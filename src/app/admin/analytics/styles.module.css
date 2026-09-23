@@ -1,0 +1,63 @@
+.shell {
+  min-height: 100vh;
+  padding: 52px clamp(24px, 5vw, 76px);
+  background: radial-gradient(circle at 15% -10%, rgba(183, 255, 84, .13), transparent 30rem), #080b08;
+  color: #edf1e9;
+}
+
+.header { display: flex; justify-content: space-between; align-items: end; gap: 24px; max-width: 1320px; margin: 0 auto 34px; }
+.header p, .panelTitle p { margin: 0 0 10px; color: #9ac95c; font: 700 10px monospace; letter-spacing: .15em; }
+.header h1 { margin: 0; font-size: clamp(36px, 5vw, 64px); line-height: 1; letter-spacing: -.055em; font-weight: 560; }
+.header span { display: block; margin-top: 14px; color: #80897e; font: 11px monospace; }
+.refresh { display: flex; align-items: center; gap: 7px; padding: 10px 13px; color: #cdd4c8; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; background: rgba(255,255,255,.03); font: 10px monospace; text-decoration: none; }
+.refresh:hover { color: #b7ff54; border-color: rgba(183,255,84,.35); }
+.refresh svg { width: 14px; }
+
+.notice { max-width: 1320px; margin: 0 auto 20px; padding: 16px 18px; border: 1px solid rgba(255, 196, 92, .25); border-radius: 8px; background: rgba(255, 196, 92, .07); }
+.notice strong { font-size: 12px; color: #f2ca7a; }
+.notice p { margin: 6px 0 0; color: #a9aa9f; font: 10px/1.6 monospace; }
+.notice code { color: #e5e8df; }
+.error { border-color: rgba(255, 105, 94, .3); background: rgba(255, 105, 94, .07); }
+.error strong { color: #ff8b82; }
+
+.metrics { max-width: 1320px; margin: 0 auto 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.metric { min-width: 0; padding: 17px; border: 1px solid rgba(255,255,255,.09); border-radius: 8px; background: #111511; }
+.metric svg { width: 18px; color: #8b9588; }
+.metric span, .metric small { display: block; }
+.metric span { margin-top: 17px; color: #798176; font: 9px monospace; text-transform: uppercase; letter-spacing: .08em; }
+.metric strong { display: block; margin: 7px 0 5px; color: #eff3e9; font-size: 28px; font-weight: 520; letter-spacing: -.04em; }
+.metric small { color: #5f685d; font: 8px monospace; }
+
+.grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; }
+.panel { min-width: 0; padding: 20px; border: 1px solid rgba(255,255,255,.09); border-radius: 8px; background: #111511; }
+.panelTitle { display: flex; justify-content: space-between; align-items: start; margin-bottom: 22px; }
+.panelTitle p { margin-bottom: 5px; font-size: 8px; }
+.panelTitle h2 { margin: 0; font-size: 17px; font-weight: 560; letter-spacing: -.02em; }
+.panelTitle > span { color: #6d766b; font: 9px monospace; }
+.useCases { display: grid; gap: 17px; }
+.useCase { display: grid; grid-template-columns: 135px 1fr 35px; align-items: center; gap: 12px; }
+.useCase strong, .useCase span { display: block; }
+.useCase strong { color: #bfc5ba; font-size: 10px; }
+.useCase span { margin-top: 3px; color: #5f685d; font: 8px monospace; }
+.useCase b { color: #bac2b6; font: 500 10px monospace; text-align: right; }
+.bar { height: 5px; overflow: hidden; border-radius: 5px; background: #252c23; }
+.bar i { display: block; height: 100%; border-radius: inherit; background: #b7ff54; box-shadow: 0 0 9px rgba(183,255,84,.35); }
+.empty { color: #697168; font: 10px monospace; }
+.quality { margin: 0; }
+.quality div { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+.quality dt { color: #7d867a; font: 9px monospace; }
+.quality dd { margin: 0; color: #e1e6dc; font: 500 13px monospace; }
+.explainer { margin: 18px 0 0; color: #626b60; font: 8px/1.65 monospace; }
+.footer { max-width: 1320px; margin: 22px auto 0; color: #525a50; font: 8px monospace; text-align: center; }
+
+@media (max-width: 900px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .shell { padding: 34px 16px; }
+  .header { align-items: flex-start; flex-direction: column; }
+  .metrics { grid-template-columns: 1fr; }
+  .useCase { grid-template-columns: 105px 1fr 28px; }
+}

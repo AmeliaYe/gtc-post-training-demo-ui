@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -155,8 +156,19 @@ export default function Home() {
 
   const runEvaluation = () => {
     if (isRunning) return;
+    trackInteraction('evaluation_run', { use_case: selectedId });
     setIsRunning(true);
     window.setTimeout(() => { setIsRunning(false); setRunCount((count) => count + 1); }, 900);
+  };
+
+  const selectUseCase = (useCase: string) => {
+    trackUseCaseSelection(useCase, selectedId ? 'dock' : 'gallery');
+    setSelectedId(useCase);
+  };
+
+  const resetView = (source: 'toolbar' | 'window') => {
+    trackInteraction('view_reset', { source, selected_use_case: selectedId });
+    setSelectedId(null);
   };
 
   return (
@@ -183,7 +195,7 @@ export default function Home() {
             <div className="traffic-lights"><i /><i /><i /></div>
             <div className="window-title"><CpuChipIcon /> localhost:8000 / gtc-post-training-demo-ui</div>
             <div className="window-meta">
-              {selectedId && <button className="reset-view-button" onClick={() => setSelectedId(null)}><ArrowPathIcon /> Reset view</button>}
+              {selectedId && <button className="reset-view-button" onClick={() => resetView('toolbar')}><ArrowPathIcon /> Reset view</button>}
               <span><span className="sync-dot" /> Synced just now</span>
             </div>
           </div>
@@ -211,11 +223,11 @@ export default function Home() {
                     : selectedId
                       ? { '--tile-glow': model.glow, gridRow: compactRow } as React.CSSProperties
                       : { '--tile-glow': model.glow } as React.CSSProperties}
-                  onClick={isSelected ? undefined : () => setSelectedId(model.id)}
+                  onClick={isSelected ? undefined : () => selectUseCase(model.id)}
                   onKeyDown={isSelected ? undefined : (event) => {
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
-                      setSelectedId(model.id);
+                      selectUseCase(model.id);
                     }
                   }}
                   role={isSelected ? undefined : 'button'}
@@ -226,7 +238,7 @@ export default function Home() {
                 <div className="expanded-window-bar">
                   <span className="expanded-traffic"><i /><i /><i /></span>
                   <code>{model.id}.specialist.local</code>
-                  <button className="view-all-button" onClick={() => setSelectedId(null)}>← All use cases</button>
+                  <button className="view-all-button" onClick={() => resetView('window')}>← All use cases</button>
                 </div>
                 <div className="expanded-header">
                   <div className="expanded-identity">

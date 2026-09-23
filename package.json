@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "framer-motion": "^12.23.24",
     "next": "16.3.6",
+    "posthog-js": "^1.434.11",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
