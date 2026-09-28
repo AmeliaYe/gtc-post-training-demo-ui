@@ -65,6 +65,10 @@ h1 em { color: var(--acid); font-style: normal; }
 .cluster-card small { display: block; color: #697267; font-size: 8px; letter-spacing: .14em; margin-bottom: 5px; }
 .cluster-card strong { display: block; font-size: 11px; font-weight: 600; color: #d4d8d1; }
 .cluster-card strong span { color: #5e675d; font-weight: 400; }
+.stack-link { display: block; color: #d4d8d1; font-size: 11px; font-weight: 600; text-decoration: none; transition: color .18s ease; }
+.stack-link span { color: #778074; font-size: 9px; font-weight: 400; }
+.stack-link:hover { color: var(--acid); }
+.stack-link:hover span { color: #a7b39e; }
 .cluster-stat { border-left: 1px solid var(--line); padding-left: 16px; min-width: 82px; }
 .cluster-stat strong { font-size: 13px; }
 .cluster-stat strong span { font-size: 9px; }

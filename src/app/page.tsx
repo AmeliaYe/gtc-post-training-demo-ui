@@ -85,6 +85,8 @@ const models: Model[] = [
   },
 ];
 
+const NEMO_REPOSITORY_URL = '#'; // TODO: Replace with the final NeMo repository URL.
+
 function MiniChart({ before, after, color }: { before: number; after: number; color: string }) {
   const points = [before - 4, before + 1, before - 2, before + 5, before + 3, after - 7, after - 3, after];
   const path = points.map((value, index) => `${index === 0 ? 'M' : 'L'} ${index * 24} ${44 - ((value - 45) / 55) * 38}`).join(' ');
@@ -182,8 +184,8 @@ export default function Home() {
           <div><p className="eyebrow">NEMOTRON DOMAIN STUDIO <span>05 / 05 WORKLOADS ONLINE</span></p><h1>Your domain. Your model. <em>Your machine.</em></h1><p className="intro-copy">Customize Nemotron for real business needs—with local post-training, inference, and complete control of data and cost. Select a use case to explore the results.</p></div>
           <div className="cluster-card">
             <div className="cluster-icon"><CpuChipIcon /></div>
-            <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private</strong></div>
-            <div className="cluster-stat"><small>STACK</small><strong>NeMo <span>open</span></strong></div>
+            <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private 2xGB300</strong></div>
+            <div className="cluster-stat"><small>STACK</small><a className="stack-link" href={NEMO_REPOSITORY_URL} onClick={(event) => event.preventDefault()} title="NeMo repository link TBD">NeMo <span>open ↗</span></a></div>
           </div>
         </section>
 
