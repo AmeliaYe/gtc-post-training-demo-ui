@@ -31,7 +31,6 @@ type Model = {
   scoreAfter: number;
   latency: string;
   memory: string;
-  samples: string;
   prompt: string;
   before: string;
   after: string;
@@ -42,7 +41,7 @@ const models: Model[] = [
   {
     id: 'cyber', name: 'Cyber Defense', version: 'v3.2', task: 'Cybersecurity · Depthfirst',
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
-    scoreLabel: 'Threat accuracy', scoreBefore: 63.4, scoreAfter: 93.1, latency: '39 ms', memory: '5.8 GB', samples: '22.8k',
+    scoreLabel: 'Threat accuracy', scoreBefore: 63.4, scoreAfter: 93.1, latency: '39 ms', memory: '5.8 GB',
     prompt: 'Triage the endpoint alert: encoded PowerShell spawned by WINWORD with outbound DNS.',
     before: 'This activity may be suspicious. Review the PowerShell command, inspect the parent process, and check the destination before deciding whether to escalate.',
     after: 'HIGH · Escalate and isolate host. WINWORD → encoded PowerShell plus DNS egress maps to T1204.002, T1059.001, and likely T1071.004. Preserve process tree, decode the command, and hunt the domain across endpoints.',
@@ -51,7 +50,7 @@ const models: Model[] = [
   {
     id: 'health', name: 'Healthcare Simulation', version: 'v2.8', task: 'Agent simulation · NeMo Gym',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    scoreLabel: 'Protocol adherence', scoreBefore: 69.8, scoreAfter: 94.4, latency: '43 ms', memory: '5.5 GB', samples: '16.2k',
+    scoreLabel: 'Protocol adherence', scoreBefore: 69.8, scoreAfter: 94.4, latency: '43 ms', memory: '5.5 GB',
     prompt: 'Simulate a patient with new chest pressure during an outpatient intake conversation.',
     before: 'I’m sorry you are experiencing discomfort. Can you tell me when it started and whether anything makes it better or worse?',
     after: 'The patient reports substernal pressure beginning 20 minutes ago with diaphoresis and nausea. Escalation trigger met: stop routine intake, alert the clinical team, and simulate emergency protocol without offering a diagnosis.',
@@ -60,7 +59,7 @@ const models: Model[] = [
   {
     id: 'bio', name: 'Multimodal Biology', version: 'v4.1', task: 'Biology · multimodal reasoning',
     color: '#ffb86b', glow: 'rgba(255, 184, 107, .18)', icon: CircleStackIcon,
-    scoreLabel: 'Grounded reasoning', scoreBefore: 57.6, scoreAfter: 87.9, latency: '58 ms', memory: '6.4 GB', samples: '28.1k',
+    scoreLabel: 'Grounded reasoning', scoreBefore: 57.6, scoreAfter: 87.9, latency: '58 ms', memory: '6.4 GB',
     prompt: 'Combine this microscopy image, protein sequence, and assay table to explain the phenotype.',
     before: 'The phenotype could be related to altered protein function. Additional experiments may help determine whether the observed cellular changes are significant.',
     after: 'The punctate mitochondrial signal, conserved catalytic-site substitution, and 41% respiration drop support impaired complex-I assembly. Prioritize rescue with wild-type construct and quantify membrane potential before claiming causality.',
@@ -69,7 +68,7 @@ const models: Model[] = [
   {
     id: 'coding', name: 'Coding Agent', version: 'v1.9', task: 'Software engineering · JetBrains',
     color: '#ff84b7', glow: 'rgba(255, 132, 183, .18)', icon: CodeBracketIcon,
-    scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB', samples: '31.5k',
+    scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB',
     prompt: 'Resolve GitHub issue #1842: retries can duplicate streamed tool-call arguments.',
     before: 'Add a retry check before processing tool calls and write a test to ensure the arguments are not duplicated.',
     after: 'Root cause is replay after reconnect: the accumulator is keyed by chunk index, which resets. Key by response_id + call_id, ignore sequence ≤ last_sequence, and add a reconnect test covering a split UTF-8 argument. Files: stream.py, state.py, test_reconnect.py.',
@@ -78,7 +77,7 @@ const models: Model[] = [
   {
     id: 'computer', name: 'Computer Use', version: 'v2.3', task: 'GUI agent · H Company',
     color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
-    scoreLabel: 'Task completion', scoreBefore: 46.8, scoreAfter: 84.7, latency: '54 ms', memory: '6.2 GB', samples: '26.4k',
+    scoreLabel: 'Task completion', scoreBefore: 46.8, scoreAfter: 84.7, latency: '54 ms', memory: '6.2 GB',
     prompt: 'Reconcile the Q3 invoice in the ERP and attach the matching purchase order.',
     before: 'Open the ERP, search for the invoice, find the purchase order, and attach it to the invoice record.',
     after: 'Plan: open Accounts Payable → search INV-30418 → verify vendor and amount → open linked PO-7712 in a new tab → compare line totals → attach the PDF. Stop for approval before clicking “Post” because it changes financial state.',
@@ -114,7 +113,6 @@ function ModelTile({ model }: { model: Model }) {
     <>
       <span className="mini-window-bar">
         <span className="mini-traffic"><i /><i /><i /></span>
-        <code>{model.id}.specialist.local</code>
         <span className="expand-glyph">↗</span>
       </span>
       <span className="tile-topline">
@@ -186,14 +184,12 @@ export default function Home() {
             <div className="cluster-icon"><CpuChipIcon /></div>
             <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private</strong></div>
             <div className="cluster-stat"><small>STACK</small><strong>NeMo <span>open</span></strong></div>
-            <div className="cluster-stat"><small>MODE</small><strong>Train <span>+ serve</span></strong></div>
           </div>
         </section>
 
         <section className="workspace" aria-label="Specialized model comparison">
           <div className="window-bar">
             <div className="traffic-lights"><i /><i /><i /></div>
-            <div className="window-title"><CpuChipIcon /> localhost:8000 / gtc-post-training-demo-ui</div>
             <div className="window-meta">
               {selectedId && <button className="reset-view-button" onClick={() => resetView('toolbar')}><ArrowPathIcon /> Reset view</button>}
               <span><span className="sync-dot" /> Synced just now</span>
@@ -201,14 +197,11 @@ export default function Home() {
           </div>
 
           <div className={`workspace-body ${selectedId ? 'has-selection' : 'gallery-view'}`}>
-            <div className="dock-heading">
-              <span>{selectedId ? 'MINIMIZED WINDOWS' : 'SELECT A USE CASE'}</span>
-              <small>{selectedId ? `${models.length - 1} in dock` : `${models.length} domain demos`}</small>
-            </div>
+            {!selectedId && <div className="dock-heading"><span>SELECT A USE CASE</span><small>{models.length} domain demos</small></div>}
             {models.map((model) => {
               const isSelected = model.id === selectedId;
               const minimizedModels = selectedId ? models.filter((item) => item.id !== selectedId) : models;
-              const compactRow = minimizedModels.findIndex((item) => item.id === model.id) + 2;
+              const compactRow = minimizedModels.findIndex((item) => item.id === model.id) + 1;
               const lift = model.scoreAfter - model.scoreBefore;
               const ModelIcon = model.icon;
 
@@ -237,13 +230,12 @@ export default function Home() {
                   {!isSelected ? <ModelTile model={model} /> : <>
                 <div className="expanded-window-bar">
                   <span className="expanded-traffic"><i /><i /><i /></span>
-                  <code>{model.id}.specialist.local</code>
                   <button className="view-all-button" onClick={() => resetView('window')}>← All use cases</button>
                 </div>
                 <div className="expanded-header">
                   <div className="expanded-identity">
                     <span className="expanded-icon"><ModelIcon /></span>
-                    <div><p><span className="live-dot" /> SELECTED MODEL · RUNNING</p><h2>{model.name} <span>{model.version}</span></h2><small>Customized from Nemotron · {model.samples} post-training examples</small></div>
+                    <div><p><span className="live-dot" /> SELECTED MODEL · RUNNING</p><h2>{model.name} <span>{model.version}</span></h2></div>
                   </div>
                   <div className="header-actions">
                     <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>

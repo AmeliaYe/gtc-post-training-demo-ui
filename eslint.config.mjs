@@ -8,6 +8,7 @@ export default defineConfig([
   globalIgnores([
     'node_modules/**',
     '.next/**',
+    '.vercel/**',
     'out/**',
     'build/**',
     'next-env.d.ts',
