@@ -188,7 +188,7 @@ export default function Home() {
 
       <div className="page-wrap">
         <section className="intro-row">
-          <div><h1>Your Expertise, Your Machine, <em>Your Nemotron</em></h1></div>
+          <div><h1>Your Expertise, Your Machine,<br /><em>Your Nemotron</em></h1></div>
           <div className="cluster-card">
             <div className="cluster-icon"><CpuChipIcon /></div>
             <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private 2xGB300</strong></div>
