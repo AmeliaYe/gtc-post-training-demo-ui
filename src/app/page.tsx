@@ -181,14 +181,14 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand"><NvidiaLogo /><span>NEMOTRON</span></div>
+        <div className="brand" role="img" aria-label="NVIDIA"><NvidiaLogo /></div>
         <div className="topbar-center"><span className="crumb-muted">DGX Station</span></div>
-        <div className="topbar-actions"><span className="local-badge"><i /> LOCAL</span><button className="icon-button" aria-label="Open command menu"><CommandLineIcon /></button><span className="avatar">AY</span></div>
+        <div className="topbar-actions"><span className="local-badge"><i /> LOCAL</span></div>
       </header>
 
       <div className="page-wrap">
         <section className="intro-row">
-          <div><h1>Your domain. Your model. <em>Your machine.</em></h1><p className="intro-copy">Customize Nemotron for real business needs—with local post-training, inference, and complete control of data and cost. Select a use case to explore the results.</p></div>
+          <div><h1>Your domain. Your Nemotron. <em>Your machine.</em></h1><p className="intro-copy">Customize Nemotron for real business needs—with local post-training, inference, and complete control of data and cost.</p></div>
           <div className="cluster-card">
             <div className="cluster-icon"><CpuChipIcon /></div>
             <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private 2xGB300</strong></div>

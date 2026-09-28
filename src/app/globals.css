@@ -24,7 +24,8 @@ button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
   height: 62px;
   padding: 0 34px;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 14px;
   align-items: center;
   border-bottom: 1px solid var(--line);
   background: rgba(8, 11, 8, .86);
@@ -34,16 +35,12 @@ button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
   z-index: 20;
 }
 .brand, .topbar-center, .topbar-actions { display: flex; align-items: center; }
-.brand { gap: 10px; font-size: 13px; font-weight: 800; letter-spacing: .18em; }
 .nvidia-logo { width: 29px; height: 29px; fill: var(--acid); }
 .topbar-center { gap: 9px; font-size: 12px; color: #c8cdc5; }
 .crumb-muted { color: #697268; }
 .topbar-actions { justify-content: flex-end; gap: 10px; }
 .local-badge, .status-pill { color: var(--acid); border: 1px solid rgba(183, 255, 84, .25); background: rgba(183, 255, 84, .07); border-radius: 100px; letter-spacing: .12em; font-size: 9px; font-weight: 800; padding: 6px 9px; }
 .local-badge i, .status-pill i, .live-dot, .sync-dot { display: inline-block; width: 6px; height: 6px; background: var(--acid); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 9px var(--acid); }
-.icon-button { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 6px; color: #929b90; background: #0e120e; cursor: pointer; }
-.icon-button svg { width: 15px; }
-.avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: #252d23; color: #cfd5ca; font-size: 10px; font-weight: 700; }
 
 .page-wrap { max-width: 1480px; margin: 0 auto; padding: 56px 34px 28px; }
 .intro-row { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 34px; margin-bottom: 34px; }
