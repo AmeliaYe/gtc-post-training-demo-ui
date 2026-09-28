@@ -46,7 +46,6 @@ button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
 .intro-row { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 34px; margin-bottom: 34px; }
 h1 { margin: 0; font-size: clamp(35px, 4vw, 58px); line-height: 1; letter-spacing: -.055em; font-weight: 560; }
 h1 em { color: var(--acid); font-style: normal; }
-.intro-copy { color: #8e968c; margin: 15px 0 0; font-size: 13px; letter-spacing: -.01em; }
 .cluster-card { min-width: 390px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 15px; padding: 14px 16px; border: 1px solid var(--line); background: rgba(17, 21, 17, .8); border-radius: 9px; box-shadow: 0 14px 45px rgba(0,0,0,.16); }
 .cluster-icon { width: 35px; height: 35px; display: grid; place-items: center; color: var(--acid); background: rgba(183,255,84,.08); border: 1px solid rgba(183,255,84,.16); border-radius: 7px; }
 .cluster-icon svg { width: 18px; }
