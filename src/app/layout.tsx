@@ -3,7 +3,7 @@ import './globals.css';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
 export const metadata: Metadata = {
-  title: 'Nemotron Domain Studio',
+  title: 'GTC Post-Training Demo UI',
   description: 'Customize and run domain-specialized Nemotron models locally on NVIDIA DGX Station.',
 };
 

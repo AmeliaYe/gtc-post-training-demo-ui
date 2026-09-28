@@ -35,16 +35,9 @@ button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
 }
 .brand, .topbar-center, .topbar-actions { display: flex; align-items: center; }
 .brand { gap: 10px; font-size: 13px; font-weight: 800; letter-spacing: .18em; }
-.brand small { color: #778075; font-size: 9px; font-weight: 600; letter-spacing: .16em; border-left: 1px solid var(--line); padding-left: 12px; }
-.brand-glyph { width: 23px; height: 23px; display: flex; gap: 2px; align-items: flex-end; }
-.brand-glyph span { width: 6px; background: var(--acid); border-radius: 1px; transform: skewY(-28deg); }
-.brand-glyph span:nth-child(1) { height: 10px; }
-.brand-glyph span:nth-child(2) { height: 17px; }
-.brand-glyph span:nth-child(3) { height: 23px; }
+.nvidia-logo { width: 29px; height: 29px; fill: var(--acid); }
 .topbar-center { gap: 9px; font-size: 12px; color: #c8cdc5; }
-.topbar-center svg { width: 13px; color: #737c71; }
 .crumb-muted { color: #697268; }
-.crumb-separator { color: #3c433c; }
 .topbar-actions { justify-content: flex-end; gap: 10px; }
 .local-badge, .status-pill { color: var(--acid); border: 1px solid rgba(183, 255, 84, .25); background: rgba(183, 255, 84, .07); border-radius: 100px; letter-spacing: .12em; font-size: 9px; font-weight: 800; padding: 6px 9px; }
 .local-badge i, .status-pill i, .live-dot, .sync-dot { display: inline-block; width: 6px; height: 6px; background: var(--acid); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 9px var(--acid); }
@@ -54,8 +47,6 @@ button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
 
 .page-wrap { max-width: 1480px; margin: 0 auto; padding: 56px 34px 28px; }
 .intro-row { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 34px; margin-bottom: 34px; }
-.eyebrow { margin: 0 0 13px; color: #788176; letter-spacing: .15em; font-size: 9px; font-weight: 700; }
-.eyebrow span { color: var(--acid); padding-left: 9px; margin-left: 7px; border-left: 1px solid #394136; }
 h1 { margin: 0; font-size: clamp(35px, 4vw, 58px); line-height: 1; letter-spacing: -.055em; font-weight: 560; }
 h1 em { color: var(--acid); font-style: normal; }
 .intro-copy { color: #8e968c; margin: 15px 0 0; font-size: 13px; letter-spacing: -.01em; }
@@ -248,7 +239,7 @@ h1 em { color: var(--acid); font-style: normal; }
   .lineage { justify-content: center; }
 }
 @media (max-width: 620px) {
-  .brand small, .local-badge { display: none; }
+  .local-badge { display: none; }
   .cluster-card { grid-template-columns: auto 1fr; }
   .cluster-stat { border-top: 1px solid var(--line); border-left: 0; padding: 10px 0 0; }
   .model-tile { min-height: 140px; }
