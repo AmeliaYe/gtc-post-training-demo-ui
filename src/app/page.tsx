@@ -1,5 +1,12 @@
 'use client';
 
+// demo URLs for embedding 
+const KERMT_DEMO_URL = 'http://127.0.0.1:5173';
+
+//other constants
+const DGX_STATION_URL = 'https://www.nvidia.com/en-us/products/workstations/dgx-station/';
+const NEMO_REPOSITORY_URL = 'https://www.nvidia.com/en-us/ai-data-science/products/nemo/';
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
@@ -9,22 +16,26 @@ import {
   CircleStackIcon,
   CodeBracketIcon,
   CommandLineIcon,
-  CpuChipIcon,
   DocumentMagnifyingGlassIcon,
   HeartIcon,
   PlayIcon,
+  ServerStackIcon,
   ShieldCheckIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
 
-type Model = {
+type DemoBase = {
   id: string;
   name: string;
-  version: string;
   task: string;
   color: string;
   glow: string;
   icon: typeof ShieldCheckIcon;
+};
+
+// Static sample content for a use case that has no integrated demo yet.
+type PlaceholderDemo = DemoBase & {
+  kind: 'placeholder';
   scoreLabel: string;
   scoreBefore: number;
   scoreAfter: number;
@@ -36,9 +47,17 @@ type Model = {
   tags: string[];
 };
 
-const models: Model[] = [
+// A live demo embedded in the expanded card.
+type LiveDemo = DemoBase & {
+  kind: 'demo';
+  embedUrl: string;
+};
+
+type Demo = PlaceholderDemo | LiveDemo;
+
+const demos: Demo[] = [
   {
-    id: 'cyber', name: 'Cyber Defense', version: 'v3.2', task: 'Cybersecurity · Depthfirst',
+    kind: 'placeholder', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
     scoreLabel: 'Threat accuracy', scoreBefore: 63.4, scoreAfter: 93.1, latency: '39 ms', memory: '5.8 GB',
     prompt: 'Triage the endpoint alert: encoded PowerShell spawned by WINWORD with outbound DNS.',
@@ -47,7 +66,7 @@ const models: Model[] = [
     tags: ['MITRE-aware', 'SOC-tuned', 'evidence-linked'],
   },
   {
-    id: 'health', name: 'Healthcare Simulation', version: 'v2.8', task: 'Agent simulation · NeMo Gym',
+    kind: 'placeholder', id: 'health', name: 'Healthcare Simulation', task: 'Agent simulation · NeMo Gym',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
     scoreLabel: 'Protocol adherence', scoreBefore: 69.8, scoreAfter: 94.4, latency: '43 ms', memory: '5.5 GB',
     prompt: 'Simulate a patient with new chest pressure during an outpatient intake conversation.',
@@ -56,16 +75,12 @@ const models: Model[] = [
     tags: ['scenario-grounded', 'protocol-safe', 'multi-agent'],
   },
   {
-    id: 'bio', name: 'Multimodal Biology', version: 'v4.1', task: 'Biology · multimodal reasoning',
+    kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
     color: '#ffb86b', glow: 'rgba(255, 184, 107, .18)', icon: CircleStackIcon,
-    scoreLabel: 'Grounded reasoning', scoreBefore: 57.6, scoreAfter: 87.9, latency: '58 ms', memory: '6.4 GB',
-    prompt: 'Combine this microscopy image, protein sequence, and assay table to explain the phenotype.',
-    before: 'The phenotype could be related to altered protein function. Additional experiments may help determine whether the observed cellular changes are significant.',
-    after: 'The punctate mitochondrial signal, conserved catalytic-site substitution, and 41% respiration drop support impaired complex-I assembly. Prioritize rescue with wild-type construct and quantify membrane potential before claiming causality.',
-    tags: ['image + sequence', 'assay-grounded', 'uncertainty-aware'],
+    embedUrl: KERMT_DEMO_URL,
   },
   {
-    id: 'coding', name: 'Coding Agent', version: 'v1.9', task: 'Software engineering · JetBrains',
+    kind: 'placeholder', id: 'coding', name: 'Coding Agent', task: 'Software engineering · JetBrains',
     color: '#ff84b7', glow: 'rgba(255, 132, 183, .18)', icon: CodeBracketIcon,
     scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB',
     prompt: 'Resolve GitHub issue #1842: retries can duplicate streamed tool-call arguments.',
@@ -74,7 +89,7 @@ const models: Model[] = [
     tags: ['repo-aware', 'Mellum', 'test-driven'],
   },
   {
-    id: 'computer', name: 'Computer Use', version: 'v2.3', task: 'GUI agent · H Company',
+    kind: 'placeholder', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
     color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
     scoreLabel: 'Task completion', scoreBefore: 46.8, scoreAfter: 84.7, latency: '54 ms', memory: '6.2 GB',
     prompt: 'Reconcile the Q3 invoice in the ERP and attach the matching purchase order.',
@@ -83,8 +98,6 @@ const models: Model[] = [
     tags: ['UI-grounded', 'approval-aware', 'recoverable'],
   },
 ];
-
-const NEMO_REPOSITORY_URL = '#'; // TODO: Replace with the final NeMo repository URL.
 
 function NvidiaLogo() {
   return (
@@ -115,9 +128,8 @@ function ScoreBar({ label, score, color, muted = false }: { label: string; score
   );
 }
 
-function ModelTile({ model }: { model: Model }) {
+function ModelTile({ model }: { model: Demo }) {
   const Icon = model.icon;
-  const lift = model.scoreAfter - model.scoreBefore;
   return (
     <>
       <span className="mini-window-bar">
@@ -129,22 +141,26 @@ function ModelTile({ model }: { model: Model }) {
         <span className="status-pill"><i /> LIVE</span>
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
-      <span className="tile-score">
-        <span><small>vs. base</small><strong style={{ color: model.color }}>+{lift.toFixed(1)}</strong><em>pts</em></span>
-        <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
-      </span>
-      <span className="tile-footer"><span>{model.version}</span><span>Click to expand <b>↗</b></span></span>
+      {model.kind === 'placeholder' ? (
+        <span className="tile-score">
+          <span><small>vs. base</small><strong style={{ color: model.color }}>+{(model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
+          <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
+        </span>
+      ) : (
+        <span className="tile-score"><span><small>interactive</small><strong style={{ color: model.color }}>Live demo</strong></span></span>
+      )}
+      <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
   );
 }
 
-function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: string; model: Model }) {
+function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: string; model: PlaceholderDemo }) {
   const tuned = type === 'tuned';
   return (
     <section className={`output-panel ${tuned ? 'tuned' : ''}`} style={tuned ? { '--accent': model.color, '--panel-glow': model.glow } as React.CSSProperties : undefined}>
       <header>
         <span className="model-mark">{tuned ? <SparklesIcon /> : <CircleStackIcon />}</span>
-        <span><small>{tuned ? 'AFTER · POST-TRAINED' : 'BEFORE · GENERAL MODEL'}</small><strong>{tuned ? `${model.name} ${model.version}` : 'Nemotron base checkpoint'}</strong></span>
+        <span><small>{tuned ? 'AFTER · POST-TRAINED' : 'BEFORE · GENERAL MODEL'}</small><strong>{tuned ? `${model.name}` : 'Nemotron base checkpoint'}</strong></span>
         <span className="token-speed">{tuned ? '148' : '132'} tok/s</span>
       </header>
       <div className="response-copy"><span className="assistant-label">ASSISTANT</span><p>{text}</p></div>
@@ -153,6 +169,29 @@ function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: stri
         <span>local · fp8</span>
       </footer>
     </section>
+  );
+}
+
+function PlaceholderBody({ model, isRunning, runCount }: { model: PlaceholderDemo; isRunning: boolean; runCount: number }) {
+  const lift = model.scoreAfter - model.scoreBefore;
+  return (
+    <>
+      <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
+
+      <div className={`comparison-grid ${isRunning ? 'is-evaluating' : ''}`}>
+        <OutputPanel type="base" text={model.before} model={model} />
+        <div className="comparison-divider"><span>VS</span></div>
+        <OutputPanel type="tuned" text={model.after} model={model} />
+      </div>
+
+      <div className="results-strip">
+        <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
+        <div className="score-bars"><ScoreBar label="Base model" score={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" score={model.scoreAfter} color={model.color} /></div>
+        <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
+      </div>
+
+      <div className="expanded-footer"><div className="tag-list">{model.tags.map((tag) => <span key={tag}><CheckIcon /> {tag}</span>)}</div><span>Evaluation run #{runCount} · 1,000 prompts · seed 42</span></div>
+    </>
   );
 }
 
@@ -190,9 +229,12 @@ export default function Home() {
         <section className="intro-row">
           <div><h1>Your Expertise, Your Machine,<br /><em>Your Nemotron</em></h1></div>
           <div className="cluster-card">
-            <div className="cluster-icon"><CpuChipIcon /></div>
-            <div><small>LOCAL SYSTEM</small><strong>2-node DGX Station <span>·</span> private 2xGB300</strong></div>
-            <div className="cluster-stat"><small>STACK</small><a className="stack-link" href={NEMO_REPOSITORY_URL} onClick={(event) => event.preventDefault()} title="NeMo repository link TBD">NeMo <span>open ↗</span></a></div>
+            <div className="cluster-icon"><ServerStackIcon /></div>
+            <div>
+              <small>LOCAL SYSTEM</small>
+              <strong>2-Node DGX Station</strong>
+              <strong>Powered by <a className="spec-link" href={DGX_STATION_URL} target="_blank" rel="noopener noreferrer">GB300 Superchip</a></strong>
+            </div>
           </div>
         </section>
 
@@ -206,12 +248,11 @@ export default function Home() {
           </div>
 
           <div className={`workspace-body ${selectedId ? 'has-selection' : 'gallery-view'}`}>
-            {!selectedId && <div className="dock-heading"><span>SELECT A USE CASE</span><small>{models.length} domain demos</small></div>}
-            {models.map((model) => {
+            {!selectedId && <div className="dock-heading"></div>}
+            {demos.map((model) => {
               const isSelected = model.id === selectedId;
-              const minimizedModels = selectedId ? models.filter((item) => item.id !== selectedId) : models;
-              const compactRow = minimizedModels.findIndex((item) => item.id === model.id) + 1;
-              const lift = model.scoreAfter - model.scoreBefore;
+              const minimizedDemos = selectedId ? demos.filter((item) => item.id !== selectedId) : demos;
+              const compactRow = minimizedDemos.findIndex((item) => item.id === model.id) + 1;
               const ModelIcon = model.icon;
 
               return (
@@ -244,29 +285,17 @@ export default function Home() {
                 <div className="expanded-header">
                   <div className="expanded-identity">
                     <span className="expanded-icon"><ModelIcon /></span>
-                    <div><p><span className="live-dot" /> SELECTED MODEL · RUNNING</p><h2>{model.name} <span>{model.version}</span></h2></div>
+                    <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">
                     <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>
-                    <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>
+                    {model.kind === 'placeholder' && <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>}
                   </div>
                 </div>
 
-                <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
-
-                <div className={`comparison-grid ${isRunning ? 'is-evaluating' : ''}`}>
-                  <OutputPanel type="base" text={model.before} model={model} />
-                  <div className="comparison-divider"><span>VS</span></div>
-                  <OutputPanel type="tuned" text={model.after} model={model} />
-                </div>
-
-                <div className="results-strip">
-                  <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
-                  <div className="score-bars"><ScoreBar label="Base model" score={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" score={model.scoreAfter} color={model.color} /></div>
-                  <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
-                </div>
-
-                <div className="expanded-footer"><div className="tag-list">{model.tags.map((tag) => <span key={tag}><CheckIcon /> {tag}</span>)}</div><span>Evaluation run #{runCount} · 1,000 prompts · seed 42</span></div>
+                {model.kind === 'demo'
+                  ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
+                  : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}
                 </motion.article>
               );
@@ -274,7 +303,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="page-footer"><span><i /> Post-training and inference stay local</span><span className="lineage"><CircleStackIcon /> Nemotron open model <b>→</b> <SparklesIcon /> 5 domain workloads</span><span>NeMo RL · Gym · Data Designer</span></footer>
+        <footer className="page-footer"><span><i /> Post-training with DGX Station </span><span className="lineage"></span><a className="stack-link-footer" href={NEMO_REPOSITORY_URL} target="_blank" rel="noopener noreferrer">Built with NeMo<span>↗</span></a></footer>
       </div>
     </main>
   );
