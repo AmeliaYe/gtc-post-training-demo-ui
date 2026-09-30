@@ -1,8 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
+import {
+  CODING_BASE_TOTAL_SECONDS,
+  formatSeconds,
+  modelState,
+  type ModelRun,
+} from '@/lib/coding-fixture';
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -68,7 +74,7 @@ const models: Model[] = [
     id: 'coding', name: 'Coding Agent', version: 'v1.9', task: 'Software engineering · JetBrains',
     color: '#ff84b7', glow: 'rgba(255, 132, 183, .18)', icon: CodeBracketIcon,
     scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB',
-    prompt: 'Resolve GitHub issue #1842: retries can duplicate streamed tool-call arguments.',
+    prompt: 'Resolve DEMO-1842 (acme/py-runtime #16): parent cancellation can be swallowed while child cleanup runs, leaving callers waiting on a task group that should unwind.',
     before: 'Add a retry check before processing tool calls and write a test to ensure the arguments are not duplicated.',
     after: 'Root cause is replay after reconnect: the accumulator is keyed by chunk index, which resets. Key by response_id + call_id, ignore sequence ≤ last_sequence, and add a reconnect test covering a split UTF-8 argument. Files: stream.py, state.py, test_reconnect.py.',
     tags: ['repo-aware', 'Mellum', 'test-driven'],
@@ -86,6 +92,14 @@ const models: Model[] = [
 
 const NEMO_REPOSITORY_URL = '#'; // TODO: Replace with the final NeMo repository URL.
 
+// Fixture seconds advanced per wall-clock second, so a 52s replay fits a booth visit.
+const PLAYBACK_RATE = 6;
+
+const codingBaseRun = modelState('base', Number.POSITIVE_INFINITY);
+const codingTrainedRun = modelState('trained', Number.POSITIVE_INFINITY);
+const codingLatencyReduction = Math.round((1 - codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100);
+const codingToolCallReduction = Math.round((1 - codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100);
+
 function NvidiaLogo() {
   return (
     <svg className="nvidia-logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -94,23 +108,38 @@ function NvidiaLogo() {
   );
 }
 
-function MiniChart({ before, after, color }: { before: number; after: number; color: string }) {
-  const points = [before - 4, before + 1, before - 2, before + 5, before + 3, after - 7, after - 3, after];
-  const path = points.map((value, index) => `${index === 0 ? 'M' : 'L'} ${index * 24} ${44 - ((value - 45) / 55) * 38}`).join(' ');
+function MiniChart({ before, after, color, domain = [45, 100], label = 'Evaluation score trend' }: { before: number; after: number; color: string; domain?: [number, number]; label?: string }) {
+  const [low, high] = domain;
+  const span = high - low;
+  const wobble = [-4, 1, -2, 5, 3, -7, -3, 0];
+  const y = (value: number) => 44 - ((value - low) / span) * 38;
+  const path = wobble.map((offset, index) => `${index === 0 ? 'M' : 'L'} ${index * 24} ${y((index < 5 ? before : after) + (offset / 55) * span)}`).join(' ');
   return (
-    <svg className="mini-chart" viewBox="0 0 168 48" role="img" aria-label="Evaluation score trend">
+    <svg className="mini-chart" viewBox="0 0 168 48" role="img" aria-label={label}>
       <path d="M 0 42 H 168" className="chart-grid" />
       <path d={path} fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="168" cy={44 - ((after - 45) / 55) * 38} r="3.5" fill={color} />
+      <circle cx="168" cy={y(after)} r="3.5" fill={color} />
     </svg>
   );
 }
 
-function ScoreBar({ label, score, color, muted = false }: { label: string; score: number; color: string; muted?: boolean }) {
+function ScoreBar({ label, display, fill, color, muted = false }: { label: string; display: string; fill: number; color: string; muted?: boolean }) {
   return (
     <div className="score-row">
-      <div className="score-meta"><span>{label}</span><strong>{score.toFixed(1)}%</strong></div>
-      <div className="score-track"><span className={muted ? 'score-fill muted' : 'score-fill'} style={{ width: `${score}%`, backgroundColor: muted ? undefined : color }} /></div>
+      <div className="score-meta"><span>{label}</span><strong>{display}</strong></div>
+      <div className="score-track"><span className={muted ? 'score-fill muted' : 'score-fill'} style={{ width: `${fill}%`, backgroundColor: muted ? undefined : color }} /></div>
+    </div>
+  );
+}
+
+function ReductionCell({ percent, label, baseDisplay, tunedDisplay, fill, color }: { percent: number; label: string; baseDisplay: string; tunedDisplay: string; fill: number; color: string }) {
+  return (
+    <div className="reduction-cell">
+      <div className="result-summary"><span className="lift-number" style={{ color }}>−{percent}%</span><span><strong>{label}</strong><small>vs. base model</small></span></div>
+      <div className="score-bars">
+        <ScoreBar label="Base model" display={baseDisplay} fill={100} color={color} muted />
+        <ScoreBar label="Post-trained" display={tunedDisplay} fill={fill} color={color} />
+      </div>
     </div>
   );
 }
@@ -130,8 +159,13 @@ function ModelTile({ model }: { model: Model }) {
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
       <span className="tile-score">
-        <span><small>vs. base</small><strong style={{ color: model.color }}>+{lift.toFixed(1)}</strong><em>pts</em></span>
-        <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
+        {model.id === 'coding' ? <>
+          <span><small>tool calls</small><strong style={{ color: model.color }}>−{codingToolCallReduction}%</strong><em>vs. base</em></span>
+          <MiniChart before={codingBaseRun.toolCalls} after={codingTrainedRun.toolCalls} color={model.color} domain={[4, 18]} label="Tool-call trend" />
+        </> : <>
+          <span><small>vs. base</small><strong style={{ color: model.color }}>+{lift.toFixed(1)}</strong><em>pts</em></span>
+          <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
+        </>}
       </span>
       <span className="tile-footer"><span>{model.version}</span><span>Click to expand <b>↗</b></span></span>
     </>
@@ -156,25 +190,124 @@ function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: stri
   );
 }
 
+function TrajectoryPanel({ run, model }: { run: ModelRun; model: Model }) {
+  const tuned = run.id === 'trained';
+  return (
+    <section className={`output-panel ${tuned ? 'tuned' : ''}`} style={tuned ? { '--accent': model.color, '--panel-glow': model.glow } as React.CSSProperties : undefined}>
+      <header>
+        <span className="model-mark">{tuned ? <SparklesIcon /> : <CircleStackIcon />}</span>
+        <span><small>{tuned ? 'AFTER · POST-TRAINED' : 'BEFORE · GENERAL MODEL'}</small><strong>{run.name}</strong></span>
+        <span className={`run-state ${run.status}`}><i className="status-dot" />{run.status === 'complete' ? 'COMPLETE' : 'RUNNING'}</span>
+      </header>
+
+      <div className="trajectory-body">
+        <div className="progress-block">
+          <div className="progress-copy"><span>{run.currentStage}</span><strong>{Math.round(run.progress)}%</strong></div>
+          <div
+            className="progress-track"
+            role="progressbar"
+            aria-label={`${run.name} progress`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(run.progress)}
+          >
+            <span style={{ width: `${run.progress}%` }} />
+          </div>
+        </div>
+
+        <dl className="run-metrics">
+          <div><dt>Elapsed</dt><dd>{formatSeconds(run.elapsedSeconds)}</dd></div>
+          <div><dt>Tool calls</dt><dd>{run.toolCalls}</dd></div>
+          <div><dt>Failures</dt><dd className={run.failures ? 'metric-warning' : 'metric-good'}>{run.failures}</dd></div>
+        </dl>
+
+        <ol className="timeline" aria-label={`${run.name} tool timeline`}>
+          {run.stages.map((stage, index) => (
+            <li className={`timeline-item ${stage.status}`} key={stage.id} aria-current={stage.status === 'active' ? 'step' : undefined}>
+              <div className="timeline-rail" aria-hidden="true">
+                <span className="timeline-node">{stage.status === 'complete' ? <CheckIcon /> : String(index + 1).padStart(2, '0')}</span>
+              </div>
+              <div className="timeline-content">
+                <div className="timeline-title">
+                  <strong>{stage.label}</strong>
+                  <span>{stage.status === 'queued' ? 'Queued' : `${stage.status === 'active' ? 'Active' : 'Complete'} · +${stage.atSeconds.toFixed(1)}s`}</span>
+                </div>
+                <div className="stage-attribution">
+                  <span className="agent-chip"><i aria-hidden="true" />{stage.agent}<small>Sim</small></span>
+                  <code>{stage.tool}</code>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <footer>
+        <span className={tuned ? 'result-chip pass' : 'result-chip'}>{tuned && <CheckIcon />}{run.currentStage}</span>
+        <span>{run.toolCalls} tool calls · local · fp8</span>
+      </footer>
+    </section>
+  );
+}
+
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
+  const [codingElapsed, setCodingElapsed] = useState(Number.POSITIVE_INFINITY);
+  const frameRef = useRef<number | null>(null);
+
+  const stopPlayback = useCallback(() => {
+    if (frameRef.current === null) return;
+    cancelAnimationFrame(frameRef.current);
+    frameRef.current = null;
+  }, []);
+
+  useEffect(() => stopPlayback, [stopPlayback]);
+
+  const playCodingTrajectory = useCallback(() => {
+    stopPlayback();
+    const startedAt = performance.now();
+    setCodingElapsed(0);
+    const step = (now: number) => {
+      const elapsed = ((now - startedAt) / 1000) * PLAYBACK_RATE;
+      if (elapsed >= CODING_BASE_TOTAL_SECONDS) {
+        frameRef.current = null;
+        setCodingElapsed(Number.POSITIVE_INFINITY);
+        setIsRunning(false);
+        setRunCount((count) => count + 1);
+        return;
+      }
+      setCodingElapsed(elapsed);
+      frameRef.current = requestAnimationFrame(step);
+    };
+    frameRef.current = requestAnimationFrame(step);
+  }, [stopPlayback]);
 
   const runEvaluation = () => {
     if (isRunning) return;
     trackInteraction('evaluation_run', { use_case: selectedId });
     setIsRunning(true);
+    if (selectedId === 'coding') {
+      playCodingTrajectory();
+      return;
+    }
     window.setTimeout(() => { setIsRunning(false); setRunCount((count) => count + 1); }, 900);
   };
 
   const selectUseCase = (useCase: string) => {
     trackUseCaseSelection(useCase, selectedId ? 'dock' : 'gallery');
+    stopPlayback();
+    setCodingElapsed(Number.POSITIVE_INFINITY);
+    setIsRunning(false);
     setSelectedId(useCase);
   };
 
   const resetView = (source: 'toolbar' | 'window') => {
     trackInteraction('view_reset', { source, selected_use_case: selectedId });
+    stopPlayback();
+    setCodingElapsed(Number.POSITIVE_INFINITY);
+    setIsRunning(false);
     setSelectedId(null);
   };
 
@@ -213,6 +346,7 @@ export default function Home() {
               const compactRow = minimizedModels.findIndex((item) => item.id === model.id) + 1;
               const lift = model.scoreAfter - model.scoreBefore;
               const ModelIcon = model.icon;
+              const isCoding = model.id === 'coding';
 
               return (
                 <motion.article
@@ -254,16 +388,42 @@ export default function Home() {
 
                 <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
 
-                <div className={`comparison-grid ${isRunning ? 'is-evaluating' : ''}`}>
-                  <OutputPanel type="base" text={model.before} model={model} />
-                  <div className="comparison-divider"><span>VS</span></div>
-                  <OutputPanel type="tuned" text={model.after} model={model} />
+                <div className={`comparison-grid ${isRunning && !isCoding ? 'is-evaluating' : ''}`}>
+                  {isCoding ? <>
+                    <TrajectoryPanel run={modelState('base', codingElapsed)} model={model} />
+                    <div className="comparison-divider"><span>VS</span></div>
+                    <TrajectoryPanel run={modelState('trained', codingElapsed)} model={model} />
+                  </> : <>
+                    <OutputPanel type="base" text={model.before} model={model} />
+                    <div className="comparison-divider"><span>VS</span></div>
+                    <OutputPanel type="tuned" text={model.after} model={model} />
+                  </>}
                 </div>
 
-                <div className="results-strip">
-                  <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
-                  <div className="score-bars"><ScoreBar label="Base model" score={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" score={model.scoreAfter} color={model.color} /></div>
-                  <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
+                <div className={`results-strip ${isCoding ? 'trajectory' : ''}`}>
+                  {isCoding ? <>
+                    <ReductionCell
+                      percent={codingLatencyReduction}
+                      label="latency reduction"
+                      baseDisplay={formatSeconds(codingBaseRun.totalSeconds)}
+                      tunedDisplay={formatSeconds(codingTrainedRun.totalSeconds)}
+                      fill={(codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100}
+                      color={model.color}
+                    />
+                    <ReductionCell
+                      percent={codingToolCallReduction}
+                      label="fewer tool calls"
+                      baseDisplay={`${codingBaseRun.toolCalls} calls`}
+                      tunedDisplay={`${codingTrainedRun.toolCalls} calls`}
+                      fill={(codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100}
+                      color={model.color}
+                    />
+                    <div className="result-metrics"><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
+                  </> : <>
+                    <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
+                    <div className="score-bars"><ScoreBar label="Base model" display={`${model.scoreBefore.toFixed(1)}%`} fill={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" display={`${model.scoreAfter.toFixed(1)}%`} fill={model.scoreAfter} color={model.color} /></div>
+                    <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
+                  </>}
                 </div>
 
                 <div className="expanded-footer"><div className="tag-list">{model.tags.map((tag) => <span key={tag}><CheckIcon /> {tag}</span>)}</div><span>Evaluation run #{runCount} · 1,000 prompts · seed 42</span></div>
