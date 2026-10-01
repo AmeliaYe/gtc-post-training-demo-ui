@@ -20,6 +20,17 @@ npm run build
 npm start
 ```
 
+## Embedded demos
+
+The **multimodal biology** demo is embedded as an iframe. First clone the [nemotron-stitch-demos repo](https://github.com/NVIDIA-dev/nemotron-stitch-demos) and run and serve the model checkpoints. Then start the demo UI using:
+
+```bash
+cd nemotron-stitch-demos/nemotron-kermt/demo/web
+npm ci
+npm run dev
+```
+
+It should start at <http://127.0.0.1:5173>.
 ## Private analytics
 
 The demo can send privacy-conscious aggregate events to PostHog and expose a password-protected dashboard at `/admin/analytics`. The route is not linked from the public interface.
