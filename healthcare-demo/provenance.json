@@ -1,0 +1,489 @@
+{
+  "packagedOn": "2026-10-01",
+  "tracks": [
+    {
+      "track": "press",
+      "source": "outputs/press-narrative-r06",
+      "revision": "press-r33-narrative-r06",
+      "entrypoint": "press/nemotron-post-training-press.html",
+      "sha256": {
+        "nemotron-post-training-press.html": "dddd0309c9a581335436cce503c40a820b3423953a28406f02d1e924318983cf",
+        "assets/results-r01.js": "43143369906f7931eba55eebc6fce1569c8a6e23cfaf0bf5696ef66a6405b05e",
+        "assets/beyond-request-maximize-r01.svg": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826",
+        "assets/beyond-request-x-r01.svg": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117",
+        "assets/marked.esm.js": "2cf87a5a5f9f677fedca30aee75c2d791e79b2330cccc77345efc87091d09f12",
+        "assets/beyond-request-play-r01.svg": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+        "assets/beyond-request-check-r01.svg": "7f33acc9a77a61659531044525fc008edebe215bf4dcf1c789c8674ad3277db0",
+        "assets/case-trace-evidence-r01.js": "1fe8f0285dbf81c4825c58a4b3a223e22c46e89c2c28975c6f507b5d02ef6247",
+        "assets/MARKED-LICENSE.md": "8e3a3f82f59a60958f56ca08f445647c32a4733dc7ca6c2c46f6eb898471ab9c",
+        "assets/beyond-request-pause-r01.svg": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+        "assets/gym-rl-start-qr.png": "fcfdb4311d20b71d8b6af72dc14c72f4de34d6bbde9cca438ec47adca21d9399",
+        "assets/architecture-r03.css": "ede247ad3eb9c278a384acbda4d6ac7d42c987b3668ba94d6db0570e828a337b",
+        "assets/architecture-r04.js": "dae2bdf9071c84505dd32bfc731efd0cd5a50d6ede26c30d726ed1470017432d",
+        "assets/learning-cinema-r01.js": "71605d1115f2f03fb16a028d76bc9046a25ff65090e32340f8aa18e8854d5f67",
+        "assets/press.css": "626dcb5a152cb93e01f9e296df02e3e1f637ae304d9053d372add6e3b696a20f",
+        "assets/architecture-r04.css": "3da76a4aad6b0603d9c02642215f6af07d273ac2bd9e09dcc26afb57f7fc1185",
+        "assets/get-started-dgx-station-r01.jpg": "171a726639ba487d571e88780e3236511f0b5dd8ffe5308e49ba783bb4ad885b",
+        "assets/beyond-request-arrow-right-r01.svg": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9",
+        "assets/press.js": "51f2f6454313efc7a64ba9013dd67e27f8548b99f549c235cc55d53d91d2f138",
+        "assets/beyond-request-rotate-ccw-r01.svg": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd",
+        "assets/gym-opening-r03/opening.css": "78d50a6f6c91a23255960581b4bf5b31e60e55f6cdae21a3b1c49e3d0e2cf3cc",
+        "assets/gym-opening-r02/scene.js": "8c6d7870207f083af5ef8be4cec4633cc1170c244c239eb55fa1873b19b558b3",
+        "assets/gym-opening-r02/opening.css": "9189d9e1bd48ff1a1fde499f6e2f959574a51a24ebe89ff7788ed60eea57d4e8",
+        "assets/gym-opening-r02/motion.js": "93f7e8d5576828092e5c6945d3e827cea816dea9c063b8ef04ffa6500491124f",
+        "assets/gym-opening-r02/training-room.png": "7e62a30ea0c6f287a5f6dba58a994327f0fc169f09a4b48a17cc284260173896",
+        "assets/gym-opening-press-r02/opening.js": "c1f6301640e05acb6a25648c11258ba6e4abb337e948d197c28c0c95688f357b",
+        "assets/architecture-r04/nvidia.png": "625c86870bc1851793dc4a83b41dd9ff05dfd1557390c312decda102fcef50d8",
+        "assets/architecture-r04/verifier.png": "0408d09f604615139421f02bc70dd9730cb5769aa7f7c88571a94568913eee49",
+        "assets/architecture-r04/tasks.png": "cfed1672cadda56240d43253a12e07df25c91ac4e566aacea01cabaf68042e70",
+        "assets/architecture-r04/tools.png": "57617b7c3140467b762b40b6445659752161d54d8f1320d3738a0fb1a82ae2ff",
+        "assets/architecture-r04/rl.png": "2cfdc9447637bbe8618b4e4e0528d9531c905fc0f3bed025ede2a2c8bbaa48f3",
+        "assets/architecture-r04/nemotron.png": "9ff751943905a53fe86175c29af9c4f04c6b85f56098b89b0294dc473ed32b30",
+        "assets/gym-opening-r01/opening.css": "d664a78b9fdbe1eb18b3ecf2bdc75dd49e560dd7b758ccfe784fe68a5317e40f",
+        "assets/coffee-lab-r01/vendor/three.module.js": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+        "assets/coffee-lab-r01/vendor/THREE-LICENSE.txt": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+        "assets/coffee-lab-r01/vendor/three.core.js": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20"
+      }
+    },
+    {
+      "track": "developer",
+      "source": "outputs/feedback-revisions/r04",
+      "revision": "developer-r30-draft",
+      "entrypoint": "developer/nemotron-post-training-developer.html",
+      "sha256": {
+        "nemotron-post-training-developer.html": "dca0a73721a2ecc45c9a6154971fd95439d4a28ecb650bb25b1899c2bbccc5b6",
+        "assets/beyond-request-maximize-r01.svg": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826",
+        "assets/architecture-flow-r02.js": "38f373c9144e7b3b22553480da4a3b2e97478ff9d9b4d9a831db935b26acc25b",
+        "assets/gym-organization-r01.js": "098095a2320588701a316efb6b210c186709655a9f9a84cc4157e38719bcfc1b",
+        "assets/narrative-flow-r02.css": "78a9e6450af5c648494221ece7d45c0da8441bb70cc4392279790ceb76c11430",
+        "assets/beyond-request-calendar-x-2-r02.svg": "25ed9d4c2c54df9c3c5d06bf4c7641f011800a70b0e59e212bf9179a054a2489",
+        "assets/beyond-request-x-r01.svg": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117",
+        "assets/beyond-request-icons-LICENSE.txt": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57",
+        "assets/beyond-request-evidence-r01.js": "9d433b6247c10a66da20b0b75b2c446d0bcd0d25530f160841bbe345c5c74afc",
+        "assets/beyond-request-play-r01.svg": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+        "assets/executive-feedback-r01.css": "159c42161f45b42c3cd04face5802bf5ef6eb1da5ff9e4f5a371f6b407d547f4",
+        "assets/beyond-request-check-r01.svg": "7f33acc9a77a61659531044525fc008edebe215bf4dcf1c789c8674ad3277db0",
+        "assets/story-reward-r06.js": "d8f6e38a3e81f00d997e2c10bdd16cb89b2c7b62089026b9999b59c0060d0cf1",
+        "assets/case-trace-evidence-r01.js": "1fe8f0285dbf81c4825c58a4b3a223e22c46e89c2c28975c6f507b5d02ef6247",
+        "assets/story-reward-r03.css": "fac8986fe9994506e7092881f433f4f1d03c4a93495fa0a84bc258f94be51404",
+        "assets/story-reward-r02.css": "a490b8e9a964b21619b37cd7e352a255182b2ed4eebbb79f1c88bdd589170a30",
+        "assets/get-started-copy-r01.svg": "ea80e566c7a12628a447cb53179b19aea4f60b9143e2becd0d0f20bf260e5718",
+        "assets/beyond-request-volume-x-r01.svg": "f382e421b7aae01172989f2b749ee87e44c0c82c16970b13a9ad5a323b613be0",
+        "assets/story-reward-r06.css": "725b25c014dbc1e19802f67f21b5e181dca96c55aef22ac4e1e3d311bd83e7ec",
+        "assets/executive-feedback-r04.js": "6e5ba4650b9f00fc5a8b6c8747907867e5ca3961f0091aac0f04afa4c1ca3240",
+        "assets/beyond-request-pause-r01.svg": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+        "assets/story-reward-r05.css": "2df9cacc8630adf104ccce5da82361e9a383715e35438577fb63892b1286986d",
+        "assets/gym-rl-start-qr.png": "fcfdb4311d20b71d8b6af72dc14c72f4de34d6bbde9cca438ec47adca21d9399",
+        "assets/architecture-flow-r01.css": "a5c4c7cbd33a8fe7dd2c2c2c550b6c0d3d47ce93be1a55aad0930af5a59362a6",
+        "assets/get-started-r01.js": "fd3e89a99362bccc83fd9f1158ec601dffaa45df705a15e2e1e248a8222119f9",
+        "assets/get-started-r01.css": "e2b50050c2ac37f3235ebb28e8a46b2cb61ade0843efbfce5ee94f8363700058",
+        "assets/architecture-flow-r02.css": "4b2e05680f3d61a1f7cdf312a81de0c5711353946d89d96b89b05b1310e9e4c9",
+        "assets/beyond-request-triangle-alert-r02.svg": "4866f38b8560d410f21e3226413e0b77997b6dfbb6931fadfe0a0d5aef9ffeb4",
+        "assets/get-started-dgx-station-r01.jpg": "171a726639ba487d571e88780e3236511f0b5dd8ffe5308e49ba783bb4ad885b",
+        "assets/story-reward-r01.js": "a5076f7ac4bcf8876a29e740d99e55668ce07680b53209cc89cd61268b811f7e",
+        "assets/beyond-request-arrow-right-r01.svg": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9",
+        "assets/healthcare-architecture-r03.png": "dbbfea13246d5f6a6d1c7bf7e4ab708efa1fe8d6c4d4bf7b8ef4670cf79cd0ff",
+        "assets/gym-organization-r01.css": "4d29419418f56e46a8c58e3d678b2ca372b3032447886220a1575f24eb2d528b",
+        "assets/beyond-request-volume-2-r01.svg": "fb404f9c128a0579de67b399177631e5edb3502fdc247ceb30e8b15754b46071",
+        "assets/pab-audience-grpo-r02.js": "0b613e17a65c7cb6d782985efaa5d7eea7e9f584cced52f960460dddf29175af",
+        "assets/narrative-flow-r04.js": "b0f9fd395ca6f3d7da024ea3d526022914a4a9806c86428ef67b09e2ceaab849",
+        "assets/case-trace-r02.js": "d7050580b24fd74282970bbc4ace885ca6fbb6d0febd8cf8c42c5653f54241ca",
+        "assets/beyond-request-info-r02.svg": "bc977a64eb96f3e9c1041ffd09a3fceb70e3e65c02b571f76064062ed31f3cb9",
+        "assets/case-trace-r02.css": "c377ab102e5643514443521913882b65cd3fadac299db8157a5de2a45649bbfc",
+        "assets/beyond-request-rotate-ccw-r01.svg": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd",
+        "assets/gym-opening-r03/opening.css": "78d50a6f6c91a23255960581b4bf5b31e60e55f6cdae21a3b1c49e3d0e2cf3cc",
+        "assets/gym-opening-r04/opening.js": "ee0991e66f9166437beb671b20b490d4a949cbd00527e34d64c24d8784ef3b6d",
+        "assets/gym-opening-r02/scene.js": "8c6d7870207f083af5ef8be4cec4633cc1170c244c239eb55fa1873b19b558b3",
+        "assets/gym-opening-r02/opening.css": "9189d9e1bd48ff1a1fde499f6e2f959574a51a24ebe89ff7788ed60eea57d4e8",
+        "assets/gym-opening-r02/motion.js": "93f7e8d5576828092e5c6945d3e827cea816dea9c063b8ef04ffa6500491124f",
+        "assets/gym-opening-r02/training-room.png": "7e62a30ea0c6f287a5f6dba58a994327f0fc169f09a4b48a17cc284260173896",
+        "assets/architecture-r04/nvidia.png": "625c86870bc1851793dc4a83b41dd9ff05dfd1557390c312decda102fcef50d8",
+        "assets/architecture-r04/verifier.png": "0408d09f604615139421f02bc70dd9730cb5769aa7f7c88571a94568913eee49",
+        "assets/architecture-r04/tasks.png": "cfed1672cadda56240d43253a12e07df25c91ac4e566aacea01cabaf68042e70",
+        "assets/architecture-r04/tools.png": "57617b7c3140467b762b40b6445659752161d54d8f1320d3738a0fb1a82ae2ff",
+        "assets/architecture-r04/rl.png": "2cfdc9447637bbe8618b4e4e0528d9531c905fc0f3bed025ede2a2c8bbaa48f3",
+        "assets/architecture-r04/nemotron.png": "9ff751943905a53fe86175c29af9c4f04c6b85f56098b89b0294dc473ed32b30",
+        "assets/architecture-r04/skills.png": "09e8ebc190e54fd1a83ab885331c621c0cb04174199b48b3b36046d720d1c8f6",
+        "assets/architecture-r04/codex.png": "54f844166fb696d68d45d7f64640fcccec78f2d66763629feb921256a9949066",
+        "assets/gym-opening-r01/opening.css": "d664a78b9fdbe1eb18b3ecf2bdc75dd49e560dd7b758ccfe784fe68a5317e40f",
+        "assets/coffee-lab-r01/vendor/three.module.js": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+        "assets/coffee-lab-r01/vendor/THREE-LICENSE.txt": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+        "assets/coffee-lab-r01/vendor/three.core.js": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20"
+      }
+    }
+  ],
+  "packageRevision": "r02-pruned",
+  "previousPackage": "outputs/healthcare-demo",
+  "prunedFiles": [
+    {
+      "path": "press/assets/architecture-r02.js",
+      "bytes": 10524,
+      "sha256": "7919d8e3c349504ee20eeb0ec879c26de6b972c342c00610151cd4c1a7c5c233"
+    },
+    {
+      "path": "press/assets/architecture-r03.js",
+      "bytes": 7893,
+      "sha256": "d06b470d38bf2f02f5f66a30ac0ebe7769a4b4222a22ccb4a5833f053519af04"
+    },
+    {
+      "path": "press/assets/architecture-r02.css",
+      "bytes": 17457,
+      "sha256": "962f53d59dc48fadde3b5388b99eaf87a4a81ea167d265c1f5b193ff1a4c6a95"
+    },
+    {
+      "path": "press/assets/gym-opening-press-r01/opening.js",
+      "bytes": 9910,
+      "sha256": "d7d21720edb030dc2b2e8900a934b8a0b4ce29b8625ef3c1fa273d4cb9ac5ce8"
+    },
+    {
+      "path": "developer/assets/care-in-practice-film-r01.css",
+      "bytes": 13868,
+      "sha256": "b98a6c73a27f1a9e4ac0b6d9645525228c8490f71a713b396423307024db1c94"
+    },
+    {
+      "path": "developer/assets/narrative-flow-r01.css",
+      "bytes": 5511,
+      "sha256": "05680d965538e2a2cdc3694c34a6f7da5527e8c9a630c1de0a7b22a8d3564ba6"
+    },
+    {
+      "path": "developer/assets/case-trace-r01.js",
+      "bytes": 15493,
+      "sha256": "14a591f1a5e2afea01fc8ef08c70f586f5d43211be7b6c4224ad699cf4044229"
+    },
+    {
+      "path": "developer/assets/narrative-flow-r02.js",
+      "bytes": 7741,
+      "sha256": "39d48a5f82b8edd4915e5548da4c1fe99047ffe6b7c36282df5250d5c81dea75"
+    },
+    {
+      "path": "developer/assets/care-in-practice-film-r01.js",
+      "bytes": 12939,
+      "sha256": "ecd69a4fa86a358f5e9769c0d63c843e66572aa34c13d15a7f992cb63e6835a6"
+    },
+    {
+      "path": "developer/assets/care-film-pause-r01.svg",
+      "bytes": 313,
+      "sha256": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c"
+    },
+    {
+      "path": "developer/assets/narrative-flow-r03.js",
+      "bytes": 7580,
+      "sha256": "562ffba0b2a0fc0f062402c2e28815580ffa1718b843c8eb2140cf89d0d992f1"
+    },
+    {
+      "path": "developer/assets/care-film-x-r01.svg",
+      "bytes": 260,
+      "sha256": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117"
+    },
+    {
+      "path": "developer/assets/pab-audience-grpo-r01.js",
+      "bytes": 100293,
+      "sha256": "fdba8b058ba04e85ed04aeca2b7b262a34ff2d2883285c379c54d2414e15dbea"
+    },
+    {
+      "path": "developer/assets/care-film-arrow-right-r01.svg",
+      "bytes": 261,
+      "sha256": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9"
+    },
+    {
+      "path": "developer/assets/executive-feedback-r01.js",
+      "bytes": 7642,
+      "sha256": "7e72e2263668facccb2d1060e8e9f619911367c250b8d1b7096006a77801550c"
+    },
+    {
+      "path": "developer/assets/story-reward-r01.css",
+      "bytes": 15335,
+      "sha256": "6d4870f50ccb8eedb31c63cdb2ed5875d35dc35f63b05f05b9b692851486346e"
+    },
+    {
+      "path": "developer/assets/beyond-request-r01.js",
+      "bytes": 12230,
+      "sha256": "195fd953a2292f67d0c9cb73d96ab8275ef3c744eb23526806111ce271d8ba99"
+    },
+    {
+      "path": "developer/assets/story-reward-r02.js",
+      "bytes": 24567,
+      "sha256": "da548db51d359b5efb404e1670e71a573b6a481aae3a8e6b500f136b70da0356"
+    },
+    {
+      "path": "developer/assets/patricia-refill-story-r01.png",
+      "bytes": 1921125,
+      "sha256": "102d7c40b3494df6b126bfdea240f591d9d316ac0350f4d4fe11e096d683e8f7"
+    },
+    {
+      "path": "developer/assets/care-film-play-r01.svg",
+      "bytes": 306,
+      "sha256": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833"
+    },
+    {
+      "path": "developer/assets/story-reward-r03.js",
+      "bytes": 29835,
+      "sha256": "2094cb09f25b22182101316e04311141636b0fb0a01af80095454b4b5e001e54"
+    },
+    {
+      "path": "developer/assets/care-film-maximize-r01.svg",
+      "bytes": 366,
+      "sha256": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826"
+    },
+    {
+      "path": "developer/assets/care-film-icons-LICENSE.txt",
+      "bytes": 3208,
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+    },
+    {
+      "path": "developer/assets/omar-refill-story-r01.png",
+      "bytes": 1791692,
+      "sha256": "4c264bc041e1ddbba66f8601cf8bfbeabdfb4d7323612ba3b6ccc7c538c94bce"
+    },
+    {
+      "path": "developer/assets/care-film-after-r01.png",
+      "bytes": 1752331,
+      "sha256": "9e0e319e181562f24560af25b7116e061778503d545a3ae08d4e2a3c4de97e28"
+    },
+    {
+      "path": "developer/assets/story-reward-r04.js",
+      "bytes": 28740,
+      "sha256": "8d2d15e816e44a39dbf245433426f3e0e69e3be15b3e7cad7d88c8b69284139a"
+    },
+    {
+      "path": "developer/assets/beyond-request-narration-r01.m4a",
+      "bytes": 296994,
+      "sha256": "2e3ae6776e3a30f9c6c257529a03c7380f3f63e3033fafd71d8e7dd328dea3cc"
+    },
+    {
+      "path": "developer/assets/executive-feedback-r03.js",
+      "bytes": 7871,
+      "sha256": "41c2c0d4f3019222d610120cfbd8f7c37c4b8c5c4915e5da77522f3b8567b858"
+    },
+    {
+      "path": "developer/assets/story-reward-r05.js",
+      "bytes": 29740,
+      "sha256": "d27dfc1165e910f6199a01357e31a74128457f8c6e0714daf0fec5132e0cfae6"
+    },
+    {
+      "path": "developer/assets/pab-grpo-rollout-group-r01.json",
+      "bytes": 61836,
+      "sha256": "073002947e1e2f862d64e3d875fbd979724f636e217fabf720abd78c43c312a3"
+    },
+    {
+      "path": "developer/assets/executive-feedback-r02.js",
+      "bytes": 7871,
+      "sha256": "bd2f9be1d62d45b267a1d332ff3463c70febb6904f98ecf48cc6876f0f581136"
+    },
+    {
+      "path": "developer/assets/care-film-before-r01.png",
+      "bytes": 1805929,
+      "sha256": "ab2869456f353ef1eb72e2eca6b97ee15a1cefac8f6ac978da69bd9550349d8a"
+    },
+    {
+      "path": "developer/assets/beyond-request-r01.css",
+      "bytes": 10532,
+      "sha256": "75413cc405a517aa9c5717e2e0d1e1a1b0e6ceceb1224d194c799b13add597b7"
+    },
+    {
+      "path": "developer/assets/beyond-request-r02.js",
+      "bytes": 7923,
+      "sha256": "8ad5f8c38ea6d10bcc5c0dec8961a28271e15c2c3d545212c7b9e141dbe54340"
+    },
+    {
+      "path": "developer/assets/beyond-request-r02.css",
+      "bytes": 10238,
+      "sha256": "0cf84ac56183cacf90b9ad982bff5fea41e61773d2d0fdd86bcc029d6c58f3d9"
+    },
+    {
+      "path": "developer/assets/beyond-request-narration-r01.js",
+      "bytes": 4838,
+      "sha256": "6f4063693315b40cd905134e848fe1094fb376419bcd8410cd66667f024dd6dd"
+    },
+    {
+      "path": "developer/assets/architecture-flow-r01.js",
+      "bytes": 11395,
+      "sha256": "0ef5491d1667163e6d03e32fb542de40df27501592a870a1270fa4e66b407e2f"
+    },
+    {
+      "path": "developer/assets/care-film-rotate-ccw-r01.svg",
+      "bytes": 297,
+      "sha256": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd"
+    },
+    {
+      "path": "developer/assets/pab-workbench-evidence-r01.json",
+      "bytes": 63935,
+      "sha256": "34bd140fd593e151cccdd4cabc5b22b4d6531c0c03350cbd80e5e8a8301452af"
+    },
+    {
+      "path": "developer/assets/case-trace-r01.css",
+      "bytes": 10199,
+      "sha256": "348af10c4aff1634242ba916e93d6052890f86a2e3bfb0f958ddcd1ea889440c"
+    },
+    {
+      "path": "developer/assets/narrative-flow-r01.js",
+      "bytes": 7551,
+      "sha256": "079134f971ce598804c0396b5d2bc6540e21d6fd578c2c3d6a3146ac6bf733bc"
+    },
+    {
+      "path": "developer/assets/whole-request-r01/app.bundle.js",
+      "bytes": 504190,
+      "sha256": "bc6c5920ee0fcfe5f127537ac8b36910837880d5c7f418388f589175996c1044"
+    },
+    {
+      "path": "developer/assets/whole-request-r01/style.css",
+      "bytes": 15161,
+      "sha256": "12a8b46fd414f35369547966ea3af8d0c5f9c35a38de8640c165a5315397e6d7"
+    },
+    {
+      "path": "developer/assets/whole-request-r01/app.mjs",
+      "bytes": 17307,
+      "sha256": "0cb165b41c20336629e9301e15ad3dd6d3fe1b827faf1b8d5e79a4191137b269"
+    },
+    {
+      "path": "developer/assets/whole-request-r01/model.mjs",
+      "bytes": 677,
+      "sha256": "a3f550c2060c88600afc18bc5c66b3b56ff8c88ac587f8e987a7a96ea8406465"
+    },
+    {
+      "path": "developer/assets/gym-opening-r03/opening.js",
+      "bytes": 10381,
+      "sha256": "e620bdc9cbb6dbe731d672cf3b4f0b175bb1ca89c1024c35b3aa6a61077b4747"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/app.bundle.js",
+      "bytes": 630393,
+      "sha256": "7afe0a8d48975a3e5db50ab72eefe7ca5bbcafc8bbe5bcbfff98b0066bf9dd0e"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/policy.mjs",
+      "bytes": 2872,
+      "sha256": "537e05a89f82b5f246855392ca86c0a4032974ead3c1d6190af9f9568accb89f"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/style.css",
+      "bytes": 8391,
+      "sha256": "fdea653cf7aca0b292d16cdd6c3e6dc22cb75373df9d54a841ce8990f6548b66"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/app.mjs",
+      "bytes": 26768,
+      "sha256": "716ae1cea066a91975de95a39b9d97e7132ad7a31295495c0fbad7ccdf9fe72a"
+    },
+    {
+      "path": "developer/assets/gym-opening-r02/opening.js",
+      "bytes": 9674,
+      "sha256": "0b99ba3c45615af8583499df4db2aab6084a0763cb33cf66a4611249fab4551c"
+    },
+    {
+      "path": "developer/assets/gym-opening-r02/asset-notes.md",
+      "bytes": 1761,
+      "sha256": "9d00851e9c287b7d9b104fa484d7a133f4d6291dc2d9a2409f1e0b5185e9fecd"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r01/app.bundle.js",
+      "bytes": 506519,
+      "sha256": "6d1c5bee04b3f65c7442cfb27ad22b7da73f2304abf061354e63020e6bd0213b"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r01/policy.mjs",
+      "bytes": 2595,
+      "sha256": "e357f99c2bb318202fc007983f528b2db3999414991d930705f6d25aef94b3f9"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r01/style.css",
+      "bytes": 11808,
+      "sha256": "9f94cef9ac429546ee92b490dd8cfc831f9daeaef15ac905a2bee866a5ceb69c"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r01/evidence.js",
+      "bytes": 12262,
+      "sha256": "aa5a2709098d25b13a847496f60651a2843f5e979a8836b562b905fbd015f383"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r01/app.mjs",
+      "bytes": 22039,
+      "sha256": "26b5811b392f672b33d71fb935ab00fd57095db1cf1cd796e172c6971162c766"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r03/app.bundle.js",
+      "bytes": 633653,
+      "sha256": "c28bf1ba5e73681094c01fe4dfa59f41dfb401d3686b303db5941bba2d3e3e26"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r03/policy.mjs",
+      "bytes": 3193,
+      "sha256": "a422cd645c2905238548c519ecafd64387b6069caa05d46dacb559b803c22d3f"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r03/style.css",
+      "bytes": 18902,
+      "sha256": "55ac7ceef2f2f67400815561a562d0d05cb8e97d120251d05a2bdd384b6a826e"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r03/app.mjs",
+      "bytes": 32009,
+      "sha256": "5792836a84f9acf50468e676dc3a0a7fa4e12402d3535964de431fcbd5dfd4f7"
+    },
+    {
+      "path": "developer/assets/gym-opening-r01/opening.js",
+      "bytes": 10654,
+      "sha256": "f6d9860a4e687573d463733c4f1ab2083deaf0ffde3993a922a8afe00630e1ea"
+    },
+    {
+      "path": "developer/assets/gym-opening-r01/rehearsal-room.png",
+      "bytes": 2210829,
+      "sha256": "34104dd8a3f000aeb5ab645f99fefabf4b188c51eeb50601ca0f752d61e9a6f3"
+    },
+    {
+      "path": "developer/assets/gym-opening-r01/asset-notes.md",
+      "bytes": 2760,
+      "sha256": "30432e91383b8efc0c2424c0eb70ed452d877a5cd43485a44032b829134b7c72"
+    },
+    {
+      "path": "developer/assets/gym-opening-r01/scene.js",
+      "bytes": 11556,
+      "sha256": "008ff4790b088c077c2f9afa1c818813f606271554cf70d5ce46824e97e3c471"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r02/app.bundle.js",
+      "bytes": 630045,
+      "sha256": "0645f9ad60fdf3253c6e4c848e35c2ac0461d77cb263f488b2b6a271fbebff0a"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r02/policy.mjs",
+      "bytes": 2872,
+      "sha256": "537e05a89f82b5f246855392ca86c0a4032974ead3c1d6190af9f9568accb89f"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r02/style.css",
+      "bytes": 11781,
+      "sha256": "d8ebf7468b5d5e06bb8a4fa190c10add0f880a4e1924a6288e08ee72903cfa68"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r02/app.mjs",
+      "bytes": 27549,
+      "sha256": "da36a9c219524df62880bf0b6ce5cf5d8c9db224f22d1575972e09264b7cf190"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r02/app.bundle.js",
+      "bytes": 495950,
+      "sha256": "cc6c622a839a11fbe44c7e5f6492275ac83b1987b12151d141bc0e2dcc07b78b"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r02/style.css",
+      "bytes": 6416,
+      "sha256": "b1cbebb1b4087b17a6d0481a197091a6bf71898364b7ef30a6bed16dbafae045"
+    },
+    {
+      "path": "developer/assets/keep-my-place-r02/app.mjs",
+      "bytes": 15720,
+      "sha256": "eecd09a46076b156a1476b0cf060a679fdc81a3da7b9ae60f12de81e16212b50"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/vendor/cannon-es.js",
+      "bytes": 346256,
+      "sha256": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c"
+    },
+    {
+      "path": "developer/assets/coffee-lab-r01/vendor/CANNON-LICENSE.txt",
+      "bytes": 1125,
+      "sha256": "4714d0272f50cb21fe46fe29333c7c600d3c85b5ebd2a80f4db07e8cfccbf5b2"
+    }
+  ]
+}

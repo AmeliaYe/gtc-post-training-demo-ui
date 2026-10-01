@@ -1,0 +1,11 @@
+@import url('story-reward-r03.css');
+
+.sr-frame { display:flow-root; }
+.sr-tool-context { margin:0 0 10px; color:#b8d2ce; font-size:11px; line-height:1.6; overflow-wrap:anywhere; }
+.sr-tool-context summary { cursor:pointer; padding:3px 4px; }
+.sr-tool-context summary:focus-visible { outline:2px solid #bce77b; outline-offset:2px; }
+.sr-tool-context code { color:#b9e3df; }
+.sr-tool-hint { color:#a3b1a9; }
+.sr-tool-record { padding:8px 4px; border-top:1px solid #344541; }
+.sr-tool-record h3 { margin:0 0 6px; font:12px/1.5 ui-monospace,monospace; }
+.sr-tool-record pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font:11px/1.55 ui-monospace,monospace; color:#c5d2cd; }
