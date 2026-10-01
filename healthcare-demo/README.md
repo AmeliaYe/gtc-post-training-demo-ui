@@ -2,7 +2,7 @@
 
 Complete standalone copies of the Press and Developer experiences, packaged on
 October 1, 2026 for reference alongside the GTC Healthcare integration.
-Package r02 removes unused assets from earlier experiments.
+Package r03 includes the Press r07 animation fix; r02 removed unused assets from earlier experiments.
 Each track includes its own HTML, JavaScript, CSS, imagery, recorded evidence,
 and bundled library licenses. Keep each HTML file with its `assets/` directory.
 
@@ -10,7 +10,7 @@ and bundled library licenses. Keep each HTML file with its `assets/` directory.
 
 | Folder | Entry point | Revision and contents |
 | --- | --- | --- |
-| `press/` | [Full Press HTML](press/nemotron-post-training-press.html) | Press r33 / narrative r06: Introduction, How It Learns, Before & After, Results, Get Started. |
+| `press/` | [Full Press HTML](press/nemotron-post-training-press-r07.html) | Press r34 / narrative r07: Introduction, How It Learns, Before & After, Results, Get Started. |
 | `developer/` | [Full Developer HTML](developer/nemotron-post-training-developer.html) | Developer r30 **draft** / executive-feedback r04: Introduction, The Refill Case, Why Post-Train, How to Post-Train, Case Trace, Benchmarks, Get Started. |
 | `provenance.json` | [Source and checksum manifest](provenance.json) | Original source directories, revisions, and SHA-256 checksums for every copied file. |
 
@@ -23,7 +23,7 @@ byte-for-byte. The GTC Healthcare tile continues to use its four-page bundle in
 - **Current Press narrative:** [Narrative – Press](https://docs.google.com/spreadsheets/d/1pjaX6vpL347YV7OJYNWN2Y_mqANTSRL7Lvir0JCUrgk/edit#gid=1409351755).
   This is the five-page Press talk track. Its Introduction screenshot/cue predates
   the r06 removal of the bottom component row and footer; the packaged HTML
-  includes that latest cleanup.
+  includes that cleanup and the r07 interaction-trace animation fix.
 - **Developer narrative:** [Executive-feedback r04 talk-track workbook](https://docs.google.com/spreadsheets/d/1RZNnjdWhNnd_yTpBEuxI0nuSJAFIIHCz0V--I57Df1w/edit).
   Select **Refill – Developer** for the seven-page Developer route. This workbook
   also retains the earlier Press route.
@@ -44,7 +44,7 @@ python3 -m http.server 8766 --bind 127.0.0.1
 
 Then open:
 
-- [Press](http://localhost:8766/press/nemotron-post-training-press.html)
+- [Press](http://localhost:8766/press/nemotron-post-training-press-r07.html)
 - [Developer](http://localhost:8766/developer/nemotron-post-training-developer.html)
 
 To view a server running on the workstation from a laptop, forward its port:
@@ -63,8 +63,8 @@ step 25. They are separate presentations, not identical checkpoint comparisons.
 ## Location and preservation
 
 - Workstation repo folder: `/home/aquraini/gtc-post-training-demo-ui/healthcare-demo/`
-- Local source package: `outputs/healthcare-demo-r02/` in the healthcare evaluation repo.
-- Golden mirrored copy: `/home/aquraini/healthcare-agent-evals/outputs/healthcare-demo-r02/`
+- Local source package: `outputs/healthcare-demo-r03/` in the healthcare evaluation repo.
+- Golden mirrored copy: `/home/aquraini/healthcare-agent-evals/outputs/healthcare-demo-r03/`
 - Git branch: `healthcare-demo`. This reference folder is included in commit preparation;
   no commit or push has been made.
 
@@ -84,3 +84,10 @@ uses Three.js from `coffee-lab-r01/vendor/`; current styles import earlier CSS
 layers, and the current story uses r01 scoring helpers. Their original bytes
 and license notices are preserved. The provenance manifest lists retained
 checksums and every removed file.
+
+## Animation update — Press r07
+
+The latest Press entry point is `press/nemotron-post-training-press-r07.html`.
+It adds connector-following trace motion, verifier/judge receipt effects, and
+scored feedback returning to NeMo RL. The previous Press HTML and its assets
+remain available at `press/nemotron-post-training-press.html`. Developer is unchanged.

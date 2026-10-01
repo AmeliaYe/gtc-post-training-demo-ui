@@ -485,5 +485,18 @@
       "bytes": 1125,
       "sha256": "4714d0272f50cb21fe46fe29333c7c600d3c85b5ebd2a80f4db07e8cfccbf5b2"
     }
-  ]
+  ],
+  "animationUpdate": {
+    "source": "outputs/press-narrative-r07",
+    "revision": "press-r34-narrative-r07",
+    "entrypoint": "press/nemotron-post-training-press-r07.html",
+    "preservedEntrypoint": "press/nemotron-post-training-press.html",
+    "sha256": {
+      "press/nemotron-post-training-press-r07.html": "baa16c2c4574014f3aa913c2066b7a801d5576ea16f6440ddea43de584b1b489",
+      "press/assets/press-r07.js": "c48fb26c0371527be3f576cef43a8db80a432f2188d23c34c155202f85cc0eb7",
+      "press/assets/learning-cinema-r02.js": "ca643a09c0de09a02b7a659d1f3caa573f64f327690817c617a09c1726bbcae4",
+      "press/assets/architecture-r05.css": "0811fb03322d371bb0bbce5763464974513f7fe322477af41844dc734b9c4c51",
+      "press/assets/architecture-r05.js": "38a488329785fcfde547617f931103c6da13a869f53ceeb59c5b6e6b681035fd"
+    }
+  }
 }

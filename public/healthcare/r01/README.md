@@ -21,7 +21,7 @@ navigation and sends same-origin height updates to its React host.
   preparation following the user’s explicit authorization.
 - Application port: 3001. Port 3000 is a different application (Clinical AIQ).
 - Verified laptop tunnel: `http://localhost:13001`; open Healthcare in the gallery.
-- Direct narrative: `http://localhost:13001/healthcare/r01/index.html#how-it-learns`.
+- Direct narrative: `http://localhost:13001/healthcare/r01/index-r02.html#how-it-learns`.
 
 The dev server's existing hostname-origin restriction still applies. If the
 laptop tunnel stops, run:
@@ -44,3 +44,10 @@ copies and verification records: `work/press-gtc-healthcare-r01/`. Screenshots:
 golden healthcare checkout using the standing scoped asset-sync workflow.
 
 Future changes should create a new bundle revision and preserve r01.
+
+## Animation update — embedded r02
+
+Active entry point: `index-r02.html`, using the animation from Press r34 /
+narrative r07. `index.html` preserves embedded r01. The new architecture-r05
+and learning-cinema-r02 modules animate traces into evaluation and scored
+feedback toward NeMo RL. Other pages and recorded evidence are unchanged.

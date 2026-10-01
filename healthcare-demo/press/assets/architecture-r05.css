@@ -1,0 +1,21 @@
+.learn-wire[data-kind=trace] {
+  stroke:#91dfdc;stroke-width:2;
+  opacity:calc(.28 + var(--trace-flow,0)*.72);
+  filter:drop-shadow(0 0 5px rgb(145 223 220 / calc(var(--trace-flow,0)*.6)));
+}
+.learn-wire[data-kind=feedback] {
+  stroke:#b5ec75;stroke-width:2;
+  opacity:calc(.35 + var(--feedback-flow,0)*.65);
+  filter:drop-shadow(0 0 5px rgb(181 236 117 / calc(var(--feedback-flow,0)*.5)));
+}
+.learn-flow[data-trace-active=true] .learn-label[data-label=trace] {color:#cbffff}
+.learn-flow[data-feedback-active=true] .learn-label[data-label=feedback] {color:#d5ffa6}
+.learn-flow .learn-judges,.learn-flow .learn-judges img {transition:none;filter:none}
+.learn-flow .learn-verifier>img {
+  filter:brightness(calc(1 + var(--verifier-receipt,0)*.65)) drop-shadow(0 0 calc(var(--verifier-receipt,0)*14px) #b5ec75);
+}
+.learn-flow .learn-judge>img {
+  filter:brightness(calc(1 + var(--judge-receipt,0)*.65)) drop-shadow(0 0 calc(var(--judge-receipt,0)*14px) #b5ec75);
+}
+.learn-flow .learn-verifier>p {color:rgb(calc(190 + var(--verifier-receipt,0)*65) 235 calc(175 + var(--verifier-receipt,0)*40))}
+.learn-flow .learn-judge>p {color:rgb(calc(190 + var(--judge-receipt,0)*65) 235 calc(175 + var(--judge-receipt,0)*40))}

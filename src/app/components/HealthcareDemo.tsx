@@ -20,7 +20,7 @@ export default function HealthcareDemo() {
   return <iframe
     ref={frame}
     className="healthcare-frame"
-    src="/healthcare/r01/index.html#how-it-learns"
+    src="/healthcare/r01/index-r02.html#how-it-learns"
     title="Healthcare post-training: How It Learns, Before & After, Results, Get Started"
     style={{ height }}
     allowFullScreen
