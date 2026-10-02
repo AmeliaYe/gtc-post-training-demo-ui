@@ -20,6 +20,20 @@ npm run build
 npm start
 ```
 
+## Coding agent integration
+
+The Coding Agent view reads the three allowlisted demo issues through the
+server-side `GET /api/demo/issues` route. Set
+`NEMOTRON_DASHBOARD_GITHUB_API_TOKEN` to a repository-scoped fine-grained PAT
+with **Issues: Read** permission to use current GitHub presentation data. The UI
+falls back to a visibly labeled bundled snapshot when the token or GitHub is
+unavailable; the credential is never sent to the browser.
+
+The current view intentionally keeps model activity, trusted test results, and
+the independent judge pending until the authenticated coordinator routes exist.
+See [docs/coding-agent-integration.md](docs/coding-agent-integration.md) for the
+model topology, trust boundary, and remaining live-run work.
+
 ## Embedded demos
 
 The **multimodal biology** demo is embedded as an iframe. First clone the [nemotron-stitch-demos repo](https://github.com/NVIDIA-dev/nemotron-stitch-demos) and run and serve the model checkpoints. Then start the demo UI using:

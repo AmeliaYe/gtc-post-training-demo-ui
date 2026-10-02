@@ -1,15 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import CodingAgentDemo from './components/CodingAgentDemo';
 import HealthcareDemo from './components/HealthcareDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
-import {
-  CODING_BASE_TOTAL_SECONDS,
-  formatSeconds,
-  modelState,
-  type ModelRun,
-} from '@/lib/coding-fixture';
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -58,7 +53,11 @@ type LiveDemo = DemoBase & {
   previewLabel?: string;
 };
 
-type Demo = PlaceholderDemo | LiveDemo;
+type CodingDemo = DemoBase & {
+  kind: 'coding';
+};
+
+type Demo = PlaceholderDemo | LiveDemo | CodingDemo;
 
 const demos: Demo[] = [
   {
@@ -81,13 +80,8 @@ const demos: Demo[] = [
     embedUrl: KERMT_DEMO_URL,
   },
   {
-    kind: 'placeholder', id: 'coding', name: 'Coding Agent', task: 'Software engineering · JetBrains',
+    kind: 'coding', id: 'coding', name: 'Coding Agent', task: 'Software engineering · JetBrains',
     color: '#ff84b7', glow: 'rgba(255, 132, 183, .18)', icon: CodeBracketIcon,
-    scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB',
-    prompt: 'Resolve DEMO-1842 (acme/py-runtime #16): parent cancellation can be swallowed while child cleanup runs, leaving callers waiting on a task group that should unwind.',
-    before: 'Add a retry check before processing tool calls and write a test to ensure the arguments are not duplicated.',
-    after: 'Root cause is replay after reconnect: the accumulator is keyed by chunk index, which resets. Key by response_id + call_id, ignore sequence ≤ last_sequence, and add a reconnect test covering a split UTF-8 argument. Files: stream.py, state.py, test_reconnect.py.',
-    tags: ['repo-aware', 'Mellum', 'test-driven'],
   },
   {
     kind: 'placeholder', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
@@ -100,13 +94,6 @@ const demos: Demo[] = [
   },
 ];
 
-// Fixture seconds advanced per wall-clock second, so a 52s replay fits a booth visit.
-const PLAYBACK_RATE = 6;
-
-const codingBaseRun = modelState('base', Number.POSITIVE_INFINITY);
-const codingTrainedRun = modelState('trained', Number.POSITIVE_INFINITY);
-const codingLatencyReduction = Math.round((1 - codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100);
-const codingToolCallReduction = Math.round((1 - codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100);
 function NvidiaLogo() {
   return (
     <svg className="nvidia-logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -139,18 +126,6 @@ function ScoreBar({ label, display, fill, color, muted = false }: { label: strin
   );
 }
 
-function ReductionCell({ percent, label, baseDisplay, tunedDisplay, fill, color }: { percent: number; label: string; baseDisplay: string; tunedDisplay: string; fill: number; color: string }) {
-  return (
-    <div className="reduction-cell">
-      <div className="result-summary"><span className="lift-number" style={{ color }}>−{percent}%</span><span><strong>{label}</strong><small>vs. base model</small></span></div>
-      <div className="score-bars">
-        <ScoreBar label="Base model" display={baseDisplay} fill={100} color={color} muted />
-        <ScoreBar label="Post-trained" display={tunedDisplay} fill={fill} color={color} />
-      </div>
-    </div>
-  );
-}
-
 function ModelTile({ model }: { model: Demo }) {
   const Icon = model.icon;
   return (
@@ -161,18 +136,18 @@ function ModelTile({ model }: { model: Demo }) {
       </span>
       <span className="tile-topline">
         <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
-        <span className="status-pill"><i /> {model.id === 'health' ? 'DEMO' : 'LIVE'}</span>
+        <span className={`status-pill ${model.kind === 'coding' ? 'is-preview' : ''}`}><i /> {model.id === 'health' ? 'DEMO' : model.kind === 'coding' ? 'PREVIEW' : 'LIVE'}</span>
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
-      {model.kind === 'placeholder' ? (
+      {model.kind === 'coding' ? (
+        <span className="tile-score coding-tile-preview" aria-label="Two routed coding lanes, trusted tests, and independent judge">
+          <span><small>workflow</small><strong style={{ color: model.color }}>A / B</strong><em>routed lanes</em></span>
+          <span className="coding-tile-flow" aria-hidden="true"><i>R</i><b>→</b><i>C</i><b>→</b><i>T</i><b>→</b><i>J</i></span>
+        </span>
+      ) : model.kind === 'placeholder' ? (
         <span className="tile-score">
-          {model.id === 'coding' ? <>
-            <span><small>tool calls</small><strong style={{ color: model.color }}>−{codingToolCallReduction}%</strong><em>vs. base</em></span>
-            <MiniChart before={codingBaseRun.toolCalls} after={codingTrainedRun.toolCalls} color={model.color} domain={[4, 18]} label="Tool-call trend" />
-          </> : <>
-            <span><small>vs. base</small><strong style={{ color: model.color }}>+{(model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
-            <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
-          </>}
+          <span><small>vs. base</small><strong style={{ color: model.color }}>+{(model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
+          <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
         <span className="tile-score"><span><small>interactive</small><strong style={{ color: model.color }}>{model.previewLabel || 'Live demo'}</strong></span></span>
@@ -200,109 +175,22 @@ function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: stri
   );
 }
 
-function TrajectoryPanel({ run, model }: { run: ModelRun; model: PlaceholderDemo }) {
-  const tuned = run.id === 'trained';
-  return (
-    <section className={`output-panel ${tuned ? 'tuned' : ''}`} style={tuned ? { '--accent': model.color, '--panel-glow': model.glow } as React.CSSProperties : undefined}>
-      <header>
-        <span className="model-mark">{tuned ? <SparklesIcon /> : <CircleStackIcon />}</span>
-        <span><small>{tuned ? 'AFTER · POST-TRAINED' : 'BEFORE · GENERAL MODEL'}</small><strong>{run.name}</strong></span>
-        <span className={`run-state ${run.status}`}><i className="status-dot" />{run.status === 'complete' ? 'COMPLETE' : 'RUNNING'}</span>
-      </header>
-
-      <div className="trajectory-body">
-        <div className="progress-block">
-          <div className="progress-copy"><span>{run.currentStage}</span><strong>{Math.round(run.progress)}%</strong></div>
-          <div
-            className="progress-track"
-            role="progressbar"
-            aria-label={`${run.name} progress`}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(run.progress)}
-          >
-            <span style={{ width: `${run.progress}%` }} />
-          </div>
-        </div>
-
-        <dl className="run-metrics">
-          <div><dt>Elapsed</dt><dd>{formatSeconds(run.elapsedSeconds)}</dd></div>
-          <div><dt>Tool calls</dt><dd>{run.toolCalls}</dd></div>
-          <div><dt>Failures</dt><dd className={run.failures ? 'metric-warning' : 'metric-good'}>{run.failures}</dd></div>
-        </dl>
-
-        <ol className="timeline" aria-label={`${run.name} tool timeline`}>
-          {run.stages.map((stage, index) => (
-            <li className={`timeline-item ${stage.status}`} key={stage.id} aria-current={stage.status === 'active' ? 'step' : undefined}>
-              <div className="timeline-rail" aria-hidden="true">
-                <span className="timeline-node">{stage.status === 'complete' ? <CheckIcon /> : String(index + 1).padStart(2, '0')}</span>
-              </div>
-              <div className="timeline-content">
-                <div className="timeline-title">
-                  <strong>{stage.label}</strong>
-                  <span>{stage.status === 'queued' ? 'Queued' : `${stage.status === 'active' ? 'Active' : 'Complete'} · +${stage.atSeconds.toFixed(1)}s`}</span>
-                </div>
-                <div className="stage-attribution">
-                  <span className="agent-chip"><i aria-hidden="true" />{stage.agent}<small>Sim</small></span>
-                  <code>{stage.tool}</code>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <footer>
-        <span className={tuned ? 'result-chip pass' : 'result-chip'}>{tuned && <CheckIcon />}{run.currentStage}</span>
-        <span>{run.toolCalls} tool calls · local · fp8</span>
-      </footer>
-    </section>
-  );
-}
-
-function PlaceholderBody({ model, isRunning, runCount, codingElapsed }: { model: PlaceholderDemo; isRunning: boolean; runCount: number; codingElapsed: number }) {
+function PlaceholderBody({ model, isRunning, runCount }: { model: PlaceholderDemo; isRunning: boolean; runCount: number }) {
   const lift = model.scoreAfter - model.scoreBefore;
-  const isCoding = model.id === 'coding';
   return (
     <>
       <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
 
-      <div className={`comparison-grid ${isRunning && !isCoding ? 'is-evaluating' : ''}`}>
-        {isCoding ? <>
-          <TrajectoryPanel run={modelState('base', codingElapsed)} model={model} />
-          <div className="comparison-divider"><span>VS</span></div>
-          <TrajectoryPanel run={modelState('trained', codingElapsed)} model={model} />
-        </> : <>
-          <OutputPanel type="base" text={model.before} model={model} />
-          <div className="comparison-divider"><span>VS</span></div>
-          <OutputPanel type="tuned" text={model.after} model={model} />
-        </>}
+      <div className={`comparison-grid ${isRunning ? 'is-evaluating' : ''}`}>
+        <OutputPanel type="base" text={model.before} model={model} />
+        <div className="comparison-divider"><span>VS</span></div>
+        <OutputPanel type="tuned" text={model.after} model={model} />
       </div>
 
-      <div className={`results-strip ${isCoding ? 'trajectory' : ''}`}>
-        {isCoding ? <>
-          <ReductionCell
-            percent={codingLatencyReduction}
-            label="latency reduction"
-            baseDisplay={formatSeconds(codingBaseRun.totalSeconds)}
-            tunedDisplay={formatSeconds(codingTrainedRun.totalSeconds)}
-            fill={(codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100}
-            color={model.color}
-          />
-          <ReductionCell
-            percent={codingToolCallReduction}
-            label="fewer tool calls"
-            baseDisplay={`${codingBaseRun.toolCalls} calls`}
-            tunedDisplay={`${codingTrainedRun.toolCalls} calls`}
-            fill={(codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100}
-            color={model.color}
-          />
-          <div className="result-metrics"><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
-        </> : <>
-          <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
-          <div className="score-bars"><ScoreBar label="Base model" display={`${model.scoreBefore.toFixed(1)}%`} fill={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" display={`${model.scoreAfter.toFixed(1)}%`} fill={model.scoreAfter} color={model.color} /></div>
-          <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
-        </>}
+      <div className="results-strip">
+        <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
+        <div className="score-bars"><ScoreBar label="Base model" display={`${model.scoreBefore.toFixed(1)}%`} fill={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" display={`${model.scoreAfter.toFixed(1)}%`} fill={model.scoreAfter} color={model.color} /></div>
+        <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
       </div>
 
       <div className="expanded-footer"><div className="tag-list">{model.tags.map((tag) => <span key={tag}><CheckIcon /> {tag}</span>)}</div><span>Evaluation run #{runCount} · 1,000 prompts · seed 42</span></div>
@@ -315,8 +203,6 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
-  const [codingElapsed, setCodingElapsed] = useState(Number.POSITIVE_INFINITY);
-  const frameRef = useRef<number | null>(null);
   const introFrameRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -334,56 +220,21 @@ export default function Home() {
     return () => window.removeEventListener('message', advanceIntro);
   }, [introStage]);
 
-  const stopPlayback = useCallback(() => {
-    if (frameRef.current === null) return;
-    cancelAnimationFrame(frameRef.current);
-    frameRef.current = null;
-  }, []);
-
-  useEffect(() => stopPlayback, [stopPlayback]);
-
-  const playCodingTrajectory = useCallback(() => {
-    stopPlayback();
-    const startedAt = performance.now();
-    setCodingElapsed(0);
-    const step = (now: number) => {
-      const elapsed = ((now - startedAt) / 1000) * PLAYBACK_RATE;
-      if (elapsed >= CODING_BASE_TOTAL_SECONDS) {
-        frameRef.current = null;
-        setCodingElapsed(Number.POSITIVE_INFINITY);
-        setIsRunning(false);
-        setRunCount((count) => count + 1);
-        return;
-      }
-      setCodingElapsed(elapsed);
-      frameRef.current = requestAnimationFrame(step);
-    };
-    frameRef.current = requestAnimationFrame(step);
-  }, [stopPlayback]);
-
   const runEvaluation = () => {
     if (isRunning) return;
     trackInteraction('evaluation_run', { use_case: selectedId });
     setIsRunning(true);
-    if (selectedId === 'coding') {
-      playCodingTrajectory();
-      return;
-    }
     window.setTimeout(() => { setIsRunning(false); setRunCount((count) => count + 1); }, 900);
   };
 
   const selectUseCase = (useCase: string) => {
     trackUseCaseSelection(useCase, selectedId ? 'dock' : 'gallery');
-    stopPlayback();
-    setCodingElapsed(Number.POSITIVE_INFINITY);
     setIsRunning(false);
     setSelectedId(useCase);
   };
 
   const resetView = (source: 'toolbar' | 'window') => {
     trackInteraction('view_reset', { source, selected_use_case: selectedId });
-    stopPlayback();
-    setCodingElapsed(Number.POSITIVE_INFINITY);
     setIsRunning(false);
     setSelectedId(null);
   };
@@ -471,14 +322,14 @@ export default function Home() {
                     <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">
-                    {model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
+                    {model.id !== 'health' && model.kind !== 'coding' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
                     {model.kind === 'placeholder' && <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>}
                   </div>
                 </div>
 
-                {model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
+                {model.kind === 'coding' ? <CodingAgentDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
-                  : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} codingElapsed={codingElapsed} />}
+                  : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}
                 </motion.article>
               );
