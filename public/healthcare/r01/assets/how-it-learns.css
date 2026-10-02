@@ -1,0 +1,7 @@
+html, body { min-height: 100%; }
+.gtc-how-it-learns > main { min-height: 100vh; padding-top: clamp(24px, 4vh, 46px); }
+.gtc-how-it-learns .learn-flow { margin-bottom: 0; }
+
+@media (min-width: 1180px) and (min-height: 850px) {
+  .gtc-how-it-learns > main { display: grid; align-items: center; }
+}

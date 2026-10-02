@@ -1,0 +1,9 @@
+@import url('story-reward-r02.css');
+
+.sr-chat { position:relative; }
+.sr-full-message { display:inline-flex; align-items:center; gap:6px; padding:8px 0 0; border:0; background:transparent; color:#b9cdbf; font-size:11px!important; }
+.sr-full-message:hover { color:#e8f5dc; }
+.sr-full-message .sr-icon { width:12px; height:12px; }
+.sr-full-message[aria-expanded="true"] .sr-icon { transform:rotate(-90deg); }
+.sr-v2 p.sr-omission { margin:8px 0 12px; padding:0 4px; color:#a0aea5; font-size:10px; line-height:1.5; overflow-wrap:anywhere; }
+.sr-bubble blockquote { font-weight:400; }

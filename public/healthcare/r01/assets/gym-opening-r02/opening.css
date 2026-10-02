@@ -1,0 +1,73 @@
+@import url('../gym-opening-r01/opening.css');
+
+.gym-opening.r02 .go-stage { height:min(50vh,560px); min-height:350px; }
+.gym-opening.r02 .go-backdrop { object-position:center 30%; }
+.gym-opening.r02 .go-heading h1 { font-size:32px; }
+.gym-opening.r02 .go-verifier { width:232px; right:5%; bottom:9%; padding:17px; box-shadow:0 8px 20px #0002; }
+.gym-opening.r02 .go-verifier>p { font-size:11px; margin-bottom:10px; }
+.gym-opening.r02 .go-check { font-size:12px; padding:8px 0; }
+.gym-opening.r02 .go-check[data-state=ignore] { opacity:.65; }
+.go-reps { position:absolute; left:6%; bottom:10%; background:#142721e8; color:#eef4ec; padding:12px 18px; border-left:3px solid #aee273; }
+.go-reps span { display:block; color:#b4cdbf; font-size:10px; text-transform:uppercase; }
+.go-reps strong { display:block; font-size:46px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums; min-width:64px; }
+.go-form-cue { position:absolute; left:25%; top:9%; max-width:280px; color:#193129; background:#f1f6ecf2; padding:12px 17px; border-left:3px solid #f3ae9b; }
+.go-form-cue[data-quality=good] { border-color:#7cae3c; }
+.go-form-cue span { display:block; font-size:10px; color:#587061; margin-bottom:5px; }
+.go-form-cue strong { display:block; font-size:18px; font-weight:600; line-height:1.2; }
+.go-reward-choice { border:0; border-top:1px solid #466456; margin:10px 0 0; padding:12px 0 0; min-width:0; }
+.go-reward-choice legend { float:left; width:100%; padding:0 0 8px; font-size:10px; color:#c1d7ca; }
+.go-reward-segment { display:flex; width:100%; border:1px solid #547063; border-radius:3px; overflow:hidden; }
+.go-reward-segment label { flex:1; text-align:center; position:relative; cursor:pointer; }
+.go-reward-segment label+label { border-left:1px solid #547063; }
+.go-reward-segment input { position:absolute; opacity:0; width:1px; height:1px; }
+.go-reward-segment span { display:block; padding:9px 5px; min-height:34px; font-size:11px; color:#c2d4ca; }
+.go-reward-segment input:checked+span { background:#b3e575; color:#192617; font-weight:650; }
+.go-reward-segment input:focus-visible+span { outline:2px solid #efffd9; outline-offset:-3px; }
+.gym-opening.r02 .go-caption { min-height:111px; }
+.gym-opening.r02 .go-caption h2 { font-size:23px; }
+.gym-opening.r02 .go-caption .go-bridge { margin:6px 0 0; text-transform:none; font-size:12px; line-height:1.45; color:#b5cac0; }
+.gym-opening.r02 .go-caption>div { max-width:800px; }
+.gym-opening.r02 .go-name { left:50%; transform:translateX(-50%); bottom:7%; font-size:10px; }
+.gym-opening.r02 .go-evidence { font-size:12px; }
+.gym-opening.r02 .go-note { font-size:10px; }
+@media(min-width:1700px) { .gym-opening.r02 .go-stage { height:560px; } }
+@media(max-width:1000px) {
+  .gym-opening.r02 .go-heading h1 { font-size:28px; }
+  .gym-opening.r02 .go-verifier { right:3%; width:202px; padding:12px; }
+  .go-form-cue { left:23%; max-width:240px; padding:10px 13px; }
+  .go-form-cue strong { font-size:16px; }
+  .go-reps { left:3%; }
+}
+@media(max-width:650px) {
+  .gym-opening.r02 .go-heading h1 { font-size:25px; }
+  .gym-opening.r02 .go-stage { height:350px; min-height:0; }
+  .gym-opening.r02 .go-backdrop { object-position:center; }
+  .gym-opening.r02 .go-verifier { left:8px; right:8px; bottom:8px; width:auto; padding:8px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px 8px; }
+  .gym-opening.r02 .go-verifier>p { font-size:9px; margin:0; grid-row:1; grid-column:1; align-self:center; }
+  .gym-opening.r02 .go-check { gap:6px; font-size:10px; padding:6px 0; }
+  .gym-opening.r02 .go-check { grid-row:2; border-top:1px solid #3a5048; }
+  .gym-opening.r02 .go-check b { width:15px; height:15px; font-size:10px; }
+  .go-reward-choice { grid-column:2 / 4; grid-row:1; margin:0; padding:0; border:0; }
+  .go-reward-choice legend { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+  .go-reward-segment span { padding:8px 3px; font-size:9px; }
+  .go-form-cue { top:42px; left:12px; max-width:210px; padding:7px 10px; }
+  .go-form-cue span { display:none; }
+  .go-form-cue strong { font-size:14px; }
+  .go-reps { top:10px; right:12px; bottom:auto; left:auto; padding:5px 8px; }
+  .go-reps span { font-size:8px; }
+  .go-reps strong { font-size:27px; min-width:42px; }
+  .gym-opening.r02 .go-name { display:none; }
+  .gym-opening.r02 .go-caption { min-height:142px; padding:12px 16px; }
+  .gym-opening.r02 .go-caption h2 { font-size:19px; min-height:0; }
+  .gym-opening.r02 .go-caption .go-bridge { font-size:11px; min-height:32px; }
+  .gym-opening.r02 .go-evidence { font-size:11px; margin-top:10px; }
+  .gym-opening.r02 .go-note { font-size:9px; }
+}
+@media(max-height:820px) and (min-width:651px) {
+  .gym-opening.r02 .go-stage { height:43vh; min-height:290px; }
+  .gym-opening.r02 .go-heading h1 { font-size:28px; }
+  .gym-opening.r02 .go-verifier { bottom:5%; padding:12px; }
+  .gym-opening.r02 .go-caption { min-height:100px; }
+  .go-form-cue { top:7%; }
+  .go-form-cue strong { font-size:16px; }
+}

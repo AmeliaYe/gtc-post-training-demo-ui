@@ -1,0 +1,8 @@
+/* Host shell supplies NVIDIA branding and the Healthcare title. */
+.view-tabs { gap: 26px; }
+body.workflow-presentation > main { min-height: 0; }
+@media (max-width: 650px) {
+  .view-tabs { gap: 17px; padding: 0 14px; }
+  .tab { font-size: 11px; gap: 5px; }
+  .tab span { display: none; }
+}

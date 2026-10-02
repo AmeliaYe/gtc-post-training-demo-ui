@@ -19,6 +19,8 @@ body {
 button { font: inherit; }
 button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
 .app-shell { min-height: 100vh; }
+.demo-landing { min-height: 100vh; background: #080a09; }
+.demo-landing iframe { display: block; width: 100%; min-height: 100vh; border: 0; background: #080a09; }
 
 .topbar {
   height: 62px;
@@ -316,3 +318,16 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .cluster-card strong + strong { margin-top: 4px; font-size: 12px; font-weight: 400; color: #8f998c; }
 .cluster-card .spec-link { color: inherit; text-decoration: underline; text-decoration-color: #4a5348; text-underline-offset: 3px; transition: color .18s ease, text-decoration-color .18s ease; }
 .cluster-card .spec-link:hover { color: var(--acid); text-decoration-color: var(--acid); }
+
+/* The healthcare narrative provides its own page headings and four-page nav. */
+.healthcare-selected .intro-row { display: none; }
+.healthcare-selected .page-wrap { padding-top: 24px; }
+.healthcare-selected .workspace-body { grid-template-rows: repeat(4, minmax(166px, auto)); align-items: start; }
+.healthcare-selected .expanded-model { overflow: visible; }
+.healthcare-selected .workspace-body { min-height: 0; }
+.healthcare-frame { display: block; width: 100%; border: 0; background: #080a09; }
+.healthcare-selected .expanded-header { min-height: 64px; padding-top: 12px; padding-bottom: 12px; }
+@media (max-width: 820px) {
+  .healthcare-selected .page-wrap { padding-top: 14px; }
+  .healthcare-selected .workspace-body { align-items: stretch; }
+}

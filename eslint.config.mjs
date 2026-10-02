@@ -7,6 +7,9 @@ export default defineConfig([
   ...nextTypeScript,
   globalIgnores([
     'node_modules/**',
+    // Versioned press-demo snapshot; verified independently of the React app.
+    'public/healthcare/r01/**',
+    'healthcare-demo/**',
     '.next/**',
     '.vercel/**',
     'out/**',

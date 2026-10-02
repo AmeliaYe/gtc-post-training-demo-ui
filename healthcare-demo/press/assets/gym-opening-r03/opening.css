@@ -1,0 +1,52 @@
+@import url('../gym-opening-r02/opening.css');
+
+.gym-opening.r03 { width:100%; max-width:1040px!important; margin:0 auto 24px; background:transparent; }
+.gym-opening.r03 .go-heading { padding:0 0 16px; }
+.gym-opening.r03 .go-heading h1 { font-size:26px; line-height:1.18; }
+.gym-opening.r03 .go-heading .go-premise { margin:10px 0 0; font-size:13px; line-height:1.45; font-weight:400; text-transform:none; color:#bac9c2; }
+.gym-opening.r03 .go-stage { height:min(38vh,360px); min-height:290px; border:1px solid #43554b; border-radius:4px; }
+.gym-opening.r03 .go-verifier { right:20px; bottom:18px; width:202px; padding:12px; }
+.gym-opening.r03 .go-check { padding:6px 0; font-size:11px; }
+.gym-opening.r03 .go-form-cue { left:50%; transform:translateX(-50%); top:12px; max-width:240px; padding:7px 12px; }
+.gym-opening.r03 .go-form-cue span { font-size:9px; margin-bottom:3px; }
+.gym-opening.r03 .go-form-cue strong { font-size:14px; }
+.gym-opening.r03 .go-reps { left:20px; bottom:18px; padding:8px 12px; }
+.gym-opening.r03 .go-reps strong { font-size:32px; }
+.gym-opening.r03 .go-caption { min-height:96px; padding:12px 0; gap:16px; }
+.gym-opening.r03 .go-caption h2 { font-size:20px; }
+.gym-opening.r03 .go-caption .go-bridge { font-size:12px; }
+.gym-opening.r03 .go-controls { min-height:52px; padding:8px 0; }
+.gym-opening.r03 .go-note { padding:0 0 8px; }
+.gym-opening.r03 .go-name { bottom:12px; }
+
+@media(max-width:1000px) {
+  .gym-opening.r03 .go-verifier { right:12px; width:184px; }
+  .gym-opening.r03 .go-reps { left:14px; }
+  .gym-opening.r03 .go-evidence { font-size:11px; }
+}
+@media(max-width:650px) {
+  .gym-opening.r03 .go-heading h1 { font-size:23px; }
+  .gym-opening.r03 .go-heading .go-premise { font-size:12px; }
+  .gym-opening.r03 .go-stage { height:350px; min-height:0; }
+  .gym-opening.r03 .go-form-cue { top:42px; left:10px; transform:none; max-width:210px; padding:7px 8px; }
+  .gym-opening.r03 .go-form-cue strong { font-size:13px; }
+  .gym-opening.r03 .go-verifier { left:7px; right:7px; bottom:7px; width:auto; padding:8px; }
+  .gym-opening.r03 .go-check { font-size:10px; }
+  .gym-opening.r03 .go-reps { left:auto; right:10px; top:9px; bottom:auto; padding:5px 7px; }
+  .gym-opening.r03 .go-reps strong { font-size:24px; }
+  .gym-opening.r03 .go-caption { min-height:156px; padding:12px 0; }
+  .gym-opening.r03 .go-caption h2 { font-size:18px; }
+  .gym-opening.r03 .go-caption .go-bridge { font-size:11px; }
+}
+@media(max-height:820px) and (min-width:651px) {
+  .gym-opening.r03 .go-heading { padding-bottom:12px; }
+  .gym-opening.r03 .go-heading h1 { font-size:24px; }
+  .gym-opening.r03 .go-stage { height:34vh; min-height:270px; }
+  .gym-opening.r03 .go-verifier { padding:10px; }
+  .gym-opening.r03 .go-verifier>p { font-size:9px; margin-bottom:6px; }
+  .gym-opening.r03 .go-check { font-size:10px; padding:5px 0; }
+  .gym-opening.r03 .go-check b { width:16px; height:16px; font-size:11px; }
+  .gym-opening.r03 .go-reward-choice { margin-top:6px; padding-top:7px; }
+  .gym-opening.r03 .go-reward-choice legend { font-size:9px; padding-bottom:6px; }
+  .gym-opening.r03 .go-reward-segment span { min-height:28px; font-size:10px; padding:6px 5px; }
+}

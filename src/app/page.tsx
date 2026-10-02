@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import HealthcareDemo from './components/HealthcareDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   CODING_BASE_TOTAL_SECONDS,
@@ -54,6 +55,7 @@ type PlaceholderDemo = DemoBase & {
 type LiveDemo = DemoBase & {
   kind: 'demo';
   embedUrl: string;
+  previewLabel?: string;
 };
 
 type Demo = PlaceholderDemo | LiveDemo;
@@ -69,13 +71,9 @@ const demos: Demo[] = [
     tags: ['MITRE-aware', 'SOC-tuned', 'evidence-linked'],
   },
   {
-    kind: 'placeholder', id: 'health', name: 'Healthcare Simulation', task: 'Agent simulation · NeMo Gym',
+    kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    scoreLabel: 'Protocol adherence', scoreBefore: 69.8, scoreAfter: 94.4, latency: '43 ms', memory: '5.5 GB',
-    prompt: 'Simulate a patient with new chest pressure during an outpatient intake conversation.',
-    before: 'I’m sorry you are experiencing discomfort. Can you tell me when it started and whether anything makes it better or worse?',
-    after: 'The patient reports substernal pressure beginning 20 minutes ago with diaphoresis and nausea. Escalation trigger met: stop routine intake, alert the clinical team, and simulate emergency protocol without offering a diagnosis.',
-    tags: ['scenario-grounded', 'protocol-safe', 'multi-agent'],
+    embedUrl: '/healthcare/r01/index.html#how-it-learns', previewLabel: 'Explore demo',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
@@ -163,7 +161,7 @@ function ModelTile({ model }: { model: Demo }) {
       </span>
       <span className="tile-topline">
         <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
-        <span className="status-pill"><i /> LIVE</span>
+        <span className="status-pill"><i /> {model.id === 'health' ? 'DEMO' : 'LIVE'}</span>
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
       {model.kind === 'placeholder' ? (
@@ -177,7 +175,7 @@ function ModelTile({ model }: { model: Demo }) {
           </>}
         </span>
       ) : (
-        <span className="tile-score"><span><small>interactive</small><strong style={{ color: model.color }}>Live demo</strong></span></span>
+        <span className="tile-score"><span><small>interactive</small><strong style={{ color: model.color }}>{model.previewLabel || 'Live demo'}</strong></span></span>
       )}
       <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
@@ -313,11 +311,28 @@ function PlaceholderBody({ model, isRunning, runCount, codingElapsed }: { model:
 }
 
 export default function Home() {
+  const [introStage, setIntroStage] = useState<'landing' | 'how-it-learns' | 'gallery'>('landing');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
   const [codingElapsed, setCodingElapsed] = useState(Number.POSITIVE_INFINITY);
   const frameRef = useRef<number | null>(null);
+  const introFrameRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (introStage === 'gallery') return;
+    const advanceIntro = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin || event.source !== introFrameRef.current?.contentWindow) return;
+      if (introStage === 'landing' && event.data?.type === 'gtc-demo:enter') {
+        setIntroStage('how-it-learns');
+      }
+      if (introStage === 'how-it-learns' && event.data?.type === 'gtc-demo:enter-gallery') {
+        setIntroStage('gallery');
+      }
+    };
+    window.addEventListener('message', advanceIntro);
+    return () => window.removeEventListener('message', advanceIntro);
+  }, [introStage]);
 
   const stopPlayback = useCallback(() => {
     if (frameRef.current === null) return;
@@ -373,8 +388,20 @@ export default function Home() {
     setSelectedId(null);
   };
 
+  if (introStage !== 'gallery') {
+    return (
+      <main className="demo-landing">
+        <iframe
+          ref={introFrameRef}
+          src={introStage === 'landing' ? '/healthcare/r01/landing.html' : '/healthcare/r01/how-it-learns.html'}
+          title={introStage === 'landing' ? 'Post-training with practice and feedback' : 'How post-training works'}
+        />
+      </main>
+    );
+  }
+
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${selectedId === 'health' ? 'healthcare-selected' : ''}`}>
       <header className="topbar">
         <div className="brand" role="img" aria-label="NVIDIA"><NvidiaLogo /></div>
         <div className="topbar-center"><span className="crumb-muted">DGX Station</span></div>
@@ -444,12 +471,12 @@ export default function Home() {
                     <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">
-                    <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>
+                    {model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
                     {model.kind === 'placeholder' && <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>}
                   </div>
                 </div>
 
-                {model.kind === 'demo'
+                {model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
                   : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} codingElapsed={codingElapsed} />}
               </>}
