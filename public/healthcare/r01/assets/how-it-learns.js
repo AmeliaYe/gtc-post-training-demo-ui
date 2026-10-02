@@ -1,4 +1,4 @@
-import {createArchitecture} from './architecture-r04.js';
+import {createArchitecture} from './architecture-r05.js';
 
 const workflow=createArchitecture();
 workflow.setVisible(true);
