@@ -147,7 +147,8 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .live-dot { width: 5px; height: 5px; background: #61d858; box-shadow: 0 0 7px #61d858; margin-right: 5px; }
 .header-actions { display: flex; gap: 8px; }
 .ghost-button, .run-button { height: 32px; display: flex; align-items: center; gap: 7px; padding: 0 12px; border-radius: 5px; border: 1px solid var(--line); cursor: pointer; font-size: 9px; font-weight: 700; }
-.ghost-button { color: #8b9388; background: rgba(255,255,255,.02); }
+.ghost-button { color: #8b9388; background: rgba(255,255,255,.02); text-decoration: none; }
+.ghost-button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
 .run-button { color: #0a0d09; background: var(--accent); border-color: var(--accent); box-shadow: 0 0 20px var(--panel-glow); }
 .ghost-button svg, .run-button svg { width: 13px; }
 .run-button.running svg { animation: spin .7s linear infinite; }
