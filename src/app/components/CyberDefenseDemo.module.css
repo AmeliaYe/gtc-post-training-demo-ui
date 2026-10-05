@@ -33,7 +33,7 @@
 .comparisonArrow { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 25px; height: 25px; display: grid; place-items: center; color: var(--acid); border: 1px solid #536a3a; border-radius: 50%; background: #151e0f; }
 .story { border: 1px solid #39452f; background: #0b100b; border-radius: 8px; overflow: hidden; }
 .phases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 17px 18px 0; }
-.phases button { display: block; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: #85927a; }
+.phases button { display: flex; flex-direction: column; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: #85927a; }
 .phases button > span { display: block; height: 3px; margin-bottom: 8px; border-radius: 5px; background: #2a3324; }
 .phases strong { font: 10px/1.5 monospace; }
 .phases button[aria-current=step] { color: var(--acid); }
