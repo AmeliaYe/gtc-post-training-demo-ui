@@ -31,13 +31,13 @@ export type CyberScenario = {
 export const CYBER_SCENARIOS: CyberScenario[] = [
   {
     id: 'openfire',
-    title: 'Known SSRF: missed → found',
+    title: 'Unsafe web request (SSRF): missed → found',
     repo: 'igniterealtime/Openfire',
     url: 'https://github.com/igniterealtime/Openfire/tree/83f653f8d0601ff3667e1c5cf3ac18834f0d4a24',
     cve: 'CVE-2019-18394',
     focus: 'recall',
     summary:
-      'Both runs read the vulnerable file. The later checkpoint connected the user-controlled host to a server-side request and reported the known SSRF.',
+      'Both checkpoints read this file. The final checkpoint linked the supplied address to the server’s HTTP request and reported the SSRF.',
     reference: {
       title: 'Server-side request forgery in icon fetching',
       path: 'xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java',
@@ -77,13 +77,13 @@ export const CYBER_SCENARIOS: CyberScenario[] = [
   },
   {
     id: 'set-value',
-    title: 'Three duplicate reports → one focused finding',
+    title: 'Three reports of one flaw → one report',
     repo: 'jonschlinkert/set-value',
     url: 'https://github.com/jonschlinkert/set-value/tree/7bd5011d82e583305a191a9a062abfe177ec29ad',
     cve: 'CVE-2019-10747',
     focus: 'focus',
     summary:
-      'The early run returned six findings, including three variants of the same prototype-pollution flaw. The later checkpoint reported it once.',
+      'The earlier checkpoint submitted six reports, including three for the same prototype-pollution flaw. The final checkpoint reported that flaw once.',
     reference: {
       title: 'Prototype pollution in nested property assignment',
       path: 'index.js',
@@ -123,13 +123,13 @@ export const CYBER_SCENARIOS: CyberScenario[] = [
   },
   {
     id: 'cosmos',
-    title: 'Unsafe evaluation: missed → found',
+    title: 'Text executed as code: missed → found',
     repo: 'OpenC3/cosmos',
     url: 'https://github.com/OpenC3/cosmos/tree/24ca2102180a28d9bb83a7251497865b50e0cc55',
     cve: 'CVE-2025-68271',
     focus: 'recall',
     summary:
-      'Both runs read the string-conversion code. The later checkpoint identified unsafe Ruby evaluation in an array-like string, which the early report missed.',
+      'Both checkpoints read the conversion code. The final checkpoint found that list-like text could execute Ruby code; the earlier checkpoint missed it.',
     reference: {
       title: 'Unsafe string evaluation in value conversion',
       path: 'openc3/lib/openc3/core_ext/string.rb',
