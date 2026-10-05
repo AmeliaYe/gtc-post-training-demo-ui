@@ -11,8 +11,8 @@ import { CYBER_VISUALS } from '@/lib/cyber-visuals';
 import { trackInteraction } from '@/lib/analytics';
 import styles from './CyberDefenseDemo.module.css';
 
-const STEPS = ['Repository map', 'Threat model', 'Discovery: input flow', 'Discovery: input', 'Discovery: follow the input', 'Discovery: risky operation', 'Validation', 'Report'] as const;
-const PHASES = [{ label: 'Map', step: 0 }, { label: 'Threat model', step: 1 }, { label: 'Discovery', step: 2 }, { label: 'Validate', step: 6 }, { label: 'Report', step: 7 }];
+const STEPS = ['Explore the code', 'Identify the risks', 'Discovery: input flow', 'Discovery: input', 'Discovery: follow the input', 'Discovery: risky operation', 'Validation', 'Report'] as const;
+const PHASES = [{ label: 'Explore the code', step: 0 }, { label: 'Identify the risks', step: 1 }, { label: 'Discovery', step: 2 }, { label: 'Validate', step: 6 }, { label: 'Report', step: 7 }];
 const STEP_INTERVAL = 3500;
 
 function FindingTiles({ run }: { run: CyberRun }) {
