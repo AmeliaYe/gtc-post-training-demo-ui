@@ -1,0 +1,243 @@
+{
+  "revision": "demo-team-handoff-r01",
+  "sources": {
+    "introduction": "outputs/press-gym-journeys-r06",
+    "healthcare": "outputs/press-narrative-r08"
+  },
+  "files": {
+    "introduction/index.html": {
+      "bytes": 4443,
+      "sha256": "e542365cc11f0f9607d5185b048d70a1f975603509eca7a7ad87fb7d6f8e8c37"
+    },
+    "introduction/assets/opening.css": {
+      "bytes": 13041,
+      "sha256": "8f9c5038e46659f97a3a162c2b58044db3e479395ade0a746edbe82fc917370d",
+      "source": "outputs/press-gym-journeys-r06/assets/opening.css"
+    },
+    "introduction/assets/gym-opening-r02/training-room.png": {
+      "bytes": 2123695,
+      "sha256": "7e62a30ea0c6f287a5f6dba58a994327f0fc169f09a4b48a17cc284260173896",
+      "source": "outputs/press-gym-journeys-r06/assets/gym-opening-r02/training-room.png"
+    },
+    "introduction/assets/pause.svg": {
+      "bytes": 313,
+      "sha256": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+      "source": "outputs/press-gym-journeys-r06/assets/pause.svg"
+    },
+    "introduction/assets/rotate-ccw.svg": {
+      "bytes": 297,
+      "sha256": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd",
+      "source": "outputs/press-gym-journeys-r06/assets/rotate-ccw.svg"
+    },
+    "introduction/assets/maximize.svg": {
+      "bytes": 366,
+      "sha256": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826",
+      "source": "outputs/press-gym-journeys-r06/assets/maximize.svg"
+    },
+    "introduction/assets/arrow-right.svg": {
+      "bytes": 261,
+      "sha256": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9",
+      "source": "outputs/press-gym-journeys-r06/assets/arrow-right.svg"
+    },
+    "introduction/assets/opening.js": {
+      "bytes": 8357,
+      "sha256": "21c82adf5d467760db6f7d2c156929d760a9a9ae6137463efd37b74175e2b745",
+      "source": "outputs/press-gym-journeys-r06/assets/opening.js"
+    },
+    "introduction/assets/circuit-r06/scene.js": {
+      "bytes": 15570,
+      "sha256": "41bd28ea4ffced61630218e8f1ff29357603d16f12c3f181c56bb41663c916b1",
+      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/scene.js"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/three.module.js": {
+      "bytes": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+      "source": "outputs/press-gym-journeys-r06/assets/coffee-lab-r01/vendor/three.module.js"
+    },
+    "introduction/assets/framing.js": {
+      "bytes": 468,
+      "sha256": "faeb20bedc3cd2c28bfae145343606147c2b3a52ef147002ca96242ca0542758",
+      "source": "outputs/press-gym-journeys-r06/assets/framing.js"
+    },
+    "introduction/assets/gym-opening-r02/motion.js": {
+      "bytes": 2018,
+      "sha256": "93f7e8d5576828092e5c6945d3e827cea816dea9c063b8ef04ffa6500491124f",
+      "source": "outputs/press-gym-journeys-r06/assets/gym-opening-r02/motion.js"
+    },
+    "introduction/assets/circuit-r06/equipment.js": {
+      "bytes": 6800,
+      "sha256": "936eec3c5e2a1d570cb3b7608a1f0810518c3fd01c93a981b99e193f623d1984",
+      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/equipment.js"
+    },
+    "introduction/assets/circuit-r06/timeline.js": {
+      "bytes": 3416,
+      "sha256": "88a76d7b06536ebb9e7cca04db0ca44b70a0f63a77a5f9a1ef2dde4dda24d48c",
+      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js"
+    },
+    "introduction/assets/nim.png": {
+      "bytes": 6395,
+      "sha256": "9ff751943905a53fe86175c29af9c4f04c6b85f56098b89b0294dc473ed32b30",
+      "source": "outputs/press-gym-journeys-r06/assets/nim.png"
+    },
+    "introduction/assets/play.svg": {
+      "bytes": 306,
+      "sha256": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+      "source": "outputs/press-gym-journeys-r06/assets/play.svg"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/three.core.js": {
+      "bytes": 1403455,
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+      "source": "outputs/press-gym-journeys-r06/assets/coffee-lab-r01/vendor/three.core.js"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/THREE-LICENSE.txt": {
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "source": "outputs/press-gym-journeys-r06/assets/coffee-lab-r01/vendor/THREE-LICENSE.txt"
+    },
+    "healthcare/index.html": {
+      "bytes": 13640,
+      "sha256": "ee67458781d5cfa1e3b2f56e79b84685bcd63ba49b49b56c79e6fabc41172831"
+    },
+    "healthcare/assets/press.css": {
+      "bytes": 28496,
+      "sha256": "626dcb5a152cb93e01f9e296df02e3e1f637ae304d9053d372add6e3b696a20f",
+      "source": "outputs/press-narrative-r08/assets/press.css"
+    },
+    "healthcare/assets/architecture-r03.css": {
+      "bytes": 9578,
+      "sha256": "ede247ad3eb9c278a384acbda4d6ac7d42c987b3668ba94d6db0570e828a337b",
+      "source": "outputs/press-narrative-r08/assets/architecture-r03.css"
+    },
+    "healthcare/assets/architecture-r04.css": {
+      "bytes": 6791,
+      "sha256": "3da76a4aad6b0603d9c02642215f6af07d273ac2bd9e09dcc26afb57f7fc1185",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04.css"
+    },
+    "healthcare/assets/architecture-r05.css": {
+      "bytes": 1211,
+      "sha256": "0811fb03322d371bb0bbce5763464974513f7fe322477af41844dc734b9c4c51",
+      "source": "outputs/press-narrative-r08/assets/architecture-r05.css"
+    },
+    "healthcare/assets/architecture-r06.css": {
+      "bytes": 151,
+      "sha256": "9c2f9a65681ce7821302378698c4bd34ede35aaf9c5b4be79bd9d309f33be4c0",
+      "source": "outputs/press-narrative-r08/assets/architecture-r06.css"
+    },
+    "healthcare/assets/architecture-r04/nvidia.png": {
+      "bytes": 46420,
+      "sha256": "625c86870bc1851793dc4a83b41dd9ff05dfd1557390c312decda102fcef50d8",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/nvidia.png"
+    },
+    "healthcare/assets/beyond-request-arrow-right-r01.svg": {
+      "bytes": 261,
+      "sha256": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-arrow-right-r01.svg"
+    },
+    "healthcare/assets/beyond-request-maximize-r01.svg": {
+      "bytes": 366,
+      "sha256": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-maximize-r01.svg"
+    },
+    "healthcare/assets/architecture-r04/tasks.png": {
+      "bytes": 6112,
+      "sha256": "cfed1672cadda56240d43253a12e07df25c91ac4e566aacea01cabaf68042e70",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/tasks.png"
+    },
+    "healthcare/assets/architecture-r04/nemotron.png": {
+      "bytes": 6395,
+      "sha256": "9ff751943905a53fe86175c29af9c4f04c6b85f56098b89b0294dc473ed32b30",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/nemotron.png"
+    },
+    "healthcare/assets/architecture-r04/tools.png": {
+      "bytes": 9464,
+      "sha256": "57617b7c3140467b762b40b6445659752161d54d8f1320d3738a0fb1a82ae2ff",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/tools.png"
+    },
+    "healthcare/assets/architecture-r04/verifier.png": {
+      "bytes": 7753,
+      "sha256": "0408d09f604615139421f02bc70dd9730cb5769aa7f7c88571a94568913eee49",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/verifier.png"
+    },
+    "healthcare/assets/architecture-r04/rl.png": {
+      "bytes": 8092,
+      "sha256": "2cfdc9447637bbe8618b4e4e0528d9531c905fc0f3bed025ede2a2c8bbaa48f3",
+      "source": "outputs/press-narrative-r08/assets/architecture-r04/rl.png"
+    },
+    "healthcare/assets/beyond-request-pause-r01.svg": {
+      "bytes": 313,
+      "sha256": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-pause-r01.svg"
+    },
+    "healthcare/assets/beyond-request-rotate-ccw-r01.svg": {
+      "bytes": 297,
+      "sha256": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-rotate-ccw-r01.svg"
+    },
+    "healthcare/assets/results-r01.js": {
+      "bytes": 2594,
+      "sha256": "43143369906f7931eba55eebc6fce1569c8a6e23cfaf0bf5696ef66a6405b05e",
+      "source": "outputs/press-narrative-r08/assets/results-r01.js"
+    },
+    "healthcare/assets/gym-rl-start-qr.png": {
+      "bytes": 4312,
+      "sha256": "fcfdb4311d20b71d8b6af72dc14c72f4de34d6bbde9cca438ec47adca21d9399",
+      "source": "outputs/press-narrative-r08/assets/gym-rl-start-qr.png"
+    },
+    "healthcare/assets/get-started-dgx-station-r01.jpg": {
+      "bytes": 130524,
+      "sha256": "171a726639ba487d571e88780e3236511f0b5dd8ffe5308e49ba783bb4ad885b",
+      "source": "outputs/press-narrative-r08/assets/get-started-dgx-station-r01.jpg"
+    },
+    "healthcare/assets/beyond-request-x-r01.svg": {
+      "bytes": 260,
+      "sha256": "4a9cdab38fbb96162e7dace28e33f4ca0e49d8963a6162abc3d4691b7d675117",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-x-r01.svg"
+    },
+    "healthcare/assets/case-trace-evidence-r01.js": {
+      "bytes": 202572,
+      "sha256": "1fe8f0285dbf81c4825c58a4b3a223e22c46e89c2c28975c6f507b5d02ef6247",
+      "source": "outputs/press-narrative-r08/assets/case-trace-evidence-r01.js"
+    },
+    "healthcare/assets/press.js": {
+      "bytes": 8699,
+      "sha256": "417ea4a67941d21e78e424af993e76ae5ba9d77f943c9329e2e4a3b0fd8bfc81"
+    },
+    "healthcare/assets/marked.esm.js": {
+      "bytes": 39511,
+      "sha256": "2cf87a5a5f9f677fedca30aee75c2d791e79b2330cccc77345efc87091d09f12",
+      "source": "outputs/press-narrative-r08/assets/marked.esm.js"
+    },
+    "healthcare/assets/architecture-r06.js": {
+      "bytes": 11045,
+      "sha256": "9ab98e148c0455d5aa35443a7082208c70b9a8d0ccea3d45810a0e2fcc741a73",
+      "source": "outputs/press-narrative-r08/assets/architecture-r06.js"
+    },
+    "healthcare/assets/learning-cinema-r03.js": {
+      "bytes": 10045,
+      "sha256": "0ad7136a4c3571db37b7f9d53efb00b227bb42ca2352e0f6b184f103f3c5fa2b",
+      "source": "outputs/press-narrative-r08/assets/learning-cinema-r03.js"
+    },
+    "healthcare/assets/beyond-request-play-r01.svg": {
+      "bytes": 306,
+      "sha256": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+      "source": "outputs/press-narrative-r08/assets/beyond-request-play-r01.svg"
+    },
+    "healthcare/assets/MARKED-LICENSE.md": {
+      "bytes": 2942,
+      "sha256": "8e3a3f82f59a60958f56ca08f445647c32a4733dc7ca6c2c46f6eb898471ab9c",
+      "source": "outputs/press-narrative-r08/assets/MARKED-LICENSE.md"
+    },
+    "healthcare/assets/embed-mode.js": {
+      "bytes": 115,
+      "sha256": "61045d9d46b6e8590b5d794034d7149ec5bdb30946a2b4981de1514a24a24fe9"
+    },
+    "healthcare/assets/embed.css": {
+      "bytes": 664,
+      "sha256": "e418010a2dd38b1ca27e2612ffd6f765872e2d487e9b550611767027f1ab8583"
+    },
+    "healthcare/assets/embed.js": {
+      "bytes": 707,
+      "sha256": "8f3ebc81f1c644bb3a4e482f37921d3a0a3af09dbd43c2689d305bc7f37ad2a5"
+    }
+  }
+}

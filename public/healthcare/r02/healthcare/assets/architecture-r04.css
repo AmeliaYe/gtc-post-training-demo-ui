@@ -1,0 +1,96 @@
+#how-it-learns .heading {min-height:52px}
+#how-it-learns .eyebrow span {color:#9fa9a3;font-weight:400}
+#learn-title {min-height:36px}
+.learn-heading-actions {display:flex;gap:18px;align-items:center}
+.learn-cinema {position:absolute;inset:0;width:100%;height:100%;z-index:30;pointer-events:none}
+.learn-gym {background:#090c0a;border-color:#536c36}
+.learn-wire {stroke:#535e53}
+.learn-signal {opacity:0!important}
+.learn-harness {transition:border-color .65s,background .65s}
+.learn-sheet {background:#101710;border-color:#515e4b}
+.learn-sheet.active {border-color:#a2d664;background:#142014}
+.learn-sheet.active>button {background:#2f461e}
+.learn-flow[data-phase=practice] .learn-harness {border-color:#82bbba;background:#101a17}
+.learn-flow[data-phase=feedback] .learn-evaluation {color:#fff}
+.learn-judges {transition:filter .5s}
+.learn-flow[data-phase=feedback] .learn-judges {filter:drop-shadow(0 0 7px #a7df6130)}
+.learn-policy-state {position:absolute;top:-25px;left:0;font-size:11px;line-height:16px;color:#c7f294;border-left:2px solid #a7df61;padding-left:8px;opacity:var(--update-reveal,0)}
+.learn-flow[data-phase=update] .learn-harness {border-color:#a7df61;background:#152110}
+.learn-flow[data-phase=update] .learn-model>img {filter:drop-shadow(0 0 9px #a7df6177)}
+.learn-model>img,.learn-patient>img,.learn-judges img {transition:filter .6s}
+.learn-platform {border-color:#252d28}
+.learn-controls {border:0;padding-top:5px}
+.learn-phases button {position:relative;border-bottom:0;padding-bottom:9px}
+.learn-phases button::after {content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:#a7df61;transform:scaleX(0);transform-origin:left}
+.learn-phases button[aria-pressed=true]::after {transform:scaleX(var(--phase-progress,0))}
+.learn-caption {font-size:15px;font-weight:400;color:#d7e0d7}
+.learn-timeline {display:block;width:100%;height:16px;margin:0;accent-color:#a7df61;appearance:none;cursor:ew-resize;background:transparent;position:relative;z-index:6;border-radius:0}
+.learn-timeline::-webkit-slider-runnable-track {height:2px;background:linear-gradient(to right,#a7df61 0 var(--time-progress,0%),#354238 var(--time-progress,0%) 100%)}
+.learn-timeline::-webkit-slider-thumb {appearance:none;width:10px;height:10px;border-radius:50%;background:#d7f5b8;border:0;margin-top:-4px}
+.learn-timeline::-moz-range-track {height:2px;background:#354238}
+.learn-timeline::-moz-range-progress {height:2px;background:#a7df61}
+.learn-timeline::-moz-range-thumb {width:10px;height:10px;border-radius:50%;background:#d7f5b8;border:0}
+.learn-timeline:focus-visible {outline:1px solid #a7df61;outline-offset:2px}
+body.workflow-presentation {background:#080a09}
+body.workflow-presentation>.masthead,body.workflow-presentation>.view-tabs {display:none}
+body.workflow-presentation>main {max-width:1544px;padding:28px 40px;margin:auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+body.workflow-presentation #how-it-learns .heading {margin-bottom:24px}
+body.workflow-presentation #learn-title {font-size:34px}
+body.workflow-presentation .learn-heading-actions .next-link {display:none}
+body.workflow-presentation #arch-present {border-color:#a7df61}
+body.workflow-presentation .learn-platform {padding-top:16px}
+@media(min-width:901px) and (max-width:1599px) {.learn-stage {height:465px}}
+@media(min-width:1600px) and (min-height:900px) {
+  body.workflow-presentation>main {max-width:1780px;padding:36px 64px}
+  body.workflow-presentation #learn-title {font-size:42px;min-height:54px}
+  body.workflow-presentation .learn-stage {height:655px}
+  body.workflow-presentation .learn-flow {--gym-height:470px;--sheet-height:276px;--sheet-step:30px}
+  body.workflow-presentation .learn-harness {top:141px;height:288px;padding-top:23px}
+  body.workflow-presentation .learn-harness h3 {font-size:21px}
+  body.workflow-presentation .learn-model {margin-top:20px}
+  body.workflow-presentation .learn-model>img,body.workflow-presentation .learn-patient>img {width:80px;height:80px}
+  body.workflow-presentation .learn-model>p {font-size:20px}
+  body.workflow-presentation .learn-tools {margin-top:22px;padding-top:16px}
+  body.workflow-presentation .learn-tools strong {font-size:16px}
+  body.workflow-presentation .learn-tools p {font-size:13px}
+  body.workflow-presentation .learn-stack {top:34px;height:397px}
+  body.workflow-presentation .learn-sheet>button {height:30px;font-size:17px;line-height:25px}
+  body.workflow-presentation .learn-patient {top:164px}
+  body.workflow-presentation .learn-patient h3 {font-size:23px}
+  body.workflow-presentation .learn-evaluation {top:187px}
+  body.workflow-presentation .learn-evaluation>h3 {font-size:23px}
+  body.workflow-presentation .learn-judges {gap:22px}
+  body.workflow-presentation .learn-judges img {width:58px;height:58px}
+  body.workflow-presentation .learn-judges p {font-size:15px}
+  body.workflow-presentation .learn-rubric {font-size:14px;margin-top:24px}
+  body.workflow-presentation .learn-optimizer {top:520px}
+  body.workflow-presentation .learn-optimizer>img {width:52px;height:52px}
+  body.workflow-presentation .learn-optimizer h2 {font-size:27px}
+  body.workflow-presentation .learn-optimizer p {font-size:13px}
+  body.workflow-presentation .learn-heldout {top:606px}
+  body.workflow-presentation .learn-heldout strong {font-size:16px}
+  body.workflow-presentation .learn-label {font-size:13px}
+  body.workflow-presentation .learn-label[data-label=update],body.workflow-presentation .learn-label[data-label=feedback] {font-size:14px}
+  body.workflow-presentation .learn-data strong {font-size:16px}
+  body.workflow-presentation .learn-data p {font-size:13px}
+  body.workflow-presentation .learn-caption {font-size:19px;padding-top:15px;min-height:54px}
+  body.workflow-presentation .learn-platform strong {font-size:18px}
+  body.workflow-presentation .learn-platform span {font-size:12px}
+}
+@media(max-width:900px) {
+  .learn-patient {top:139px}.learn-patient>img {width:43px;height:43px}.learn-patient h3 {margin-top:5px}
+  .learn-caption {font-size:14px}
+  body.workflow-presentation>main {padding:24px 18px;display:block}
+  body.workflow-presentation #learn-title {font-size:27px}
+}
+@media(max-width:650px) {
+  #how-it-learns .heading {display:grid;grid-template-columns:minmax(0,1fr) 32px;gap:10px}
+  #how-it-learns .heading .next-link {display:none}
+  #learn-title {font-size:24px;min-height:86px}
+  .learn-heading-actions {align-self:start}.learn-heading-actions .icon-button {width:32px}
+  #how-it-learns .eyebrow {line-height:1.6}
+  #how-it-learns .eyebrow span {display:block}
+  .learn-policy-state {font-size:10px}
+  .learn-caption {min-height:64px}
+}
+@media(prefers-reduced-motion:reduce) {.learn-model>img,.learn-patient>img,.learn-judges,.learn-harness {transition:none}}

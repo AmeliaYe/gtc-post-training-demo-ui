@@ -73,7 +73,7 @@ const demos: Demo[] = [
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    embedUrl: '/healthcare/r01/index.html#how-it-learns', previewLabel: 'Explore demo',
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
