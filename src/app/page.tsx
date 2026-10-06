@@ -73,7 +73,7 @@ const demos: Demo[] = [
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    embedUrl: '/healthcare/r01/index-r02.html#how-it-learns', previewLabel: 'Explore demo',
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
@@ -393,7 +393,7 @@ export default function Home() {
       <main className="demo-landing">
         <iframe
           ref={introFrameRef}
-          src={introStage === 'landing' ? '/healthcare/r01/landing.html' : '/healthcare/r01/how-it-learns.html'}
+          src={introStage === 'landing' ? '/healthcare/r02/introduction/index.html?embed=1' : '/healthcare/r01/how-it-learns.html'}
           title={introStage === 'landing' ? 'Post-training with practice and feedback' : 'How post-training works'}
         />
       </main>
