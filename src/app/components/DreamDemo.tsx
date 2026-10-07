@@ -3,18 +3,12 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import AttackScene, { SCENES } from './AttackScene';
+import CtiMap from './CtiMap';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
 import './DreamDemo.css';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
-import { ArrowPathIcon, CheckIcon, ChevronDownIcon, CircleStackIcon, DocumentMagnifyingGlassIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
-
-// Dream × NVIDIA, Posture agent validation run (Nemotron 3.5 Super VL 120B-A12B preview).
-const VALIDATION = [0.6935, 0.7047, 0.7069, 0.7047, 0.7293, 0.7338, 0.7315, 0.7383, 0.7293, 0.7562, 0.7360, 0.7606];
-const STEPS = ['Ingest', 'Post-train', 'Validate', 'Release'];
-// Fraction of the run at which each step starts; the chart draws during Post-train.
-const STEP_AT = [0, .1, .85, .95];
-const RUN_SECONDS = 10;
+import { CheckIcon, ChevronDownIcon, CircleStackIcon, DocumentMagnifyingGlassIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
@@ -223,88 +217,6 @@ function BeforeAfter() {
   );
 }
 
-const W = 640, H = 210, L = 40, R = 18, T = 14, B = 26;
-const LOW = .65, HIGH = .8;
-const px = (i: number) => L + (i * (W - L - R)) / (VALIDATION.length - 1);
-const py = (v: number) => T + (1 - (v - LOW) / (HIGH - LOW)) * (H - T - B);
-
-function TrainingRun() {
-  const reduce = useReducedMotion();
-  const [runId, setRunId] = useState(0);
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    if (reduce) return;
-    const controls = animate(0, 1, { duration: RUN_SECONDS, ease: 'linear', onUpdate: setProgress });
-    return () => controls.stop();
-  }, [runId, reduce]);
-
-  const p = reduce ? 1 : progress;
-  const stepIndex = STEP_AT.findLastIndex((at) => p >= at);
-  const done = p >= 1;
-  // Chart position in checkpoint units: 0 → first point, 11 → last.
-  const pos = Math.min(1, Math.max(0, (p - STEP_AT[1]) / (STEP_AT[2] - STEP_AT[1]))) * (VALIDATION.length - 1);
-  const whole = Math.floor(pos);
-  const headValue = whole >= VALIDATION.length - 1 ? VALIDATION[whole] : VALIDATION[whole] + (VALIDATION[whole + 1] - VALIDATION[whole]) * (pos - whole);
-  const points = [...VALIDATION.slice(0, whole + 1).map((v, i) => [px(i), py(v)]), [px(pos), py(headValue)]];
-  const line = points.map(([x, y], i) => `${i ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
-  const area = `${line} L ${px(pos).toFixed(1)} ${H - B} L ${L} ${H - B} Z`;
-  const started = p > STEP_AT[1];
-
-  return (
-    <div className="cyber-run">
-      <div className="cyber-run-head">
-        <div>
-          <small>VALIDATION SCORE · HELD-OUT POSTURE QUESTIONS</small>
-          <strong>checkpoint {started ? whole + 1 : 0}/{VALIDATION.length} · <em>{started ? headValue.toFixed(4) : '—'}</em></strong>
-        </div>
-        <span className={`run-state ${done ? 'complete' : ''}`}><i className="status-dot" />{done ? 'RELEASED' : STEPS[stepIndex].toUpperCase()}</span>
-        <button className="ghost-button" onClick={() => { setProgress(0); setRunId((id) => id + 1); }}><ArrowPathIcon /> Replay</button>
-      </div>
-
-      <svg className="cyber-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Validation score climbs from 0.69 to 0.76 over 12 checkpoints">
-        <defs>
-          <linearGradient id="cyber-area" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stopColor="var(--accent)" stopOpacity=".28" />
-            <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {[.65, .7, .75, .8].map((t) => (
-          <g key={t}>
-            <line x1={L} x2={W - R} y1={py(t)} y2={py(t)} className={t === .7 ? 'cyber-baseline' : 'chart-grid'} />
-            <text x={L - 8} y={py(t) + 3} textAnchor="end">{t.toFixed(2)}</text>
-          </g>
-        ))}
-        <text x={L} y={H - 6}>start of run</text>
-        <text x={W - R} y={H - 6} textAnchor="end">end of run</text>
-        {started && <>
-          <path d={area} fill="url(#cyber-area)" />
-          <path d={line} className="cyber-line" />
-          {VALIDATION.slice(0, whole + 1).map((v, i) => (
-            <motion.circle key={`${runId}-${i}`} cx={px(i)} cy={py(v)} initial={{ r: 0 }} animate={{ r: 3 }} className="cyber-point" />
-          ))}
-          <circle cx={px(pos)} cy={py(headValue)} r="5" className="cyber-head" />
-        </>}
-        {pos >= VALIDATION.length - 1 && (
-          <motion.g initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
-            <text x={px(VALIDATION.length - 1) - 8} y={py(.7606) - 12} textAnchor="end" className="cyber-peak">peak 0.76</text>
-          </motion.g>
-        )}
-      </svg>
-
-      <ol className="cyber-steps">
-        {STEPS.map((step, i) => {
-          const state = done || i < stepIndex ? 'complete' : i === stepIndex ? 'active' : '';
-          return (
-            <li key={step} className={state}>
-              <span className="timeline-node">{state === 'complete' ? <CheckIcon /> : String(i + 1).padStart(2, '0')}</span>
-              <strong>{step}</strong>
-            </li>
-          );
-        })}
-      </ol>
-    </div>
-  );
-}
 
 // Dreamer agent runtime, ported from Dream's "Dreamer Continuous Post-Training" page.
 type Path = 'core' | 'live' | 'train';
@@ -574,7 +486,7 @@ function StatsStrip({ bench }: { bench?: Category['bench'] }) {
 const TABS = [
   { id: 'compare', label: 'Model comparison' },
   { id: 'how', label: 'How we train' },
-  { id: 'run', label: 'Training run' },
+  { id: 'map', label: 'CTI map' },
   { id: 'card', label: 'Model card' },
 ] as const;
 
@@ -624,7 +536,7 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
       <div className="cyber-demo">
         <AnimatePresence mode="wait">
           <motion.div key={tab} role="tabpanel" initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: .25 }}>
-            {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <RuntimeDiagram /> : tab === 'run' ? <TrainingRun /> : <ModelCard />}
+            {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <RuntimeDiagram /> : tab === 'map' ? <CtiMap /> : <ModelCard />}
           </motion.div>
         </AnimatePresence>
       </div>
