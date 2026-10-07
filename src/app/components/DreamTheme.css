@@ -472,3 +472,40 @@
 .dream-theme .cti-feed .cti-infra { display: block; margin-top: 4px; color: #ffd27a; font-size: 11px; }
 @media (prefers-reduced-motion: reduce) { .dream-theme .cti-beacon-ring { animation: none; } }
 .dream-theme .cyber-tab-num { display: inline-grid; place-items: center; width: 20px; height: 20px; border: 1px solid currentColor; border-radius: 50%; font-size: 11px; font-weight: 600; opacity: .8; }
+
+/* How we train: plain-language five-step story (default) with a toggle to the technical diagram. */
+.dream-theme .ts-switch { display: flex; gap: 4px; width: max-content; margin: var(--dream-space-4) var(--dream-space-6) 0 auto; padding: 3px; border: 1px solid var(--line); border-radius: var(--dream-radius-pill); }
+.dream-theme .ts-switch button { padding: 5px 12px; border: 0; border-radius: var(--dream-radius-pill); background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+.dream-theme .ts-switch button.active { background: var(--panel-glow); color: var(--accent); font-weight: 600; }
+.dream-theme .ts { margin: var(--dream-space-3) var(--dream-space-6) 0; padding: var(--dream-space-6); border: 1px solid var(--line); border-radius: var(--dream-radius-lg); background: var(--panel); }
+.dream-theme .ts-lead { max-width: 760px; margin: 0 auto var(--dream-space-6); color: var(--ink); font-family: var(--dream-font-display); font-size: 24px; line-height: 1.35; text-align: center; text-wrap: balance; }
+.dream-theme .ts-steps { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--dream-space-3); margin: 0; padding: 0; list-style: none; }
+/* Connector line through the icon row, filling up to the active step. */
+.dream-theme .ts-steps::before, .dream-theme .ts-steps::after { content: ''; position: absolute; top: 31px; left: 10%; height: 2px; border-radius: 2px; }
+.dream-theme .ts-steps::before { right: 10%; background: var(--line-strong); }
+.dream-theme .ts-steps::after { width: calc(var(--progress) * .8); background: var(--accent); box-shadow: 0 0 8px var(--accent); transition: width .6s ease; }
+.dream-theme .ts-steps button { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; padding: 0 4px; border: 0; background: transparent; color: var(--muted); text-align: center; cursor: pointer; }
+.dream-theme .ts-icon { position: relative; display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: 6px; border: 1.5px solid var(--line-strong); border-radius: 18px; background: var(--panel-2); transition: all .3s ease; }
+.dream-theme .ts-icon svg { width: 28px; }
+.dream-theme .ts-icon b { position: absolute; top: -8px; right: -8px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--panel-3); color: var(--ink); font-size: 11px; }
+.dream-theme .ts-steps strong { color: var(--ink); font-size: 15px; font-weight: 600; }
+.dream-theme .ts-steps small { font-size: 12px; line-height: 1.4; }
+.dream-theme .ts-steps .done .ts-icon { border-color: color-mix(in srgb, var(--accent) 50%, transparent); color: var(--accent); }
+.dream-theme .ts-steps .active .ts-icon { border-color: var(--accent); background: var(--panel-glow); color: var(--accent); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 12%, transparent), 0 0 24px var(--panel-glow); transform: scale(1.06); }
+.dream-theme .ts-steps .active .ts-icon b { background: var(--accent); color: var(--accent-ink); }
+.dream-theme .ts-steps .active strong { color: var(--accent); }
+.dream-theme .ts-detail { min-height: 96px; margin-top: var(--dream-space-6); padding: var(--dream-space-4) var(--dream-space-5); border: 1px solid var(--line); border-radius: var(--dream-radius-md); background: var(--panel-2); }
+.dream-theme .ts-detail p { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.55; }
+.dream-theme .ts-detail b { color: var(--accent); }
+.dream-theme .ts-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--dream-space-3); }
+.dream-theme .ts-tags span { padding: 3px 10px; border: 1px solid var(--line); border-radius: var(--dream-radius-pill); color: var(--muted); font-size: 12px; }
+.dream-theme .ts-result { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: var(--dream-space-4); padding: var(--dream-space-4) var(--dream-space-5); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: var(--dream-radius-md); background: linear-gradient(100deg, var(--panel-glow), transparent 70%); }
+.dream-theme .ts-result span { padding: 3px 9px; border-radius: var(--dream-radius-pill); background: var(--accent); color: var(--accent-ink); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.dream-theme .ts-result strong { color: var(--ink); font-size: 16px; font-weight: 600; }
+.dream-theme .ts-result svg { width: 16px; color: var(--muted); }
+.dream-theme .ts-result em { color: var(--accent); font-style: normal; font-size: 14px; }
+@media (max-width: 820px) {
+  .dream-theme .ts-steps { grid-template-columns: 1fr; }
+  .dream-theme .ts-steps::before, .dream-theme .ts-steps::after { display: none; }
+  .dream-theme .ts-steps button { flex-direction: row; text-align: left; }
+}

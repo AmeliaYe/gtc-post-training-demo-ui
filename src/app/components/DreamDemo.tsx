@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import AttackScene, { SCENES } from './AttackScene';
 import CtiMap from './CtiMap';
+import TrainingStory from './TrainingStory';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
@@ -518,6 +519,20 @@ const TABS = [
 const dreamBody = Inter({ subsets: ['latin'], variable: '--font-dream-body' });
 const dreamDisplay = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-dream-display' });
 
+// Plain-language story by default; the detailed runtime diagram stays one click away.
+function HowWeTrain() {
+  const [technical, setTechnical] = useState(false);
+  return (
+    <>
+      <div className="ts-switch">
+        <button className={technical ? '' : 'active'} onClick={() => setTechnical(false)}>Simple view</button>
+        <button className={technical ? 'active' : ''} onClick={() => setTechnical(true)}>Technical view</button>
+      </div>
+      {technical ? <RuntimeDiagram /> : <TrainingStory />}
+    </>
+  );
+}
+
 type CyberTab = (typeof TABS)[number]['id'];
 
 // Gallery entry for Dream's standalone card; page.tsx adds it to the use-case list.
@@ -565,7 +580,7 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
       <div className="cyber-demo">
         <AnimatePresence mode="wait">
           <motion.div key={tab} role="tabpanel" initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: .25 }}>
-            {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <RuntimeDiagram /> : tab === 'map' ? <CtiMap /> : <ModelCard />}
+            {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <HowWeTrain /> : tab === 'map' ? <CtiMap /> : <ModelCard />}
           </motion.div>
         </AnimatePresence>
       </div>
