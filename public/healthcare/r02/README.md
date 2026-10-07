@@ -6,7 +6,7 @@ WebGL require a browser with those capabilities. The animation has no CDN depend
 
 | Deliverable | Entry point | Content |
 | --- | --- | --- |
-| Introduction | `introduction/index.html` | Larger NeMo Gym robot scene from gym r06; 58-second practice circuit, three exercise stations, feedback, model updates and three final controlled reps. |
+| Introduction | `introduction/index.html` | 30-second robot practice workflow with task setup, an imperfect attempt, coach feedback, a model update and improved controlled reps. |
 | Post-training for healthcare | `healthcare/index.html` | How It Learns → Before & After → Results → Getting Started. Opens on How It Learns. No Introduction page, robot runtime or gym backdrop. |
 
 The Introduction's “See the NVIDIA workflow” link opens the adjacent Healthcare

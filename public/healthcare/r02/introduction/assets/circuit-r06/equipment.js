@@ -47,6 +47,12 @@ export function makeEquipment(scene) {
  const spoke=box(wheel,mats.trim,0,.01,0,.045,.02,.53);
  const curl=new T.Group();scene.add(curl);
  const matsByStation=[bench,ellipse,curl].map(p=>{const material=new T.MeshBasicMaterial({color:0x8dc944,transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide});const o=mesh(p,new T.RingGeometry(.93,1.0,64),material,0,.022,0);o.rotation.x=-Math.PI/2;o.scale.set(1.4,1.8,1);o.castShadow=false;return o;});
+ const ease=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
+ function reveal(progress=1){
+  const benchProgress=ease(progress/.5),ellipseProgress=ease((progress-.42)/.58);
+  bench.visible=benchProgress>.001;ellipse.visible=ellipseProgress>.001;
+  bench.scale.setScalar(Math.max(.001,benchProgress));ellipse.scale.setScalar(Math.max(.001,ellipseProgress));
+ }
  function update(phase=0,bad=0,active='dumbbells',pulse=0){
   const angle=phase*2*Math.PI;
   handles.forEach((h,i)=>{const s=i?1:-1,q=angle+i*Math.PI;h.rotation.x=.24*Math.cos(q);const pedal=pedals[i];pedal.position.set(s*.27,.23+.065*Math.sin(q),-.43+.30*Math.cos(q));
@@ -57,9 +63,9 @@ export function makeEquipment(scene) {
   matsByStation.forEach((o,i)=>o.material.opacity=(active===['bench','elliptical','dumbbells'][i]||active==='all')? .25+pulse*.25:0);
  }
  function press(phase=0,bad=0){const wave=.5-.5*Math.cos(phase*Math.PI*2);bar.position.set(bad*.065*Math.sin(phase*4*Math.PI),1.7-(.42-.15*bad)*wave+bad*.035*Math.sin(phase*10*Math.PI)*wave,-.52+bad*.10*Math.sin(phase*Math.PI*2));bar.rotation.z=bad*.15*Math.sin(phase*4*Math.PI);}
- update();press();
+ reveal();update();press();
  const world=(o,v)=>o.localToWorld(new T.Vector3(...v));
- return{bench,bar,ellipse,curl,update,press,
+ return{bench,bar,ellipse,curl,reveal,update,press,
   barTargets:()=>[-1,1].map(s=>world(bar,[s*.59,0,0])),
   pedalTargets:()=>pedals.map(p=>world(p,[0,.165,0])),
   gripTargets:()=>grips.map(g=>g.getWorldPosition(new T.Vector3())),

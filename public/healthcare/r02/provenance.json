@@ -6,12 +6,12 @@
   },
   "files": {
     "introduction/index.html": {
-      "bytes": 4462,
-      "sha256": "f57fdb1d6d49e44ca8012806f7fc23c195b21b05d71bf3532ac0b7e6b2417a79"
+      "bytes": 4149,
+      "sha256": "d9bb46deb6fa0df365d2139e93ac818046287e2c062ae70cb6a3e2294e842c79"
     },
     "introduction/assets/opening.css": {
-      "bytes": 13041,
-      "sha256": "8f9c5038e46659f97a3a162c2b58044db3e479395ade0a746edbe82fc917370d",
+      "bytes": 12962,
+      "sha256": "35bf51e0a8a353c71526f9e924e2869143d0508a1dca86f80b4dbdbbff26a549",
       "source": "outputs/press-gym-journeys-r06/assets/opening.css"
     },
     "introduction/assets/gym-opening-r02/training-room.png": {
@@ -40,13 +40,13 @@
       "source": "outputs/press-gym-journeys-r06/assets/arrow-right.svg"
     },
     "introduction/assets/opening.js": {
-      "bytes": 8525,
-      "sha256": "5157c7643ff866ab4b4493b2440ba328f80622efe722f8019efaf103a3d8dd80",
+      "bytes": 8297,
+      "sha256": "622c2e67fa6c64acc3a7a2ac70d6f94e4d3847ee59161ab473b2a0288fc12d7b",
       "source": "outputs/press-gym-journeys-r06/assets/opening.js"
     },
     "introduction/assets/circuit-r06/scene.js": {
-      "bytes": 15570,
-      "sha256": "41bd28ea4ffced61630218e8f1ff29357603d16f12c3f181c56bb41663c916b1",
+      "bytes": 15611,
+      "sha256": "826b483e8a3106837643a6eb40bcaa3f2efab799efa38bbf28fb15055234b30d",
       "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/scene.js"
     },
     "introduction/assets/coffee-lab-r01/vendor/three.module.js": {
@@ -65,13 +65,13 @@
       "source": "outputs/press-gym-journeys-r06/assets/gym-opening-r02/motion.js"
     },
     "introduction/assets/circuit-r06/equipment.js": {
-      "bytes": 6800,
-      "sha256": "936eec3c5e2a1d570cb3b7608a1f0810518c3fd01c93a981b99e193f623d1984",
+      "bytes": 7181,
+      "sha256": "9a7af2ad03f80a99c9fdee01bb742daf52564528e4aed3741578fc2996974799",
       "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/equipment.js"
     },
     "introduction/assets/circuit-r06/timeline.js": {
-      "bytes": 3416,
-      "sha256": "88a76d7b06536ebb9e7cca04db0ca44b70a0f63a77a5f9a1ef2dde4dda24d48c",
+      "bytes": 1643,
+      "sha256": "0d1222fcf9dc55644569ae539f540d24f227e004c41f24e3511fde4897a25f80",
       "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js"
     },
     "introduction/assets/nim.png": {

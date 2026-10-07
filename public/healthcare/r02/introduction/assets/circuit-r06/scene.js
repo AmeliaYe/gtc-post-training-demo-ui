@@ -147,11 +147,12 @@ export function createGymScene(host) {
   function render(spec,skill) {
     currentSpec=spec;currentTime=spec.time;currentSkill=Math.min(1,Math.max(0,skill));if(!ready)return;
     reset();const {action,station,progress:p}=spec,bad=1-currentSkill;
+    equipment.reveal(action==='prepare'?p:spec.phase===0?0:1);
     const exercising=['try','retry','final'].includes(action),phase=exercising?p:0;
     const cadence=phase+bad*.12*Math.sin(phase*Math.PI*2);
     equipment.update(station==='elliptical'?cadence:0,bad,action==='prepare'?'all':station,action==='update'?Math.sin(p*Math.PI):0);
     equipment.press(station==='bench'?phase:0,station==='bench'?bad:0);
-    floorWeights.forEach(o=>o.visible=spec.time>=14&&spec.time<43);
+    floorWeights.forEach(o=>o.visible=false);
     if(station==='dumbbells'&&['try','retry','final','hold','feedback','update','prepare','environment'].includes(action)){
       arms.forEach(a=>a.dumbbell.visible=true);sample(phase*REP_SECONDS,currentSkill);
     }else if(action==='putdown')lowerWeights(p<.5?p*2:(1-p)*2,p<.5);
