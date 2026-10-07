@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { AcademicCapIcon, ArrowPathIcon, BookOpenIcon, CheckBadgeIcon, ChevronRightIcon, PencilSquareIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, animate, motion, useReducedMotion } from 'framer-motion';
+import NvidiaLogo from './NvidiaLogo';
+import { AcademicCapIcon, BookOpenIcon, CheckBadgeIcon, ChevronRightIcon, PencilSquareIcon, TrophyIcon } from '@heroicons/react/24/outline';
 
 // Plain-language version of the training pipeline, from Dream's MiST write-up
 // (seed corpus, four rewrite flows, verifier, mid-training) and the Dreamer RL stage.
@@ -35,16 +36,6 @@ const STEPS = [
 ];
 const STEP_MS = 4000;
 
-// Simplified post-training flow: Dream's stages on top of NVIDIA's pre-trained Nemotron
-// (MiST write-up: mid-training then SFT; Dreamer report: RL, validation, release every two weeks).
-const FLOW = [
-  { title: 'Nemotron', sub: 'General-purpose model', by: 'nvidia' },
-  { title: 'Mid-training', sub: 'Learns security knowledge', by: 'dream' },
-  { title: 'Fine-tuning', sub: 'Learns to answer like an analyst', by: 'dream' },
-  { title: 'Practice', sub: 'Reinforcement learning with feedback', by: 'dream', loop: true },
-  { title: 'Validate', sub: 'Scored on unseen questions', by: 'dream', loop: true },
-  { title: 'Release', sub: 'Deployed on-prem', by: 'dream', loop: true },
-];
 
 export default function TrainingStory() {
   const reduce = useReducedMotion();
@@ -83,19 +74,7 @@ export default function TrainingStory() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="ts-flow" aria-label="Post-training flow">
-        <h4>Post-training at a glance</h4>
-        <ol>
-          {FLOW.map((f, i) => (
-            <motion.li key={f.title} className={`${f.by} ${f.loop ? 'loop' : ''}`} initial={reduce ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15 + i * .12 }}>
-              <small>{f.by === 'nvidia' ? 'NVIDIA' : 'Dream'}</small>
-              <strong>{f.title}</strong>
-              <span>{f.sub}</span>
-            </motion.li>
-          ))}
-        </ol>
-        <p className="ts-loop"><ArrowPathIcon />Practice, validation and release repeat every two weeks as new threats appear</p>
-      </div>
+      <SimpleRuntime />
 
       <div className="ts-result">
         <span>Result</span>
@@ -106,3 +85,106 @@ export default function TrainingStory() {
     </div>
   );
 }
+
+// Simplified version of the Dreamer runtime diagram (Technical view): same two paths, plain names.
+type Kind = 'core' | 'live' | 'train';
+const NODES: { x: number; y: number; w: number; kind: Kind; title: string; sub: string; hero?: boolean }[] = [
+  { x: 20, y: 30, w: 200, kind: 'train', title: 'Security library', sub: 'Expert documents as lessons' },
+  { x: 20, y: 150, w: 200, kind: 'train', title: 'Mid-training', sub: 'Learns security knowledge' },
+  { x: 20, y: 270, w: 200, kind: 'train', title: 'Practice & feedback', sub: 'Improves from every answer' },
+  { x: 340, y: 30, w: 300, kind: 'core', title: 'Dream AI agent', sub: 'Answers analyst questions' },
+  { x: 340, y: 150, w: 300, kind: 'core', title: 'NVIDIA Nemotron', sub: 'The model behind every answer', hero: true },
+  { x: 760, y: 30, w: 220, kind: 'live', title: 'Real network data', sub: 'Stays inside the client network' },
+  { x: 760, y: 270, w: 220, kind: 'train', title: 'Safe practice copy', sub: 'Synthetic, never real data' },
+];
+const LINKS: { d: string; kind: Kind; label?: string; lx?: number; ly?: number }[] = [
+  { d: 'M120,94 V150', kind: 'train' },
+  { d: 'M220,172 H340', kind: 'train', label: 'knowledge', lx: 280, ly: 164 },
+  { d: 'M490,94 V150', kind: 'core', label: 'thinks with', lx: 500, ly: 126 },
+  { d: 'M640,62 H760', kind: 'live', label: 'reads', lx: 700, ly: 54 },
+  { d: 'M640,82 H700 V302 H760', kind: 'train', label: 'practices on', lx: 708, ly: 200 },
+  { d: 'M760,318 H220', kind: 'train', label: 'results scored', lx: 490, ly: 310 },
+  { d: 'M220,288 H280 V196 H340', kind: 'train', label: 'better model', lx: 288, ly: 246 },
+];
+const PATHS = {
+  live: [
+    { link: 2, caption: 'The Dream AI agent thinks with NVIDIA Nemotron.' },
+    { link: 3, caption: 'It reads the client’s real network data, which never leaves the building.' },
+  ],
+  train: [
+    { link: 0, caption: 'Expert security documents are rewritten into lessons.' },
+    { link: 1, caption: 'Mid-training gives Nemotron deep security knowledge.' },
+    { link: 4, caption: 'The same agent practices on a safe, synthetic copy of a network.' },
+    { link: 5, caption: 'Every answer is scored.' },
+    { link: 6, caption: 'Feedback makes Nemotron better, and the improved model goes back to work.' },
+  ],
+};
+
+function SimpleRuntime() {
+  const reduce = useReducedMotion();
+  const [mode, setMode] = useState<'live' | 'train'>('train');
+  const [step, setStep] = useState(0);
+  const [auto, setAuto] = useState(true);
+  const dot = useRef<SVGGElement>(null);
+  const track = useRef<SVGPathElement>(null);
+  const seq = PATHS[mode];
+  useEffect(() => {
+    const path = track.current;
+    if (reduce || !path) return;
+    const len = path.getTotalLength();
+    const controls = animate(0, len, {
+      duration: Math.max(.8, len / 160), delay: .4, ease: 'easeInOut',
+      onUpdate: (v) => { const { x, y } = path.getPointAtLength(v); dot.current?.setAttribute('transform', `translate(${x} ${y})`); },
+      onComplete: () => {
+        if (step < seq.length - 1) return setStep(step + 1);
+        setStep(0);
+        if (auto) setMode((m) => (m === 'live' ? 'train' : 'live'));
+      },
+    });
+    return () => controls.stop();
+  }, [step, mode, auto, reduce, seq.length]);
+  const on = (k: Kind) => k === 'core' || k === mode;
+
+  return (
+    <div className="ts-runtime">
+      <div className="ts-runtime-head">
+        <h4>How it works</h4>
+        <div className="ts-switch">
+          {(['live', 'train'] as const).map((m) => (
+            <button key={m} className={mode === m ? 'active' : ''} onClick={() => { setAuto(false); setMode(m); setStep(0); }}>
+              {m === 'live' ? 'Answering analysts' : 'Learning'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="rt-scroll">
+        <svg className="rt-diagram" viewBox="0 0 1000 340" role="img" aria-label="Simplified view: the Dream AI agent thinks with NVIDIA Nemotron and reads real network data inside the client network. To learn, Nemotron is mid-trained on an expert security library, and the same agent practices on a safe synthetic copy; scored results feed back to improve Nemotron.">
+          {LINKS.map((l, i) => (
+            <g key={l.d} className={!on(l.kind) ? 'off' : !reduce && seq[step].link === i ? 'active' : 'on'}>
+              <path className={`rt-edge ${l.kind}`} d={l.d} />
+              {l.label && <text className={`rt-edge-label ${on(l.kind) ? '' : 'off'}`} x={l.lx} y={l.ly} textAnchor="middle">{l.label}</text>}
+            </g>
+          ))}
+          {NODES.map((n) => (
+            <g key={n.title} style={{ opacity: on(n.kind) ? 1 : .35, transition: 'opacity .4s ease' }}>
+              <rect className={`rt-box ${n.kind} ${on(n.kind) ? 'on' : ''} ${n.hero ? 'hero' : ''}`} x={n.x} y={n.y} width={n.w} height="64" rx="10" />
+              {n.hero && <NvidiaLogo className="rt-nv-mark" x={n.x + 16} y={n.y + 19} width="26" height="26" />}
+              <text className="rt-main" x={n.x + n.w / 2} y={n.y + 28} textAnchor="middle">{n.title}</text>
+              <text className="rt-sub" x={n.x + n.w / 2} y={n.y + 46} textAnchor="middle">{n.sub}</text>
+            </g>
+          ))}
+          {!reduce && <>
+            <path ref={track} d={LINKS[seq[step].link].d} fill="none" stroke="none" />
+            <g ref={dot} transform="translate(-50 -50)"><circle r="9" className={`rt-halo ${mode}`} /><circle r="5" className={`rt-dot ${mode}`} /></g>
+          </>}
+        </svg>
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.p key={`${mode}-${step}`} className="rt-note" initial={reduce ? false : { opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: .2 }}>
+          <b>{String(step + 1).padStart(2, '0')}/{String(seq.length).padStart(2, '0')}</b>{seq[step].caption}
+        </motion.p>
+      </AnimatePresence>
+    </div>
+  );
+}
+
