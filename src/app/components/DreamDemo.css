@@ -183,7 +183,7 @@
 .partner-x { color: #6f786d; font-size: 14px; }
 
 /* Question + attack illustration */
-.dream-scenario { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0; margin: 16px 21px 13px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); overflow: hidden; }
+.dream-scenario { display: grid; grid-template-columns: minmax(0, 35fr) minmax(0, 65fr); gap: 0; margin: 16px 21px 13px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); overflow: hidden; }
 .dream-question { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; border-right: 1px solid var(--line); }
 .dream-question p { margin: 0; color: #d3d9cf; font: 12px/1.65 monospace; }
 .dream-question .prompt-label, .as-title { font: 700 15px monospace; letter-spacing: .14em; }
