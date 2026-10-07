@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 import httpx
 import pytest
 
-from ui.share import COOKIE, create_share_app
+from ui.backend.app.share import COOKIE, create_share_app
 
 TOKEN = "test-share-token-" + "x" * 32
 ORIGIN = "http://10.1.2.3:4192"

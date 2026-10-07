@@ -1,4 +1,4 @@
-"""Loopback-only FastAPI app for live and recorded paired healthcare conversations."""
+"""FastAPI app for live and recorded paired healthcare conversations."""
 import asyncio
 from contextlib import asynccontextmanager
 import json
@@ -15,10 +15,10 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
-from ui.config import Endpoint, SettingsInput, initial_endpoints
-from ui.runtime import Comparison, target_sides
+from ui.backend.app.config import Endpoint, SettingsInput, initial_endpoints
+from ui.backend.app.runtime import Comparison, target_sides
 
-HERE = Path(__file__).resolve().parent
+from .paths import UI_ROOT, FRONTEND_ROOT
 
 
 class TurnInput(BaseModel):
@@ -36,13 +36,14 @@ class StartInput(TurnInput):
 
 
 def create_app(data_path=None, python=None, runtime_root=None):
-    path = Path(data_path or os.getenv("DEMO_CASES_FILE", HERE / "data/cases.json"))
+    path = Path(data_path or os.getenv("DEMO_CASES_FILE", UI_ROOT / "data/cases.json"))
     bundle = json.loads(path.read_text()) if path.is_file() else {"cases": [], "cohort_size": 0}
     cases = {c["id"]: c for c in bundle["cases"]}
+    allowed_hosts = {h.strip() for h in os.getenv("DEMO_ALLOWED_HOSTS", "localhost,127.0.0.1,::1").split(",") if h.strip()}
     endpoints = initial_endpoints()
     runs = {}
     python = str(python or os.getenv("DEMO_HERMES_PYTHON", sys.executable))
-    runtime_root = Path(runtime_root or HERE / ".local/runtime")
+    runtime_root = Path(runtime_root or os.getenv("DEMO_RUNTIME_DIR", UI_ROOT / ".local/runtime"))
 
     @asynccontextmanager
     async def lifespan(app):
@@ -61,9 +62,9 @@ def create_app(data_path=None, python=None, runtime_root=None):
         except ValueError:
             hostname = None
         origin = request.headers.get("origin")
-        if hostname not in {"localhost", "127.0.0.1", "::1"}:
-            return JSONResponse({"detail": "Local access only"}, status_code=403)
-        if (origin and origin != "http://" + host) or request.headers.get("sec-fetch-site") == "cross-site":
+        if hostname not in allowed_hosts:
+            return JSONResponse({"detail": "Host not allowed"}, status_code=403)
+        if (origin and origin != request.url.scheme + "://" + host) or request.headers.get("sec-fetch-site") == "cross-site":
             return JSONResponse({"detail": "Same-origin access required"}, status_code=403)
         if request.method in {"POST", "PUT", "PATCH"}:
             if request.headers.get("content-type", "").split(";")[0] != "application/json":
@@ -86,15 +87,20 @@ def create_app(data_path=None, python=None, runtime_root=None):
         # Pydantic's default includes submitted input values, potentially API keys.
         return JSONResponse({"detail": "Invalid request fields", "fields": [".".join(map(str, e["loc"])) for e in exc.errors()]}, status_code=422)
 
-    @app.get("/")
-    async def index():
-        return FileResponse(HERE / "static/index.html")
+    @app.get("/healthz")
+    async def health():
+        return JSONResponse({"status": "ready" if cases else "no_cases"}, status_code=200 if cases else 503)
 
-    @app.get("/assets/{name}")
-    async def assets(name: str):
-        if name not in {"app.js", "styles.css", "icons.js"}:
-            raise HTTPException(404)
-        return FileResponse(HERE / "static" / name)
+    if os.getenv("DEMO_SERVE_FRONTEND", "1") == "1":
+        @app.get("/")
+        async def index():
+            return FileResponse(FRONTEND_ROOT / "index.html")
+
+        @app.get("/assets/{name}")
+        async def assets(name: str):
+            if name not in {"app.js", "styles.css", "icons.js"}:
+                raise HTTPException(404)
+            return FileResponse(FRONTEND_ROOT / "assets" / name)
 
     @app.get("/api/settings")
     async def settings():
@@ -207,4 +213,4 @@ def create_app(data_path=None, python=None, runtime_root=None):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(create_app(), host="127.0.0.1", port=int(os.getenv("DEMO_PORT", "4193")), access_log=False)
+    uvicorn.run(create_app(), host=os.getenv("DEMO_BIND_HOST", "127.0.0.1"), port=int(os.getenv("DEMO_PORT", "4193")), access_log=False, proxy_headers=False)

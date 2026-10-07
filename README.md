@@ -4,6 +4,20 @@ An interactive demonstration of local Nemotron customization and inference on NV
 
 The experience opens with five domain use cases—cybersecurity, healthcare simulation, multimodal biology, coding, and computer use. Selecting a use case expands it into a focused before-and-after comparison while the remaining demos move into a compact side rail.
 
+## Healthcare inference demo
+
+The standalone inference application is in [`ui/`](ui/README.md), with separate
+frontend and backend directories, bundled synthetic recordings, and Docker Compose
+startup. See its README for model connections, native development, and team sharing.
+
+```bash
+cd ui
+docker compose up --build -d --wait
+```
+
+Open <http://127.0.0.1:4193> and choose **Recorded preview**. Live inference requires
+external model endpoints. This runs independently of the Next.js landing site below.
+
 ## Run locally
 
 ```bash

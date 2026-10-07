@@ -8,4 +8,4 @@ if [[ -n "${DEMO_ENV_FILE:-}" ]]; then
 fi
 DEMO_APP_PYTHON=${DEMO_APP_PYTHON:-${DEMO_REPO_ROOT}/ui/.venv/bin/python}
 cd "$DEMO_REPO_ROOT"
-exec "$DEMO_APP_PYTHON" -m ui.app
+exec "$DEMO_APP_PYTHON" -m ui.backend.app.main

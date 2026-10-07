@@ -1,4 +1,6 @@
 """Explicit endpoint configuration; credentials never enter public responses."""
+from .secrets import secret_value
+
 from dataclasses import dataclass, field
 import os
 from urllib.parse import urlsplit
@@ -64,8 +66,8 @@ class Endpoint:
 def initial_endpoints():
     return {
         "baseline": Endpoint(os.getenv("BASELINE_BASE_URL", "https://inference-api.nvidia.com/v1").rstrip("/"),
-                             os.getenv("BASELINE_MODEL", ""), os.getenv("BASELINE_API_KEY", "")),
+                             os.getenv("BASELINE_MODEL", ""), secret_value("BASELINE_API_KEY")),
         "checkpoint": Endpoint(os.getenv("CHECKPOINT_BASE_URL", "http://127.0.0.1:18045/v1").rstrip("/"),
-                               os.getenv("CHECKPOINT_MODEL", "pab-astra-step25-heldout"),
-                               os.getenv("CHECKPOINT_API_KEY", "")),
+                               os.getenv("CHECKPOINT_MODEL", ""),
+                               secret_value("CHECKPOINT_API_KEY")),
     }

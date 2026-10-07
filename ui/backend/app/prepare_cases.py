@@ -65,7 +65,7 @@ def main():
     parser.add_argument("--cases", required=True, type=Path)
     parser.add_argument("--baseline-run", required=True, type=Path)
     parser.add_argument("--checkpoint-run", required=True, type=Path)
-    parser.add_argument("--output", type=Path, default=Path(__file__).parent / ".local/cases.json")
+    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parents[2] / ".local/cases.json")
     args = parser.parse_args()
     result = build(args.cases, args.baseline_run, args.checkpoint_run)
     args.output.parent.mkdir(parents=True, exist_ok=True, mode=0o700)

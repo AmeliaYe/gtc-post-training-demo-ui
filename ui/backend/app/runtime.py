@@ -10,7 +10,7 @@ import sys
 import time
 from uuid import uuid4
 
-ROOT = Path(__file__).resolve().parents[1]
+from .paths import REPO_ROOT as ROOT, BACKEND_ROOT
 
 
 def target_sides(target):
@@ -26,7 +26,7 @@ def worker_environment(home, sandbox):
     allowed = ("PATH", "LANG", "LC_ALL", "SSL_CERT_FILE", "SSL_CERT_DIR")
     env = {k: os.environ[k] for k in allowed if k in os.environ}
     env.update(HOME=str(home), HERMES_HOME=str(home), PYTHONNOUSERSITE="1", PYTHONUNBUFFERED="1",
-               PYTHONPATH=os.pathsep.join([str(ROOT / "ui/vendor/hermes_agent_runtime"), str(ROOT / "ui/vendor"), str(ROOT)]),
+               PYTHONPATH=os.pathsep.join([str(BACKEND_ROOT / "vendor/hermes_agent_runtime"), str(BACKEND_ROOT / "vendor"), str(ROOT)]),
                HEALTH_SANDBOX_SESSION_DIR=str(sandbox))
     return env
 
@@ -103,7 +103,7 @@ class Comparison:
         try:
             async with asyncio.timeout(self.timeout):
                 process = await asyncio.create_subprocess_exec(
-                    self.python, "-m", "ui.worker", cwd=ROOT, env=worker_environment(home, sandbox),
+                    self.python, "-m", "ui.backend.app.worker", cwd=ROOT, env=worker_environment(home, sandbox),
                     stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.DEVNULL, start_new_session=True, limit=8 * 1024 * 1024)
                 lane.process = process

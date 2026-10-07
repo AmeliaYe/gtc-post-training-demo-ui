@@ -1,0 +1,32 @@
+# Optional private-network capability-link gateway. The owner port stays on loopback.
+services:
+  share:
+    image: gtc-healthcare-backend:local
+    profiles: [share]
+    init: true
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    command: [python, -m, ui.backend.app.share]
+    environment:
+      DEMO_SHARE_HOST: 0.0.0.0
+      DEMO_SHARE_PORT: 8001
+      DEMO_SHARE_UPSTREAM: http://frontend:8080
+      DEMO_SHARE_ORIGIN: ${DEMO_SHARE_ORIGIN:?Set the exact origin used in guest browsers}
+      DEMO_SHARE_TOKEN_FILE: /run/secrets/share_token
+    ports:
+      - ${SHARE_BIND_IP:?Set a specific private host IP}:${SHARE_PORT:-4195}:8001
+    secrets:
+      - share_token
+    healthcheck:
+      test: [CMD, python, -m, ui.backend.app.share_health]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    depends_on:
+      frontend:
+        condition: service_healthy
+secrets:
+  share_token:
+    file: ./.secrets/share_token

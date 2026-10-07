@@ -1,0 +1,57 @@
+name: gtc-healthcare
+services:
+  backend:
+    image: gtc-healthcare-backend:local
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: runtime
+    init: true
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    environment:
+      DEMO_BIND_HOST: 0.0.0.0
+      DEMO_PORT: 8000
+      DEMO_SERVE_FRONTEND: 0
+      DEMO_ALLOWED_HOSTS: localhost,127.0.0.1,::1,frontend
+      DEMO_RUNTIME_DIR: /var/lib/healthcare-ui
+      DEMO_TURN_TIMEOUT: ${DEMO_TURN_TIMEOUT:-900}
+      BASELINE_BASE_URL: ${BASELINE_BASE_URL:-https://inference-api.nvidia.com/v1}
+      BASELINE_MODEL: ${BASELINE_MODEL:-}
+      BASELINE_API_KEY: ${BASELINE_API_KEY:-}
+      CHECKPOINT_BASE_URL: ${CHECKPOINT_BASE_URL:-http://host.docker.internal:18045/v1}
+      CHECKPOINT_MODEL: ${CHECKPOINT_MODEL:-}
+      CHECKPOINT_API_KEY: ${CHECKPOINT_API_KEY:-}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - runtime:/var/lib/healthcare-ui
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    init: true
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    ports:
+      - 127.0.0.1:${UI_PORT:-4193}:8080
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://127.0.0.1:8080/healthz]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+volumes:
+  runtime:

@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 import time
 
-from ui.streaming import ReplyStream
+from ui.backend.app.streaming import ReplyStream
 
 
 def execute(request, emit):

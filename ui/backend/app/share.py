@@ -21,7 +21,11 @@ POST_PATHS = re.compile(r"api/comparisons(?:/[0-9a-f]{32}/(?:turns|cancel))?")
 def create_share_app(*, token, origin, upstream="http://127.0.0.1:4193", transport=None):
     if not re.fullmatch(r"[A-Za-z0-9_-]{32,128}", token):
         raise ValueError("A randomly generated share token is required")
-    expected_host = httpx.URL(origin).netloc.decode()
+    parsed = httpx.URL(origin)
+    if (parsed.scheme not in {"http", "https"} or not parsed.host or parsed.userinfo
+            or parsed.path != "/" or parsed.query or parsed.fragment or origin.endswith("/")):
+        raise ValueError("DEMO_SHARE_ORIGIN must be an HTTP(S) origin without a path or credentials")
+    expected_host = parsed.netloc.decode()
 
     @asynccontextmanager
     async def lifespan(app):
@@ -120,12 +124,20 @@ def create_share_app(*, token, origin, upstream="http://127.0.0.1:4193", transpo
     return app
 
 
+def configured_app():
+    from .secrets import secret_value
+    host = os.getenv("DEMO_SHARE_HOST", "127.0.0.1")
+    origin = os.getenv("DEMO_SHARE_ORIGIN", "")
+    if not origin:
+        address = ip_address(host)
+        if not address.is_private or address.is_unspecified:
+            raise ValueError("Set a specific private address or an explicit DEMO_SHARE_ORIGIN")
+        origin = f"http://{host}:{os.getenv('DEMO_SHARE_PORT', '4195')}"
+    return create_share_app(token=secret_value("DEMO_SHARE_TOKEN"), origin=origin,
+                            upstream=os.getenv("DEMO_SHARE_UPSTREAM", "http://127.0.0.1:4193"))
+
+
 if __name__ == "__main__":
     import uvicorn
-    host = os.environ["DEMO_SHARE_HOST"]
-    address = ip_address(host)
-    if not address.is_private or address.is_unspecified:
-        raise ValueError("Bind the sharing gateway to a specific private network address")
-    port = int(os.getenv("DEMO_SHARE_PORT", "4195"))
-    app = create_share_app(token=os.environ["DEMO_SHARE_TOKEN"], origin=f"http://{host}:{port}")
-    uvicorn.run(app, host=host, port=port, access_log=False)
+    uvicorn.run(configured_app(), host=os.getenv("DEMO_SHARE_HOST", "127.0.0.1"),
+                port=int(os.getenv("DEMO_SHARE_PORT", "4195")), access_log=False, proxy_headers=False)

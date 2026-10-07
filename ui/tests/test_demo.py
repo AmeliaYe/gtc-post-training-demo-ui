@@ -11,9 +11,9 @@ from uuid import uuid4
 from fastapi.testclient import TestClient
 import pytest
 
-from ui.app import create_app
-from ui.config import Endpoint, EndpointInput
-from ui.streaming import VisibleText
+from ui.backend.app.main import create_app
+from ui.backend.app.config import Endpoint, EndpointInput
+from ui.backend.app.streaming import VisibleText
 
 
 @pytest.mark.parametrize('width', [1, 2, 5, 17, 100])
