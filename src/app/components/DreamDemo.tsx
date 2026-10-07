@@ -167,7 +167,7 @@ function BeforeAfter() {
             <section className="output-panel">
               <header>
                 <span className="model-mark"><CircleStackIcon /></span>
-                <span><small>BEFORE · ORIGINAL</small><strong>Nemotron 3.5 Super</strong></span>
+                <span><small><b className="dream-phase">BEFORE</b> · ORIGINAL</small><strong>Nemotron 3.5 Super</strong></span>
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>
@@ -181,7 +181,7 @@ function BeforeAfter() {
             <section className="output-panel tuned cyber-scan">
               <header>
                 <span className="model-mark"><SparklesIcon /></span>
-                <span><small>AFTER · MIST MID-TRAINED</small><strong>Nemotron-3.5-Super-MiST <em className="dream-trained-by">· Trained by Dream</em></strong></span>
+                <span><small><b className="dream-phase">AFTER</b> · MIST MID-TRAINED</small><strong>Nemotron-3.5-Super-MiST <em className="dream-trained-by">· Trained by Dream</em></strong></span>
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>

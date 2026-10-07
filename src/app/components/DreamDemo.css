@@ -234,4 +234,6 @@
 .cyber-demo .comparison-grid { grid-template-columns: minmax(0, 35fr) 1px minmax(0, 65fr); }
 .dream-trained-by { color: var(--accent); font-style: normal; font-weight: 500; }
 @media (max-width: 820px) { .cyber-demo .comparison-grid { grid-template-columns: 1fr; } }
+.dream-phase { display: inline-block; margin-right: 2px; padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,.06); color: #e6eae3; font: 700 12px monospace; letter-spacing: .12em; }
+.tuned .dream-phase { background: var(--accent); color: #0a0d09; }
 
