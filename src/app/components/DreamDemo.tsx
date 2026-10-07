@@ -182,6 +182,7 @@ function BeforeAfter() {
               <header>
                 <span className="model-mark"><SparklesIcon /></span>
                 <span><small><b className="dream-phase">AFTER</b> · MIST MID-TRAINED</small><strong>Nemotron-3.5-Super-MiST <em className="dream-trained-by">· Trained by Dream</em></strong></span>
+                <span className="dream-claim"><CheckIcon />100% accuracy in tactic and technique identification</span>
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>
