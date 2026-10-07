@@ -2,97 +2,33 @@
 .normal { --path-color: #b7ed71; --path-tint: #b7ed7110; }
 .unsafe { --path-color: #f39889; --path-tint: #f398890d; }
 .consequence { --path-color: #edc67b; --path-tint: #edc67b0f; }
-.heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
-.heading h4 { margin: 0; color: #ecf2e7; font-size: 17px; font-weight: 500; line-height: 1.4; letter-spacing: -.025em; }
-.illustrationLabel { flex-shrink: 0; color: #a0ac97; font: 9px/1.4 monospace; }
-.experience { overflow: hidden; border: 1px solid #38462f; border-radius: 8px; background: #0c120d; }
-.scene { position: relative; padding: 15px 15px 0; background: radial-gradient(ellipse at 45% 40%, #26392035, transparent 70%), linear-gradient(180deg, #111a12, #0c120d); }
-.scene::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(#92b2830b 1px, transparent 1px), linear-gradient(90deg, #92b2830b 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(#000, transparent); }
-.sceneTopline { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 9px; border: 1px solid color-mix(in srgb, var(--path-color) 28%, transparent); border-radius: 4px; background: var(--path-tint); color: var(--path-color); font: 9px/1.3 monospace; }
-.badge > span { width: 5px; height: 5px; flex-shrink: 0; border-radius: 50%; background: currentColor; }
-.stepCount { color: #9ba994; font: 9px/1.4 monospace; }
-.desktopGraph { position: relative; aspect-ratio: 1000 / 380; min-height: 290px; color: var(--path-color); }
+.scene { position: relative; overflow: hidden; padding: 0 12px; border: 1px solid #38462f; border-radius: 10px; background: radial-gradient(ellipse at 45% 40%, #26392035, transparent 70%), #0d150e; }
+.scene::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(#92b28308 1px, transparent 1px), linear-gradient(90deg, #92b28308 1px, transparent 1px); background-size: 36px 36px; mask-image: linear-gradient(#000, transparent); }
+.desktopGraph { position: relative; height: clamp(310px, 32vw, 360px); color: var(--path-color); }
 .attack .desktopGraph .network { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.route { fill: none; stroke: #52604e; stroke-width: 1.5; opacity: .4; vector-effect: non-scaling-stroke; }
-.activeRoute { stroke: currentColor; stroke-width: 2; opacity: 1; }
-.packet { fill: currentColor; filter: drop-shadow(0 0 5px currentColor); }
-.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 13px 12px; border: 1px solid #34412f; border-radius: 7px; background: #111a13; box-shadow: 0 8px 20px #0002; }
-.nodeIcon { display: grid; flex-shrink: 0; place-items: center; width: 29px; height: 29px; margin-bottom: 9px; border-radius: 6px; background: #839b7515; color: #9aaa90; }
-.attack .nodeIcon svg { width: 18px; height: 18px; }
-.node strong, .mobileNode strong { display: block; color: #b7c3ad; font-size: 12px; font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; }
-.nodeDetail { display: block; margin-top: 5px; color: #96a38e; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
-.activeNode { border-color: color-mix(in srgb, var(--path-color) 65%, #34412f); background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-.activeNode strong { color: #edf3e8; }
+.route { fill: none; stroke: #52604e; stroke-width: 2; opacity: .3; vector-effect: non-scaling-stroke; }
+.activeRoute { stroke: currentColor; stroke-width: 3.5; opacity: 1; }
+.packet { fill: currentColor; filter: drop-shadow(0 0 7px currentColor); }
+.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 16px 13px; border: 1px solid #34412f; border-radius: 9px; background: #111a13; box-shadow: 0 8px 20px #0002; }
+.nodeIcon { display: grid; flex-shrink: 0; place-items: center; width: 44px; height: 44px; margin-bottom: 10px; border-radius: 8px; background: #839b7515; color: #9aaa90; }
+.attack .nodeIcon svg { width: 28px; height: 28px; }
+.node strong, .mobileNode strong { display: block; color: #a6b29c; font-size: clamp(18px, 1.65vw, 28px); font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+.activeNode { border-color: color-mix(in srgb, var(--path-color) 70%, #34412f); background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
+.activeNode strong { color: #f0f6eb; }
 .activeNode .nodeIcon { color: var(--path-color); background: var(--path-tint); }
-.narrative { display: flex; align-items: flex-start; gap: 13px; min-height: 106px; padding: 17px 19px; border-top: 1px solid #2c3a27; background: #0d140e; }
-.narrative > div { flex: 1; min-width: 0; }
-.narrativeNumber { display: grid; place-items: center; flex-shrink: 0; width: 31px; height: 31px; border: 1px solid color-mix(in srgb, var(--path-color) 40%, transparent); border-radius: 50%; color: var(--path-color); font: 10px monospace; }
-.narrative h5 { margin: 0; color: #e4ebdc; font-size: 14px; font-weight: 500; line-height: 1.4; }
-.narrative p { margin: 6px 0 0; color: #b4c0a9; font-size: 12px; line-height: 1.65; }
-.sourceLink { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 9px 16px; margin-top: 13px; }
-.sourceLink > span { color: #a5b399; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
-.sourceLink button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 33px; padding: 7px 10px; border: 1px solid #647f49; border-radius: 4px; background: #b7ed710a; color: #c7e7a7; font-size: 10px; line-height: 1.4; cursor: pointer; }
-.sourceLink button:hover { border-color: #b7ed71; background: #b7ed7116; }
-.attack .sourceLink svg { width: 14px; height: 14px; flex-shrink: 0; }
-.controls { display: flex; align-items: stretch; gap: 10px; margin-top: 11px; }
-.steps { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-.steps button { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 10px; border: 1px solid #34402e; border-radius: 5px; background: #0c130d; color: #9ca991; text-align: left; font-size: 10px; line-height: 1.45; cursor: pointer; }
-.steps button:hover { border-color: #6e8358; color: #d7e5c9; }
-.steps button[aria-current='step'] { border-color: color-mix(in srgb, var(--path-color) 62%, #34402e); background: var(--path-tint); color: #e6eee0; box-shadow: inset 0 2px var(--path-color); }
-.stepNumber { color: #8fa07f; font: 9px monospace; }
-.steps button[aria-current='step'] .stepNumber { color: var(--path-color); }
-.playButton { min-width: 88px; padding: 10px 13px; border: 1px solid #b7ed71; border-radius: 5px; background: #b7ed71; color: #16230e; font-size: 11px; font-weight: 600; cursor: pointer; }
-.playButton:hover { background: #c7fa87; }
-.autoplayLabel, .manualLabel { align-items: center; justify-content: center; gap: 6px; }
-.autoplayLabel { display: flex; }
-.manualLabel { display: none; }
-.attack .playButton svg { width: 14px; height: 14px; }
-.attack :is(button, summary):focus-visible { outline: 2px solid #b7ed71; outline-offset: 3px; }
-.caveat { margin: 12px 0 0; color: #9bab90; font-size: 10px; line-height: 1.6; }
-.term { margin-top: 11px; color: #aebd9f; font-size: 11px; line-height: 1.6; }
-.term summary { width: fit-content; max-width: 100%; cursor: pointer; }
-.term p { margin: 6px 0 0; max-width: 740px; color: #9baa8f; }
 .mobileRoute { display: none; }
-.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-
-@media (max-width: 1000px) {
-  .node { padding: 10px; }
-  .node strong { font-size: 11px; }
-  .nodeDetail { font-size: 10px; }
-}
 
 @media (max-width: 800px) {
   .desktopGraph { display: none; }
-  .scene { padding: 13px; }
-  .mobileRoute { position: relative; display: flex; flex-direction: column; max-width: 480px; padding: 16px 0 4px; margin: 0 auto; list-style: none; }
+  .scene { padding: 16px; }
+  .mobileRoute { position: relative; display: flex; flex-direction: column; max-width: 480px; padding: 0; margin: 0 auto; list-style: none; }
   .mobileRoute li { min-width: 0; }
-  .mobileNode { display: flex; align-items: center; gap: 11px; padding: 12px; border: 1px solid color-mix(in srgb, var(--path-color) 45%, #34412f); border-radius: 6px; background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-  .mobileNode > div { min-width: 0; }
-  .mobileNode .nodeIcon { margin-bottom: 0; color: var(--path-color); }
-  .mobileNode strong { color: #e4ebde; font-size: 12px; }
-  .mobileNode .nodeDetail { margin-top: 2px; font-size: 11px; }
-  .attack .mobileArrow { display: block; width: 17px; height: 25px; margin: 2px auto; color: var(--path-color); }
-  .narrative { min-height: 0; }
-}
-
-@media (max-width: 560px) {
-  .heading { align-items: flex-start; flex-direction: column; gap: 4px; }
-  .heading h4 { font-size: 16px; }
-  .controls { flex-wrap: wrap; gap: 8px; }
-  .steps { flex-basis: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .steps button { padding: 9px 10px; font-size: 11px; }
-  .playButton { width: 100%; min-height: 40px; }
-  .narrative { gap: 10px; padding: 14px 12px; }
-  .narrativeNumber { width: 26px; height: 26px; }
-  .narrative h5 { font-size: 13px; }
-  .narrative p { font-size: 11px; }
-  .sourceLink { flex-direction: column; align-items: stretch; }
-  .sourceLink button { min-height: 38px; }
+  .mobileNode { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 12px; border: 1px solid color-mix(in srgb, var(--path-color) 55%, #34412f); border-radius: 7px; background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
+  .mobileNode .nodeIcon { width: 38px; height: 38px; margin-bottom: 0; color: var(--path-color); }
+  .mobileNode strong { min-width: 0; color: #edf3e7; font-size: 20px; }
+  .attack .mobileArrow { display: block; width: 24px; height: 28px; margin: 3px auto; color: var(--path-color); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .packet { display: none; }
-  .autoplayLabel { display: none; }
-  .manualLabel { display: flex; }
 }

@@ -5,14 +5,13 @@ import styles from './CyberTrainingResults.module.css';
 
 export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) {
   const benchmark = DFBENCH_RESULT;
-  const consolidates = scenario.focus === 'focus';
-  const attack = CYBER_ATTACKS[scenario.id];
+  const attack = CYBER_ATTACKS.openfire;
 
   return (
     <div className={styles.results}>
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
-          <span className={styles.eyebrow}>dfbench</span>
+          <span className={styles.eyebrow}>dfbench recall</span>
           <h4>More known flaws found</h4>
         </header>
         <div className={styles.metric}>
@@ -35,71 +34,51 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
         </div>
         <footer className={styles.benchmarkFooter}>
           <p className={styles.gain}><strong>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)}</strong> percentage points</p>
-          <span>Separate step-180 evaluation</span>
+          <span>Broader benchmark · separate step-180 run</span>
         </footer>
       </section>
 
       <section className={styles.example} aria-label={`${scenario.repo} recorded example results`}>
-        <header className={styles.exampleHeading}>
-          <span className={styles.eyebrow}>Selected example</span>
-          <h4>{consolidates ? 'Same flaw, fewer repeated reports' : scenario.id === 'cosmos' ? 'A missed flaw found. Same report count.' : 'A previously missed flaw found'}</h4>
-        </header>
-        <div className={styles.comparison}>
-          {[scenario.before, scenario.after].map((run, index) => {
-            const matchedReports = run.findings.reduce((count, finding) => count + (finding.referenceMatch === 'matched' ? finding.count : 0), 0);
-            return (
-              <div key={index} className={`${styles.checkpoint} ${index === 1 ? styles.later : ''}`}>
-                <span className={styles.checkpointLabel}>{index === 0 ? 'Earlier · step 5' : 'Later · step 200'}</span>
-                <strong className={`${styles.outcome} ${run.matchedCount ? styles.found : styles.missed}`}>
-                  {consolidates ? <>{matchedReports}<span>{matchedReports === 1 ? 'report' : 'reports'}</span></> : <>{run.matchedCount ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}{run.matchedCount ? 'Found' : 'Missed'}</>}
-                </strong>
-                {consolidates && <span className={styles.sameFlaw}>of the same flaw</span>}
-                <ul className={styles.glyphs} role="list" aria-label={`${run.findingsCount} total reports; ${matchedReports} matched the known flaw`}>
-                  {run.findings.flatMap((finding) => Array.from({ length: finding.count }, (_, reportIndex) => (
-                    <li
-                      key={`${finding.title}-${reportIndex}`}
-                      className={`${styles.reportGlyph} ${finding.referenceMatch === 'matched' ? styles.matchedGlyph : ''}`}
-                      aria-label={`${finding.title}, report ${reportIndex + 1} of ${finding.count}: ${finding.referenceMatch === 'matched' ? 'matched the known flaw' : finding.referenceMatch === 'unassessed' ? 'not assessed' : 'did not match the known flaw'}`}
-                    >
-                      <span className={styles.reportLines} aria-hidden="true" />
-                      {finding.referenceMatch === 'matched' ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}
-                    </li>
-                  )))}
-                </ul>
-                <span className={styles.reportCount}>{run.findingsCount} total {run.findingsCount === 1 ? 'report' : 'reports'}</span>
-              </div>
-            );
-          })}
-          <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
+        <div className={styles.exampleLabel}>
+          <h4>This Openfire flaw</h4>
+          <p className={styles.trainingNote}>Both already trained.</p>
         </div>
-        <div className={styles.exampleFooter}>
-          <span className={styles.legend}><CheckIcon aria-hidden="true" />Known flaw <MinusIcon aria-hidden="true" />Other report</span>
-          <span>Both checkpoints already RL-trained.</span>
+        <div className={styles.comparison}>
+          {[scenario.before, scenario.after].map((run, index) => (
+              <div key={index} className={`${styles.checkpoint} ${index === 1 ? styles.later : ''}`}>
+                <span className={styles.checkpointLabel}>{index === 0 ? 'Early · step 5' : 'Final · step 200'}</span>
+                <strong className={`${styles.outcome} ${run.matchedCount ? styles.found : styles.missed}`}>
+                  {run.matchedCount ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}{run.matchedCount ? 'Found' : 'Missed'}
+                </strong>
+              </div>
+          ))}
+          <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
         </div>
       </section>
 
       <details className={styles.details} key={scenario.id}>
-        <summary>Reports &amp; evaluation details</summary>
+        <summary>Evidence</summary>
         <div className={styles.detailContent}>
           <section>
-            <h5>Selected example: {scenario.repo}</h5>
+            <h5>Openfire: {scenario.repo}</h5>
             <p>Two checkpoints after reinforcement learning (RL) training, at steps 5 and 200, reviewing the same repository revision. Recorded evaluation: October 2026, attempt 1 of 4.</p>
             <div className={styles.reportDetails}>
               {[scenario.before, scenario.after].map((run, index) => (
                 <div key={index}>
-                  <h6>{index === 0 ? 'Earlier · step 5' : 'Later · step 200'}</h6>
+                  <h6>{index === 0 ? 'Early · step 5' : 'Final · step 200'} · {run.findingsCount} total {run.findingsCount === 1 ? 'report' : 'reports'}</h6>
                   <p>{index === 0 ? attack.training.before : attack.training.after}</p>
                   <ul>{run.findings.map((finding) => <li key={finding.title}><strong>{finding.count}×</strong> {finding.title}<span>{finding.referenceMatch === 'matched' ? 'Matches the reference flaw' : finding.referenceMatch === 'unassessed' ? 'Not assessed' : 'Does not match the reference flaw'}</span></li>)}</ul>
                   <p>Verifier: {run.matchedCount} of {run.referenceTotal} reference {run.referenceTotal === 1 ? 'flaw' : 'flaws'} matched.</p>
                 </div>
               ))}
             </div>
-            <p>Reference: {scenario.cve} · {scenario.reference.title}. Reports marked “other” are not confirmed false positives. Fewer repeated reports alone do not prove higher precision.</p>
+            <p>Reference: {scenario.cve} · {scenario.reference.title}. SSRF means server-side request forgery: making a server fetch an address chosen by someone else. Reports that do not match this reference are not confirmed false positives.</p>
             <p>{attack.caveat}</p>
+            <a href={scenario.url} target="_blank" rel="noopener noreferrer">Evaluated source revision<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
           </section>
           <section>
             <h5>Broader benchmark: dfbench</h5>
-            <p>Recall is the share of known vulnerabilities found. This separate comparison uses <code>{benchmark.before.model}</code> and <code>{benchmark.after.model}</code>. Its step-180 result is distinct from the selected step-200 examples.</p>
+            <p>Recall is the share of known vulnerabilities found. This separate comparison uses <code>{benchmark.before.model}</code> and <code>{benchmark.after.model}</code>. Its step-180 result is distinct from this step-200 Openfire example.</p>
             <p>Full benchmark scope: 253 real-world examples, 910 known vulnerabilities, and 17 languages in vulnerable code. These scope statistics describe the full benchmark.</p>
             <a href="https://depthfirst.com/research/dfbench-v1" target="_blank" rel="noopener noreferrer">How dfbench works<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
           </section>
