@@ -223,10 +223,10 @@
 .attack-scene .as-badge-text { font-size: 8px; letter-spacing: 1px; text-transform: none; }
 .as-badge-text.safe { fill: var(--accent); }
 .as-badge-text.threat { fill: var(--threat); }
-.as-status { display: flex; align-items: center; gap: 12px; min-height: 44px; margin: 8px 0 0; padding: 9px 12px; border: 1px solid; border-left-width: 3px; border-radius: 6px; font: 700 14px/1.4 Arial, Helvetica, sans-serif; }
-.as-status b { flex: none; padding: 3px 7px; border-radius: 4px; background: rgba(255,255,255,.06); color: #c5cac1; font: 600 11px monospace; }
-.as-status.safe { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
-.as-status.threat { color: var(--threat); border-color: color-mix(in srgb, var(--threat) 40%, transparent); background: color-mix(in srgb, var(--threat) 8%, transparent); }
+.as-status { min-height: 22px; margin: 8px 0 0; font: 700 14px/1.4 Arial, Helvetica, sans-serif; }
+.as-status b { margin-right: 10px; color: #6f786d; font: 400 11px monospace; }
+.as-status.safe { color: var(--accent); }
+.as-status.threat { color: var(--threat); }
 @media (max-width: 1100px) {
   .dream-scenario { grid-template-columns: 1fr; }
   .dream-question { border-right: 0; border-bottom: 1px solid var(--line); }
