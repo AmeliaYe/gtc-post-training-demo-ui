@@ -453,3 +453,4 @@
 
 @media (max-width: 620px) { .dream-theme .cti-phases { position: static; margin: var(--dream-space-3); width: fit-content; } }
 
+.dream-theme .dream-tagline { font-size: 15px; }

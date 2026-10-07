@@ -454,7 +454,7 @@ function ModelCard() {
     <div className="cyber-run cyber-card">
       <div className="cyber-card-head">
         <span className="expanded-icon"><SparklesIcon /></span>
-        <div><small>MODEL CARD · DREAM</small><strong>Nemotron-3.5-Super-MiST</strong></div>
+        <div><small>MODEL INFO · DREAM</small><strong>Nemotron-3.5-Super-MiST</strong></div>
       </div>
       <div className="cyber-card-grid">
         <dl className="cyber-specs">
