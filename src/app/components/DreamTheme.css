@@ -453,7 +453,12 @@
 
 @media (max-width: 620px) { .dream-theme .cti-phases { position: static; margin: var(--dream-space-3); width: fit-content; } }
 
-.dream-theme .dream-tagline { font-size: 15px; }
+.dream-theme .dream-tagline { font-size: 17px; }
+.dream-theme .partner-nvidia { height: 32px; }
+.dream-theme .partner-dream { height: 23px; }
+.dream-theme .partner-x { font-size: 18px; }
+.dream-theme .partner-logo { gap: 14px; }
+.dream-theme .dream-brand { gap: 10px; }
 /* CTI map: randomized source dots and the sample-data note spanning under map + feed. */
 .dream-theme .cti-source { fill: var(--dream-periwinkle); filter: drop-shadow(0 0 4px var(--dream-periwinkle)); }
 .dream-theme .cti-legend i.origin { width: 8px; height: 8px; border-radius: 50%; background: var(--dream-periwinkle); }
