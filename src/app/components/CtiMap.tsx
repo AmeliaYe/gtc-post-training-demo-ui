@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { COUNTRIES, ORIGINS } from './worldMap';
+import { COUNTRIES } from './worldMap';
 
 // Illustrative CTI map: the same threat-report feed analysed before and after training.
-// Groups are anonymized and origins unlabeled; this is not a measured result.
-type Campaign = { name: string; group: string; severity: 'Critical' | 'High' | 'Medium'; origin: keyof typeof ORIGINS; targets: string[]; before: string[] };
+// Groups are anonymized and never placed in a country: every attack enters from an unattributed
+// source beyond the map edge. This is not a measured result.
+type Campaign = { name: string; group: string; severity: 'Critical' | 'High' | 'Medium'; origin: keyof typeof SOURCES; targets: string[]; before: string[] };
 const CAMPAIGNS: Campaign[] = [
-  { name: 'Campaign 01', group: 'Group A', severity: 'Critical', origin: 'o1', targets: ['804', '398'], before: ['804'] },
+  { name: 'Campaign 01', group: 'Group A', severity: 'Critical', origin: 'o1', targets: ['792', '398'], before: ['792'] },
   { name: 'Campaign 02', group: 'Group C', severity: 'High', origin: 'o3', targets: ['004', '586', '356'], before: ['356'] },
   { name: 'Campaign 03', group: 'Group D', severity: 'Critical', origin: 'o4', targets: ['764', '704', '458', '360', '608', '116'], before: [] },
   { name: 'Campaign 04', group: 'Group B', severity: 'High', origin: 'o2', targets: ['760', '368', '784', '512'], before: [] },
@@ -18,12 +19,15 @@ const CAMPAIGNS: Campaign[] = [
 const CENTROID = Object.fromEntries(COUNTRIES.map((c) => [c.id, c.c]));
 // Crop of the world map around the campaigns (Eastern Europe to South-East Asia).
 const VIEW = { x: 400, y: 150, w: 500, h: 290 };
+// Unattributed entry points just outside the visible map, over open ocean (Indian Ocean along the
+// bottom, Pacific on the right), so no country or region reads as an origin.
+const SOURCES = { o1: [600, 468], o2: [530, 468], o3: [690, 468], o4: [926, 360] } as const;
 
 // Timeline in 500 ms ticks: before scan, before findings, after scan, after findings, hold, loop.
 const TICK = 500, AFTER_AT = 14, END = 39;
 const foundAt = (i: number, after: boolean) => (after ? AFTER_AT + 5 + i * 2 : 5 + i * 2);
 
-const arc = ([x1, y1]: number[], [x2, y2]: number[]) => {
+const arc = ([x1, y1]: readonly number[], [x2, y2]: readonly number[]) => {
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, len = Math.hypot(x2 - x1, y2 - y1);
   return `M${x1} ${y1} Q${mx} ${my - Math.max(18, len * .35)} ${x2} ${y2}`;
 };
@@ -53,14 +57,9 @@ export default function CtiMap() {
         <svg viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} role="img" aria-label={`Illustrative CTI map. Before training the model links ${CAMPAIGNS.filter((c) => c.before.length).length} campaigns; after training it links ${CAMPAIGNS.length} campaigns across ${new Set(CAMPAIGNS.flatMap((c) => c.targets)).size} countries.`}>
           {COUNTRIES.map((c) => <path key={c.id} d={c.d} className={`cti-country ${targeted.has(c.id) ? 'hit' : ''}`} />)}
           {found.map((c) => c.hits.map((id) => (
-            <motion.path key={`${phase}-${c.name}-${id}`} d={arc(ORIGINS[c.origin], CENTROID[id])} className="cti-arc"
+            <motion.path key={`${phase}-${c.name}-${id}`} d={arc(SOURCES[c.origin], CENTROID[id])} className="cti-arc"
               initial={reduce ? false : { pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.1, ease: 'easeInOut' }} />
           )))}
-          {[...new Set(found.map((c) => c.origin))].map((o) => {
-            const [x, y] = ORIGINS[o];
-            return <motion.rect key={`${phase}-${o}`} x={x - 4} y={y - 4} width="8" height="8" className="cti-origin" transform={`rotate(45 ${x} ${y})`}
-              initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} />;
-          })}
           {scanning && !reduce && (
             <motion.rect key={`sweep-${phase}`} y={VIEW.y} width="90" height={VIEW.h} fill="url(#cti-sweep)" initial={{ x: VIEW.x - 90 }} animate={{ x: VIEW.x + VIEW.w }} transition={{ duration: 2.4, ease: 'linear' }} />
           )}
@@ -89,7 +88,7 @@ export default function CtiMap() {
         </div>
 
         <div className="cti-legend">
-          <span><i className="origin" />Threat group origin</span>
+          <span><i className="origin" />Unattributed source</span>
           <span><i className="target" />Targeted country</span>
           <span className="cti-note">Illustrative · anonymized groups</span>
         </div>
