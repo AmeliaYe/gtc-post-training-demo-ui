@@ -72,6 +72,12 @@ export default function CtiMap() {
           </defs>
         </svg>
 
+        <div className="cti-phases" aria-hidden="true">
+          <span className={after ? '' : 'on'}>Before training</span>
+          <i><b style={{ width: `${(t / END) * 100}%` }} /></i>
+          <span className={after ? 'on' : ''}>After training</span>
+        </div>
+
         <div className="cti-overlay">
           <AnimatePresence mode="wait">
             <motion.div key={phase} initial={reduce ? false : { opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
@@ -100,8 +106,7 @@ export default function CtiMap() {
           {found.map((c) => (
             <motion.article key={`${phase}-${c.name}`} layout initial={reduce ? false : { opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
               <header><strong>{c.name}</strong><span className={`cti-sev ${c.severity.toLowerCase()}`}>{c.severity}</span></header>
-              <p>Threat group <b>{c.group}</b></p>
-              <small>{c.hits.length} {c.hits.length === 1 ? 'country' : 'countries'} targeted</small>
+              <p>Threat group <b>{c.group}</b> · {c.hits.length} {c.hits.length === 1 ? 'country' : 'countries'}</p>
             </motion.article>
           ))}
         </AnimatePresence>

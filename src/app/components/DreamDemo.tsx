@@ -207,7 +207,7 @@ function BeforeAfter() {
                 <span className="assistant-label">ANSWER</span>
                 <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong>{active.key && <MitreBadge id={active.key} />}</div>
                 <p>“{active.before.quote}”</p>
-                {active.full && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
+                {active.full && active.full.before !== active.before.quote && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
               </div>
               {active.before.runs && active.key && <Runs runs={active.before.runs} answerKey={active.key} />}
             </section>
@@ -216,7 +216,7 @@ function BeforeAfter() {
               <header>
                 <span className="model-mark"><SparklesIcon /></span>
                 <span><small><b className="dream-phase">AFTER TRAINING</b> · MIST MID-TRAINED</small><strong>Nemotron-3.5-Super-MiST <em className="dream-trained-by">· Trained by Dream</em></strong></span>
-                <span className="dream-claim"><CheckIcon />100% ATT&amp;CK accuracy</span>
+                {active.key?.startsWith('T') && <span className="dream-claim"><CheckIcon />100% ATT&amp;CK accuracy</span>}
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>
