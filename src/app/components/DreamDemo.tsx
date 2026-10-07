@@ -522,7 +522,7 @@ type CyberTab = (typeof TABS)[number]['id'];
 
 // Gallery entry for Dream's standalone card; page.tsx adds it to the use-case list.
 export const DREAM_DEMO = {
-  kind: 'demo' as const, id: 'dream', name: 'Security Mid-Training', task: 'Cybersecurity · Dream',
+  kind: 'demo' as const, id: 'dream', name: 'Cybersecurity for Nations', task: 'Cybersecurity · Dream',
   color: '#E88480', glow: 'rgba(232, 132, 128, .18)', icon: LockClosedIcon, // Dream coral
   embedUrl: '', // unused: DreamCard renders the expanded view itself
   previewLabel: 'Explore demo',
@@ -530,7 +530,7 @@ export const DREAM_DEMO = {
 
 function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab) => void }) {
   return (
-    <div className="cyber-tabs" role="tablist" aria-label="Security Mid-Training demo">
+    <div className="cyber-tabs" role="tablist" aria-label="Cybersecurity for Nations demo">
       {TABS.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'active' : ''} onClick={() => onChange(t.id)}>
           {tab === t.id && <motion.span layoutId="cyber-tab" className="cyber-tab-bg" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}

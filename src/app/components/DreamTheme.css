@@ -1,4 +1,4 @@
-/* Dream brand theme for the Security Mid-Training card, scoped to .dream-theme.
+/* Dream brand theme for the Cybersecurity for Nations card, scoped to .dream-theme.
    Ported from Dream's design-system export (tokens from DREAM_template.pptx). */
 /* Shared globals.css rules set monospace on panel classes; inside the card every element inherits
    the brand fonts instead, and the theme rules below re-apply the display face where intended. */
