@@ -174,7 +174,10 @@ export default function AttackScene({ scene }: { scene: Scene }) {
 
   return (
     <div className="attack-scene">
-      <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
+      <div className="as-head">
+        <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
+        <span className="as-legend"><i className="threat" />Attacker / compromised<i className="safe" />Legitimate</span>
+      </div>
       <svg viewBox="0 0 600 240" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
         {scene.zones?.map((z) => (
           <g key={z.label}>
@@ -197,6 +200,7 @@ export default function AttackScene({ scene }: { scene: Scene }) {
             <motion.g key={`${cycle}-${i}`} initial={reduce ? false : { opacity: 0, scale: .8 }} animate={{ opacity: 1, scale: 1 }} style={{ transformOrigin: `${n.x}px ${n.y}px` }}>
               {n.pulseAt === now && !reduce && <motion.circle cx={n.x} cy={n.y} r="30" className={`as-pulse ${tone}`} initial={{ scale: .7, opacity: .9 }} animate={{ scale: 2, opacity: 0 }} transition={{ duration: 1.6 }} style={{ transformOrigin: `${n.x}px ${n.y}px` }} />}
               <g transform={`translate(${n.x} ${n.y})`} className={`as-icon ${tone}`}>
+                <rect x="-24" y="-24" width="48" height="48" rx="12" className="as-tile" />
                 {ICONS[n.icon]}
                 {n.bars?.map((b, j) => now >= b.at && <motion.rect key={j} x="-17" y={j ? 4 : -13} width="34" height="9" rx="2" className={`as-bar ${b.tone}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} />)}
                 {n.crossAt !== undefined && now >= n.crossAt && <motion.path d="M-12 -12 L12 12 M12 -12 L-12 12" className="as-cross" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} />}

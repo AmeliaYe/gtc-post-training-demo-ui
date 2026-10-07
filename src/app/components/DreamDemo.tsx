@@ -6,7 +6,8 @@ import AttackScene, { SCENES } from './AttackScene';
 import CtiMap from './CtiMap';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
-import './DreamDemo.css';
+import './DreamTheme.css';
+import { Inter, Instrument_Serif } from 'next/font/google';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
 import { CheckIcon, ChevronDownIcon, CircleStackIcon, DocumentMagnifyingGlassIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -513,12 +514,16 @@ const TABS = [
   { id: 'card', label: 'Model card' },
 ] as const;
 
+// Dream brand fonts (OFL), self-hosted by next/font and exposed to DreamTheme.css as CSS variables.
+const dreamBody = Inter({ subsets: ['latin'], variable: '--font-dream-body' });
+const dreamDisplay = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-dream-display' });
+
 type CyberTab = (typeof TABS)[number]['id'];
 
 // Gallery entry for Dream's standalone card; page.tsx adds it to the use-case list.
 export const DREAM_DEMO = {
   kind: 'demo' as const, id: 'dream', name: 'Security Mid-Training', task: 'Cybersecurity · Dream',
-  color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: LockClosedIcon,
+  color: '#E88480', glow: 'rgba(232, 132, 128, .18)', icon: LockClosedIcon, // Dream coral
   embedUrl: '', // unused: DreamCard renders the expanded view itself
   previewLabel: 'Explore demo',
 };
@@ -541,6 +546,7 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
   const [tab, setTab] = useState<CyberTab>('compare');
   return (
     <MotionConfig reducedMotion="user">
+      <div className={`dream-theme ${dreamBody.variable} ${dreamDisplay.variable}`}>
       <div className="expanded-window-bar">
         <span className="expanded-traffic"><i /><i /><i /></span>
         <button className="view-all-button" onClick={onBack}>← All use cases</button>
@@ -562,6 +568,7 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
             {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <RuntimeDiagram /> : tab === 'map' ? <CtiMap /> : <ModelCard />}
           </motion.div>
         </AnimatePresence>
+      </div>
       </div>
     </MotionConfig>
   );
