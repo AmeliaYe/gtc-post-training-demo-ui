@@ -11,13 +11,14 @@ import { COUNTRIES } from './worldMap';
 // surfaces them (the base model at most links the campaign to a country), so beacons appear after training.
 type Infra = { country: string; sector: string };
 type Campaign = { name: string; group: string; severity: 'Critical' | 'High' | 'Medium'; targets: string[]; before: string[]; infra?: Infra[] };
+// A realistic gain: the same reports, read better. The base model surfaces 2 campaigns and one
+// country each; the trained model links 4 campaigns to 3 groups, their full target set (9 countries)
+// and the critical infrastructure they hit.
 const CAMPAIGNS: Campaign[] = [
   { name: 'Campaign 01', group: 'Group A', severity: 'Critical', targets: ['792', '398'], before: ['792'], infra: [{ country: '398', sector: 'Energy grid' }] },
-  { name: 'Campaign 02', group: 'Group C', severity: 'High', targets: ['004', '586', '356'], before: ['356'], infra: [{ country: '356', sector: 'Telecom' }] },
-  { name: 'Campaign 03', group: 'Group D', severity: 'Critical', targets: ['764', '704', '458', '360', '608', '116'], before: [], infra: [{ country: '704', sector: 'Ports' }, { country: '360', sector: 'Energy grid' }] },
-  { name: 'Campaign 04', group: 'Group B', severity: 'High', targets: ['760', '368', '784', '512'], before: [], infra: [{ country: '784', sector: 'Oil & gas' }] },
-  { name: 'Campaign 05', group: 'Group A', severity: 'Medium', targets: ['417', '860'], before: [] },
-  { name: 'Campaign 06', group: 'Group D', severity: 'Medium', targets: ['418', '104'], before: [] },
+  { name: 'Campaign 02', group: 'Group B', severity: 'High', targets: ['356', '586'], before: ['356'], infra: [{ country: '356', sector: 'Telecom' }] },
+  { name: 'Campaign 03', group: 'Group C', severity: 'Critical', targets: ['704', '360', '608'], before: [], infra: [{ country: '704', sector: 'Ports' }] },
+  { name: 'Campaign 04', group: 'Group B', severity: 'Medium', targets: ['784', '512'], before: [], infra: [{ country: '784', sector: 'Oil & gas' }] },
 ];
 const CENTROID = Object.fromEntries(COUNTRIES.map((c) => [c.id, c.c]));
 const COUNTRY_NAME = Object.fromEntries(COUNTRIES.map((c) => [c.id, c.name]));
@@ -130,7 +131,7 @@ export default function CtiMap() {
         </div>
       </div>
 
-      <p className="cti-sample">Based on sample anonymized data</p>
+      <p className="cti-sample">Illustrative example based on anonymized data</p>
 
       <aside className="cti-feed">
         <h4>Detected campaigns</h4>

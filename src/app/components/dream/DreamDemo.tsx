@@ -251,15 +251,13 @@ const EDGES: { d: string; kind: Path; both?: boolean }[] = [
   { d: 'M502,140 L502,188', kind: 'core' },
   { d: 'M674,92 L740,92 L740,64 L790,64', kind: 'live' },
   { d: 'M674,120 L740,120 L740,238 L790,238', kind: 'train' },
-  { d: 'M887,150 L887,104', kind: 'live' },
-  { d: 'M887,290 L887,272', kind: 'train' },
   { d: 'M280,367 L340,367', kind: 'train' },
   { d: 'M507,342 L507,250', kind: 'train' },
 ];
 const EDGE_LABELS: [number, number, string, Path, ('middle' | 'start')?][] = [
-  [259, 90, 'rollouts', 'train', 'middle'], [259, 116, 'trajectories', 'train', 'middle'], [70, 165, 'scored rollouts', 'train'],
-  [259, 209, 'weights', 'train', 'middle'], [512, 168, 'infer', 'core'],
-  [740, 53, 'production MCP', 'live', 'middle'], [515, 300, 'cyber-knowledge checkpoint', 'train'], [740, 256, 'training MCP', 'train', 'middle'], [895, 132, 'populate', 'live'],
+  [259, 90, 'tasks', 'train', 'middle'], [259, 116, 'answers', 'train', 'middle'], [70, 165, 'scores', 'train'],
+  [259, 209, 'better model', 'train', 'middle'], [512, 168, 'thinks with', 'core'],
+  [740, 53, 'real data', 'live', 'middle'], [515, 300, 'security knowledge', 'train'], [740, 256, 'practice data', 'train', 'middle'],
 ];
 const MODES = [
   { id: 'live', label: 'Live request' },
@@ -268,19 +266,18 @@ const MODES = [
 // One dot walks these hops in order; `edges` are the EDGES indexes lit while it travels.
 const SEQUENCES: Record<'live' | 'train', { d: string; edges: number[]; caption: string; lands?: boolean }[]> = {
   live: [
-    { d: 'M887,150 L887,104', edges: [6], caption: 'Agentic data pipelines populate production storage: assets, findings, intel, alerts.' },
-    { d: 'M502,140 L502,188', edges: [3], caption: 'An analyst question reaches the Dreamer agent, which infers on Nemotron, served via vLLM.' },
-    { d: 'M674,92 L740,92 L740,64 L790,64', edges: [4], caption: 'Its tools read production storage over MCP, inside the client network.' },
+    { d: 'M502,140 L502,188', edges: [3], caption: 'An analyst asks a question; the Dreamer agent thinks with NVIDIA Nemotron.' },
+    { d: 'M674,92 L740,92 L740,64 L790,64', edges: [4], caption: 'It reads the client’s real data, which never leaves the network.' },
   ],
   train: [
-    { d: 'M280,367 L340,367', edges: [8], caption: 'Stage 1, cyber knowledge: an expert-vetted security corpus (CVE, CWE, ATT&CK, threat reports) is rewritten into training data such as explainers and Q&A.' },
-    { d: 'M507,342 L507,250', edges: [9], caption: 'Training on NVIDIA NeMo (MiST, SFT) gives Nemotron deep cyber knowledge: the checkpoint agentic training starts from.', lands: true },
-    { d: 'M206,100 L312,100', edges: [0], caption: 'Stage 2, agentic RL: Dreamer Gym, built on NVIDIA NeMo Gym, sends a task to the unchanged production agent, exactly as an analyst question would.' },
-    { d: 'M502,140 L502,188', edges: [3], caption: 'The agent infers on the same Nemotron model.' },
-    { d: 'M674,120 L740,120 L740,238 L790,238', edges: [5], caption: 'Only the data path differs: tools read a synthetic digital twin over the training MCP, never derived from customer data.' },
-    { d: 'M312,100 L206,100', edges: [0], caption: 'The trajectory returns to Dreamer Gym and is scored.' },
-    { d: 'M60,142 L60,180', edges: [1], caption: 'Scored rollouts go to NVIDIA NeMo RL for agentic RL post-training.' },
-    { d: 'M206,218 L328,218', edges: [2], caption: 'New weights return to the same Nemotron the agents infer on.', lands: true },
+    { d: 'M280,367 L340,367', edges: [6], caption: 'Stage 1: expert security documents are turned into lessons.' },
+    { d: 'M507,342 L507,250', edges: [7], caption: 'Nemotron studies them and gains deep security knowledge.', lands: true },
+    { d: 'M206,100 L312,100', edges: [0], caption: 'Stage 2: Dream’s training gym, built on NVIDIA NeMo Gym, gives the real agent a practice task.' },
+    { d: 'M502,140 L502,188', edges: [3], caption: 'The agent works on it, thinking with Nemotron.' },
+    { d: 'M674,120 L740,120 L740,238 L790,238', edges: [5], caption: 'It practices on a synthetic network built for training, never derived from customer data.' },
+    { d: 'M312,100 L206,100', edges: [0], caption: 'Its answer goes back to the gym and is scored.' },
+    { d: 'M60,142 L60,180', edges: [1], caption: 'NVIDIA NeMo RL learns from the scores.' },
+    { d: 'M206,218 L328,218', edges: [2], caption: 'An improved Nemotron goes back to work.', lands: true },
   ],
 };
 
@@ -306,7 +303,7 @@ function RuntimeDiagram() {
     const path = track.current;
     if (reduce || !path) return;
     const controls = animate(0, path.getTotalLength(), {
-      duration: Math.max(.7, path.getTotalLength() / 170), delay: .35, ease: 'easeInOut',
+      duration: Math.max(.9, path.getTotalLength() / 140), delay: 1.4, ease: 'easeInOut',
       onUpdate: (v) => {
         const { x, y } = path.getPointAtLength(v);
         dot.current?.setAttribute('transform', `translate(${x} ${y})`);
@@ -353,60 +350,51 @@ function RuntimeDiagram() {
 
         <motion.rect className="rt-group train" x="16" y="30" width="190" height="270" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="273" width="17" height="17" /><text className="rt-nv" x="50" y="286">NVIDIA</text>
-        <text className="rt-kicker train" x="30" y="56">2 · AGENTIC RL</text>
+        <text className="rt-kicker train" x="30" y="56">2 · PRACTICE</text>
         <Box x={30} y={72} w={162} h={70} kind="train" mode={mode} hero>
-          <text className="rt-main" x="111" y="98" textAnchor="middle">Dreamer Gym</text>
-          <text className="rt-sub" x="111" y="115" textAnchor="middle">built on NVIDIA NeMo Gym</text>
-          <text className="rt-sub" x="111" y="129" textAnchor="middle">drives the real agent</text>
+          <text className="rt-main" x="111" y="103" textAnchor="middle">Training gym</text>
+          <text className="rt-sub" x="111" y="121" textAnchor="middle">built on NVIDIA NeMo Gym</text>
         </Box>
         <Box x={30} y={180} w={162} h={70} kind="train" mode={mode}>
-          <text className="rt-main" x="111" y="208" textAnchor="middle">NVIDIA NeMo RL</text>
-          <text className="rt-sub" x="111" y="226" textAnchor="middle">agentic RL post-training</text>
-          <text className="rt-sub" x="111" y="240" textAnchor="middle">GRPO · Megatron backend</text>
+          <text className="rt-main" x="111" y="211" textAnchor="middle">Feedback loop</text>
+          <text className="rt-sub" x="111" y="229" textAnchor="middle">NVIDIA NeMo RL</text>
         </Box>
 
         <rect className="rt-group core" x="316" y="18" width="374" height="270" rx="12" />
-        <text className="rt-kicker" x="330" y="36">PRODUCTION DREAMER AGENT, UNCHANGED</text>
+        <text className="rt-kicker" x="330" y="36">DREAMER AGENT · SAME IN PRODUCTION AND TRAINING</text>
         <Box x={330} y={78} w={344} h={62} kind="core" mode={mode}>
-          <text className="rt-kicker" x="502" y="99" textAnchor="middle">DEEP AGENTS</text>
-          <text className="rt-main" x="502" y="121" textAnchor="middle">Orchestrator · Posture · CTI · Detection</text>
+          <text className="rt-main" x="502" y="105" textAnchor="middle">Dreamer AI agents</text>
+          <text className="rt-sub" x="502" y="123" textAnchor="middle">answer security questions</text>
         </Box>
         <Box x={330} y={188} w={344} h={60} kind="core" mode={mode} hero>
           <NvidiaLogo className="rt-nv-mark" x="342" y="204" width="26" height="26" />
-          <text className="rt-main" x="518" y="212" textAnchor="middle">NEMOTRON 3.5 Super VL 120B-A12B</text>
-          <text className="rt-sub" x="518" y="232" textAnchor="middle">fine-tuned per agent · served via vLLM</text>
+          <text className="rt-main" x="518" y="212" textAnchor="middle">NVIDIA Nemotron</text>
+          <text className="rt-sub" x="518" y="232" textAnchor="middle">the model behind every answer</text>
         </Box>
         {/* Weights land on Nemotron: flash when the training loop is on. */}
         {seq[step].lands && !reduce && <rect className="rt-flash" x="330" y="188" width="344" height="60" rx="8" />}
 
         <Box x={790} y={34} w={194} h={70} kind="live" mode={mode}>
           <text className="rt-kicker live" x="806" y="56">LIVE</text>
-          <text className="rt-main" x="887" y="78" textAnchor="middle">Production Storage</text>
-          <text className="rt-sub" x="887" y="94" textAnchor="middle">client environments</text>
-        </Box>
-        <Box x={790} y={150} w={194} h={52} kind="live" mode={mode}>
-          <text className="rt-main" x="887" y="172" textAnchor="middle">Agentic Data Pipelines</text>
-          <text className="rt-sub" x="887" y="189" textAnchor="middle">assets · findings · intel · alerts</text>
+          <text className="rt-main" x="887" y="78" textAnchor="middle">Client network data</text>
+          <text className="rt-sub" x="887" y="94" textAnchor="middle">never leaves the network</text>
         </Box>
         <Box x={790} y={212} w={194} h={60} kind="train" mode={mode}>
           <text className="rt-kicker train" x="806" y="234">TRAINING</text>
-          <text className="rt-main" x="887" y="252" textAnchor="middle">Training Storage</text>
-          <text className="rt-sub" x="887" y="266" textAnchor="middle">synthetic digital twin</text>
-        </Box>
-        <Box x={790} y={290} w={194} h={30} kind="train" mode={mode}>
-          <text className="rt-sub" x="887" y="309" textAnchor="middle">generated, never from production</text>
+          <text className="rt-main" x="887" y="252" textAnchor="middle">Practice network</text>
+          <text className="rt-sub" x="887" y="266" textAnchor="middle">synthetic, never from customer data</text>
         </Box>
 
         <motion.rect className="rt-group train" x="16" y="314" width="674" height="88" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="320" width="17" height="17" /><text className="rt-nv" x="50" y="333">NVIDIA</text>
-        <text className="rt-kicker train" x="676" y="333" textAnchor="end">1 · CYBER KNOWLEDGE · SFT</text>
+        <text className="rt-kicker train" x="676" y="333" textAnchor="end">1 · LEARN</text>
         <Box x={30} y={342} w={250} h={50} kind="train" mode={mode}>
-          <text className="rt-main" x="155" y="363" textAnchor="middle">Security corpus</text>
-          <text className="rt-sub" x="155" y="380" textAnchor="middle">expert-vetted seed + synthetic flows</text>
+          <text className="rt-main" x="155" y="363" textAnchor="middle">Expert security library</text>
+          <text className="rt-sub" x="155" y="380" textAnchor="middle">turned into lessons</text>
         </Box>
         <Box x={340} y={342} w={334} h={50} kind="train" mode={mode} hero>
-          <text className="rt-main" x="507" y="363" textAnchor="middle">Cyber-knowledge training</text>
-          <text className="rt-sub" x="507" y="380" textAnchor="middle">MiST · SFT on NVIDIA NeMo AutoModel</text>
+          <text className="rt-main" x="507" y="363" textAnchor="middle">Security knowledge training</text>
+          <text className="rt-sub" x="507" y="380" textAnchor="middle">NVIDIA NeMo AutoModel</text>
         </Box>
 
         {!reduce && <>
@@ -426,12 +414,11 @@ function RuntimeDiagram() {
 }
 
 // From Dream's "Mid-Training NVIDIA Nemotron 3.5 Super for Cybersecurity" post.
-const MODEL_SPECS = [
+const MODEL_SPECS: [string, string | string[]][] = [
   ['Model', 'Dreamer: Dream’s security model, trained on NVIDIA Nemotron 3.5 Super (120B hybrid Mamba-Transformer MoE, 12B active per token)'],
   ['What it does', 'Answers general cybersecurity questions and questions about the customer’s own network: assets, exposure and fixes'],
-  ['Training', '1 · Cyber knowledge: SFT on an expert security corpus (MiST, EMNLP 2026). 2 · Agentic RL (GRPO) through the unchanged production agent, on a synthetic digital twin of a customer network, re-released every two weeks'],
+  ['Training', ['Cyber knowledge: SFT on an expert security corpus (MiST, EMNLP 2026)', 'Agentic RL (GRPO) through the unchanged production agent, on a synthetic digital twin; re-released every two weeks']],
   ['NVIDIA stack', 'NeMo AutoModel, NeMo RL and NeMo Gym on NVIDIA DGX'],
-  ['First', 'First agentic training on NVIDIA Nemotron Super'],
   ['Deployment', 'On-prem and air-gapped: customer data never leaves the network'],
 ];
 const MODEL_SCORES = [
@@ -453,7 +440,7 @@ function ModelCard() {
         <dl className="cyber-specs">
           {MODEL_SPECS.map(([k, v], i) => (
             <motion.div key={k} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: .05 + i * .06 }}>
-              <dt>{k}</dt><dd>{v}</dd>
+              <dt>{k}</dt><dd>{Array.isArray(v) ? <ol className="cyber-spec-steps">{v.map((x) => <li key={x}>{x}</li>)}</ol> : v}</dd>
             </motion.div>
           ))}
         </dl>

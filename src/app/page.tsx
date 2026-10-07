@@ -23,7 +23,7 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
-import DreamCard, { DREAM_DEMO } from './components/DreamDemo';
+import DreamCard, { DREAM_DEMO } from './components/dream/DreamDemo';
 
 const KERMT_DEMO_URL = 'http://127.0.0.1:5173';
 const DGX_STATION_URL = 'https://www.nvidia.com/en-us/products/workstations/dgx-station/';
