@@ -22,7 +22,7 @@ const RUN_SECONDS = 10;
 const CATEGORIES = [
   {
     id: 'cti', label: 'CTI',
-    bench: { name: 'ATT&CK technique extraction', before: 43.9, after: 77.8 },
+    bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
     prompt: 'An attacker with access to a host’s Docker API sent a remote build request containing a Dockerfile that pulled a vanilla alpine base image and then fetched a malware binary from their C2 to bake into the image. The build completed locally on the host, avoiding alerts tied to downloading malicious images. The adversary then used the resulting custom image to deploy a container for follow-on activity.',
     why: { base: "Base describes the build correctly, then labels the final step (deploying a container).", ours: "Ours sees that the evasion happens at build time, which is exactly T1612." },
     key: 'T1612',
@@ -32,7 +32,7 @@ const CATEGORIES = [
   },
   {
     id: 'triage', label: 'Triage',
-    bench: { name: 'ATT&CK technique extraction', before: 43.9, after: 77.8 },
+    bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
     prompt: 'An attacker emailed a victim a malicious ISO file hosted on a public file-share, which was saved with a MOTW tag. The victim mounted the ISO and executed the contained EXE, which lacked the MOTW because the disk image did not preserve NTFS alternate data streams. This allowed the payload to run without SmartScreen or Protected View restrictions.',
     why: { base: "Base labels the victim's click instead of the trick.", ours: "Ours explains why the payload escapes SmartScreen (the ISO drops the MOTW stream) and maps it to Subvert Trust Controls, the parent of the MOTW-bypass sub-technique." },
     key: 'T1553',
@@ -42,7 +42,7 @@ const CATEGORIES = [
   },
   {
     id: 'mitigation', label: 'Mitigation',
-    bench: { name: 'risk mitigation strategy', before: 22.9, after: 55.7 },
+    bench: { name: 'risk mitigation strategy', plain: 'Choosing the right defense', before: 22.9, after: 55.7 },
     prompt: 'An adversary rented time on a large botnet and instructed compromised hosts worldwide to flood a target web service with UDP packets. The sustained high-volume traffic saturated the service’s upstream bandwidth, preventing legitimate clients from reaching the site.',
     why: { base: "Base has the right idea but every ID is wrong: T1499 is Endpoint DoS, and M1032 is MFA (Network Intrusion Prevention is M1031).", ours: "Ours gives the correct control with its correct ID and name." },
     key: 'M1037',
@@ -52,7 +52,7 @@ const CATEGORIES = [
   },
   {
     id: 'vuln', label: 'Vulnerability',
-    bench: { name: 'root-cause mapping', before: 61.3, after: 73.7 },
+    bench: { name: 'root-cause mapping', plain: 'Finding the root cause', before: 61.3, after: 73.7 },
     prompt: 'Open5GS MME versions <= 2.6.4 contain an assertion that can be remotely triggered via a malformed ASN.1 packet over the S1AP interface. An attacker may send an `Initial UE Message` message missing a required `PLMN Identity` field to repeatedly crash the MME, resulting in denial of service.',
     why: { base: "Base falls back to the catch-all CWE-20, which is true but uninformative.", ours: "Ours names the precise weakness: a debug-time assertion that remote traffic can reach." },
     key: 'CWE-617',
@@ -155,16 +155,6 @@ function BeforeAfter() {
       <AnimatePresence mode="wait">
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="prompt-bar"><span className="prompt-label">QUESTION</span><p>{active.prompt}</p><span className="prompt-tag">answer key · {active.key}</span></div>
-          <div className="cyber-bench">
-            <small>{active.bench.name}</small>
-            <div className="score-bars">
-              <div className="score-meta"><span>Nemotron 3.5 Super</span><strong>{active.bench.before.toFixed(1)}</strong></div>
-              <div className="score-track"><span className="score-fill muted" style={{ width: `${active.bench.before}%` }} /></div>
-              <div className="score-meta"><span>+ MiST mid-training</span><strong>{active.bench.after.toFixed(1)}</strong></div>
-              <div className="score-track"><motion.span className="score-fill" initial={{ width: `${active.bench.before}%` }} animate={{ width: `${active.bench.after}%` }} transition={{ duration: 1.2, delay: .2, ease: [.22, 1, .36, 1] }} /></div>
-            </div>
-            <strong>+<CountUp to={active.bench.after - active.bench.before} decimals={1} /><em>pts</em></strong>
-          </div>
           <div className="comparison-grid">
             <section className="output-panel">
               <header>
@@ -199,6 +189,7 @@ function BeforeAfter() {
             <p><XMarkIcon /><span><b>Original</b> {active.why.base.replace(/^Base /, '')}</span></p>
             <p className="ours"><CheckIcon /><span><b>MiST</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
           </motion.div>
+          <StatsStrip bench={active.bench} />
         </motion.div>
       </AnimatePresence>
     </>
@@ -527,34 +518,26 @@ function ModelCard() {
   );
 }
 
-const STATS = [
-  { label: 'Security knowledge', from: '65.4 → ', to: 74.1, decimals: 1, suffix: '', note: '15 benchmarks · MiST mid-training', bars: [65.4, 74.1], spark: false },
-  { label: 'Validation score', from: '0.70 → ', to: .75, decimals: 2, suffix: '', note: 'Posture agent RL · peak 0.76', bars: null, spark: true },
-  { label: 'Answer length', from: '−', to: 22, decimals: 0, suffix: '%', note: 'mean tokens per answer', bars: [100, 78], spark: false },
-  { label: 'Truncated answers', from: '4.8% → ', to: 1, decimals: 1, suffix: '%', note: 'cut off at generation limit', bars: [100, 21], spark: false },
-];
-
-function StatsStrip() {
-  const spark = VALIDATION.map((v, i) => `${i ? 'L' : 'M'} ${i * 10} ${(1 - (v - LOW) / (HIGH - LOW)) * 24}`).join(' ');
+// Scores out of 100, original Nemotron 3.5 Super vs MiST (mean of 3 runs), from Dream's MiST post.
+function StatsStrip({ bench }: { bench: { name: string; plain: string; before: number; after: number } }) {
+  const stats: { label: string; note: string; before: number; after: number; delta?: number }[] = [
+    { label: bench.plain, note: `this kind of question · ${bench.name}`, ...bench },
+    // The post states +8.8, computed before rounding; 74.1 − 65.4 would show 8.7.
+    { label: 'Overall security knowledge', note: 'average across 15 security tests', before: 65.4, after: 74.1, delta: 8.8 },
+    { label: 'General skills', note: 'math, reasoning, instructions: kept intact', before: 91.8, after: 92.4 },
+  ];
   return (
     <div className="cyber-stats">
-      <small className="cyber-stats-label">RESULTS · NEMOTRON 3.5 SUPER · ORIGINAL VS POST-TRAINED</small>
-      {STATS.map((s, i) => (
-        <motion.div key={s.label} className="cyber-stat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 + i * .08 }}>
-          <small>{s.label}</small>
-          <strong><span className="cyber-from">{s.from}</span><CountUp to={s.to} decimals={s.decimals} suffix={s.suffix} /></strong>
-          {s.spark && (
-            <svg className="cyber-spark" viewBox="0 0 110 24" aria-hidden="true">
-              <motion.path d={spark} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.6, delay: .3 }} />
-            </svg>
-          )}
-          {s.bars && (
-            <div className="score-bars">
-              <div className="score-track"><span className="score-fill muted" style={{ width: `${s.bars[0]}%` }} /></div>
-              <div className="score-track"><motion.span className="score-fill" initial={{ width: 0 }} animate={{ width: `${s.bars[1]}%` }} transition={{ duration: 1.4, delay: .4 }} /></div>
-            </div>
-          )}
-          <em>{s.note}</em>
+      <small className="cyber-stats-label">SCORES OUT OF 100 · ORIGINAL NEMOTRON → AFTER MIST</small>
+      {stats.map((st, i) => (
+        <motion.div key={st.label} className="cyber-stat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 + i * .08 }}>
+          <small>{st.label}</small>
+          <strong><span className="cyber-from">{st.before.toFixed(1)} → </span><CountUp to={st.after} decimals={1} /><em className="cyber-delta">+{(st.delta ?? st.after - st.before).toFixed(1)}</em></strong>
+          <div className="score-bars">
+            <div className="score-track"><span className="score-fill muted" style={{ width: `${st.before}%` }} /></div>
+            <div className="score-track"><motion.span className="score-fill" initial={{ width: `${st.before}%` }} animate={{ width: `${st.after}%` }} transition={{ duration: 1.3, delay: .4, ease: [.22, 1, .36, 1] }} /></div>
+          </div>
+          <em>{st.note}</em>
         </motion.div>
       ))}
     </div>
@@ -617,7 +600,6 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
             {tab === 'compare' ? <BeforeAfter /> : tab === 'how' ? <RuntimeDiagram /> : tab === 'run' ? <TrainingRun /> : <ModelCard />}
           </motion.div>
         </AnimatePresence>
-        {tab === 'compare' && <StatsStrip />}
       </div>
     </MotionConfig>
   );
