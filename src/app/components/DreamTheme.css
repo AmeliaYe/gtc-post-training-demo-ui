@@ -377,3 +377,5 @@
 .dream-theme .cti-legend i.origin { width: 16px; height: 2px; border: 0; transform: none; background: linear-gradient(90deg, transparent, var(--dream-periwinkle)); }
 
 .dream-theme .cti-legend { top: 12px; bottom: auto; }
+.dream-theme .dream-tagline { max-width: none; white-space: nowrap; }
+@media (max-width: 820px) { .dream-theme .dream-tagline { white-space: normal; } }
