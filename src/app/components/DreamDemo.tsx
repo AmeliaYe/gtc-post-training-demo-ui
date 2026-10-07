@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import AttackScene, { SCENES } from './AttackScene';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
 import './DreamDemo.css';
@@ -154,7 +155,14 @@ function BeforeAfter() {
 
       <AnimatePresence mode="wait">
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
-          <div className="prompt-bar"><span className="prompt-label">QUESTION</span><p>{active.prompt}</p><span className="prompt-tag">answer key · {active.key}</span></div>
+          <div className="dream-scenario">
+            <div className="dream-question">
+              <span className="prompt-label">QUESTION</span>
+              <p>{active.prompt}</p>
+              <span className="prompt-tag">answer key · {active.key}</span>
+            </div>
+            <AttackScene scene={SCENES[active.id]} />
+          </div>
           <div className="comparison-grid">
             <section className="output-panel">
               <header>

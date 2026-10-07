@@ -181,3 +181,50 @@
 .partner-dream { height: 15px; width: auto; }
 .partner-nvidia { height: 22px; width: auto; }
 .partner-x { color: #6f786d; font-size: 14px; }
+
+/* Question + attack illustration */
+.dream-scenario { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0; margin: 16px 21px 13px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); overflow: hidden; }
+.dream-question { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; border-right: 1px solid var(--line); }
+.dream-question p { margin: 0; color: #d3d9cf; font: 12px/1.65 monospace; }
+.dream-question .prompt-tag { margin-top: auto; }
+.attack-scene { --threat: #ff4d5e; display: flex; flex-direction: column; padding: 10px 14px 12px; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 24px 24px; }
+.attack-scene svg { display: block; width: 100%; height: auto; overflow: visible; }
+.as-track { fill: none; stroke: #8b9388; stroke-width: 1; stroke-dasharray: 2 6; opacity: .25; }
+.as-line { fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke .4s ease; }
+.as-line.safe { stroke: var(--accent); filter: drop-shadow(0 0 4px var(--accent)); }
+.as-line.threat { stroke: var(--threat); filter: drop-shadow(0 0 4px var(--threat)); }
+.as-icon { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .4s ease; }
+.as-icon.safe { stroke: var(--accent); }
+.as-icon.threat { stroke: var(--threat); }
+.as-icon .fill { fill: var(--threat); stroke: none; }
+.as-bar { stroke: none; }
+.as-bar.safe { fill: var(--accent); }
+.as-bar.threat { fill: var(--threat); }
+.as-cross { stroke: var(--threat); stroke-width: 3; }
+.as-pulse { fill: none; stroke-width: 2; }
+.as-pulse.safe { stroke: var(--accent); }
+.as-pulse.threat { stroke: var(--threat); }
+.attack-scene text { font: 9px monospace; letter-spacing: 2px; text-transform: uppercase; }
+/* Mask lines behind labels, as in the original illustration. */
+.as-label { paint-order: stroke; stroke: #0e120e; stroke-width: 6px; stroke-linejoin: round; }
+.as-label.safe { fill: var(--accent); }
+.as-label.threat { fill: var(--threat); }
+.as-edge-label { letter-spacing: 1px; text-transform: none; }
+.attack-scene .as-edge-label { text-transform: none; letter-spacing: 1px; }
+.as-edge-label.safe { fill: var(--accent); }
+.as-edge-label.threat { fill: var(--threat); }
+.as-badge { stroke-width: 1; }
+.as-badge.safe { fill: var(--panel-glow); stroke: var(--accent); }
+.as-badge.threat { fill: rgba(255,77,94,.14); stroke: var(--threat); }
+.attack-scene .as-badge-text { font-size: 8px; letter-spacing: 1px; text-transform: none; }
+.as-badge-text.safe { fill: var(--accent); }
+.as-badge-text.threat { fill: var(--threat); }
+.as-status { min-height: 18px; margin: 6px 0 0; font: 11px/1.5 monospace; }
+.as-status b { margin-right: 10px; color: #6f786d; font-weight: 400; }
+.as-status.safe { color: var(--accent); }
+.as-status.threat { color: var(--threat); }
+@media (max-width: 1100px) {
+  .dream-scenario { grid-template-columns: 1fr; }
+  .dream-question { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+
