@@ -119,18 +119,18 @@ export const SCENES: Record<string, Scene> = {
   posture: {
     title: 'NETWORK VIEW',
     steps: [
-      { text: 'db-67 sits in VLAN vlan_name2 (192.168.162.0/24)', tone: 'safe' },
+      { text: 'dbs-310 sits in VLAN vlan_name2 (10.40.12.0/24)', tone: 'safe' },
       { text: 'Traffic from other subnets has to pass the router or firewall', tone: 'safe' },
-      { text: 'Devices in the same VLAN skip that check and reach db-67 directly', tone: 'threat' },
-      { text: 'Those same-VLAN devices are db-67’s direct exposure', tone: 'threat' },
+      { text: 'Devices in the same VLAN skip that check and reach dbs-310 directly', tone: 'threat' },
+      { text: 'Those same-VLAN devices are dbs-310’s direct exposure', tone: 'threat' },
     ],
-    zones: [{ x: 330, y: 16, w: 262, h: 214, label: 'VLAN vlan_name2 · 192.168.162.0/24' }],
+    zones: [{ x: 330, y: 16, w: 262, h: 214, label: 'VLAN vlan_name2 · 10.40.12.0/24' }],
     nodes: [
       { x: 70, y: 120, icon: 'pc', tone: 'safe', label: 'Other subnets' },
       { x: 220, y: 120, icon: 'shield', tone: 'safe', label: 'Router / firewall' },
       { x: 410, y: 52, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
       { x: 410, y: 180, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
-      { x: 530, y: 120, icon: 'db', tone: 'safe', tones: { 3: 'threat' }, label: 'db-67', pulseAt: 3 },
+      { x: 530, y: 120, icon: 'db', tone: 'safe', tones: { 3: 'threat' }, label: 'dbs-310', pulseAt: 3 },
     ],
     edges: [
       { d: 'M98 120 H198', tone: 'safe', at: 1 },

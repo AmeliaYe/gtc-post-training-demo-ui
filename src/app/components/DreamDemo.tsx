@@ -67,9 +67,11 @@ const CATEGORIES: Category[] = [
   },
   {
     id: 'posture', label: 'Posture', tags: 'Posture · Discovery · Risk',
-    prompt: 'Which devices can communicate directly with device db-67 without going through a router or firewall?',
-    before: { answer: 'No direct peers', quote: 'No device can communicate directly with db-67 without going through a router or firewall' },
-    after: { answer: 'Same-VLAN devices · 192.168.162.0/24', quote: 'Devices in the same VLAN segment as db-67 (VLAN "vlan_name2", subnet 192.168.162.0/24) can communicate with it directly without going through a router or firewall. Here are those devices: ...' },
+    prompt: 'Which devices can communicate directly with device dbs-310 without going through a router or firewall?',
+    before: { answer: 'No direct peers', quote: 'No device can communicate directly with dbs-310 without going through a router or firewall' },
+    after: { answer: 'Same-VLAN devices · 10.40.12.0/24', quote: "Devices in the same VLAN segment as dbs-310 (VLAN \"vlan_name2\", subnet 10.40.12.0/24) can communicate with it directly without going through a router or firewall. Here are those devices: \u2026" },
+    // Device names and addresses are masked mock values.
+    full: { before: "No device can communicate directly with dbs-310 without going through a router or firewall", after: "Devices in the same VLAN segment as dbs-310 (VLAN \"vlan_name2\", subnet 10.40.12.0/24) can communicate with it directly without going through a router or firewall. Here are those devices:\n\n| Device name | Type |\n|---|---|\n| wks-431 | ENDPOINT |\n| dbs-254 | SERVER |\n| dbs-504 | SERVER |\n| wks-766 | ENDPOINT |\n| nb-149 | ENDPOINT |\n| nb-174 | ENDPOINT |\n| dbs-648 | SERVER |\n| dbs-196 | SERVER |\n| mail-474 | ENDPOINT |\n| nb-696 | ENDPOINT |\n| mail-159 | ENDPOINT |\n| wks-619 | ENDPOINT |\n| dbs-319 | SERVER |\n| mail-138 | ENDPOINT |\n| mail-188 | ENDPOINT |\n| nb-544 | ENDPOINT |\n| nb-528 | ENDPOINT |\n| mail-171 | ENDPOINT |\n| nb-346 | ENDPOINT |\n| 10.40.12.43 | ENDPOINT |\n| dbs-664 | SERVER |\n| app-534 | ENDPOINT |\n| nb-160 | ENDPOINT |\n| nb-679 | ENDPOINT |\n| nb-226 | ENDPOINT |\n| wks-328 | ENDPOINT |\n| app-745 | ENDPOINT |\n| nb-742 | ENDPOINT |\n| nb-163 | ENDPOINT |\n| wks-690 | ENDPOINT |\n| app-699 | ENDPOINT |\n| nb-506 | ENDPOINT |" },
   },
 ];
 
@@ -78,6 +80,25 @@ function MitreBadge({ id }: { id: string }) {
   return id.startsWith('CWE-')
     ? <span className="mitre-badge">MITRE CWE</span>
     : <span className="mitre-badge" title="MITRE ATT&CK®"><Image src="/mitre-attack-logo.png" alt="MITRE ATT&CK" width={104} height={11} /></span>;
+}
+
+// Splits a response into text and Markdown-table blocks (runs of lines starting with '|').
+const toBlocks = (text: string) => text.split('\n').reduce<string[]>((blocks, line) => {
+  const last = blocks.length - 1;
+  if (last >= 0 && line.startsWith('|') === blocks[last].startsWith('|')) blocks[last] += '\n' + line;
+  else blocks.push(line);
+  return blocks;
+}, []);
+
+// Renders a simple Markdown table (header row, separator, body rows) from a model response.
+function MarkdownTable({ md }: { md: string }) {
+  const [head, , ...rows] = md.trim().split('\n').map((line) => line.split('|').slice(1, -1).map((cell) => cell.trim()));
+  return (
+    <table className="cyber-full-table">
+      <thead><tr>{head.map((h) => <th key={h}>{h}</th>)}</tr></thead>
+      <tbody>{rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}</tbody>
+    </table>
+  );
 }
 
 // Both panels share one open state, so either button expands/collapses both responses.
@@ -91,7 +112,9 @@ function FullResponse({ text, open, onToggle }: { text: string; open: boolean; o
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .3, ease: [.22, 1, .36, 1] }} style={{ overflow: 'hidden' }}>
             <div className="cyber-full-text">
-              {text.split('**').map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part))}
+              {toBlocks(text).map((block, b) => (block.startsWith('|')
+                ? <MarkdownTable key={b} md={block} />
+                : <span key={b}>{block.split('**').map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part))}</span>))}
             </div>
           </motion.div>
         )}
