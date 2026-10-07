@@ -508,10 +508,10 @@ function StatsStrip({ bench }: { bench?: Category['bench'] }) {
 }
 
 const TABS = [
-  { id: 'compare', label: 'Model comparison' },
+  { id: 'compare', label: 'Before / After' },
   { id: 'how', label: 'How we train' },
-  { id: 'map', label: 'CTI map' },
-  { id: 'card', label: 'Model card' },
+  { id: 'map', label: 'Threat Intelligence Map' },
+  { id: 'card', label: 'Model Info' },
 ] as const;
 
 // Dream brand fonts (OFL), self-hosted by next/font and exposed to DreamTheme.css as CSS variables.
