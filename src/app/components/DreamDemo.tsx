@@ -144,7 +144,7 @@ function BeforeAfter() {
   const active = CATEGORIES.find((c) => c.id === activeId)!;
   return (
     <>
-      <div className="cyber-chips" role="tablist" aria-label="Question category">
+      <div className="cyber-chips" role="tablist" aria-label="Case category">
         {CATEGORIES.map((c) => (
           <button key={c.id} role="tab" aria-selected={c.id === activeId} className={c.id === activeId ? 'active' : ''} onClick={() => { setActiveId(c.id); setFullOpen(false); }}>
             {c.id === activeId && <motion.span layoutId="cyber-chip" className="cyber-chip-bg" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
@@ -157,7 +157,7 @@ function BeforeAfter() {
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="dream-scenario">
             <div className="dream-question">
-              <span className="prompt-label">QUESTION</span>
+              <span className="prompt-label">CASE</span>
               <p>{active.prompt}</p>
               <span className="prompt-tag">answer key · {active.key}</span>
             </div>
@@ -529,7 +529,7 @@ function ModelCard() {
 // Scores out of 100, original Nemotron 3.5 Super vs MiST (mean of 3 runs), from Dream's MiST post.
 function StatsStrip({ bench }: { bench: { name: string; plain: string; before: number; after: number } }) {
   const stats: { label: string; note: string; before: number; after: number; delta?: number }[] = [
-    { label: bench.plain, note: `this kind of question · ${bench.name}`, ...bench },
+    { label: bench.plain, note: `this kind of case · ${bench.name}`, ...bench },
     // The post states +8.8, computed before rounding; 74.1 − 65.4 would show 8.7.
     { label: 'Overall security knowledge', note: 'average across 15 security tests', before: 65.4, after: 74.1, delta: 8.8 },
     { label: 'General skills', note: 'math, reasoning, instructions: kept intact', before: 91.8, after: 92.4 },

@@ -186,6 +186,8 @@
 .dream-scenario { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0; margin: 16px 21px 13px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); overflow: hidden; }
 .dream-question { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; border-right: 1px solid var(--line); }
 .dream-question p { margin: 0; color: #d3d9cf; font: 12px/1.65 monospace; }
+.dream-question .prompt-label, .as-title { font: 700 15px monospace; letter-spacing: .14em; }
+.as-title { color: var(--threat); }
 .dream-question .prompt-tag { margin-top: auto; }
 .attack-scene { --threat: #ff4d5e; display: flex; flex-direction: column; padding: 10px 14px 12px; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 24px 24px; }
 .attack-scene svg { display: block; width: 100%; height: auto; overflow: visible; }

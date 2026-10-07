@@ -146,6 +146,7 @@ export default function AttackScene({ scene }: { scene: Scene }) {
 
   return (
     <div className="attack-scene">
+      <span className="as-title">ATTACK FLOW</span>
       <svg viewBox="0 0 600 240" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
         {scene.edges.map((e) => <path key={`bg-${e.d}`} d={e.d} className="as-track" />)}
         {scene.edges.map((e) => now >= e.at && (
