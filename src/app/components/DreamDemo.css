@@ -183,8 +183,10 @@
 @media (max-width: 820px) { .cyber-why { grid-template-columns: 1fr; gap: 8px; } }
 
 /* Dream × NVIDIA lockup next to the card title */
-.partner-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; color: #f3f5ed; }
-@media (max-width: 620px) { .partner-logo { position: static; transform: none; } }
+.dream-brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.partner-logo { display: flex; align-items: center; gap: 10px; color: #f3f5ed; }
+.dream-tagline { max-width: 340px; margin: 0; color: #8b9388; font-size: 11px; line-height: 1.4; text-align: center; }
+@media (max-width: 620px) { .dream-brand { position: static; transform: none; align-items: flex-start; } .dream-tagline { text-align: left; } }
 .partner-dream { height: 15px; width: auto; }
 .partner-nvidia { height: 22px; width: auto; }
 .partner-x { color: #6f786d; font-size: 14px; }

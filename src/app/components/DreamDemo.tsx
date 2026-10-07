@@ -605,7 +605,10 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
           <span className="expanded-icon"><LockClosedIcon /></span>
           <div><h2>{DREAM_DEMO.name}</h2></div>
         </div>
-        <PartnerLogo className="partner-logo" />
+        <div className="dream-brand">
+          <PartnerLogo className="partner-logo" />
+          <p className="dream-tagline">Security knowledge built into the model, on hardware the nation owns</p>
+        </div>
       </div>
       <div className="cyber-tabs-row"><CyberTabs tab={tab} onChange={setTab} /></div>
       <div className="cyber-demo">
