@@ -11,6 +11,8 @@ export default defineConfig([
     'public/healthcare/r01/**',
     'public/healthcare/r02/**',
     'healthcare-demo/**',
+    // Standalone Python inference app; browser assets are checked separately.
+    'ui/**',
     '.next/**',
     '.vercel/**',
     'out/**',
