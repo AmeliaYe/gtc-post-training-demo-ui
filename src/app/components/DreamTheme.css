@@ -377,12 +377,12 @@
 .dream-theme .cti-legend i.origin { width: 16px; height: 2px; border: 0; transform: none; background: linear-gradient(90deg, transparent, var(--dream-periwinkle)); }
 
 .dream-theme .cti-legend { top: 12px; bottom: auto; }
-/* Header: title on the left, NVIDIA x Dream lockup right-aligned. A grid instead of absolute centering,
+/* Header: title on the left, NVIDIA x Dream lockup centered in the remaining space. A grid instead of absolute centering,
    so the brand can never overlap the title; the tagline stays on one line when there is room and wraps when not. */
-.dream-theme .dream-header { display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(0, max-content); align-items: center; gap: var(--dream-space-5); }
-.dream-theme .dream-brand { position: static; transform: none; align-items: flex-end; }
+.dream-theme .dream-header { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: center; gap: var(--dream-space-5); }
+.dream-theme .dream-brand { position: static; transform: none; align-items: center; justify-self: center; }
 .dream-theme .dream-header h2 { white-space: nowrap; }
-.dream-theme .dream-tagline { max-width: none; text-align: right; text-wrap: balance; }
+.dream-theme .dream-tagline { max-width: none; text-align: center; text-wrap: balance; }
 @media (max-width: 620px) {
   .dream-theme .dream-header { grid-template-columns: 1fr; }
   .dream-theme .dream-brand { align-items: flex-start; }
