@@ -11,8 +11,8 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
     <div className={styles.results}>
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
-          <span className={styles.eyebrow}>dfbench recall</span>
-          <h4>More known flaws found</h4>
+          <span className={styles.eyebrow}>dfbench</span>
+          <div><h4>Vulnerability recall</h4><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
         </header>
         <div className={styles.metric}>
           {[benchmark.before, benchmark.after].map((result, index) => (
@@ -40,8 +40,8 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
 
       <section className={styles.example} aria-label={`${scenario.repo} recorded example results`}>
         <div className={styles.exampleLabel}>
-          <h4>This Openfire flaw</h4>
-          <p className={styles.trainingNote}>Both already trained.</p>
+          <h4>SSRF detection</h4>
+          <p className={styles.trainingNote}>Both checkpoints received reinforcement learning (RL).</p>
         </div>
         <div className={styles.comparison}>
           {[scenario.before, scenario.after].map((run, index) => (
