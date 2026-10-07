@@ -157,7 +157,7 @@ function BeforeAfter() {
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="dream-scenario">
             <div className="dream-question">
-              <span className="prompt-label">CASE</span>
+              <span className="prompt-label">CASE (ORIGINAL PROMPT)</span>
               <p>{active.prompt}</p>
               <span className="prompt-tag">answer key · {active.key}</span>
             </div>
