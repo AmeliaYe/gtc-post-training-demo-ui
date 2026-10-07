@@ -9,7 +9,7 @@ import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
 import { Inter, Instrument_Serif } from 'next/font/google';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
-import { CheckIcon, ChevronDownIcon, CircleStackIcon, DocumentMagnifyingGlassIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronDownIcon, CircleStackIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
@@ -509,8 +509,8 @@ function StatsStrip({ bench }: { bench?: Category['bench'] }) {
 
 const TABS = [
   { id: 'compare', label: 'Before / After' },
-  { id: 'how', label: 'How we train' },
   { id: 'map', label: 'Threat Intelligence Map' },
+  { id: 'how', label: 'How we train' },
   { id: 'card', label: 'Model Info' },
 ] as const;
 
@@ -534,7 +534,7 @@ function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab)
       {TABS.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'active' : ''} onClick={() => onChange(t.id)}>
           {tab === t.id && <motion.span layoutId="cyber-tab" className="cyber-tab-bg" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
-          <span>{t.id === 'card' && <DocumentMagnifyingGlassIcon />}{t.label}</span>
+          <span><b className="cyber-tab-num">{TABS.indexOf(t) + 1}</b>{t.label}</span>
         </button>
       ))}
     </div>
