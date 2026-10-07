@@ -454,3 +454,7 @@
 @media (max-width: 620px) { .dream-theme .cti-phases { position: static; margin: var(--dream-space-3); width: fit-content; } }
 
 .dream-theme .dream-tagline { font-size: 15px; }
+/* CTI map: randomized source dots and the sample-data note spanning under map + feed. */
+.dream-theme .cti-source { fill: var(--dream-periwinkle); filter: drop-shadow(0 0 4px var(--dream-periwinkle)); }
+.dream-theme .cti-legend i.origin { width: 8px; height: 8px; border-radius: 50%; background: var(--dream-periwinkle); }
+.dream-theme .cti-sample { grid-column: 1 / -1; order: 3; margin: 0; padding: var(--dream-space-2) var(--dream-space-4); border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; font-style: italic; }
