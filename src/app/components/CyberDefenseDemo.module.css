@@ -1,7 +1,7 @@
 .demo { padding: 20px 22px; --subtle: #99a58e; }
 .demo svg { width: 17px; height: 17px; flex-shrink: 0; }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.demo :is(button, a, input, summary):focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+.demo :is(button, a, input, summary, [role=tabpanel]):focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
 .eyebrow { display: block; color: var(--subtle); font: 8px/1.5 monospace; letter-spacing: .1em; }
 .introduction { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 19px; }
 .introduction h3 { margin: 5px 0 0; font-size: clamp(17px, 1.6vw, 22px); font-weight: 500; letter-spacing: -.03em; }
@@ -185,4 +185,32 @@
   .benchmarkTasks { grid-template-columns: 1fr; gap: 16px; }
   .benchmarkFooter details { max-width: 100%; }
   .benchmarkFooter summary { text-align: left; }
+}
+
+.exampleContext { margin: -5px 0 18px; color: #aebba5; font-size: 12px; line-height: 1.6; }
+.viewTabs { display: flex; gap: 24px; border-bottom: 1px solid #35432e; margin-bottom: 22px; }
+.viewTabs button { padding: 0 0 12px; border: 0; border-bottom: 2px solid transparent; background: none; color: #91a087; font-size: 12px; cursor: pointer; }
+.viewTabs button[aria-selected=true] { color: var(--acid); border-bottom-color: var(--acid); }
+.continueButton { display: flex; align-items: center; gap: 9px; padding: 10px 0; margin: 12px 0; border: 0; color: #c3df9b; background: none; font-size: 12px; cursor: pointer; }
+.continueButton:hover { color: var(--acid); }
+.continueButton svg { width: 14px; height: 14px; }
+.trainingHeading { margin-bottom: 20px; }
+.trainingHeading h4 { margin: 7px 0; color: #e0ead7; font-size: 21px; font-weight: 500; letter-spacing: -.025em; }
+.trainingHeading p { margin: 0; color: #aebba5; font-size: 13px; line-height: 1.6; }
+.trainingFlow { display: flex; gap: 12px; margin: 0 0 22px; }
+.trainingFlow > div { display: flex; align-items: center; flex: 1; gap: 12px; min-width: 0; }
+.trainingFlow > div > span { display: block; flex: 1; padding: 14px; border: 1px solid #3c4a32; border-radius: 6px; background: #10170e; }
+.trainingFlow strong { display: block; color: #c9d6bd; font-size: 13px; font-weight: 500; }
+.trainingFlow small { display: block; margin-top: 6px; color: #99aa8c; font-size: 11px; line-height: 1.5; }
+.trainingFlow .trainingFocus > span { border-color: #6b8746; background: #b7ff5407; }
+.trainingFlow .trainingFocus strong, .trainingFlow svg { color: #bcdf8c; }
+.checkpointExplanation { margin: 11px 0 0; color: #afbea3; font-size: 12px; line-height: 1.6; }
+.trainingNote { margin: -5px 0 8px; color: #94a587; font-size: 11px; line-height: 1.6; }
+@media (max-width: 600px) {
+  .viewTabs { gap: 20px; }
+  .viewTabs button { font-size: 11px; }
+  .trainingFlow { flex-direction: column; }
+  .trainingFlow > div { flex-direction: column; gap: 10px; }
+  .trainingFlow > div > span { width: 100%; }
+  .trainingFlow svg { transform: rotate(90deg); }
 }

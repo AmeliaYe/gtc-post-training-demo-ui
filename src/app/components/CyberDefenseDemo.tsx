@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import {
   ArrowPathIcon, ArrowRightIcon, ArrowTopRightOnSquareIcon, CheckIcon,
   ChevronLeftIcon, ChevronRightIcon, CodeBracketIcon, DocumentTextIcon,
@@ -8,6 +8,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { DFBENCH_RESULT, CYBER_SCENARIOS, type CyberRun, type CyberScenario } from '@/lib/cyber-fixture';
 import { CYBER_VISUALS } from '@/lib/cyber-visuals';
+import { CYBER_ATTACKS } from '@/lib/cyber-attacks';
+import { CyberAttackDemo } from './CyberAttackDemo';
 import { trackInteraction } from '@/lib/analytics';
 import styles from './CyberDefenseDemo.module.css';
 
@@ -36,6 +38,29 @@ function ReportCard({ run, trained }: { run: CyberRun; trained: boolean }) {
       <h4 className={run.matchedCount ? styles.found : styles.missed}>{run.matchedCount ? <ShieldCheckIcon /> : <XMarkIcon />}{run.matchedCount ? 'Known flaw found' : 'Known flaw missed'}</h4>
       <FindingTiles run={run} />
       <ul>{run.findings.map((finding) => <li key={finding.title}><span className={finding.referenceMatch === 'matched' ? styles.found : ''}>{finding.count}×</span><span>{finding.title}</span></li>)}</ul>
+    </section>
+  );
+}
+
+function ReportComparison({ scenario, explain = false }: { scenario: CyberScenario; explain?: boolean }) {
+  return (
+    <section className={styles.comparison} aria-label="Recorded report comparison">
+      {[scenario.before, scenario.after].map((run, index) => {
+        const referenceReports = run.findings.reduce((count, finding) => count + (finding.referenceMatch === 'matched' ? finding.count : 0), 0);
+        return <div className={styles.checkpointResult} key={index}>
+          <header><span className={styles.eyebrow}>{index === 0 ? 'EARLIER · STEP 5' : 'FINAL · STEP 200'}</span><span>{run.findingsCount} {run.findingsCount === 1 ? 'report' : 'reports'}</span></header>
+          <div className={styles.reportInventory}>
+            {run.matchedCount === 0 && <div className={styles.missingTile}><XMarkIcon /><span>Missed</span></div>}
+            <FindingTiles run={run} />
+          </div>
+          <div className={run.matchedCount ? styles.matchCaption : styles.missCaption}>
+            {run.matchedCount ? <CheckIcon /> : <XMarkIcon />}
+            <span>{run.matchedCount ? scenario.focus === 'focus' ? `${referenceReports} ${referenceReports === 1 ? 'report' : 'reports'} · same flaw` : 'Known flaw found' : 'Known flaw missed'}</span>
+          </div>
+          {explain && <p className={styles.checkpointExplanation}>{index === 0 ? CYBER_ATTACKS[scenario.id].training.before : CYBER_ATTACKS[scenario.id].training.after}</p>}
+        </div>;
+      })}
+      <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
     </section>
   );
 }
@@ -89,27 +114,7 @@ function Storyboard({ scenario }: { scenario: CyberScenario }) {
 
   return (
     <>
-      <div className={styles.storyHeader}>
-        <h4>{scenario.title}</h4>
-        <div className={styles.repo}>{scenario.repo}<small>Known flaw · {scenario.cve}</small></div>
-      </div>
-      <section className={styles.comparison} aria-label="Recorded report comparison">
-        {[scenario.before, scenario.after].map((run, index) => {
-          const referenceReports = run.findings.reduce((count, finding) => count + (finding.referenceMatch === 'matched' ? finding.count : 0), 0);
-          return <div className={styles.checkpointResult} key={index}>
-            <header><span className={styles.eyebrow}>{index === 0 ? 'EARLIER CHECKPOINT' : 'FINAL CHECKPOINT'}</span><span>{run.findingsCount} {run.findingsCount === 1 ? 'report' : 'reports'}</span></header>
-            <div className={styles.reportInventory}>
-              {run.matchedCount === 0 && <div className={styles.missingTile}><XMarkIcon /><span>Missed</span></div>}
-              <FindingTiles run={run} />
-            </div>
-            <div className={run.matchedCount ? styles.matchCaption : styles.missCaption}>
-              {run.matchedCount ? <CheckIcon /> : <XMarkIcon />}
-              <span>{run.matchedCount ? scenario.focus === 'focus' ? `${referenceReports} ${referenceReports === 1 ? 'report' : 'reports'} · same flaw` : 'Known flaw found' : 'Known flaw missed'}</span>
-            </div>
-          </div>;
-        })}
-        <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
-      </section>
+      <ReportComparison scenario={scenario} />
       <section className={styles.story} aria-label="Security discovery walkthrough">
         <nav className={styles.phases} aria-label="Review phases">
           {PHASES.map((phase, index) => <button key={phase.label} className={index < activePhase ? styles.phaseDone : ''} aria-current={index === activePhase ? 'step' : undefined} onClick={() => navigate(phase.step)}><span /><strong>{phase.label}</strong></button>)}
@@ -176,29 +181,69 @@ function Storyboard({ scenario }: { scenario: CyberScenario }) {
   );
 }
 
+const VIEWS = [
+  { id: 'attack', label: 'Attack pattern' },
+  { id: 'review', label: 'Code review' },
+  { id: 'training', label: 'Post-training' },
+] as const;
+
 export function CyberDefenseDemo() {
   const [selectedId, setSelectedId] = useState(CYBER_SCENARIOS[0].id);
+  const [view, setView] = useState<(typeof VIEWS)[number]['id']>('attack');
+  const tabId = useId();
   const scenario = CYBER_SCENARIOS.find((item) => item.id === selectedId) ?? CYBER_SCENARIOS[0];
+  const attack = CYBER_ATTACKS[scenario.id];
   const benchmark = DFBENCH_RESULT;
   return (
     <div className={styles.demo}>
-      <div className={styles.introduction}><div><span className={styles.eyebrow}>DEPTHFIRST / NEMOTRON 3.5 LIGHTNING</span><h3>How training changed the review</h3></div>
-        <div className={styles.scenarios} aria-label="Choose a repository comparison">{CYBER_SCENARIOS.map((item) => <button key={item.id} aria-pressed={item.id === selectedId} onClick={() => setSelectedId(item.id)}>{item.repo.split('/').at(-1)}</button>)}</div>
+      <div className={styles.introduction}><div><span className={styles.eyebrow}>DEPTHFIRST / NEMOTRON 3.5 LIGHTNING</span><h3>From security flaws to better reviews</h3></div>
+        <div className={styles.scenarios} aria-label="Choose a security example">{CYBER_SCENARIOS.map((item) => <button key={item.id} aria-pressed={item.id === selectedId} onClick={() => setSelectedId(item.id)}>{item.id === 'cosmos' ? 'COSMOS' : item.repo.split('/').at(-1)}</button>)}</div>
       </div>
-      <Storyboard key={scenario.id} scenario={scenario} />
-      <section className={styles.benchmark} aria-label="dfbench evaluation">
-        <div className={styles.benchmarkHeader}>
-          <div><a href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer">dfbench<ArrowTopRightOnSquareIcon /></a><p>Security work across real codebases</p></div>
-          <div className={styles.recall}><span>Vulnerability recall</span><strong>{benchmark.before.recall}% <span>→</span> {benchmark.after.recall}%</strong><small>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)} percentage points</small></div>
-        </div>
-        <p className={styles.benchmarkDescription}>Find vulnerabilities in applications, system software, and smart contracts. Tasks can span several components or codebases. Recall is the share of known vulnerabilities found.</p>
-        <div className={styles.benchmarkTasks} aria-label="Full dfbench scope">
-          <div><strong>253</strong><span>real-world examples</span></div>
-          <div><strong>910</strong><span>known vulnerabilities</span></div>
-          <div><strong>17</strong><span>languages in vulnerable code</span></div>
-        </div>
-        <div className={styles.benchmarkFooter}><a href="https://depthfirst.com/research/dfbench-v1" target="_blank" rel="noopener noreferrer">How dfbench works<ArrowTopRightOnSquareIcon /></a><details><summary>Evaluation details</summary><p>Scope statistics describe the full benchmark. Recall compares {benchmark.before.model} and {benchmark.after.model}. The examples above compare steps 5 and 200; step 5 has already received RL training. Fewer duplicate reports do not prove higher precision.</p></details></div>
-      </section>
+      <p className={styles.exampleContext}>{attack.context}</p>
+      <div className={styles.viewTabs} role="tablist" aria-label="Explore this security example">
+        {VIEWS.map((item, index) => <button key={item.id} id={`${tabId}-${item.id}-tab`} role="tab" aria-selected={view === item.id} aria-controls={`${tabId}-${item.id}-panel`} tabIndex={view === item.id ? 0 : -1} onClick={() => setView(item.id)} onKeyDown={(event) => {
+          const nextIndex = event.key === 'ArrowRight' ? (index + 1) % VIEWS.length : event.key === 'ArrowLeft' ? (index + VIEWS.length - 1) % VIEWS.length : event.key === 'Home' ? 0 : event.key === 'End' ? VIEWS.length - 1 : null;
+          if (nextIndex === null) return;
+          event.preventDefault();
+          setView(VIEWS[nextIndex].id);
+          event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[nextIndex]?.focus();
+        }}>{item.label}</button>)}
+      </div>
+      {VIEWS.map((item) => <section key={item.id} id={`${tabId}-${item.id}-panel`} role="tabpanel" aria-labelledby={`${tabId}-${item.id}-tab`} hidden={view !== item.id} tabIndex={0}>
+        {view === item.id && item.id === 'attack' && <>
+          <CyberAttackDemo key={scenario.id} attack={attack} scenarioId={scenario.id} />
+          <button className={styles.continueButton} onClick={() => { setView('training'); document.getElementById(`${tabId}-training-tab`)?.focus(); }}>See post-training results<ArrowRightIcon /></button>
+        </>}
+        {view === item.id && item.id === 'review' && <>
+          <div className={styles.storyHeader}><h4>{scenario.title}</h4><div className={styles.repo}>Known flaw · {scenario.cve}</div></div>
+          <Storyboard key={scenario.id} scenario={scenario} />
+        </>}
+        {view === item.id && item.id === 'training' && <>
+          <div className={styles.trainingHeading}><span className={styles.eyebrow}>WHAT CHANGED IN THIS EXAMPLE</span><h4>{scenario.title}</h4><p>{attack.training.takeaway}</p></div>
+          <div className={styles.trainingFlow} aria-label="The flaw examined by both checkpoints">
+            {attack.training.focusNodes.map((id, index) => {
+              const node = attack.nodes.find((candidate) => candidate.id === id)!;
+              return <div key={`${id}-${index}`} className={styles.trainingFocus}>{index > 0 && <ArrowRightIcon aria-hidden="true" />}<span><strong>{node.label}</strong><small>{node.detail}</small></span></div>;
+            })}
+          </div>
+          <ReportComparison scenario={scenario} explain />
+          <p className={styles.trainingNote}>Same code, two trained checkpoints. Green tiles report this flaw; dashed tiles mark a miss. Other reports were not fully assessed. Training improves the review; it does not fix the software.</p>
+          <button className={styles.continueButton} onClick={() => { setView('review'); document.getElementById(`${tabId}-review-tab`)?.focus(); }}>Inspect the code review<ArrowRightIcon /></button>
+          <section className={styles.benchmark} aria-label="dfbench evaluation">
+            <div className={styles.benchmarkHeader}>
+              <div><a href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer">dfbench<ArrowTopRightOnSquareIcon /></a><p>Broader evaluation · separate step-180 run</p></div>
+              <div className={styles.recall}><span>Vulnerability recall</span><strong>{benchmark.before.recall}% <span>→</span> {benchmark.after.recall}%</strong><small>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)} percentage points</small></div>
+            </div>
+            <p className={styles.benchmarkDescription}>Find vulnerabilities in applications, system software, and smart contracts. Tasks can span several components or codebases. Recall is the share of known vulnerabilities found.</p>
+            <div className={styles.benchmarkTasks} aria-label="Full dfbench scope">
+              <div><strong>253</strong><span>real-world examples</span></div>
+              <div><strong>910</strong><span>known vulnerabilities</span></div>
+              <div><strong>17</strong><span>languages in vulnerable code</span></div>
+            </div>
+            <div className={styles.benchmarkFooter}><a href="https://depthfirst.com/research/dfbench-v1" target="_blank" rel="noopener noreferrer">How dfbench works<ArrowTopRightOnSquareIcon /></a><details><summary>Evaluation details</summary><p>Scope statistics describe the full benchmark. Recall compares {benchmark.before.model} and {benchmark.after.model}. The examples above compare steps 5 and 200; step 5 has already received RL training. Fewer duplicate reports do not prove higher precision.</p></details></div>
+          </section>
+        </>}
+      </section>)}
     </div>
   );
 }
