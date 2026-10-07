@@ -518,3 +518,13 @@
 .dream-theme .ts-runtime .rt-diagram .rt-main { font-size: 15px; }
 .dream-theme .ts-runtime .rt-diagram .rt-sub { font-size: 12px; }
 .dream-theme .ts-runtime .rt-diagram .rt-edge-label { font-size: 12px; }
+/* Numbered step badges on the simplified diagram. */
+.dream-theme .ts-badge circle { fill: var(--panel-2); stroke: var(--accent); stroke-width: 1.6; transition: r .3s ease; }
+.dream-theme .ts-badge.live circle { stroke: var(--live); }
+.dream-theme .rt-diagram .ts-badge text { fill: var(--accent); font-size: 12px; font-weight: 700; }
+.dream-theme .rt-diagram .ts-badge.live text { fill: var(--live); }
+.dream-theme .ts-badge.done circle { fill: color-mix(in srgb, var(--accent) 25%, var(--panel-2)); }
+.dream-theme .ts-badge.current circle { fill: var(--accent); filter: drop-shadow(0 0 8px var(--accent)); }
+.dream-theme .ts-badge.live.current circle { fill: var(--live); filter: drop-shadow(0 0 8px var(--live)); }
+.dream-theme .rt-diagram .ts-badge.current text { fill: var(--dream-navy); font-size: 14px; }
+.dream-theme .ts-badge-inline { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 10px; border-radius: 50%; background: var(--accent); color: var(--dream-navy); font-size: 13px; font-weight: 700; vertical-align: middle; }

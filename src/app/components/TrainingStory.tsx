@@ -100,7 +100,7 @@ const NODES: { x: number; y: number; w: number; kind: Kind; title: string; sub: 
 const LINKS: { d: string; kind: Kind; label?: string; lx?: number; ly?: number }[] = [
   { d: 'M120,94 V150', kind: 'train' },
   { d: 'M220,172 H340', kind: 'train', label: 'knowledge', lx: 280, ly: 164 },
-  { d: 'M490,94 V150', kind: 'core', label: 'thinks with', lx: 500, ly: 126 },
+  { d: 'M490,94 V150', kind: 'core', label: 'thinks with', lx: 536, ly: 126 },
   { d: 'M640,62 H760', kind: 'live', label: 'reads', lx: 700, ly: 54 },
   { d: 'M640,82 H700 V302 H760', kind: 'train', label: 'practices on', lx: 708, ly: 200 },
   { d: 'M760,318 H220', kind: 'train', label: 'results scored', lx: 490, ly: 310 },
@@ -108,15 +108,15 @@ const LINKS: { d: string; kind: Kind; label?: string; lx?: number; ly?: number }
 ];
 const PATHS = {
   live: [
-    { link: 2, caption: 'The Dream AI agent thinks with NVIDIA Nemotron.' },
-    { link: 3, caption: 'It reads the client’s real network data, which never leaves the building.' },
+    { link: 2, at: [450, 122], caption: 'The Dream AI agent thinks with NVIDIA Nemotron.' },
+    { link: 3, at: [740, 62], caption: 'It reads the client’s real network data, which never leaves the building.' },
   ],
   train: [
-    { link: 0, caption: 'Expert security documents are rewritten into lessons.' },
-    { link: 1, caption: 'Mid-training gives Nemotron deep security knowledge.' },
-    { link: 4, caption: 'The same agent practices on a safe, synthetic copy of a network.' },
-    { link: 5, caption: 'Every answer is scored.' },
-    { link: 6, caption: 'Feedback makes Nemotron better, and the improved model goes back to work.' },
+    { link: 0, at: [120, 122], caption: 'Expert security documents are rewritten into lessons.' },
+    { link: 1, at: [244, 172], caption: 'Mid-training gives Nemotron deep security knowledge.' },
+    { link: 4, at: [700, 140], caption: 'The same agent practices on a safe, synthetic copy of a network.' },
+    { link: 5, at: [380, 318], caption: 'Every answer is scored.' },
+    { link: 6, at: [250, 288], caption: 'Feedback makes Nemotron better, and the improved model goes back to work.' },
   ],
 };
 
@@ -173,6 +173,13 @@ function SimpleRuntime() {
               <text className="rt-sub" x={n.x + n.w / 2} y={n.y + 46} textAnchor="middle">{n.sub}</text>
             </g>
           ))}
+          {/* Numbered step badges along the active path. */}
+          {seq.map((st, i) => (
+            <g key={`${mode}-${i}`} className={`ts-badge ${mode} ${i === step ? 'current' : i < step ? 'done' : ''}`} transform={`translate(${st.at[0]} ${st.at[1]})`}>
+              <circle r={i === step ? 14 : 11} />
+              <text textAnchor="middle" dy="4.5">{i + 1}</text>
+            </g>
+          ))}
           {!reduce && <>
             <path ref={track} d={LINKS[seq[step].link].d} fill="none" stroke="none" />
             <g ref={dot} transform="translate(-50 -50)"><circle r="9" className={`rt-halo ${mode}`} /><circle r="5" className={`rt-dot ${mode}`} /></g>
@@ -181,7 +188,7 @@ function SimpleRuntime() {
       </div>
       <AnimatePresence mode="wait">
         <motion.p key={`${mode}-${step}`} className="rt-note" initial={reduce ? false : { opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: .2 }}>
-          <b>{String(step + 1).padStart(2, '0')}/{String(seq.length).padStart(2, '0')}</b>{seq[step].caption}
+          <b className="ts-badge-inline">{step + 1}</b>{seq[step].caption}
         </motion.p>
       </AnimatePresence>
     </div>
