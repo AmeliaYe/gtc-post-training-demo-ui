@@ -19,8 +19,18 @@ const RUN_SECONDS = 10;
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
 // `why` is the researchers' one-line explanation from the same page. `bench` is that benchmark's
-// score for the original Nemotron 3.5 Super vs MiST, mean of 3 runs.
-const CATEGORIES = [
+// score for the original Nemotron 3.5 Super vs MiST, mean of 3 runs. Cases without a benchmark,
+// MITRE ID or recorded runs (e.g. Posture) simply omit those fields.
+type Answer = { answer: string; quote: string; runs?: string };
+type Category = {
+  id: string; label: string; prompt: string; key?: string; tags?: string;
+  bench?: { name: string; plain: string; before: number; after: number };
+  before: Answer; after: Answer;
+  full?: { before: string; after: string };
+  why?: { base: string; ours: string };
+};
+
+const CATEGORIES: Category[] = [
   {
     id: 'cti', label: 'CTI',
     bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
@@ -60,6 +70,12 @@ const CATEGORIES = [
     before: { answer: 'CWE-20 · Improper Input Validation', runs: 'CWE-20 · CWE-20 · CWE-20', quote: 'The absence of this expected field triggers an assertion failure, which causes the service to crash. This is a classic case of insufficient input validation' },
     after: { answer: 'CWE-617 · Reachable Assertion', runs: 'CWE-617 · CWE-617 · CWE-617', quote: 'The key indicator here is the use of an `assert()` statement—commonly used during development to catch internal logic errors—that is reachable through attacker-controlled input. […] The root cause is not a failure to validate input per se, but rather the improper use of assertions in a context where they can be triggered by untrusted input.' },
     full: { before: "The vulnerability arises from the MME's failure to validate that a required `PLMN Identity` field is present in the `Initial UE Message` before processing it. The absence of this expected field triggers an assertion failure, which causes the service to crash. This is a classic case of insufficient input validation, where the software assumes the input conforms to the expected protocol structure without explicitly checking for the presence of mandatory elements.\nAnswer: CWE-20", after: "The vulnerability in Open5GS MME versions ≤ 2.6.4 arises from an assertion statement that is triggered by a malformed ASN.1 packet sent over the S1AP interface. Specifically, an attacker can craft an `Initial UE Message` that omits the required `PLMN Identity` field, which causes the assertion to fail and the MME process to crash. This results in a denial of service, as the service becomes unavailable to legitimate users.\nThe key indicator here is the use of an `assert()` statement—commonly used during development to catch internal logic errors—that is reachable through attacker-controlled input. Assertions are intended to fail only under conditions that should never occur in production, but when they are triggered by external input, they can be exploited to crash the application. In this case, the assertion is not properly isolated from user input, and the failure leads to a complete process crash, which is a direct consequence of the assertion being reachable via a remote attacker.\nThis behavior aligns precisely with the definition of a reachable assertion: a defensive check (assertion) that can be triggered by an attacker, leading to unintended application termination. The fact that the crash occurs in response to a malformed network packet—specifically one missing a required field—confirms that the assertion is not protected by proper input validation and is directly exposed to external input. The consequence is a denial of service, which matches the common impact of this weakness.\nFurthermore, the presence of multiple historical CVEs involving assertion failures in network services (e.g., FTP servers, LDAP, web proxies) that result in crashes due to crafted inputs reinforces that this is a well-documented pattern of misuse of assertions in production code. The root cause is not a failure to validate input per se, but rather the improper use of assertions in a context where they can be triggered by untrusted input.\nThus, the most appropriate classification is a reachable assertion, where the assertion is not only present but can be triggered remotely, leading to a denial of service.\nAnswer: CWE-617" },
+  },
+  {
+    id: 'posture', label: 'Posture', tags: 'Posture · Discovery · Risk',
+    prompt: 'Which devices can communicate directly with device db-67 without going through a router or firewall?',
+    before: { answer: 'No direct peers', quote: 'No device can communicate directly with db-67 without going through a router or firewall' },
+    after: { answer: 'Same-VLAN devices · 192.168.162.0/24', quote: 'Devices in the same VLAN segment as db-67 (VLAN "vlan_name2", subnet 192.168.162.0/24) can communicate with it directly without going through a router or firewall. Here are those devices: ...' },
   },
 ];
 
@@ -159,7 +175,7 @@ function BeforeAfter() {
             <div className="dream-question">
               <span className="prompt-label">CASE (ORIGINAL PROMPT)</span>
               <p>{active.prompt}</p>
-              <span className="prompt-tag">answer key · {active.key}</span>
+              <span className="prompt-tag">{active.key ? `answer key · ${active.key}` : active.tags}</span>
             </div>
             <AttackScene scene={SCENES[active.id]} />
           </div>
@@ -171,11 +187,11 @@ function BeforeAfter() {
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>
-                <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong><MitreBadge id={active.key} /></div>
+                <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong>{active.key && <MitreBadge id={active.key} />}</div>
                 <p>“{active.before.quote}”</p>
-                <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />
+                {active.full && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
               </div>
-              <Runs runs={active.before.runs} answerKey={active.key} />
+              {active.before.runs && active.key && <Runs runs={active.before.runs} answerKey={active.key} />}
             </section>
             <div className="comparison-divider"><span>VS</span></div>
             <section className="output-panel tuned cyber-scan">
@@ -186,18 +202,20 @@ function BeforeAfter() {
               </header>
               <div className="response-copy">
                 <span className="assistant-label">ANSWER</span>
-                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}><CheckIcon />{active.after.answer}</motion.strong><MitreBadge id={active.key} /></div>
+                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}><CheckIcon />{active.after.answer}</motion.strong>{active.key && <MitreBadge id={active.key} />}</div>
                 <TypedText text={`“${active.after.quote}”`} />
-                <FullResponse text={active.full.after} open={fullOpen} onToggle={toggleFull} />
+                {active.full && <FullResponse text={active.full.after} open={fullOpen} onToggle={toggleFull} />}
               </div>
-              <Runs runs={active.after.runs} answerKey={active.key} />
+              {active.after.runs && active.key && <Runs runs={active.after.runs} answerKey={active.key} />}
             </section>
           </div>
-          <motion.div className="cyber-why" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9, duration: .35 }}>
-            <small>WHY MIST GETS IT RIGHT</small>
-            <p><XMarkIcon /><span><b>Original</b> {active.why.base.replace(/^Base /, '')}</span></p>
-            <p className="ours"><CheckIcon /><span><b>MiST</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
-          </motion.div>
+          {active.why && (
+            <motion.div className="cyber-why" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9, duration: .35 }}>
+              <small>WHY MIST GETS IT RIGHT</small>
+              <p><XMarkIcon /><span><b>Original</b> {active.why.base.replace(/^Base /, '')}</span></p>
+              <p className="ours"><CheckIcon /><span><b>MiST</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
+            </motion.div>
+          )}
           <StatsStrip bench={active.bench} />
         </motion.div>
       </AnimatePresence>
@@ -528,15 +546,15 @@ function ModelCard() {
 }
 
 // Scores out of 100, original Nemotron 3.5 Super vs MiST (mean of 3 runs), from Dream's MiST post.
-function StatsStrip({ bench }: { bench: { name: string; plain: string; before: number; after: number } }) {
+function StatsStrip({ bench }: { bench?: Category['bench'] }) {
   const stats: { label: string; note: string; before: number; after: number; delta?: number }[] = [
-    { label: bench.plain, note: `this kind of case · ${bench.name}`, ...bench },
+    ...(bench ? [{ label: bench.plain, note: `this kind of case · ${bench.name}`, ...bench }] : []),
     // The post states +8.8, computed before rounding; 74.1 − 65.4 would show 8.7.
     { label: 'Overall security knowledge', note: 'average across 15 security tests', before: 65.4, after: 74.1, delta: 8.8 },
     { label: 'General skills', note: 'math, reasoning, instructions: kept intact', before: 91.8, after: 92.4 },
   ];
   return (
-    <div className="cyber-stats">
+    <div className="cyber-stats" style={{ '--cols': stats.length } as React.CSSProperties}>
       <small className="cyber-stats-label">SCORES OUT OF 100 · ORIGINAL NEMOTRON → AFTER MIST</small>
       {stats.map((st, i) => (
         <motion.div key={st.label} className="cyber-stat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 + i * .08 }}>

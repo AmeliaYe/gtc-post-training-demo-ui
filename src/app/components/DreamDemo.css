@@ -45,7 +45,7 @@
 .cyber-steps .active { color: var(--accent); }
 .cyber-steps .active .timeline-node { border-color: var(--accent); color: var(--accent); animation: run-pulse 1.5s ease-out infinite; }
 
-.cyber-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 14px 21px 0; padding: 12px 0 14px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); }
+.cyber-stats { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 0; margin: 14px 21px 0; padding: 12px 0 14px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0,0,0,.14); }
 .cyber-stats-label { grid-column: 1 / -1; padding: 0 15px 12px; color: #6f786d; font: 9px monospace; letter-spacing: .12em; }
 .cyber-stat { display: grid; align-content: start; gap: 6px; padding: 0 15px; border-left: 1px solid var(--line); }
 .cyber-stat:nth-child(2) { border-left: 0; }
@@ -191,6 +191,8 @@
 .dream-question .prompt-tag { margin-top: auto; }
 .attack-scene { --threat: #ff4d5e; display: flex; flex-direction: column; padding: 10px 14px 12px; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 24px 24px; }
 .attack-scene svg { display: block; width: 100%; height: auto; overflow: visible; }
+.as-zone { fill: rgba(183,255,84,.03); stroke: #4a5348; stroke-dasharray: 5 5; }
+.attack-scene .as-zone-label { fill: #8b9388; font-size: 9px; letter-spacing: 1px; text-transform: none; }
 .as-track { fill: none; stroke: #8b9388; stroke-width: 1; stroke-dasharray: 2 6; opacity: .25; }
 .as-line { fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke .4s ease; }
 .as-line.safe { stroke: var(--accent); filter: drop-shadow(0 0 4px var(--accent)); }

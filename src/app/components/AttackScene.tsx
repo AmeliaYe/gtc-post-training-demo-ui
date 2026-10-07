@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 // Dream's "Docker API Build Attack" illustration; the others use the same visual language.
 
 type Tone = 'safe' | 'threat';
-type Icon = 'terminal' | 'server' | 'image' | 'host' | 'container' | 'cloud' | 'disk' | 'file' | 'shield' | 'bot' | 'filter' | 'router' | 'web' | 'users' | 'core' | 'phone';
+type Icon = 'terminal' | 'server' | 'image' | 'host' | 'container' | 'cloud' | 'disk' | 'file' | 'shield' | 'bot' | 'filter' | 'router' | 'web' | 'users' | 'core' | 'phone' | 'db' | 'pc';
 
 type SceneNode = {
   x: number; y: number; icon: Icon; tone: Tone; label?: string; labelPos?: 'below' | 'right' | 'above';
@@ -16,7 +16,10 @@ type SceneNode = {
   bars?: { tone: Tone; at: number }[];
 };
 type SceneEdge = { d: string; tone: Tone; at: number; tones?: Record<number, Tone>; dimAt?: number; label?: string; lx?: number; ly?: number; anchor?: 'middle' | 'start' };
-export type Scene = { steps: { text: string; tone: Tone }[]; nodes: SceneNode[]; edges: SceneEdge[] };
+export type Scene = {
+  title?: string; steps: { text: string; tone: Tone }[]; nodes: SceneNode[]; edges: SceneEdge[];
+  zones?: { x: number; y: number; w: number; h: number; label: string }[];
+};
 
 const STEP_MS = 2800;
 const toneAt = (base: Tone, tones: Record<number, Tone> | undefined, step: number) =>
@@ -39,6 +42,8 @@ const ICONS: Record<Icon, React.ReactNode> = {
   users: <><circle cx="-7" cy="-7" r="6" /><path d="M-18 14 a11 11 0 0 1 22 0" /><circle cx="9" cy="-5" r="5" /><path d="M6 6 a10 10 0 0 1 12 8" /></>,
   core: <><rect x="-25" y="-20" width="50" height="40" rx="5" /><path d="M-15 -8 h30 M-15 0 h30 M-15 8 h18" /></>,
   phone: <><rect x="-11" y="-18" width="22" height="36" rx="4" /><path d="M-3 12 h6" /></>,
+  db: <><ellipse cy="-12" rx="16" ry="5" /><path d="M-16 -12 v24 a16 5 0 0 0 32 0 v-24 M-16 0 a16 5 0 0 0 32 0" /></>,
+  pc: <><rect x="-16" y="-14" width="32" height="22" rx="2" /><path d="M-7 15 h14 M0 8 v7" /></>,
 };
 
 export const SCENES: Record<string, Scene> = {
@@ -111,6 +116,29 @@ export const SCENES: Record<string, Scene> = {
       { d: 'M531 120 H474', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
     ],
   },
+  posture: {
+    title: 'NETWORK VIEW',
+    steps: [
+      { text: 'db-67 sits in VLAN vlan_name2 (192.168.162.0/24)', tone: 'safe' },
+      { text: 'Traffic from other subnets has to pass the router or firewall', tone: 'safe' },
+      { text: 'Devices in the same VLAN skip that check and reach db-67 directly', tone: 'threat' },
+      { text: 'Those same-VLAN devices are db-67’s direct exposure', tone: 'threat' },
+    ],
+    zones: [{ x: 330, y: 16, w: 262, h: 214, label: 'VLAN vlan_name2 · 192.168.162.0/24' }],
+    nodes: [
+      { x: 70, y: 120, icon: 'pc', tone: 'safe', label: 'Other subnets' },
+      { x: 220, y: 120, icon: 'shield', tone: 'safe', label: 'Router / firewall' },
+      { x: 410, y: 52, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
+      { x: 410, y: 180, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
+      { x: 530, y: 120, icon: 'db', tone: 'safe', tones: { 3: 'threat' }, label: 'db-67', pulseAt: 3 },
+    ],
+    edges: [
+      { d: 'M98 120 H198', tone: 'safe', at: 1 },
+      { d: 'M242 120 H506', tone: 'safe', at: 1, label: 'via firewall', lx: 290, ly: 110 },
+      { d: 'M432 64 L508 108', tone: 'threat', at: 2, label: 'direct', lx: 482, ly: 76, anchor: 'start' },
+      { d: 'M432 168 L508 132', tone: 'threat', at: 2 },
+    ],
+  },
   vuln: {
     steps: [
       { text: 'The MME connects phones to the 4G network', tone: 'safe' },
@@ -146,8 +174,14 @@ export default function AttackScene({ scene }: { scene: Scene }) {
 
   return (
     <div className="attack-scene">
-      <span className="as-title">ATTACK FLOW</span>
+      <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
       <svg viewBox="0 0 600 240" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
+        {scene.zones?.map((z) => (
+          <g key={z.label}>
+            <rect x={z.x} y={z.y} width={z.w} height={z.h} rx="10" className="as-zone" />
+            <text x={z.x + 12} y={z.y + z.h - 10} className="as-zone-label">{z.label}</text>
+          </g>
+        ))}
         {scene.edges.map((e) => <path key={`bg-${e.d}`} d={e.d} className="as-track" />)}
         {scene.edges.map((e) => now >= e.at && (
           <motion.g key={`${cycle}-${e.d}`} animate={{ opacity: e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
