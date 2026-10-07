@@ -57,6 +57,7 @@ function seek(t){pause();time=Math.max(0,Math.min(duration,Number(t)||0));render
 function resize(){const r=frameFor(host),dpr=Math.min(devicePixelRatio,2);overlay.width=Math.round(r.width*dpr);overlay.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);render();}
 $('#play').addEventListener('click',()=>playing?pause():play());$('#reset').addEventListener('click',()=>{seek(0);if(!reduced.matches)play();});$('#timeline').addEventListener('input',e=>seek(e.target.value));
 document.querySelectorAll('[data-step]').forEach(el=>el.addEventListener('click',()=>seek(starts[Number(el.dataset.step)])));
+document.querySelectorAll('[data-demo-stage]').forEach(el=>el.addEventListener('click',()=>{const stage=el.dataset.demoStage;if(parent===window)location.assign(`/?stage=${stage}`);else parent.postMessage({type:'gtc-demo:navigate',stage},location.origin);}));
 $('#continue-demo').addEventListener('click',event=>{if(window.parent!==window){event.preventDefault();parent.postMessage({type:'gtc-demo:enter'},location.origin);}});
 $('#fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('#experience').requestFullscreen();}catch(error){console.warn('Fullscreen unavailable:',error.message);}});
 document.addEventListener('fullscreenchange',()=>{const label=document.fullscreenElement?'Exit fullscreen':'Enter fullscreen';$('#fullscreen').setAttribute('aria-label',label);$('#fullscreen').title=label;resize();});

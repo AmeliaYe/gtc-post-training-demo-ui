@@ -26,6 +26,11 @@ html, body { min-height: 100%; }
 .workflow-heading h1 { font-size: clamp(38px, 4.2vw, 62px); line-height: 1; font-weight: 600; }
 .workflow-subtitle { margin-top: 16px; color: #aab2aa; font-size: clamp(16px, 1.5vw, 21px); }
 
+.page-switcher { display: flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid #303a31; border-radius: 6px; background: #111713; }
+.page-switcher button { width: 30px; min-height: 30px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: #829087; font: 700 11px/1 monospace; cursor: pointer; }
+.page-switcher button:hover { color: #d9e8d2; background: #1b261e; }
+.page-switcher button[aria-pressed=true] { color: #172111; background: #b5ea79; }
+
 .workflow {
   display: grid;
   align-items: center;
@@ -113,7 +118,7 @@ html, body { min-height: 100%; }
 
 @media (max-width: 520px) {
   .workflow-heading { display: block; }
-  .workflow-heading .next-link { margin-top: 18px; }
+  .workflow-heading .page-switcher { width: max-content; margin-top: 18px; }
   .workflow-step h2 { font-size: 22px; }
 }
 

@@ -6,12 +6,12 @@
   },
   "files": {
     "introduction/index.html": {
-      "bytes": 4149,
-      "sha256": "d9bb46deb6fa0df365d2139e93ac818046287e2c062ae70cb6a3e2294e842c79"
+      "bytes": 4624,
+      "sha256": "c06f971132408d3a67d626fe4b60dd0ab1f738ec11d3a38bb3520f179cf5b330"
     },
     "introduction/assets/opening.css": {
-      "bytes": 12962,
-      "sha256": "35bf51e0a8a353c71526f9e924e2869143d0508a1dca86f80b4dbdbbff26a549",
+      "bytes": 13514,
+      "sha256": "3e3393b249dcb26787d3bc742ad0a5a8da567d0b2cf3fe59a0fcedda911769ea",
       "source": "outputs/press-gym-journeys-r06/assets/opening.css"
     },
     "introduction/assets/gym-opening-r02/training-room.png": {
@@ -40,8 +40,8 @@
       "source": "outputs/press-gym-journeys-r06/assets/arrow-right.svg"
     },
     "introduction/assets/opening.js": {
-      "bytes": 8297,
-      "sha256": "622c2e67fa6c64acc3a7a2ac70d6f94e4d3847ee59161ab473b2a0288fc12d7b",
+      "bytes": 8556,
+      "sha256": "aa3353b16cc00b1c187392bf5e3f28e3683121f7b807f134f8c9b3241af4010d",
       "source": "outputs/press-gym-journeys-r06/assets/opening.js"
     },
     "introduction/assets/circuit-r06/scene.js": {
