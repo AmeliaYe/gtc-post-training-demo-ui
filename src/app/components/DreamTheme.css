@@ -388,8 +388,8 @@
   .dream-theme .dream-brand { align-items: flex-start; }
 }
 /* Keep Before/After headers single-row and equal height so both answers line up;
-   the accuracy badge wraps its own text instead of dropping to a new row. */
+   the accuracy badge hugs its (short) text. */
 .dream-theme .output-panel header { flex-wrap: nowrap; min-height: 84px; }
 .dream-theme .output-panel header > span:not(.dream-claim) { flex: none; }
-.dream-theme .dream-claim { flex: 0 1 300px; min-width: 0; line-height: 1.3; }
+.dream-theme .dream-claim { flex: none; white-space: nowrap; line-height: 1.3; }
 @media (max-width: 620px) { .dream-theme .output-panel header { flex-wrap: wrap; } }
