@@ -12,12 +12,12 @@ import styles from './CyberDefenseDemo.module.css';
 
 const SCENARIO = CYBER_SCENARIOS.find((scenario) => scenario.id === 'openfire')!;
 const STEPS = [
-  { title: 'Explore the Java codebase', detail: 'Openfire is a Java messaging server. The agent starts by locating the files in its audit scope.' },
+  { title: 'Explore the Java codebase' },
   { title: 'Map the SSRF risk', detail: 'Server-side request forgery (SSRF) lets an attacker direct a server’s requests. Here, the destination comes from user input.' },
-  { title: 'Trace untrusted input', detail: 'The host parameter is the input source: data from an incoming request that an attacker can control.' },
-  { title: 'Trace URL construction', detail: 'Openfire inserts that host into a URL. The request parameter now controls where the server connects.' },
-  { title: 'Inspect the network sink', detail: 'The sink is the operation where that input has an effect: here, the server’s outbound HTTP request.' },
-  { title: 'Confirm the endpoint mapping', detail: 'The agent checks the servlet mapping: /getFavicon routes incoming requests to the code it just reviewed.' },
+  { title: 'Trace untrusted input' },
+  { title: 'Trace URL construction' },
+  { title: 'Inspect the network sink' },
+  { title: 'Confirm the endpoint mapping' },
   { title: 'Verify the submitted finding', detail: 'The agent reports SSRF. The evaluator matches that report against the known vulnerability in this repository.' },
   { title: 'Compare checkpoint results', detail: 'Both checkpoints inspected FaviconServlet.java. Only the final checkpoint reported its SSRF vulnerability.' },
 ];
@@ -113,7 +113,7 @@ export function CyberDefenseDemo() {
         <header className={styles.header}><div><span>NEMOTRON · SECURITY INVESTIGATION</span><p>Openfire / Java messaging server</p></div><button onClick={toggleFullscreen}>{fullscreen ? <ArrowsPointingInIcon /> : <ArrowsPointingOutIcon />}{fullscreen ? 'Exit full screen' : 'Full screen'}</button></header>
         <nav className={styles.progress} aria-label="Investigation stages">{PHASES.map((phase, index) => <button key={phase.label} aria-current={index === activePhase ? 'step' : undefined} className={index < activePhase ? styles.complete : ''} onClick={() => navigate(phase.step)}><span>{String(index + 1).padStart(2, '0')}</span>{phase.label}<i aria-hidden="true" /></button>)}</nav>
         <section className={styles.scene} aria-labelledby={titleId}>
-          <div className={styles.headline}><h3 id={titleId}>{current.title}</h3><p>{current.detail}</p></div>
+          <div className={styles.headline}><h3 id={titleId}>{current.title}</h3>{current.detail && <p>{current.detail}</p>}</div>
           {step < 7 ? <CyberInvestigation step={step} playing={playing} /> : <CyberTrainingResults scenario={SCENARIO} />}
         </section>
         <div className={styles.controls} aria-label="Investigation playback">

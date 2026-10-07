@@ -1,7 +1,12 @@
+.stage { display: grid; gap: 16px; min-width: 0; }
+.reasoning { padding: 17px 22px; border: 1px solid #647c4d; border-radius: 9px; background: #182213; }
+.reasoning header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 20px; margin-bottom: 10px; }
+.reasoning h4 { margin: 0; color: #b7ed71; font-size: 18px; font-weight: 500; }
+.reasoning header > span { color: #9eb88b; font-size: 15px; }
+.reasoning blockquote { max-width: 1400px; margin: 0; color: #e1ecd7; font-size: clamp(20px, 1.3vw, 25px); line-height: 1.4; }
 .investigation { min-width: 0; overflow: hidden; border: 1px solid #3b4e31; border-radius: 9px; background: #0d150e; color: #c8d7ba; }
 .toolBar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; padding: 11px 20px; border-bottom: 1px solid #33452b; background: #172012; }
 .toolBar > span:first-child { display: flex; align-items: center; gap: 10px; font: 19px/1.4 monospace; color: #e1edda; }
-.callIdentity { color: #bbcea9; font-size: 17px; }
 .provenance { margin-left: auto; color: #a4b995; font-size: 15px; }
 .command { display: flex; align-items: baseline; gap: 10px; padding: 9px 20px; border-bottom: 1px solid #283921; background: #090f0a; }
 .command > span { color: #b7ed71; font: 20px monospace; }
@@ -29,9 +34,6 @@
 .lineNumber { flex-shrink: 0; width: 57px; margin-right: 16px; padding-right: 12px; border-right: 1px solid #31432a; color: #779367; text-align: right; user-select: none; }
 .source > .highlight { background: #b7ed7113; color: #edf7e3; }
 .routeOutput { padding: 12px 20px; color: #e0edd4; }
-.observation { display: flex; align-items: flex-start; gap: 16px; padding: 12px 20px; border-top: 1px solid #33452b; }
-.observation > span { flex-shrink: 0; margin-top: 3px; color: #9cb18b; font: 15px/1.5 monospace; }
-.observation p { margin: 0; color: #d7e8ca; font-size: 20px; line-height: 1.4; }
 .verifier { padding: 20px; }
 .reference { display: flex; align-items: center; gap: 12px; color: #bacdab; font-size: 21px; line-height: 1.4; }
 .reference strong { font-weight: 500; color: #e1eed6; }
@@ -50,12 +52,16 @@
 .transcript { padding: 10px 20px; border-top: 1px solid #33452b; color: #9cb78a; font-size: 16px; line-height: 1.5; }
 .transcript summary { cursor: pointer; width: fit-content; }
 .transcript p { margin: 16px 0 8px; color: #b9d2a4; }
+.transcript blockquote { margin: 8px 0 12px; padding-left: 14px; border-left: 2px solid #647c4d; color: #d0dfc4; }
 .transcript pre { max-height: 320px; overflow: auto; padding: 12px; margin: 8px 0; border: 1px solid #31462a; background: #080f09; color: #c9dabd; font: 15px/1.5 monospace; scrollbar-width: thin; }
 .investigation :is(a, pre, summary):focus-visible { outline: 3px solid #b7ed71; outline-offset: -3px; }
 @media (max-width: 800px) {
+  .stage { gap: 12px; }
+  .reasoning { padding: 15px; }
+  .reasoning header > span { font-size: 14px; }
   .toolBar { padding: 11px 14px; }
   .toolBar > span:first-child { font-size: 17px; }
-  .callIdentity, .provenance { font-size: 14px; }
+  .provenance { font-size: 14px; }
   .provenance { margin-left: 0; }
   .command { flex-wrap: wrap; padding: 9px 14px; gap: 5px 8px; }
   .command code { min-width: 0; flex: 1; font-size: 16px; }
@@ -72,8 +78,6 @@
   .sourceHeader > code, .sourceHeader a { font-size: 15px; }
   .source { font-size: 15px; }
   .lineNumber { width: 45px; margin-right: 10px; }
-  .observation { flex-direction: column; gap: 5px; padding: 12px 14px; }
-  .observation p { font-size: 18px; }
   .verifier { padding: 15px; }
   .reference { align-items: flex-start; font-size: 18px; }
   .verifierResults > div { padding: 14px 12px; }
