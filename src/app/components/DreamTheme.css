@@ -509,3 +509,25 @@
   .dream-theme .ts-steps::before, .dream-theme .ts-steps::after { display: none; }
   .dream-theme .ts-steps button { flex-direction: row; text-align: left; }
 }
+
+/* How we train: simplified post-training flow chart. */
+.dream-theme .ts-flow { margin-top: var(--dream-space-5); padding: var(--dream-space-4) var(--dream-space-5) var(--dream-space-5); border: 1px solid var(--line); border-radius: var(--dream-radius-md); background: var(--panel-2); }
+.dream-theme .ts-flow h4 { margin: 0 0 var(--dream-space-4); color: var(--muted); font-size: var(--dream-text-overline); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.dream-theme .ts-flow ol { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; margin: 0; padding: 0; list-style: none; }
+.dream-theme .ts-flow li { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid var(--line-strong); border-radius: var(--dream-radius-md); background: var(--panel); text-align: center; }
+/* Arrow between boxes. */
+.dream-theme .ts-flow li:not(:last-child)::after { content: '→'; position: absolute; top: 50%; right: -18px; transform: translateY(-50%); color: var(--accent); font-size: 15px; }
+.dream-theme .ts-flow li small { color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.dream-theme .ts-flow li.nvidia small { color: #76b900; }
+.dream-theme .ts-flow li.dream { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.dream-theme .ts-flow li strong { color: var(--ink); font-size: 14px; font-weight: 600; }
+.dream-theme .ts-flow li span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+.dream-theme .ts-flow li.loop { background: linear-gradient(180deg, var(--panel-glow), var(--panel) 70%); }
+.dream-theme .ts-loop { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 12px 0 0 auto; width: calc(50% - 11px); padding-top: 10px; border-top: 2px dashed color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); font-size: 13px; text-align: right; }
+.dream-theme .ts-loop svg { width: 16px; flex: none; animation: spin 6s linear infinite; }
+@media (max-width: 1000px) {
+  .dream-theme .ts-flow ol { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dream-theme .ts-flow li:nth-child(3)::after { display: none; }
+  .dream-theme .ts-loop { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .dream-theme .ts-loop svg { animation: none; } }

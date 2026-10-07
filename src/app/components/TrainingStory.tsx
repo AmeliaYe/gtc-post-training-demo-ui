@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { AcademicCapIcon, BookOpenIcon, CheckBadgeIcon, ChevronRightIcon, PencilSquareIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { AcademicCapIcon, ArrowPathIcon, BookOpenIcon, CheckBadgeIcon, ChevronRightIcon, PencilSquareIcon, TrophyIcon } from '@heroicons/react/24/outline';
 
 // Plain-language version of the training pipeline, from Dream's MiST write-up
 // (seed corpus, four rewrite flows, verifier, mid-training) and the Dreamer RL stage.
@@ -34,6 +34,17 @@ const STEPS = [
   },
 ];
 const STEP_MS = 4000;
+
+// Simplified post-training flow: Dream's stages on top of NVIDIA's pre-trained Nemotron
+// (MiST write-up: mid-training then SFT; Dreamer report: RL, validation, release every two weeks).
+const FLOW = [
+  { title: 'Nemotron', sub: 'General-purpose model', by: 'nvidia' },
+  { title: 'Mid-training', sub: 'Learns security knowledge', by: 'dream' },
+  { title: 'Fine-tuning', sub: 'Learns to answer like an analyst', by: 'dream' },
+  { title: 'Practice', sub: 'Reinforcement learning with feedback', by: 'dream', loop: true },
+  { title: 'Validate', sub: 'Scored on unseen questions', by: 'dream', loop: true },
+  { title: 'Release', sub: 'Deployed on-prem', by: 'dream', loop: true },
+];
 
 export default function TrainingStory() {
   const reduce = useReducedMotion();
@@ -71,6 +82,20 @@ export default function TrainingStory() {
           <div className="ts-tags">{step.tags.map((t) => <span key={t}>{t}</span>)}</div>
         </motion.div>
       </AnimatePresence>
+
+      <div className="ts-flow" aria-label="Post-training flow">
+        <h4>Post-training at a glance</h4>
+        <ol>
+          {FLOW.map((f, i) => (
+            <motion.li key={f.title} className={`${f.by} ${f.loop ? 'loop' : ''}`} initial={reduce ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15 + i * .12 }}>
+              <small>{f.by === 'nvidia' ? 'NVIDIA' : 'Dream'}</small>
+              <strong>{f.title}</strong>
+              <span>{f.sub}</span>
+            </motion.li>
+          ))}
+        </ol>
+        <p className="ts-loop"><ArrowPathIcon />Practice, validation and release repeat every two weeks as new threats appear</p>
+      </div>
 
       <div className="ts-result">
         <span>Result</span>
