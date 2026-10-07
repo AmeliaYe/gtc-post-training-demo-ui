@@ -185,8 +185,6 @@
 .dream-theme .dream-phase { display: inline-block; padding: 4px 9px; border-radius: var(--dream-radius-pill); background: rgba(190, 197, 203, .18); color: var(--ink); font-size: var(--dream-text-overline); font-weight: 600; letter-spacing: .08em; line-height: 1.2; }
 .dream-theme .tuned .dream-phase { background: var(--accent); color: var(--accent-ink); }
 .dream-theme .dream-trained-by { color: var(--accent); font-style: normal; font-weight: 500; }
-.dream-theme .dream-claim { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: var(--dream-radius-md); background: var(--panel-glow); color: var(--accent); font-size: 12px; font-weight: 600; line-height: 1.3; }
-.dream-theme .dream-claim svg { width: 14px; flex: none; }
 .dream-theme .response-copy { padding: var(--dream-space-4) var(--dream-space-5); flex: 1; }
 .dream-theme .assistant-label { color: var(--dim); font-size: var(--dream-text-overline); font-weight: 600; letter-spacing: .08em; }
 .dream-theme .response-copy p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: var(--dream-space-3) 0 0; text-wrap: pretty; }
@@ -420,11 +418,9 @@
 .dream-theme .comparison-grid > .comparison-divider { grid-row: span 3; }
 .dream-theme .output-panel header { flex-wrap: wrap; }
 .dream-theme .output-panel header > .model-mark { flex: none; }
-.dream-theme .output-panel header > span:not(.dream-claim):not(.model-mark) { flex: 1 1 220px; min-width: 0; }
 .dream-theme .output-panel header small { flex-wrap: wrap; row-gap: 4px; }
 .dream-theme .dream-phase { white-space: nowrap; }
 @container (max-width: 300px) { .dream-theme .output-panel header > .model-mark { display: none; } }
-.dream-theme .dream-claim { flex: none; white-space: nowrap; line-height: 1.3; }
 
 /* 5. Narrow panels: keep the run count, drop the per-run IDs. */
 @container (max-width: 340px) { .dream-theme .cyber-runs-ids { display: none; } }

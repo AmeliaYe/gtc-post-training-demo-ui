@@ -216,7 +216,6 @@ function BeforeAfter() {
               <header>
                 <span className="model-mark"><SparklesIcon /></span>
                 <span><small><b className="dream-phase">AFTER TRAINING</b> · ON NVIDIA NEMOTRON</small><strong>Dreamer <em className="dream-trained-by">· Trained by Dream</em></strong></span>
-                {active.key?.startsWith('T') && <span className="dream-claim"><CheckIcon />100% ATT&amp;CK accuracy</span>}
               </header>
               <div className="response-copy">
                 <div className="answer-head"><span className="assistant-label">ANSWER</span>{active.key && <MitreBadge id={active.key} />}</div>
