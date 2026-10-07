@@ -17,6 +17,7 @@ export type CyberAttackStage = {
   activeEdges: string[];
   activeNodes: string[];
   mobilePath: string[];
+  source: { code: number[]; nodeIds: string[]; note?: string };
 };
 
 export type CyberAttack = {
@@ -66,6 +67,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['request', 'public-fetch'],
         activeNodes: ['requester', 'server', 'public'],
         mobilePath: ['requester', 'server', 'public'],
+        source: { code: [0, 1, 2], nodeIds: ['server'] },
       },
       {
         label: 'Changed address',
@@ -75,6 +77,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['request'],
         activeNodes: ['requester', 'server'],
         mobilePath: ['requester', 'server'],
+        source: { code: [0], nodeIds: ['server'] },
       },
       {
         label: 'Private request',
@@ -84,6 +87,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['request', 'private-fetch'],
         activeNodes: ['requester', 'server', 'private'],
         mobilePath: ['requester', 'server', 'private'],
+        source: { code: [1, 2], nodeIds: ['server'] },
       },
       {
         label: 'Possible exposure',
@@ -93,6 +97,11 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['private-response', 'relay-response'],
         activeNodes: ['private', 'server', 'requester'],
         mobilePath: ['private', 'server', 'requester'],
+        source: {
+          code: [2],
+          nodeIds: ['server'],
+          note: 'The excerpt returns successful response bytes. The diagram shows a possible relay, with no demonstrated data exposure.',
+        },
       },
     ],
     training: {
@@ -128,6 +137,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input', 'normal-write'],
         activeNodes: ['input', 'helper', 'objects'],
         mobilePath: ['input', 'helper', 'objects'],
+        source: { code: [0, 1, 2], nodeIds: ['helper'] },
       },
       {
         label: 'Crafted path',
@@ -137,6 +147,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input'],
         activeNodes: ['input', 'helper'],
         mobilePath: ['input', 'helper'],
+        source: { code: [0, 1], nodeIds: ['helper'] },
       },
       {
         label: 'Shared change',
@@ -146,6 +157,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input', 'prototype-write'],
         activeNodes: ['input', 'helper', 'prototype'],
         mobilePath: ['input', 'helper', 'prototype'],
+        source: { code: [1, 2], nodeIds: ['helper'] },
       },
       {
         label: 'Wider effect',
@@ -155,6 +167,11 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['inherit'],
         activeNodes: ['prototype', 'objects'],
         mobilePath: ['prototype', 'objects'],
+        source: {
+          code: [2],
+          nodeIds: ['helper'],
+          note: 'The excerpt shows the helper’s assignment. Other objects inheriting that value is the possible downstream effect illustrated here.',
+        },
       },
     ],
     training: {
@@ -189,6 +206,11 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input', 'normal-value'],
         activeNodes: ['text', 'converter', 'data'],
         mobilePath: ['text', 'converter', 'data'],
+        source: {
+          code: [0],
+          nodeIds: ['converter'],
+          note: 'The parser calls the Value converter here; number and list conversion happen inside that method.',
+        },
       },
       {
         label: 'Crafted text',
@@ -198,6 +220,11 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input'],
         activeNodes: ['text', 'converter'],
         mobilePath: ['text', 'converter'],
+        source: {
+          code: [0],
+          nodeIds: ['converter'],
+          note: 'The excerpt shows where crafted command text can enter the converter; it does not show a crafted payload.',
+        },
       },
       {
         label: 'Weak check',
@@ -207,6 +234,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['input'],
         activeNodes: ['text', 'converter'],
         mobilePath: ['text', 'converter'],
+        source: { code: [1], nodeIds: ['converter'] },
       },
       {
         label: 'Code runs',
@@ -216,6 +244,11 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
         activeEdges: ['execute'],
         activeNodes: ['converter', 'execution'],
         mobilePath: ['converter', 'execution'],
+        source: {
+          code: [2],
+          nodeIds: ['converter'],
+          note: 'The eval call runs inside Value converter and produces the illustrated Ruby code runs outcome.',
+        },
       },
     ],
     training: {

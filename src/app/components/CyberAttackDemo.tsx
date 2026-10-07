@@ -20,8 +20,13 @@ const NODE_ICONS = {
 };
 const STAGE_INTERVAL = 5000;
 
-export function CyberAttackDemo({ attack, scenarioId }: { attack: CyberAttack; scenarioId: CyberScenario['id'] }) {
-  const [step, setStep] = useState(0);
+export function CyberAttackDemo({ attack, scenarioId, step, onStepChange, onInspectSource }: {
+  attack: CyberAttack;
+  scenarioId: CyberScenario['id'];
+  step: number;
+  onStepChange: (step: number) => void;
+  onInspectSource: () => void;
+}) {
   const [playing, setPlaying] = useState(false);
   const instanceId = useId();
   const diagramId = `attack-${scenarioId}-${instanceId.replaceAll(':', '')}`;
@@ -29,15 +34,16 @@ export function CyberAttackDemo({ attack, scenarioId }: { attack: CyberAttack; s
   const stage = attack.stages[step];
   const tone = step === 0 ? styles.normal : step === lastStep ? styles.consequence : styles.unsafe;
   const activeRoute = stage.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)).filter((node) => node !== undefined);
+  const sourceBlocks = stage.source.nodeIds.map((id) => attack.nodes.find((node) => node.id === id)?.label).filter(Boolean).join(' + ');
 
   useEffect(() => {
     if (!playing) return;
     const timer = window.setTimeout(() => {
       if (step === lastStep) setPlaying(false);
-      else setStep(step + 1);
+      else onStepChange(step + 1);
     }, STAGE_INTERVAL);
     return () => window.clearTimeout(timer);
-  }, [lastStep, playing, step]);
+  }, [lastStep, onStepChange, playing, step]);
 
   useEffect(() => {
     function pauseWhenHidden() {
@@ -57,7 +63,7 @@ export function CyberAttackDemo({ attack, scenarioId }: { attack: CyberAttack; s
 
   function navigate(next: number) {
     setPlaying(false);
-    setStep(Math.max(0, Math.min(lastStep, next)));
+    onStepChange(Math.max(0, Math.min(lastStep, next)));
   }
 
   function play() {
@@ -69,7 +75,7 @@ export function CyberAttackDemo({ attack, scenarioId }: { attack: CyberAttack; s
       setPlaying(false);
       return;
     }
-    if (step === lastStep) setStep(0);
+    if (step === lastStep) onStepChange(0);
     setPlaying(true);
   }
 
@@ -133,7 +139,16 @@ export function CyberAttackDemo({ attack, scenarioId }: { attack: CyberAttack; s
         </div>
         <div className={styles.narrative}>
           <span className={styles.narrativeNumber} aria-hidden="true">{String(step + 1).padStart(2, '0')}</span>
-          <div><h5>{stage.title}</h5><p>{stage.description}</p></div>
+          <div>
+            <h5>{stage.title}</h5>
+            <p>{stage.description}</p>
+            <div className={styles.sourceLink}>
+              <span>Code in: {sourceBlocks}</span>
+              <button type="button" onClick={() => { setPlaying(false); onInspectSource(); }}>
+                <CodeBracketIcon />Inspect code for step {step + 1}<ArrowRightIcon />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.controls}>
