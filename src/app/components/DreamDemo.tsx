@@ -324,8 +324,8 @@ const SEQUENCES: Record<'live' | 'train', { d: string; edges: number[]; caption:
     { d: 'M690,92 L740,92 L740,64 L790,64', edges: [8], caption: 'Its tools read production storage over MCP, inside the client network.' },
   ],
   train: [
-    { d: 'M280,367 L340,367', edges: [12], caption: 'Mid-training: an expert-vetted security corpus (CVE, CWE, ATT&CK, threat reports), expanded with synthetic data, feeds MiST.' },
-    { d: 'M507,342 L507,250', edges: [13], caption: 'MiST (continued pre-training + SFT on NeMo AutoModel) gives Nemotron deep security knowledge: the starting checkpoint for RL.', lands: true },
+    { d: 'M280,367 L340,367', edges: [12], caption: 'Mid-training data: a compact, expert-vetted security corpus (CVE, CWE, ATT&CK, threat reports), rewritten into synthetic training data such as explainers, Q&A chains and paraphrases.' },
+    { d: 'M507,342 L507,250', edges: [13], caption: 'MiST mid-training, then SFT, on NeMo AutoModel gives Nemotron deep security knowledge: the checkpoint the rest of the stack, including RL, starts from.', lands: true },
     { d: 'M206,100 L312,100', edges: [0], caption: 'RL: Dreamer Gym sends a rollout to the unchanged production agent, exactly as an analyst question would.' },
     { d: 'M384,78 L384,56 L502,56 L502,78', edges: [6, 7], caption: 'The orchestrator routes it to the Posture agent.' },
     { d: 'M502,140 L502,188', edges: [4], caption: 'The agent infers on the same Nemotron model.' },
@@ -460,7 +460,7 @@ function RuntimeDiagram() {
         </Box>
         <Box x={340} y={342} w={334} h={50} kind="train" mode={mode} hero>
           <text className="rt-main" x="507" y="363" textAnchor="middle">MiST mid-training</text>
-          <text className="rt-sub" x="507" y="380" textAnchor="middle">NeMo AutoModel · continued pre-training + SFT</text>
+          <text className="rt-sub" x="507" y="380" textAnchor="middle">NeMo AutoModel · mid-training + SFT</text>
         </Box>
 
         {!reduce && <>
@@ -482,8 +482,8 @@ function RuntimeDiagram() {
 // From Dream's "Mid-Training NVIDIA Nemotron 3.5 Super for Cybersecurity" post.
 const MODEL_SPECS = [
   ['Base model', 'NVIDIA Nemotron 3.5 Super · 120B hybrid Mamba-Transformer MoE · 12B active per token'],
-  ['Method', 'MiST cybersecurity mid-training (arXiv:2609.18496, EMNLP 2026): continued pre-training, then SFT with replayed general data'],
-  ['Corpus', 'Expert-vetted seed (CVE records, CWE, MITRE ATT&CK, threat reports, defensive guidance) expanded by synthetic generation flows, quality-filtered, decontaminated'],
+  ['Method', 'MiST cybersecurity mid-training (arXiv:2609.18496, EMNLP 2026): a dedicated mid-training stage on a synthetic security corpus, then SFT with replayed general data'],
+  ['Corpus', 'Expert-vetted seed (CVE records, CWE, MITRE ATT&CK, threat reports, defensive guidance) rewritten into synthetic training data, verifier-filtered, decontaminated'],
   ['Training', 'NeMo AutoModel · 2× DGX B200 (16 GPUs) · 28.5 h · 61–63K tokens/s'],
   ['Deployment', 'Open weights, on-prem and air-gapped. Starting point for task SFT, expert trajectories and RL with NeMo RL'],
 ];
