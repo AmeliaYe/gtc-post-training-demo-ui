@@ -458,3 +458,11 @@
 .dream-theme .cti-source { fill: var(--dream-periwinkle); filter: drop-shadow(0 0 4px var(--dream-periwinkle)); }
 .dream-theme .cti-legend i.origin { width: 8px; height: 8px; border-radius: 50%; background: var(--dream-periwinkle); }
 .dream-theme .cti-sample { grid-column: 1 / -1; order: 3; margin: 0; padding: var(--dream-space-2) var(--dream-space-4); border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; font-style: italic; }
+/* CTI map: critical-infrastructure beacons (after training only). */
+.dream-theme .cti-beacon-core { fill: #ffd27a; stroke: var(--dream-navy); stroke-width: 1; filter: drop-shadow(0 0 5px #ffd27a); }
+.dream-theme .cti-beacon-ring { fill: none; stroke: #ffd27a; stroke-width: 1.4; transform-box: fill-box; transform-origin: center; animation: cti-beacon 1.6s ease-out infinite; }
+@keyframes cti-beacon { from { transform: scale(.6); opacity: .9; } to { transform: scale(3.2); opacity: 0; } }
+.dream-theme .cti-legend i.infra { width: 8px; height: 8px; border-radius: 1.5px; background: #ffd27a; transform: rotate(45deg); }
+.dream-theme .cti-overlay dt.infra { color: #ffd27a; }
+.dream-theme .cti-feed .cti-infra { display: block; margin-top: 4px; color: #ffd27a; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) { .dream-theme .cti-beacon-ring { animation: none; } }
