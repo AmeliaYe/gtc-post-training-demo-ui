@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import AttackScene, { SCENES } from './AttackScene';
 import CtiMap from './CtiMap';
-import TrainingStory from './TrainingStory';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
@@ -205,8 +204,8 @@ function BeforeAfter() {
                 <span><small><b className="dream-phase">BEFORE TRAINING</b> · ORIGINAL</small><strong>Nemotron 3.5 Super</strong></span>
               </header>
               <div className="response-copy">
-                <span className="assistant-label">ANSWER</span>
-                <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong>{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="answer-head"><span className="assistant-label">ANSWER</span>{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong></div>
                 <p>“{active.before.quote}”</p>
                 {active.full && active.full.before !== active.before.quote && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
               </div>
@@ -216,12 +215,12 @@ function BeforeAfter() {
             <section className="output-panel tuned cyber-scan">
               <header>
                 <span className="model-mark"><SparklesIcon /></span>
-                <span><small><b className="dream-phase">AFTER TRAINING</b> · MIST MID-TRAINED</small><strong>Nemotron-3.5-Super-MiST <em className="dream-trained-by">· Trained by Dream</em></strong></span>
+                <span><small><b className="dream-phase">AFTER TRAINING</b> · ON NVIDIA NEMOTRON</small><strong>Dreamer <em className="dream-trained-by">· Trained by Dream</em></strong></span>
                 {active.key?.startsWith('T') && <span className="dream-claim"><CheckIcon />100% ATT&amp;CK accuracy</span>}
               </header>
               <div className="response-copy">
-                <span className="assistant-label">ANSWER</span>
-                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}><CheckIcon />{active.after.answer}</motion.strong>{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="answer-head"><span className="assistant-label">ANSWER</span>{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}><CheckIcon />{active.after.answer}</motion.strong></div>
                 <TypedText text={`“${active.after.quote}”`} />
                 {active.full && <FullResponse text={active.full.after} open={fullOpen} onToggle={toggleFull} />}
               </div>
@@ -230,9 +229,9 @@ function BeforeAfter() {
           </div>
           {active.why && (
             <motion.div className="cyber-why" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9, duration: .35 }}>
-              <small>WHY MIST GETS IT RIGHT</small>
+              <small>WHY DREAMER GETS IT RIGHT</small>
               <p><XMarkIcon /><span><b>Original</b> {active.why.base.replace(/^Base /, '')}</span></p>
-              <p className="ours"><CheckIcon /><span><b>MiST</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
+              <p className="ours"><CheckIcon /><span><b>Dreamer</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
             </motion.div>
           )}
           <StatsStrip bench={active.bench} />
@@ -249,13 +248,9 @@ const EDGES: { d: string; kind: Path; both?: boolean }[] = [
   { d: 'M206,100 L312,100', kind: 'train', both: true },
   { d: 'M60,142 L60,180', kind: 'train' },
   { d: 'M206,218 L328,218', kind: 'train' },
-  { d: 'M384,140 L384,188', kind: 'core' },
   { d: 'M502,140 L502,188', kind: 'core' },
-  { d: 'M620,140 L620,188', kind: 'core' },
-  { d: 'M384,78 L384,56 L620,56 L620,78', kind: 'core' },
-  { d: 'M502,56 L502,78', kind: 'core' },
-  { d: 'M690,92 L740,92 L740,64 L790,64', kind: 'live' },
-  { d: 'M690,120 L740,120 L740,238 L790,238', kind: 'train' },
+  { d: 'M674,92 L740,92 L740,64 L790,64', kind: 'live' },
+  { d: 'M674,120 L740,120 L740,238 L790,238', kind: 'train' },
   { d: 'M887,150 L887,104', kind: 'live' },
   { d: 'M887,290 L887,272', kind: 'train' },
   { d: 'M280,367 L340,367', kind: 'train' },
@@ -263,8 +258,8 @@ const EDGES: { d: string; kind: Path; both?: boolean }[] = [
 ];
 const EDGE_LABELS: [number, number, string, Path, ('middle' | 'start')?][] = [
   [259, 90, 'rollouts', 'train', 'middle'], [259, 116, 'trajectories', 'train', 'middle'], [70, 165, 'scored rollouts', 'train'],
-  [259, 209, 'weights', 'train', 'middle'], [392, 168, 'infer', 'core'], [392, 70, 'route', 'core'],
-  [740, 53, 'production MCP', 'live', 'middle'], [515, 300, 'MiST checkpoint', 'train'], [740, 256, 'training MCP', 'train', 'middle'], [895, 132, 'populate', 'live'],
+  [259, 209, 'weights', 'train', 'middle'], [512, 168, 'infer', 'core'],
+  [740, 53, 'production MCP', 'live', 'middle'], [515, 300, 'cyber-knowledge checkpoint', 'train'], [740, 256, 'training MCP', 'train', 'middle'], [895, 132, 'populate', 'live'],
 ];
 const MODES = [
   { id: 'live', label: 'Live request' },
@@ -273,20 +268,18 @@ const MODES = [
 // One dot walks these hops in order; `edges` are the EDGES indexes lit while it travels.
 const SEQUENCES: Record<'live' | 'train', { d: string; edges: number[]; caption: string; lands?: boolean }[]> = {
   live: [
-    { d: 'M887,150 L887,104', edges: [10], caption: 'Agentic data pipelines populate production storage: assets, findings, intel, alerts.' },
-    { d: 'M384,78 L384,56 L620,56 L620,78', edges: [6], caption: 'An analyst question reaches the orchestrator, which routes it to the CTI · Detection agent.' },
-    { d: 'M620,140 L620,188', edges: [5], caption: 'The agent infers on Nemotron, served via vLLM.' },
-    { d: 'M690,92 L740,92 L740,64 L790,64', edges: [8], caption: 'Its tools read production storage over MCP, inside the client network.' },
+    { d: 'M887,150 L887,104', edges: [6], caption: 'Agentic data pipelines populate production storage: assets, findings, intel, alerts.' },
+    { d: 'M502,140 L502,188', edges: [3], caption: 'An analyst question reaches the Dreamer agent, which infers on Nemotron, served via vLLM.' },
+    { d: 'M674,92 L740,92 L740,64 L790,64', edges: [4], caption: 'Its tools read production storage over MCP, inside the client network.' },
   ],
   train: [
-    { d: 'M280,367 L340,367', edges: [12], caption: 'Mid-training data: a compact, expert-vetted security corpus (CVE, CWE, ATT&CK, threat reports), rewritten into synthetic training data such as explainers, Q&A chains and paraphrases.' },
-    { d: 'M507,342 L507,250', edges: [13], caption: 'MiST mid-training, then SFT, on NeMo AutoModel gives Nemotron deep security knowledge: the checkpoint the rest of the stack, including RL, starts from.', lands: true },
-    { d: 'M206,100 L312,100', edges: [0], caption: 'RL: Dreamer Gym sends a rollout to the unchanged production agent, exactly as an analyst question would.' },
-    { d: 'M384,78 L384,56 L502,56 L502,78', edges: [6, 7], caption: 'The orchestrator routes it to the Posture agent.' },
-    { d: 'M502,140 L502,188', edges: [4], caption: 'The agent infers on the same Nemotron model.' },
-    { d: 'M690,120 L740,120 L740,238 L790,238', edges: [9], caption: 'Only the data path differs: tools read the synthetic digital twin over the training MCP.' },
+    { d: 'M280,367 L340,367', edges: [8], caption: 'Stage 1, cyber knowledge: an expert-vetted security corpus (CVE, CWE, ATT&CK, threat reports) is rewritten into training data such as explainers and Q&A.' },
+    { d: 'M507,342 L507,250', edges: [9], caption: 'Training on NVIDIA NeMo (MiST, SFT) gives Nemotron deep cyber knowledge: the checkpoint agentic training starts from.', lands: true },
+    { d: 'M206,100 L312,100', edges: [0], caption: 'Stage 2, agentic RL: Dreamer Gym, built on NVIDIA NeMo Gym, sends a task to the unchanged production agent, exactly as an analyst question would.' },
+    { d: 'M502,140 L502,188', edges: [3], caption: 'The agent infers on the same Nemotron model.' },
+    { d: 'M674,120 L740,120 L740,238 L790,238', edges: [5], caption: 'Only the data path differs: tools read a synthetic digital twin over the training MCP, never derived from customer data.' },
     { d: 'M312,100 L206,100', edges: [0], caption: 'The trajectory returns to Dreamer Gym and is scored.' },
-    { d: 'M60,142 L60,180', edges: [1], caption: 'Scored rollouts go to nemo-rl for RL post-training.' },
+    { d: 'M60,142 L60,180', edges: [1], caption: 'Scored rollouts go to NVIDIA NeMo RL for agentic RL post-training.' },
     { d: 'M206,218 L328,218', edges: [2], caption: 'New weights return to the same Nemotron the agents infer on.', lands: true },
   ],
 };
@@ -342,7 +335,7 @@ function RuntimeDiagram() {
       </div>
 
       <div className="rt-scroll">
-      <svg className={`rt-diagram mode-${mode}`} viewBox="0 0 1000 410" role="img" aria-label="First, MiST mid-training on NeMo AutoModel turns an expert-vetted security corpus into a security-specialized Nemotron checkpoint. Then Dreamer Gym, an extension of NVIDIA nemo-gym, sends rollouts through the unchanged production Dreamer agent (orchestrator plus posture, CTI and detection agents) which infers on NVIDIA Nemotron served via vLLM. In production the agents read production storage over MCP; in training the same agents read a synthetic digital twin. nemo-rl trains on the trajectories and writes new weights back into Nemotron.">
+      <svg className={`rt-diagram mode-${mode}`} viewBox="0 0 1000 410" role="img" aria-label="Stage 1, cyber knowledge: SFT on NVIDIA NeMo AutoModel turns an expert-vetted security corpus into a security-specialized Nemotron checkpoint. Stage 2, agentic RL: Dreamer Gym, built on NVIDIA NeMo Gym, sends rollouts through the unchanged production Dreamer agent (an orchestrator plus posture, CTI and detection deep agents) which infers on NVIDIA Nemotron served via vLLM. In production the agents read production storage over MCP; in training the same agents read a synthetic digital twin. NVIDIA NeMo RL trains on the trajectories and writes new weights back into Nemotron.">
         <defs>
           {(['core', 'live', 'train'] as const).map((k) => (
             <marker key={k} id={`rt-ah-${k}`} markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse"><path className={`rt-ah ${k}`} d="M0,0 L9,4.5 L0,9 Z" /></marker>
@@ -360,26 +353,24 @@ function RuntimeDiagram() {
 
         <motion.rect className="rt-group train" x="16" y="30" width="190" height="270" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="273" width="17" height="17" /><text className="rt-nv" x="50" y="286">NVIDIA</text>
-        <text className="rt-kicker train" x="30" y="56">2 · RL TRAINING</text>
+        <text className="rt-kicker train" x="30" y="56">2 · AGENTIC RL</text>
         <Box x={30} y={72} w={162} h={70} kind="train" mode={mode} hero>
           <text className="rt-main" x="111" y="98" textAnchor="middle">Dreamer Gym</text>
-          <text className="rt-sub" x="111" y="115" textAnchor="middle">extends nemo-gym</text>
+          <text className="rt-sub" x="111" y="115" textAnchor="middle">built on NVIDIA NeMo Gym</text>
           <text className="rt-sub" x="111" y="129" textAnchor="middle">drives the real agent</text>
         </Box>
         <Box x={30} y={180} w={162} h={70} kind="train" mode={mode}>
-          <text className="rt-main" x="111" y="208" textAnchor="middle">nemo-rl</text>
-          <text className="rt-sub" x="111" y="226" textAnchor="middle">RL post-training</text>
-          <text className="rt-sub" x="111" y="240" textAnchor="middle">Megatron backend</text>
+          <text className="rt-main" x="111" y="208" textAnchor="middle">NVIDIA NeMo RL</text>
+          <text className="rt-sub" x="111" y="226" textAnchor="middle">agentic RL post-training</text>
+          <text className="rt-sub" x="111" y="240" textAnchor="middle">GRPO · Megatron backend</text>
         </Box>
 
         <rect className="rt-group core" x="316" y="18" width="374" height="270" rx="12" />
         <text className="rt-kicker" x="330" y="36">PRODUCTION DREAMER AGENT, UNCHANGED</text>
-        {[[330, 'Orchestrator'], [448, 'Posture'], [566, 'CTI · Detection']].map(([x, name]) => (
-          <Box key={name} x={x as number} y={78} w={108} h={62} kind="core" mode={mode}>
-            <text className="rt-kicker" x={(x as number) + 54} y="98" textAnchor="middle">DEEP AGENT</text>
-            <text className="rt-main" x={(x as number) + 54} y="120" textAnchor="middle">{name}</text>
-          </Box>
-        ))}
+        <Box x={330} y={78} w={344} h={62} kind="core" mode={mode}>
+          <text className="rt-kicker" x="502" y="99" textAnchor="middle">DEEP AGENTS</text>
+          <text className="rt-main" x="502" y="121" textAnchor="middle">Orchestrator · Posture · CTI · Detection</text>
+        </Box>
         <Box x={330} y={188} w={344} h={60} kind="core" mode={mode} hero>
           <NvidiaLogo className="rt-nv-mark" x="342" y="204" width="26" height="26" />
           <text className="rt-main" x="518" y="212" textAnchor="middle">NEMOTRON 3.5 Super VL 120B-A12B</text>
@@ -408,14 +399,14 @@ function RuntimeDiagram() {
 
         <motion.rect className="rt-group train" x="16" y="314" width="674" height="88" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="320" width="17" height="17" /><text className="rt-nv" x="50" y="333">NVIDIA</text>
-        <text className="rt-kicker train" x="676" y="333" textAnchor="end">1 · MID-TRAINING · MiST</text>
+        <text className="rt-kicker train" x="676" y="333" textAnchor="end">1 · CYBER KNOWLEDGE · SFT</text>
         <Box x={30} y={342} w={250} h={50} kind="train" mode={mode}>
           <text className="rt-main" x="155" y="363" textAnchor="middle">Security corpus</text>
           <text className="rt-sub" x="155" y="380" textAnchor="middle">expert-vetted seed + synthetic flows</text>
         </Box>
         <Box x={340} y={342} w={334} h={50} kind="train" mode={mode} hero>
-          <text className="rt-main" x="507" y="363" textAnchor="middle">MiST mid-training</text>
-          <text className="rt-sub" x="507" y="380" textAnchor="middle">NeMo AutoModel · mid-training + SFT</text>
+          <text className="rt-main" x="507" y="363" textAnchor="middle">Cyber-knowledge training</text>
+          <text className="rt-sub" x="507" y="380" textAnchor="middle">MiST · SFT on NVIDIA NeMo AutoModel</text>
         </Box>
 
         {!reduce && <>
@@ -436,14 +427,15 @@ function RuntimeDiagram() {
 
 // From Dream's "Mid-Training NVIDIA Nemotron 3.5 Super for Cybersecurity" post.
 const MODEL_SPECS = [
-  ['Base model', 'NVIDIA Nemotron 3.5 Super · 120B hybrid Mamba-Transformer MoE · 12B active per token'],
-  ['Method', 'MiST cybersecurity mid-training (arXiv:2609.18496, EMNLP 2026): a dedicated mid-training stage on a synthetic security corpus, then SFT with replayed general data'],
-  ['Corpus', 'Expert-vetted seed (CVE records, CWE, MITRE ATT&CK, threat reports, defensive guidance) rewritten into synthetic training data, verifier-filtered, decontaminated'],
-  ['Training', 'NeMo AutoModel · 2× DGX B200 (16 GPUs) · 28.5 h · 61–63K tokens/s'],
-  ['Deployment', 'Open weights, on-prem and air-gapped. Starting point for task SFT, expert trajectories and RL with NeMo RL'],
+  ['Model', 'Dreamer: Dream’s security model, trained on NVIDIA Nemotron 3.5 Super (120B hybrid Mamba-Transformer MoE, 12B active per token)'],
+  ['What it does', 'Answers general cybersecurity questions and questions about the customer’s own network: assets, exposure and fixes'],
+  ['Training', '1 · Cyber knowledge: SFT on an expert security corpus (MiST, EMNLP 2026). 2 · Agentic RL (GRPO) through the unchanged production agent, on a synthetic digital twin of a customer network, re-released every two weeks'],
+  ['NVIDIA stack', 'NeMo AutoModel, NeMo RL and NeMo Gym on NVIDIA DGX'],
+  ['First', 'First agentic training on NVIDIA Nemotron Super'],
+  ['Deployment', 'On-prem and air-gapped: customer data never leaves the network'],
 ];
 const MODEL_SCORES = [
-  { name: 'Nemotron-3.5-Super-MiST', security: 74.1, general: 92.4, ours: true },
+  { name: 'Dreamer (Dream)', security: 74.1, general: 92.4, ours: true },
   { name: 'Nemotron 3.5 Super (original)', security: 65.4, general: 91.8 },
   { name: 'Qwen3.5-122B-A10B', security: 64.5, general: 93.9 },
   { name: 'Nemotron-3-Super-120B', security: 64.4, general: 86.7 },
@@ -455,7 +447,7 @@ function ModelCard() {
     <div className="cyber-run cyber-card">
       <div className="cyber-card-head">
         <span className="expanded-icon"><SparklesIcon /></span>
-        <div><small>MODEL INFO · DREAM</small><strong>Nemotron-3.5-Super-MiST</strong></div>
+        <div><small>MODEL INFO · DREAM</small><strong>Dreamer</strong></div>
       </div>
       <div className="cyber-card-grid">
         <dl className="cyber-specs">
@@ -475,7 +467,13 @@ function ModelCard() {
               <em>{m.general.toFixed(1)}</em>
             </div>
           ))}
-          <p>Mean of 3 runs. Improves on all 15 security benchmarks, leads every 120B-class open model tested on 12. General: GSM8K, MMLU, ARC-Challenge, IFEval.</p>
+          <p>Mean of 3 runs. Improves on all 15 security benchmarks, leads every 120B-class open model tested on 12. Scores measure stage 1 (cyber knowledge).</p>
+          <small className="cyber-scores-stage2">STAGE 2 · AGENTIC RL · ONE TRAINING RUN</small>
+          <dl className="cyber-rl">
+            <div><dt>0.70 → <b>0.75</b></dt><dd>validation score on held-out questions</dd></div>
+            <div><dt><b>−22%</b></dt><dd>shorter answers</dd></div>
+            <div><dt>4.8% → <b>1.0%</b></dt><dd>answers cut off</dd></div>
+          </dl>
         </div>
       </div>
     </div>
@@ -488,11 +486,11 @@ function StatsStrip({ bench }: { bench?: Category['bench'] }) {
     ...(bench ? [{ label: bench.plain, note: `this kind of case · ${bench.name}`, ...bench }] : []),
     // The post states +8.8, computed before rounding; 74.1 − 65.4 would show 8.7.
     { label: 'Overall security knowledge', note: 'average across 15 security tests', before: 65.4, after: 74.1, delta: 8.8 },
-    { label: 'General skills', note: 'math, reasoning, instructions: kept intact', before: 91.8, after: 92.4 },
+    { label: 'General skills', note: 'general knowledge and following instructions: kept intact', before: 91.8, after: 92.4 },
   ];
   return (
     <div className="cyber-stats" style={{ '--cols': stats.length } as React.CSSProperties}>
-      <small className="cyber-stats-label">SCORES OUT OF 100 · ORIGINAL NEMOTRON → AFTER MIST</small>
+      <small className="cyber-stats-label">SCORES OUT OF 100 · ORIGINAL NEMOTRON → DREAMER</small>
       {stats.map((st, i) => (
         <motion.div key={st.label} className="cyber-stat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 + i * .08 }}>
           <small>{st.label}</small>
@@ -519,16 +517,11 @@ const TABS = [
 const dreamBody = Inter({ subsets: ['latin'], variable: '--font-dream-body' });
 const dreamDisplay = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-dream-display' });
 
-// Plain-language story by default; the detailed runtime diagram stays one click away.
 function HowWeTrain() {
-  const [technical, setTechnical] = useState(false);
   return (
     <>
-      <div className="ts-switch">
-        <button className={technical ? '' : 'active'} onClick={() => setTechnical(false)}>Simple view</button>
-        <button className={technical ? 'active' : ''} onClick={() => setTechnical(true)}>Technical view</button>
-      </div>
-      {technical ? <RuntimeDiagram /> : <TrainingStory />}
+      <p className="hw-first"><b>First agentic RL training on NVIDIA Nemotron Super</b> · built on NVIDIA NeMo RL and NeMo Gym</p>
+      <RuntimeDiagram />
     </>
   );
 }

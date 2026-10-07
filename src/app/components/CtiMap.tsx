@@ -111,7 +111,7 @@ export default function CtiMap() {
           <AnimatePresence mode="wait">
             <motion.div key={phase} initial={reduce ? false : { opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
               <b className={`dream-phase ${after ? 'on' : ''}`}>{after ? 'AFTER TRAINING' : 'BEFORE TRAINING'}</b>
-              <small>{after ? 'Nemotron-3.5-Super-MiST · Trained by Dream' : 'Nemotron 3.5 Super'}</small>
+              <small>{after ? 'Dreamer · Trained by Dream' : 'Nemotron 3.5 Super'}</small>
             </motion.div>
           </AnimatePresence>
           <dl>
