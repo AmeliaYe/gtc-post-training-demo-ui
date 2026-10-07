@@ -471,9 +471,7 @@ export default function Home() {
                     <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">
-                    {model.kind === 'cyber'
-                      ? <a className="ghost-button" href="https://huggingface.co/depthfirstlabs/Nemotron-3.5-Lightning-RL-NVD-Final-Step-200" target="_blank" rel="noopener noreferrer"><DocumentMagnifyingGlassIcon /> Model card</a>
-                      : model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
+                    {model.kind !== 'cyber' && model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
                     {model.kind === 'placeholder' && <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>}
                   </div>
                 </div>

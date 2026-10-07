@@ -34,15 +34,10 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
         </div>
         <footer className={styles.benchmarkFooter}>
           <p className={styles.gain}><strong>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)}</strong> percentage points</p>
-          <span>Broader benchmark · separate step-180 run</span>
         </footer>
       </section>
 
       <section className={styles.example} aria-label={`${scenario.repo} recorded example results`}>
-        <div className={styles.exampleLabel}>
-          <h4>SSRF detection</h4>
-          <p className={styles.trainingNote}>Both checkpoints received reinforcement learning (RL).</p>
-        </div>
         <div className={styles.comparison}>
           {[scenario.before, scenario.after].map((run, index) => (
               <div key={index} className={`${styles.checkpoint} ${index === 1 ? styles.later : ''}`}>
