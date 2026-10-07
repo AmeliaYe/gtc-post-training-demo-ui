@@ -13,8 +13,8 @@ import { CyberAttackDemo } from './CyberAttackDemo';
 import { trackInteraction } from '@/lib/analytics';
 import styles from './CyberDefenseDemo.module.css';
 
-const STEPS = ['Locate relevant files', 'Identify risks', 'Trace the flaw: input flow', 'Trace the flaw: input', 'Trace the flaw: follow the input', 'Trace the flaw: risky operation', 'Validation', 'Report'] as const;
-const PHASES = [{ label: 'Locate relevant files', step: 0 }, { label: 'Identify risks', step: 1 }, { label: 'Trace the flaw', step: 2 }, { label: 'Validate', step: 6 }, { label: 'Report', step: 7 }];
+const STEPS = ['Repository map', 'Threat model', 'Data-flow trace', 'Input source', 'Propagation', 'Sink'] as const;
+const PHASES = [{ label: 'Repository map', step: 0 }, { label: 'Threat model', step: 1 }, { label: 'Data-flow trace', step: 2 }];
 const STEP_INTERVAL = 3500;
 
 function FindingTiles({ run }: { run: CyberRun }) {
@@ -33,7 +33,7 @@ function FindingTiles({ run }: { run: CyberRun }) {
 
 function ReportCard({ run, trained }: { run: CyberRun; trained: boolean }) {
   return (
-    <section className={`${styles.reportCard} ${trained ? styles.trainedCard : ''}`} aria-label={trained ? 'Post-trained report' : 'Early report'}>
+    <section className={`${styles.reportCard} ${trained ? styles.trainedCard : ''}`} aria-label={trained ? 'Final checkpoint reports' : 'Earlier checkpoint reports'}>
       <span className={styles.eyebrow}>{trained ? 'FINAL CHECKPOINT' : 'EARLIER CHECKPOINT'}</span>
       <h4 className={run.matchedCount ? styles.found : styles.missed}>{run.matchedCount ? <ShieldCheckIcon /> : <XMarkIcon />}{run.matchedCount ? 'Known flaw found' : 'Known flaw missed'}</h4>
       <FindingTiles run={run} />
@@ -42,7 +42,7 @@ function ReportCard({ run, trained }: { run: CyberRun; trained: boolean }) {
   );
 }
 
-function ReportComparison({ scenario, explain = false }: { scenario: CyberScenario; explain?: boolean }) {
+function ReportComparison({ scenario }: { scenario: CyberScenario }) {
   return (
     <section className={styles.comparison} aria-label="Recorded report comparison">
       {[scenario.before, scenario.after].map((run, index) => {
@@ -57,7 +57,8 @@ function ReportComparison({ scenario, explain = false }: { scenario: CyberScenar
             {run.matchedCount ? <CheckIcon /> : <XMarkIcon />}
             <span>{run.matchedCount ? scenario.focus === 'focus' ? `${referenceReports} ${referenceReports === 1 ? 'report' : 'reports'} · same flaw` : 'Known flaw found' : 'Known flaw missed'}</span>
           </div>
-          {explain && <p className={styles.checkpointExplanation}>{index === 0 ? CYBER_ATTACKS[scenario.id].training.before : CYBER_ATTACKS[scenario.id].training.after}</p>}
+          <p className={styles.checkpointExplanation}>{index === 0 ? CYBER_ATTACKS[scenario.id].training.before : CYBER_ATTACKS[scenario.id].training.after}</p>
+          <p className={styles.verifierResult}>Verifier: {run.matchedCount} / {run.referenceTotal} reference vulnerabilities matched</p>
         </div>;
       })}
       <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
@@ -70,9 +71,9 @@ function Storyboard({ scenario }: { scenario: CyberScenario }) {
   const [playing, setPlaying] = useState(false);
   const visual = CYBER_VISUALS[scenario.id];
   const lastStep = STEPS.length - 1;
-  const activePhase = step < 2 ? step : step < 6 ? 2 : step - 3;
+  const activePhase = Math.min(step, 2);
   const snippet = visual.code[Math.max(0, Math.min(step - 3, visual.code.length - 1))];
-  const caption = step === 0 ? visual.captions.map : step === 1 ? visual.captions.threat : step === 2 ? visual.captions.discovery : step >= 3 && step <= 5 ? snippet.explanation : step === 6 ? visual.captions.validation : scenario.summary;
+  const caption = step === 0 ? visual.captions.map : step === 1 ? visual.captions.threat : step === 2 ? visual.captions.discovery : snippet.explanation;
 
   useEffect(() => {
     if (!playing) return;
@@ -114,28 +115,27 @@ function Storyboard({ scenario }: { scenario: CyberScenario }) {
 
   return (
     <>
-      <ReportComparison scenario={scenario} />
-      <section className={styles.story} aria-label="Security discovery walkthrough">
-        <nav className={styles.phases} aria-label="Review phases">
+      <section className={styles.story} aria-label="Source analysis walkthrough">
+        <nav className={styles.phases} aria-label="Source analysis phases">
           {PHASES.map((phase, index) => <button key={phase.label} className={index < activePhase ? styles.phaseDone : ''} aria-current={index === activePhase ? 'step' : undefined} onClick={() => navigate(phase.step)}><span /><strong>{phase.label}</strong></button>)}
         </nav>
         <div className={styles.scene}>
-          <div className={styles.sceneHeading}><span className={styles.sceneIcon}>{step < 2 ? <FolderIcon /> : step < 6 ? <CodeBracketIcon /> : <ShieldCheckIcon />}</span><div><span className={styles.eyebrow}>{step >= 3 && step <= 5 ? snippet.title : STEPS[step]}</span><p>{caption}</p></div></div>
+          <div className={styles.sceneHeading}><span className={styles.sceneIcon}>{step < 2 ? <FolderIcon /> : <CodeBracketIcon />}</span><div><span className={styles.eyebrow}>{step >= 3 && step <= 5 ? snippet.title : STEPS[step]}</span><p>{caption}</p></div></div>
           {step === 0 && <div className={styles.fileTree} aria-label="Relevant repository files">
             <div className={styles.treeRoot}><FolderIcon />{scenario.repo.split('/').at(-1)}<span>reviewed code</span></div>
             {visual.files.map((file) => <div key={file.path} className={`${styles.treeRow} ${file.focus ? styles.focusFile : ''}`} style={{ paddingLeft: `${18 + file.depth * 19}px` }}>
               {file.path.endsWith('/') ? <FolderIcon /> : <DocumentTextIcon />}<code title={file.path}>{file.path.endsWith('/') ? `${file.depth > 0 ? '…/' : ''}${file.path.split('/').filter(Boolean).at(-1)}/` : file.path.split('/').at(-1)}</code>{file.focus && <span>known flaw</span>}
             </div>)}
-            <p className={styles.sceneNote}>Both checkpoints reviewed the same version of the code.</p>
+            <p className={styles.sceneNote}>Highlighted files contain the vulnerable code path.</p>
           </div>}
           {(step === 1 || step === 2) && <>
             <div className={`${styles.flow} ${step === 2 ? styles.activeFlow : ''}`} aria-label="How the input reaches the unsafe operation">
               {visual.flow.map((node, index) => <div className={styles.flowSegment} key={node.label}>
                 {index > 0 && <span className={styles.connector}><ArrowRightIcon /></span>}
-                <div className={styles.flowNode}><span className={styles.nodeIndex}>{['INPUT', 'FOLLOW THE INPUT', 'RISKY OPERATION'][index]}</span><code>{node.label}</code><p>{node.detail}</p></div>
+                <div className={styles.flowNode}><span className={styles.nodeIndex}>{['SOURCE', 'PROPAGATION', 'SINK'][index]}</span><code>{node.label}</code><p>{node.detail}</p></div>
               </div>)}
             </div>
-            <p className={styles.sceneNote}>How the input reaches the unsafe operation.</p>
+            <p className={styles.sceneNote}>Trace the input from its source to the sink: the operation where it becomes dangerous.</p>
           </>}
           {step >= 3 && step <= 5 && <>
             <nav className={styles.sourceFlow} aria-label="Follow the data flow">{visual.flow.map((node, index) => <button key={node.label} className={snippet.node > index ? styles.sourceVisited : ''} aria-current={snippet.node === index ? 'step' : undefined} onClick={() => navigate(index + 3)}><span>{snippet.node > index ? <CheckIcon /> : index + 1}</span>{node.label}{index < 2 && <ArrowRightIcon />}</button>)}</nav>
@@ -143,48 +143,26 @@ function Storyboard({ scenario }: { scenario: CyberScenario }) {
             <div className={styles.sourceHeader}><code>{snippet.path}</code><span>Reviewed code</span></div>
             <pre tabIndex={0} aria-label="Source excerpt at the evaluated revision">{snippet.lines.map((line) => <span key={line.number} className={line.highlight ? styles.highlightLine : ''}><span className={styles.lineNumber}>{line.number}</span><code>{line.text || ' '}</code></span>)}</pre>
           </div></>}
-          {step >= 2 && step <= 5 && <div className={styles.pathOutcomes} aria-label="Known flaw in the recorded reports">
-            {[scenario.before, scenario.after].map((run, index) => {
-              const referenceReports = run.findings.reduce((count, finding) => count + (finding.referenceMatch === 'matched' ? finding.count : 0), 0);
-              return <div key={index} className={run.matchedCount ? styles.pathMatched : styles.pathMissed}>
-                <span className={styles.pathLine} aria-hidden="true" />
-                <span className={styles.pathMarkers} aria-hidden="true">{referenceReports ? Array.from({ length: referenceReports }, (_, report) => <ShieldCheckIcon key={report} />) : <XMarkIcon />}</span>
-                <span><small>{index === 0 ? 'Earlier checkpoint' : 'Final checkpoint'}</small>{scenario.focus === 'focus' ? `${referenceReports} ${referenceReports === 1 ? 'report' : 'reports'} · same flaw` : run.matchedCount ? 'Known flaw reported' : 'Known flaw not reported'}</span>
-              </div>;
-            })}
-          </div>}
-          {step === 6 && <>
-            <div className={styles.validation}>
-              {[scenario.before, scenario.after].map((run, index) => <div key={index} className={`${styles.validationResult} ${run.matchedCount ? styles.validationPassed : ''}`}>
-                <span className={styles.eyebrow}>{index === 0 ? 'EARLIER CHECKPOINT' : 'FINAL CHECKPOINT'}</span>
-                {run.matchedCount ? <ShieldCheckIcon /> : <XMarkIcon />}
-                <strong>{run.matchedCount}<span> / {run.referenceTotal}</span></strong>
-                <h4>{run.matchedCount ? 'Known flaw found' : 'Known flaw missed'}</h4>
-                <code>{scenario.cve}</code>
-              </div>)}
-            </div>
-            <p className={styles.sceneNote}>Checked against the known flaw. Other reports were not fully checked.</p>
-          </>}
-          {step === 7 && <div className={styles.reports}><ReportCard run={scenario.before} trained={false} /><ReportCard run={scenario.after} trained /></div>}
+
         </div>
         <footer className={styles.playback}>
-          <span className={styles.srOnly} role="status">{playing ? 'Playing recorded review' : `Step ${step + 1} of ${STEPS.length}: ${STEPS[step]}.`}</span>
+          <span className={styles.srOnly} role="status">{playing ? 'Playing source analysis' : `Step ${step + 1} of ${STEPS.length}: ${STEPS[step]}.`}</span>
           <button className={styles.iconButton} onClick={() => navigate(step - 1)} disabled={step === 0} aria-label="Previous step"><ChevronLeftIcon /></button>
           <button className={styles.playButton} onClick={play}>{playing ? <PauseIcon /> : step === lastStep ? <ArrowPathIcon /> : <PlayIcon />}{playing ? 'Pause' : step === lastStep ? 'Replay' : 'Play'}</button>
           <button className={styles.iconButton} onClick={() => navigate(step + 1)} disabled={step === lastStep} aria-label="Next step"><ChevronRightIcon /></button>
-          <input type="range" aria-label="Review timeline" aria-valuetext={`${step + 1} of ${STEPS.length}: ${STEPS[step]}`} min={0} max={lastStep} value={step} onChange={(event) => navigate(Number(event.target.value))} />
+          <input type="range" aria-label="Source analysis timeline" aria-valuetext={`${step + 1} of ${STEPS.length}: ${STEPS[step]}`} min={0} max={lastStep} value={step} onChange={(event) => navigate(Number(event.target.value))} />
           <span className={styles.stepCount}>{step + 1} / {STEPS.length}</span>
         </footer>
       </section>
-      <p className={styles.replayNote}>Selected training examples · source walkthrough with recorded outcomes</p>
+      <p className={styles.replayNote}>Source walkthrough at the evaluated repository revision</p>
     </>
   );
 }
 
 const VIEWS = [
   { id: 'attack', label: 'Attack pattern' },
-  { id: 'review', label: 'Code review' },
-  { id: 'training', label: 'Post-training' },
+  { id: 'review', label: 'Source analysis' },
+  { id: 'training', label: 'Training results' },
 ] as const;
 
 export function CyberDefenseDemo() {
@@ -212,23 +190,19 @@ export function CyberDefenseDemo() {
       {VIEWS.map((item) => <section key={item.id} id={`${tabId}-${item.id}-panel`} role="tabpanel" aria-labelledby={`${tabId}-${item.id}-tab`} hidden={view !== item.id} tabIndex={0}>
         {view === item.id && item.id === 'attack' && <>
           <CyberAttackDemo key={scenario.id} attack={attack} scenarioId={scenario.id} />
-          <button className={styles.continueButton} onClick={() => { setView('training'); document.getElementById(`${tabId}-training-tab`)?.focus(); }}>See post-training results<ArrowRightIcon /></button>
+          <button className={styles.continueButton} onClick={() => { setView('training'); document.getElementById(`${tabId}-training-tab`)?.focus(); }}>Compare checkpoint results<ArrowRightIcon /></button>
         </>}
         {view === item.id && item.id === 'review' && <>
-          <div className={styles.storyHeader}><h4>{scenario.title}</h4><div className={styles.repo}>Known flaw · {scenario.cve}</div></div>
+          <div className={styles.storyHeader}><div><span className={styles.eyebrow}>WHERE THE VULNERABILITY APPEARS IN CODE</span><h4>{scenario.reference.title}</h4></div><div className={styles.repo}>{scenario.cve}</div></div>
           <Storyboard key={scenario.id} scenario={scenario} />
         </>}
         {view === item.id && item.id === 'training' && <>
-          <div className={styles.trainingHeading}><span className={styles.eyebrow}>WHAT CHANGED IN THIS EXAMPLE</span><h4>{scenario.title}</h4><p>{attack.training.takeaway}</p></div>
-          <div className={styles.trainingFlow} aria-label="The flaw examined by both checkpoints">
-            {attack.training.focusNodes.map((id, index) => {
-              const node = attack.nodes.find((candidate) => candidate.id === id)!;
-              return <div key={`${id}-${index}`} className={styles.trainingFocus}>{index > 0 && <ArrowRightIcon aria-hidden="true" />}<span><strong>{node.label}</strong><small>{node.detail}</small></span></div>;
-            })}
-          </div>
-          <ReportComparison scenario={scenario} explain />
-          <p className={styles.trainingNote}>Same code, two trained checkpoints. Green tiles report this flaw; dashed tiles mark a miss. Other reports were not fully assessed. Training improves the review; it does not fix the software.</p>
-          <button className={styles.continueButton} onClick={() => { setView('review'); document.getElementById(`${tabId}-review-tab`)?.focus(); }}>Inspect the code review<ArrowRightIcon /></button>
+          <div className={styles.trainingHeading}><span className={styles.eyebrow}>POST-TRAINING · CHECKPOINT COMPARISON</span><h4>{scenario.title}</h4><p>{attack.training.takeaway}</p></div>
+          <p className={styles.trainingNote}>Same repository revision, early checkpoint (step 5) vs. final checkpoint (step 200). Both have already received reinforcement learning (RL) training.</p>
+          <ReportComparison scenario={scenario} />
+          <p className={styles.trainingNote}>Green tiles match the reference vulnerability; dashed tiles mark a miss. Other reports were not fully assessed.</p>
+          <details className={styles.reportDetails}><summary>Inspect submitted reports</summary><div className={styles.reports}><ReportCard run={scenario.before} trained={false} /><ReportCard run={scenario.after} trained /></div></details>
+          <button className={styles.continueButton} onClick={() => { setView('review'); document.getElementById(`${tabId}-review-tab`)?.focus(); }}>Inspect the source analysis<ArrowRightIcon /></button>
           <section className={styles.benchmark} aria-label="dfbench evaluation">
             <div className={styles.benchmarkHeader}>
               <div><a href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer">dfbench<ArrowTopRightOnSquareIcon /></a><p>Broader evaluation · separate step-180 run</p></div>

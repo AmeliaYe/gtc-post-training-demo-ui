@@ -15,13 +15,12 @@ type CyberVisual = {
     map: string;
     threat: string;
     discovery: string;
-    validation: string;
   };
 };
 
 // Source excerpts preserve the exact lines at the evaluated repository commits.
 // Connected panels analyze public source; they do not claim additional observed tool calls.
-// Captions summarize recorded reports and verifier outcomes.
+// Captions describe source structure, trust boundaries, and data flow.
 export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
   openfire: {
     files: [
@@ -44,14 +43,14 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       },
     ],
     flow: [
-      { label: 'Chosen address', detail: 'The request supplies the host' },
-      { label: 'Build the URL', detail: 'getImage adds /favicon.ico' },
-      { label: 'Fetch the icon', detail: 'The server sends the HTTP request' },
+      { label: 'Host parameter', detail: 'request.getParameter reads the input' },
+      { label: 'URL construction', detail: 'getImage concatenates host into a URL' },
+      { label: 'HTTP client', detail: 'client.execute sends the request' },
     ],
     code: [
       {
-        title: '1. A user supplies the host',
-        explanation: 'The host field comes from the user. The gmail.com exception changes one address but leaves other destinations unchecked.',
+        title: '1. Input: host parameter',
+        explanation: 'doGet reads the host parameter. The gmail.com rewrite does not restrict other destinations.',
         path: 'xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java',
         url: 'https://github.com/igniterealtime/Openfire/blob/83f653f8d0601ff3667e1c5cf3ac18834f0d4a24/xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java#L118-L124',
         node: 0,
@@ -66,8 +65,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '2. That host becomes a URL',
-        explanation: 'If the icon is not cached, getImage builds its URL directly from the supplied host.',
+        title: '2. Propagation: URL construction',
+        explanation: 'On this uncached path, getImage concatenates the supplied host between http:// and /favicon.ico.',
         path: 'xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java',
         url: 'https://github.com/igniterealtime/Openfire/blob/83f653f8d0601ff3667e1c5cf3ac18834f0d4a24/xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java#L160-L166',
         node: 1,
@@ -82,8 +81,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '3. The server fetches the chosen address',
-        explanation: 'client.execute makes the server fetch that address and return the response. An attacker can use this to reach private services.',
+        title: '3. Sink: HTTP client',
+        explanation: 'client.execute sends the request. HTTP 200 response bodies are returned as bytes without image validation.',
         path: 'xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java',
         url: 'https://github.com/igniterealtime/Openfire/blob/83f653f8d0601ff3667e1c5cf3ac18834f0d4a24/xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java#L191-L198',
         node: 2,
@@ -100,10 +99,9 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       },
     ],
     captions: {
-      map: 'Both checkpoints read the code that fetches website icons and loads XML settings.',
-      threat: 'A user provides an address, and the server fetches it without enough checks.',
-      discovery: 'The final report caught the unsafe web request. The earlier report focused on XML parsing.',
-      validation: 'The checker matched the final SSRF report to the known flaw, CVE-2019-18394.',
+      map: 'FaviconServlet.java handles icon retrieval; XMLProperties.java loads XML configuration.',
+      threat: 'An untrusted host parameter controls the destination of a server-side HTTP request.',
+      discovery: 'The host parameter reaches URL construction and client.execute without destination restrictions on this path.',
     },
   },
   'set-value': {
@@ -114,14 +112,14 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       { path: 'README.md', depth: 0, focus: false },
     ],
     flow: [
-      { label: 'Choose a property', detail: 'The caller supplies a path and value' },
-      { label: 'Follow the keys', detail: 'Each key selects the next object' },
-      { label: 'Write the value', detail: 'The write can affect other objects' },
+      { label: 'Property path', detail: 'The caller supplies keys and a value' },
+      { label: 'Property traversal', detail: 'target[prop] follows each key' },
+      { label: 'Property assignment', detail: 'result writes to the reached object' },
     ],
     code: [
       {
-        title: '1. A caller supplies a property path',
-        explanation: 'The path lists the property names to follow. A string path is split into keys; an array already contains them.',
+        title: '1. Input: property path',
+        explanation: 'String paths are split into keys; array paths supply keys directly. The caller also controls the assigned value.',
         path: 'index.js',
         url: 'https://github.com/jonschlinkert/set-value/blob/7bd5011d82e583305a191a9a062abfe177ec29ad/index.js#L28-L35',
         node: 0,
@@ -137,8 +135,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '2. The keys can lead to a shared prototype',
-        explanation: 'Each key selects the next object. Inherited properties can lead into a shared prototype.',
+        title: '2. Propagation: property traversal',
+        explanation: 'target[prop] follows inherited properties as well as own properties, allowing traversal into a shared prototype.',
         path: 'index.js',
         url: 'https://github.com/jonschlinkert/set-value/blob/7bd5011d82e583305a191a9a062abfe177ec29ad/index.js#L44-L50',
         node: 1,
@@ -153,8 +151,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '3. The write can affect other objects',
-        explanation: 'The helper writes to the object it reached. It does not block keys that access shared prototypes.',
+        title: '3. Sink: property assignment',
+        explanation: 'result assigns or merges the value into the reached object. Prototype keys are not filtered on this path.',
         path: 'index.js',
         url: 'https://github.com/jonschlinkert/set-value/blob/7bd5011d82e583305a191a9a062abfe177ec29ad/index.js#L55-L61',
         node: 2,
@@ -170,10 +168,9 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       },
     ],
     captions: {
-      map: 'Both checkpoints read the function that updates object properties and its tests.',
-      threat: 'A crafted property path can change a shared prototype: an object that other objects inherit properties from.',
-      discovery: 'Both checkpoints found prototype pollution. The earlier report listed the same flaw three times; the final report listed it once.',
-      validation: 'Both checkpoints found CVE-2019-10747. The final checkpoint reported it once.',
+      map: 'index.js implements nested property assignment; test.js covers setter behavior.',
+      threat: 'Caller-controlled keys can traverse inherited properties and write to a shared prototype.',
+      discovery: 'Path splitting feeds property traversal, then assignment. No prototype-key filter separates input from the write.',
     },
   },
   cosmos: {
@@ -189,14 +186,14 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       },
     ],
     flow: [
-      { label: 'Command text', detail: 'convert_to_value receives the text' },
-      { label: 'Check the brackets', detail: 'is_array? accepts square brackets' },
-      { label: 'Run as Ruby', detail: 'eval runs the text as code' },
+      { label: 'Parameter text', detail: 'The parser calls convert_to_value' },
+      { label: 'Format validation', detail: 'is_array? checks surrounding brackets' },
+      { label: 'Ruby eval', detail: 'eval(self) evaluates the original text' },
     ],
     code: [
       {
-        title: '1. Command text enters the converter',
-        explanation: 'The command parser passes this text to convert_to_value, which tries to turn it into a value.',
+        title: '1. Input: command parameter text',
+        explanation: 'The command parser passes parameter text to convert_to_value after its quoted-string and hex-string handling.',
         path: 'openc3/lib/openc3/script/extract.rb',
         url: 'https://github.com/OpenC3/cosmos/blob/24ca2102180a28d9bb83a7251497865b50e0cc55/openc3/lib/openc3/script/extract.rb#L59-L66',
         node: 0,
@@ -212,8 +209,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '2. Brackets are treated as an array',
-        explanation: 'is_array? checks for square brackets around the text. It does not check whether the contents are safe data.',
+        title: '2. Propagation: bracket check',
+        explanation: 'is_array? matches surrounding brackets. The regex does not restrict their contents to literal data.',
         path: 'openc3/lib/openc3/core_ext/string.rb',
         url: 'https://github.com/OpenC3/cosmos/blob/24ca2102180a28d9bb83a7251497865b50e0cc55/openc3/lib/openc3/core_ext/string.rb#L41-L210',
         node: 1,
@@ -228,8 +225,8 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
         ],
       },
       {
-        title: '3. eval runs the text as Ruby code',
-        explanation: 'eval(self) runs the original text as Ruby code. Instructions inside the brackets can execute instead of being read as data.',
+        title: '3. Sink: Ruby eval',
+        explanation: 'The array branch passes the original string to eval(self), allowing embedded Ruby expressions to execute.',
         path: 'openc3/lib/openc3/core_ext/string.rb',
         url: 'https://github.com/OpenC3/cosmos/blob/24ca2102180a28d9bb83a7251497865b50e0cc55/openc3/lib/openc3/core_ext/string.rb#L239-L246',
         node: 2,
@@ -246,10 +243,9 @@ export const CYBER_VISUALS: Record<CyberScenario['id'], CyberVisual> = {
       },
     ],
     captions: {
-      map: 'Both checkpoints read the code that converts text and other values.',
-      threat: 'Text that looks like a list is passed to eval, which can run it as Ruby code.',
-      discovery: 'The final report found that text could run as Ruby code. The earlier report missed this flaw.',
-      validation: 'The checker matched CVE-2025-68271. The report did not establish how a remote user could reach this code or what permissions they need.',
+      map: 'string.rb defines format checks and convert_to_value. Command parsing supplies input through extract.rb.',
+      threat: 'A bracket-only format check allows Ruby expressions to reach an eval sink.',
+      discovery: 'Parameter text passes through convert_to_value and is_array? before reaching eval(self) unchanged.',
     },
   },
 };

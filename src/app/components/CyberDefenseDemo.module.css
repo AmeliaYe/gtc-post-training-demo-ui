@@ -9,7 +9,7 @@
 .scenarios button { padding: 8px 11px; border: 1px solid #35412b; border-radius: 5px; color: #b0b9a9; background: #10160e; font-size: 11px; cursor: pointer; }
 .scenarios button[aria-pressed=true] { color: var(--acid); border-color: #708d45; background: #b7ff5410; }
 .storyHeader { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
-.storyHeader h4 { margin: 0; color: #def0cc; font-size: 15px; font-weight: 500; }
+.storyHeader h4 { margin: 5px 0 0; color: #def0cc; font-size: 15px; font-weight: 500; }
 .repo { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 7px; color: #c6d0bc; font: 10px/1.5 monospace; text-decoration: none; }
 .repo > svg { width: 11px; height: 11px; }
 .repo small { width: 100%; text-align: right; color: #96a18b; font: 8px monospace; }
@@ -32,7 +32,7 @@
 .matchCaption svg, .missCaption svg { width: 12px; height: 12px; }
 .comparisonArrow { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 25px; height: 25px; display: grid; place-items: center; color: var(--acid); border: 1px solid #536a3a; border-radius: 50%; background: #151e0f; }
 .story { border: 1px solid #39452f; background: #0b100b; border-radius: 8px; overflow: hidden; }
-.phases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 17px 18px 0; }
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 17px 18px 0; }
 .phases button { display: flex; flex-direction: column; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: #85927a; }
 .phases button > span { display: block; height: 3px; margin-bottom: 8px; border-radius: 5px; background: #2a3324; }
 .phases strong { font: 10px/1.5 monospace; }
@@ -84,24 +84,6 @@
 .lineNumber { display: inline-block; width: 47px; padding-right: 12px; text-align: right; flex-shrink: 0; color: #798c69; border-right: 1px solid #39472e; margin-right: 12px; user-select: none; }
 .source .highlightLine { color: #e7ecde; background: #b7ff5412; border-left: 2px solid var(--acid); }
 .highlightLine .lineNumber { width: 45px; color: #b6d197; }
-.pathOutcomes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 17px; }
-.pathOutcomes > div { display: flex; align-items: center; gap: 9px; font-size: 10px; line-height: 1.5; }
-.pathOutcomes small { display: block; color: #a4b199; font: 8px/1.8 monospace; }
-.pathLine { flex: 1; min-width: 15px; border-top: 2px solid currentColor; }
-.pathMarkers { display: flex; flex-wrap: wrap; gap: 3px; }
-.pathMatched { color: var(--acid); }
-.pathMissed { color: #c8ac7e; }
-.pathMissed .pathLine { border-top-style: dashed; }
-.validation { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.validationResult { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 184px; gap: 9px; padding: 17px; border: 1px solid #6e5c3a; background: #b7893308; border-radius: 6px; text-align: center; }
-.validationResult > svg { width: 28px; height: 28px; color: #e3be7b; }
-.validationResult h4 { margin: 0; font-size: 14px; font-weight: 500; color: #e3be7b; }
-.validationResult code { font: 10px monospace; color: #c2ccb8; }
-.validationResult > span:last-child { font-size: 10px; color: #9fb08f; }
-.validationResult > strong { color: #e3be7b; font: 38px/1.2 monospace; }
-.validationResult > strong > span { font-size: 19px; color: #91a181; }
-.validationPassed { background: #b7ff5408; border-color: #6c8b3e; }
-.validationPassed > svg, .validationPassed h4, .validationPassed > strong { color: var(--acid); }
 .reports { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .reportCard { padding: 15px; border: 1px solid #394630; border-radius: 6px; background: #ffffff02; }
 .trainedCard { border-color: #657e43; background: #b7ff5405; }
@@ -162,9 +144,6 @@
   .scene { padding: 17px 12px; min-height: 350px; }
   .sceneHeading { min-height: 82px; }
   .sceneHeading p { font-size: 11px; }
-  .pathOutcomes { gap: 12px; }
-  .pathOutcomes > div { font-size: 9px; gap: 5px; }
-  .pathLine { display: none; }
   .sourceFlow button { font-size: 8px; padding: 7px 5px; gap: 4px; }
   .treeRow { flex-wrap: wrap; gap: 5px; padding-top: 4px; padding-bottom: 4px; }
   .treeRow > span { margin-left: 22px; font-size: 7px; }
@@ -175,8 +154,7 @@
   .nodeIndex { margin-bottom: 5px; }
   .connector { width: 2px; height: 19px; min-width: 0; }
   .connector svg { transform: rotate(90deg); margin: auto 0 -3px -5px; }
-  .validation, .reports { grid-template-columns: 1fr; }
-  .validationResult { min-height: 160px; }
+  .reports { grid-template-columns: 1fr; }
   .playback { padding: 10px; gap: 5px; }
   .playback input { margin: 0 3px; }
   .playButton { width: 64px; }
@@ -197,20 +175,13 @@
 .trainingHeading { margin-bottom: 20px; }
 .trainingHeading h4 { margin: 7px 0; color: #e0ead7; font-size: 21px; font-weight: 500; letter-spacing: -.025em; }
 .trainingHeading p { margin: 0; color: #aebba5; font-size: 13px; line-height: 1.6; }
-.trainingFlow { display: flex; gap: 12px; margin: 0 0 22px; }
-.trainingFlow > div { display: flex; align-items: center; flex: 1; gap: 12px; min-width: 0; }
-.trainingFlow > div > span { display: block; flex: 1; padding: 14px; border: 1px solid #3c4a32; border-radius: 6px; background: #10170e; }
-.trainingFlow strong { display: block; color: #c9d6bd; font-size: 13px; font-weight: 500; }
-.trainingFlow small { display: block; margin-top: 6px; color: #99aa8c; font-size: 11px; line-height: 1.5; }
-.trainingFlow .trainingFocus > span { border-color: #6b8746; background: #b7ff5407; }
-.trainingFlow .trainingFocus strong, .trainingFlow svg { color: #bcdf8c; }
+.reportDetails { margin: 15px 0; color: #aebf9e; font-size: 11px; }
+.reportDetails summary { cursor: pointer; }
+.reportDetails .reports { margin-top: 12px; }
+.verifierResult { margin: 10px 0 0; color: #97a88a; font: 9px/1.6 monospace; }
 .checkpointExplanation { margin: 11px 0 0; color: #afbea3; font-size: 12px; line-height: 1.6; }
 .trainingNote { margin: -5px 0 8px; color: #94a587; font-size: 11px; line-height: 1.6; }
 @media (max-width: 600px) {
   .viewTabs { gap: 20px; }
   .viewTabs button { font-size: 11px; }
-  .trainingFlow { flex-direction: column; }
-  .trainingFlow > div { flex-direction: column; gap: 10px; }
-  .trainingFlow > div > span { width: 100%; }
-  .trainingFlow svg { transform: rotate(90deg); }
 }
