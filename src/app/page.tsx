@@ -23,6 +23,7 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
+import DreamCard, { DREAM_DEMO } from './components/dream/DreamDemo';
 
 const KERMT_DEMO_URL = 'http://127.0.0.1:5173';
 const DGX_STATION_URL = 'https://www.nvidia.com/en-us/products/workstations/dgx-station/';
@@ -114,6 +115,9 @@ function NvidiaLogo() {
     </svg>
   );
 }
+
+// Dream's standalone card goes last in the gallery.
+demos.push(DREAM_DEMO);
 
 function MiniChart({ before, after, color, domain = [45, 100], label = 'Evaluation score trend' }: { before: number; after: number; color: string; domain?: [number, number]; label?: string }) {
   const [low, high] = domain;
@@ -460,7 +464,7 @@ export default function Home() {
                   tabIndex={isSelected ? undefined : 0}
                   aria-label={isSelected ? undefined : `Expand ${model.name}`}
                 >
-                  {!isSelected ? <ModelTile model={model} /> : <>
+                  {!isSelected ? <ModelTile model={model} /> : model.id === 'dream' ? <DreamCard onBack={() => resetView('window')} /> : <>
                 <div className="expanded-window-bar">
                   <span className="expanded-traffic"><i /><i /><i /></span>
                   <button className="view-all-button" onClick={() => resetView('window')}>← All use cases</button>
