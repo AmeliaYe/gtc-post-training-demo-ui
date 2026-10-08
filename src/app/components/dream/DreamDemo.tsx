@@ -9,7 +9,7 @@ import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
 import { Inter, Instrument_Serif } from 'next/font/google';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
-import { CheckIcon, ChevronDownIcon, CircleStackIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronDownIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
@@ -18,7 +18,7 @@ import { CheckIcon, ChevronDownIcon, CircleStackIcon, LockClosedIcon, SparklesIc
 // MITRE ID or recorded runs (e.g. Posture) simply omit those fields.
 type Answer = { answer: string; quote: string; runs?: string };
 type Category = {
-  id: string; label: string; prompt: string; key?: string; tags?: string;
+  id: string; label: string; prompt: string; key?: string;
   bench?: { name: string; plain: string; before: number; after: number };
   before: Answer; after: Answer;
   full?: { before: string; after: string };
@@ -67,7 +67,7 @@ const CATEGORIES: Category[] = [
     full: { before: "The vulnerability arises from the MME's failure to validate that a required `PLMN Identity` field is present in the `Initial UE Message` before processing it. The absence of this expected field triggers an assertion failure, which causes the service to crash. This is a classic case of insufficient input validation, where the software assumes the input conforms to the expected protocol structure without explicitly checking for the presence of mandatory elements.\nAnswer: CWE-20", after: "The vulnerability in Open5GS MME versions ≤ 2.6.4 arises from an assertion statement that is triggered by a malformed ASN.1 packet sent over the S1AP interface. Specifically, an attacker can craft an `Initial UE Message` that omits the required `PLMN Identity` field, which causes the assertion to fail and the MME process to crash. This results in a denial of service, as the service becomes unavailable to legitimate users.\nThe key indicator here is the use of an `assert()` statement—commonly used during development to catch internal logic errors—that is reachable through attacker-controlled input. Assertions are intended to fail only under conditions that should never occur in production, but when they are triggered by external input, they can be exploited to crash the application. In this case, the assertion is not properly isolated from user input, and the failure leads to a complete process crash, which is a direct consequence of the assertion being reachable via a remote attacker.\nThis behavior aligns precisely with the definition of a reachable assertion: a defensive check (assertion) that can be triggered by an attacker, leading to unintended application termination. The fact that the crash occurs in response to a malformed network packet—specifically one missing a required field—confirms that the assertion is not protected by proper input validation and is directly exposed to external input. The consequence is a denial of service, which matches the common impact of this weakness.\nFurthermore, the presence of multiple historical CVEs involving assertion failures in network services (e.g., FTP servers, LDAP, web proxies) that result in crashes due to crafted inputs reinforces that this is a well-documented pattern of misuse of assertions in production code. The root cause is not a failure to validate input per se, but rather the improper use of assertions in a context where they can be triggered by untrusted input.\nThus, the most appropriate classification is a reachable assertion, where the assertion is not only present but can be triggered remotely, leading to a denial of service.\nAnswer: CWE-617" },
   },
   {
-    id: 'posture', label: 'Network Connectivity', tags: 'Posture · Discovery · Risk',
+    id: 'posture', label: 'Network Connectivity',
     prompt: 'Which devices can communicate directly with device dbs-310 without going through a router or firewall?',
     before: { answer: 'No direct peers', quote: 'No device can communicate directly with dbs-310 without going through a router or firewall' },
     after: { answer: 'Same-VLAN devices · 10.40.12.0/24', quote: "Devices in the same VLAN segment as dbs-310 (VLAN \"vlan_name2\", subnet 10.40.12.0/24) can communicate with it directly without going through a router or firewall. Here are those devices: \u2026" },
@@ -80,7 +80,7 @@ const CATEGORIES: Category[] = [
 function MitreBadge({ id }: { id: string }) {
   return id.startsWith('CWE-')
     ? <span className="mitre-badge">MITRE CWE</span>
-    : <span className="mitre-badge" title="MITRE ATT&CK®"><Image src="/mitre-attack-logo.png" alt="MITRE ATT&CK" width={104} height={11} /></span>;
+    : <span className="mitre-badge" title="MITRE ATT&CK®"><Image src="/mitre-attack-logo.png" alt="MITRE ATT&CK" width={104} height={11} style={{ width: 'auto' }} /></span>;
 }
 
 // Splits a response into text and Markdown-table blocks (runs of lines starting with '|').
@@ -107,7 +107,7 @@ function FullResponse({ text, open, onToggle }: { text: string; open: boolean; o
   return (
     <div className="cyber-full">
       <button className="cyber-full-toggle" aria-expanded={open} onClick={onToggle}>
-        <ChevronDownIcon style={{ transform: open ? 'rotate(180deg)' : undefined }} />{open ? 'Hide full responses' : 'Full responses'}
+        <ChevronDownIcon style={{ transform: open ? 'rotate(180deg)' : undefined }} />{open ? 'Hide full response' : 'Full response'}
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -124,19 +124,16 @@ function FullResponse({ text, open, onToggle }: { text: string; open: boolean; o
   );
 }
 
-// Each benchmark question was answered 3 times per model; a run is correct when it matches the answer key.
-function Runs({ runs, answerKey }: { runs: string; answerKey: string }) {
-  const correct = runs.split(' · ').filter((id) => id === answerKey).length;
+// Verdict shown above each answer: correct / wrong, plus how many of the 3 benchmark runs got it right.
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+function Verdict({ ok, runs, answerKey }: { ok: boolean; runs?: string; answerKey?: string }) {
+  const correct = runs && answerKey ? runs.split(' · ').filter((id) => id === answerKey).length : undefined;
   return (
-    <footer>
-      <span className="cyber-runs" aria-label={`${correct} of 3 runs correct`}>
-        {[0, 1, 2].map((i) => (
-          <motion.i key={i} className={i < correct ? 'hit' : ''} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: .5 + i * .15, type: 'spring', stiffness: 500, damping: 18 }} />
-        ))}
-        {correct}/3 runs correct
-      </span>
-      <span className="cyber-runs-ids">{runs}</span>
-    </footer>
+    <span className={`cyber-verdict ${ok ? 'ok' : 'bad'}`}>
+      {ok ? 'Correct answer' : 'Partial answer'}
+      {correct !== undefined && <small>{correct}/3 runs</small>}
+    </span>
   );
 }
 
@@ -191,48 +188,40 @@ function BeforeAfter() {
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="dream-scenario">
             <div className="dream-question">
-              <span className="prompt-label">CASE (ORIGINAL PROMPT)</span>
+              <span className="prompt-label">CASE <span className="prompt-label-note">(original prompt)</span></span>
               <p>{active.prompt}</p>
-              <span className="prompt-tag">{active.key ? `answer key · ${active.key}` : active.tags}</span>
             </div>
             <AttackScene scene={SCENES[active.id]} />
           </div>
           <div className="comparison-grid">
             <section className="output-panel">
               <header>
-                <span className="model-mark"><CircleStackIcon /></span>
+                <span className="model-mark bad"><XMarkIcon /></span>
                 <span><small><b className="dream-phase">BEFORE TRAINING</b> · ORIGINAL</small><strong>Nemotron 3.5 Super</strong></span>
               </header>
               <div className="response-copy">
-                <div className="answer-head"><span className="assistant-label">ANSWER</span>{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="answer-head"><Verdict ok={false} runs={active.before.runs} answerKey={active.key} />{active.key && <MitreBadge id={active.key} />}</div>
                 <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong></div>
                 <p>“{active.before.quote}”</p>
+                {active.why && <div className="cyber-why-note bad"><b>Why it’s inaccurate</b>{cap(active.why.base.replace(/^Base /, ''))}</div>}
                 {active.full && active.full.before !== active.before.quote && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
               </div>
-              {active.before.runs && active.key && <Runs runs={active.before.runs} answerKey={active.key} />}
             </section>
-            <div className="comparison-divider"><span>VS</span></div>
+            <div className="comparison-divider"><span>vs.</span></div>
             <section className="output-panel tuned cyber-scan">
               <header>
-                <span className="model-mark"><SparklesIcon /></span>
-                <span><small><b className="dream-phase">AFTER TRAINING</b> · ON NVIDIA NEMOTRON</small><strong>Dreamer <em className="dream-trained-by">· Trained by Dream</em></strong></span>
+                <span className="model-mark ok"><CheckIcon /></span>
+                <span><small><b className="dream-phase">AFTER TRAINING</b></small><strong>CLM (Cyber Language Model), powered by MiST &amp; Dreamer</strong></span>
               </header>
               <div className="response-copy">
-                <div className="answer-head"><span className="assistant-label">ANSWER</span>{active.key && <MitreBadge id={active.key} />}</div>
-                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}><CheckIcon />{active.after.answer}</motion.strong></div>
+                <div className="answer-head"><Verdict ok runs={active.after.runs} answerKey={active.key} />{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}>{active.after.answer}</motion.strong></div>
                 <TypedText text={`“${active.after.quote}”`} />
+                {active.why && <div className="cyber-why-note ok"><b>Why CLM gets it right</b>{cap(active.why.ours.replace(/^Ours /, ''))}</div>}
                 {active.full && <FullResponse text={active.full.after} open={fullOpen} onToggle={toggleFull} />}
               </div>
-              {active.after.runs && active.key && <Runs runs={active.after.runs} answerKey={active.key} />}
             </section>
           </div>
-          {active.why && (
-            <motion.div className="cyber-why" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9, duration: .35 }}>
-              <small>WHY DREAMER GETS IT RIGHT</small>
-              <p><XMarkIcon /><span><b>Original</b> {active.why.base.replace(/^Base /, '')}</span></p>
-              <p className="ours"><CheckIcon /><span><b>Dreamer</b> {active.why.ours.replace(/^Ours /, '')}</span></p>
-            </motion.div>
-          )}
           <StatsStrip bench={active.bench} />
         </motion.div>
       </AnimatePresence>
@@ -254,29 +243,30 @@ const EDGES: { d: string; kind: Path; both?: boolean }[] = [
   { d: 'M507,342 L507,250', kind: 'train' },
 ];
 const EDGE_LABELS: [number, number, string, Path, ('middle' | 'start')?][] = [
-  [259, 90, 'tasks', 'train', 'middle'], [259, 116, 'answers', 'train', 'middle'], [70, 165, 'scores', 'train'],
-  [259, 209, 'better model', 'train', 'middle'], [512, 168, 'thinks with', 'core'],
-  [740, 53, 'real data', 'live', 'middle'], [515, 300, 'security knowledge', 'train'], [740, 256, 'practice data', 'train', 'middle'],
+  [259, 90, 'tasks', 'train', 'middle'], [259, 116, 'answers', 'train', 'middle'], [78, 165, 'scores', 'train'],
+  [259, 204, 'better model', 'train', 'middle'], [522, 168, 'thinks with', 'core'],
+  [740, 53, 'real data', 'live', 'middle'], [525, 300, 'security knowledge', 'train'], [740, 256, 'practice data', 'train', 'middle'],
 ];
 const MODES = [
   { id: 'live', label: 'Live request' },
   { id: 'train', label: 'Training loop' },
 ] as const;
 // One dot walks these hops in order; `edges` are the EDGES indexes lit while it travels.
-const SEQUENCES: Record<'live' | 'train', { d: string; edges: number[]; caption: string; lands?: boolean }[]> = {
+// `at`: where the step's number badge sits on the drawing.
+const SEQUENCES: Record<'live' | 'train', { d: string; edges: number[]; at: [number, number]; caption: string; lands?: boolean }[]> = {
   live: [
-    { d: 'M502,140 L502,188', edges: [3], caption: 'An analyst asks a question; the Dreamer agent thinks with NVIDIA Nemotron.' },
-    { d: 'M674,92 L740,92 L740,64 L790,64', edges: [4], caption: 'It reads the client’s real data, which never leaves the network.' },
+    { d: 'M502,140 L502,188', edges: [3], at: [502, 164], caption: 'An analyst asks a question; the agent (CLM powered by MiST & Dreamer) thinks with NVIDIA Nemotron.' },
+    { d: 'M674,92 L740,92 L740,64 L790,64', edges: [4], at: [740, 78], caption: 'It reads the client’s real data, which never leaves the network.' },
   ],
   train: [
-    { d: 'M280,367 L340,367', edges: [6], caption: 'Stage 1: expert security documents are turned into lessons.' },
-    { d: 'M507,342 L507,250', edges: [7], caption: 'Nemotron studies them and gains deep security knowledge.', lands: true },
-    { d: 'M206,100 L312,100', edges: [0], caption: 'Stage 2: Dream’s training gym, built on NVIDIA NeMo Gym, gives the real agent a practice task.' },
-    { d: 'M502,140 L502,188', edges: [3], caption: 'The agent works on it, thinking with Nemotron.' },
-    { d: 'M674,120 L740,120 L740,238 L790,238', edges: [5], caption: 'It practices on a synthetic network built for training, never derived from customer data.' },
-    { d: 'M312,100 L206,100', edges: [0], caption: 'Its answer goes back to the gym and is scored.' },
-    { d: 'M60,142 L60,180', edges: [1], caption: 'NVIDIA NeMo RL learns from the scores.' },
-    { d: 'M206,218 L328,218', edges: [2], caption: 'An improved Nemotron goes back to work.', lands: true },
+    { d: 'M280,367 L340,367', edges: [6], at: [310, 367], caption: 'Stage 1: expert security documents are turned into lessons.' },
+    { d: 'M507,342 L507,250', edges: [7], at: [507, 296], caption: 'Nemotron studies them and gains deep security knowledge.', lands: true },
+    { d: 'M206,100 L312,100', edges: [0], at: [226, 100], caption: 'Stage 2: Dream’s training gym, built on NVIDIA NeMo Gym, gives the real agent a practice task.' },
+    { d: 'M502,140 L502,188', edges: [3], at: [502, 164], caption: 'The agent works on it, thinking with Nemotron.' },
+    { d: 'M674,120 L740,120 L740,238 L790,238', edges: [5], at: [740, 180], caption: 'It practices on a synthetic network built for training, never derived from customer data.' },
+    { d: 'M312,100 L206,100', edges: [0], at: [290, 100], caption: 'Its answer goes back to the gym and is scored.' },
+    { d: 'M60,142 L60,180', edges: [1], at: [60, 161], caption: 'NVIDIA NeMo RL learns from the scores.' },
+    { d: 'M206,218 L328,218', edges: [2], at: [267, 218], caption: 'An improved Nemotron goes back to work.', lands: true },
   ],
 };
 
@@ -360,9 +350,9 @@ function RuntimeDiagram() {
         </Box>
 
         <rect className="rt-group core" x="316" y="18" width="374" height="270" rx="12" />
-        <text className="rt-kicker" x="330" y="36">DREAMER AGENT · SAME IN PRODUCTION AND TRAINING</text>
+        <text className="rt-kicker" x="330" y="36">DREAM AGENT</text>
         <Box x={330} y={78} w={344} h={62} kind="core" mode={mode}>
-          <text className="rt-main" x="502" y="105" textAnchor="middle">Dreamer AI agents</text>
+          <text className="rt-main" x="502" y="105" textAnchor="middle">Dream AI agents</text>
           <text className="rt-sub" x="502" y="123" textAnchor="middle">answer security questions</text>
         </Box>
         <Box x={330} y={188} w={344} h={60} kind="core" mode={mode} hero>
@@ -396,6 +386,12 @@ function RuntimeDiagram() {
           <text className="rt-sub" x="507" y="380" textAnchor="middle">NVIDIA NeMo AutoModel</text>
         </Box>
 
+        {seq.map((st, i) => (!reduce && i > step ? null : (
+          <g key={`${mode}-n${i}`} className={`rt-step ${mode} ${i === step ? 'current' : ''}`}>
+            <circle cx={st.at[0]} cy={st.at[1]} r={i === step ? 12 : 10} />
+            <text x={st.at[0]} y={st.at[1] + 4} textAnchor="middle">{i + 1}</text>
+          </g>
+        )))}
         {!reduce && <>
           <path ref={track} d={seq[step].d} fill="none" stroke="none" />
           <g ref={dot} transform="translate(-50 -50)"><circle r="9" className={`rt-halo ${mode}`} /><circle r="4.5" className={`rt-dot ${mode}`} /></g>
@@ -404,8 +400,8 @@ function RuntimeDiagram() {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.p key={`${mode}-${step}`} className="rt-note" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: .2 }}>
-          <b>{String(step + 1).padStart(2, '0')}/{String(seq.length).padStart(2, '0')}</b>{seq[step].caption}
+        <motion.p key={`${mode}-${step}`} className={`rt-note ${mode}`} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: .2 }}>
+          <b className="rt-step-num">{step + 1}</b><span className="rt-step-of">of {seq.length}</span>{seq[step].caption}
         </motion.p>
       </AnimatePresence>
     </div>
@@ -414,14 +410,14 @@ function RuntimeDiagram() {
 
 // From Dream's "Mid-Training NVIDIA Nemotron 3.5 Super for Cybersecurity" post.
 const MODEL_SPECS: [string, string | string[]][] = [
-  ['Model', 'Dreamer: Dream’s security model, trained on NVIDIA Nemotron 3.5 Super (120B hybrid Mamba-Transformer MoE, 12B active per token)'],
+  ['Model', 'CLM powered by MiST & Dreamer: Dream’s security model, trained on NVIDIA Nemotron 3.5 Super (120B hybrid Mamba-Transformer MoE, 12B active per token)'],
   ['What it does', 'Answers general cybersecurity questions and questions about the customer’s own network: assets, exposure and fixes'],
   ['Training', ['Cyber knowledge: SFT on an expert security corpus (MiST, EMNLP 2026)', 'Agentic RL (GRPO) through the unchanged production agent, on a synthetic digital twin; re-released every two weeks']],
   ['NVIDIA stack', 'NeMo AutoModel, NeMo RL and NeMo Gym on NVIDIA DGX'],
   ['Deployment', 'On-prem and air-gapped: customer data never leaves the network'],
 ];
 const MODEL_SCORES = [
-  { name: 'Dreamer (Dream)', security: 74.1, general: 92.4, ours: true },
+  { name: 'CLM powered by MiST & Dreamer', security: 74.1, general: 92.4, ours: true },
   { name: 'Nemotron 3.5 Super (original)', security: 65.4, general: 91.8 },
   { name: 'Qwen3.5-122B-A10B', security: 64.5, general: 93.9 },
   { name: 'Nemotron-3-Super-120B', security: 64.4, general: 86.7 },
@@ -433,7 +429,7 @@ function ModelCard() {
     <div className="cyber-run cyber-card">
       <div className="cyber-card-head">
         <span className="expanded-icon"><SparklesIcon /></span>
-        <div><small>MODEL INFO · DREAM</small><strong>Dreamer</strong></div>
+        <div><small>MODEL INFO · DREAM</small><strong>CLM powered by MiST &amp; Dreamer</strong></div>
       </div>
       <div className="cyber-card-grid">
         <dl className="cyber-specs">
@@ -476,7 +472,6 @@ function StatsStrip({ bench }: { bench?: Category['bench'] }) {
   ];
   return (
     <div className="cyber-stats" style={{ '--cols': stats.length } as React.CSSProperties}>
-      <small className="cyber-stats-label">SCORES OUT OF 100 · ORIGINAL NEMOTRON → DREAMER</small>
       {stats.map((st, i) => (
         <motion.div key={st.label} className="cyber-stat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 + i * .08 }}>
           <small>{st.label}</small>
@@ -519,7 +514,7 @@ export const DREAM_DEMO = {
   kind: 'demo' as const, id: 'dream', name: 'Cybersecurity for Nations', task: 'Cybersecurity · Dream',
   color: '#E88480', glow: 'rgba(232, 132, 128, .18)', icon: LockClosedIcon, // Dream coral
   embedUrl: '', // unused: DreamCard renders the expanded view itself
-  previewLabel: 'Explore demo',
+  previewLabel: 'Real simulation',
 };
 
 function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab) => void }) {
@@ -552,7 +547,7 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
         </div>
         <div className="dream-brand">
           <PartnerLogo className="partner-logo" />
-          <p className="dream-tagline">Security knowledge built into the model, on hardware the nation owns</p>
+          <p className="dream-tagline">Cyber language built into the model, on hardware your nation owns</p>
         </div>
       </div>
       <div className="cyber-tabs-row"><CyberTabs tab={tab} onChange={setTab} /></div>

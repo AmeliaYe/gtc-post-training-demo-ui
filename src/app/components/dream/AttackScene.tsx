@@ -16,12 +16,13 @@ type SceneNode = {
   bars?: { tone: Tone; at: number }[];
 };
 type SceneEdge = { d: string; tone: Tone; at: number; tones?: Record<number, Tone>; dimAt?: number; label?: string; lx?: number; ly?: number; anchor?: 'middle' | 'start' };
+// `marks`: where each step's number sits on the drawing (index = step).
 export type Scene = {
-  title?: string; steps: { text: string; tone: Tone }[]; nodes: SceneNode[]; edges: SceneEdge[];
+  title?: string; legend?: [string, string]; steps: { text: string; tone: Tone }[]; marks: [number, number][]; nodes: SceneNode[]; edges: SceneEdge[];
   zones?: { x: number; y: number; w: number; h: number; label: string }[];
 };
 
-const STEP_MS = 2800;
+const STEP_MS = 3400; // time to read each caption
 const toneAt = (base: Tone, tones: Record<number, Tone> | undefined, step: number) =>
   Object.entries(tones ?? {}).reduce<Tone>((t, [at, next]) => (step >= Number(at) ? next : t), base);
 
@@ -49,56 +50,61 @@ const ICONS: Record<Icon, React.ReactNode> = {
 export const SCENES: Record<string, Scene> = {
   cti: {
     steps: [
-      { text: 'Docker API exposed on the host', tone: 'safe' },
-      { text: 'Attacker sends a remote build request to the Docker API', tone: 'threat' },
-      { text: 'Build step: pull a safe base image', tone: 'safe' },
-      { text: 'Build step: fetch malware from the attacker’s server and bake it into the image', tone: 'threat' },
-      { text: 'Image built locally: no malicious image download to alert on', tone: 'threat' },
-      { text: 'Container deployed from the custom image', tone: 'threat' },
+      { text: 'The attacker has access to the host’s Docker API', tone: 'threat' },
+      { text: 'It sends a remote build request with its own Dockerfile', tone: 'threat' },
+      { text: 'Build step: pull a vanilla Alpine base image', tone: 'safe' },
+      { text: 'Build step: fetch malware from the attacker’s C2 server and bake it into the image', tone: 'threat' },
+      { text: 'The image is built locally: no malicious image download to alert on', tone: 'threat' },
+      { text: 'A container is deployed from the custom image for follow-on activity', tone: 'threat' },
     ],
+    marks: [[326, 94], [120, 120], [300, 174], [300, 70], [274, 94], [470, 120]],
     nodes: [
       { x: 70, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 300, y: 34, icon: 'server', tone: 'threat', label: 'Malicious server', labelPos: 'right' },
-      { x: 300, y: 212, icon: 'image', tone: 'safe', label: 'Safe base image', labelPos: 'right' },
+      { x: 300, y: 34, icon: 'server', tone: 'threat', label: 'Attacker C2 server', labelPos: 'right' },
+      { x: 300, y: 212, icon: 'image', tone: 'safe', label: 'Alpine base image', labelPos: 'right' },
       { x: 300, y: 120, icon: 'host', tone: 'safe', tones: { 3: 'threat' }, label: 'Docker host', pulseAt: 1, bars: [{ tone: 'threat', at: 3 }, { tone: 'safe', at: 2 }] },
       { x: 530, y: 120, icon: 'container', tone: 'threat', label: 'Container', showAt: 5, pulseAt: 5 },
     ],
     edges: [
       { d: 'M100 120 H268', tone: 'threat', at: 1, label: 'POST /build', lx: 184, ly: 110 },
-      { d: 'M300 196 V152', tone: 'safe', at: 2, label: 'FROM safe image', lx: 312, ly: 178, anchor: 'start' },
+      { d: 'M300 196 V152', tone: 'safe', at: 2, label: 'FROM alpine', lx: 312, ly: 178, anchor: 'start' },
       { d: 'M300 52 V88', tone: 'threat', at: 3, label: 'RUN fetch malware', lx: 312, ly: 74, anchor: 'start' },
       { d: 'M332 120 H502', tone: 'threat', at: 5, label: 'docker run', lx: 417, ly: 110 },
     ],
   },
   triage: {
     steps: [
-      { text: 'Windows tags files from the internet with Mark-of-the-Web (MOTW)', tone: 'safe' },
-      { text: 'Attacker emails a link to an ISO on a public file share', tone: 'threat' },
-      { text: 'Victim downloads the ISO: it carries the MOTW tag', tone: 'safe' },
-      { text: 'Victim mounts the ISO: the EXE inside has no MOTW tag', tone: 'threat' },
+      { text: 'Windows tags files downloaded from the internet with Mark-of-the-Web (MOTW)', tone: 'safe' },
+      { text: 'The attacker emails the victim a link to an ISO on a public file share', tone: 'threat' },
+      { text: 'The victim downloads the ISO: it is saved with the MOTW tag', tone: 'safe' },
+      { text: 'The victim mounts the ISO: the EXE inside has no MOTW, because disk images drop it', tone: 'threat' },
       { text: 'The EXE runs: SmartScreen and Protected View never check it', tone: 'threat' },
     ],
+    marks: [[214, 96], [98, 120], [190, 76], [385, 120], [474, 10]],
     nodes: [
       { x: 60, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 200, y: 120, icon: 'cloud', tone: 'threat', label: 'File share' },
-      { x: 340, y: 120, icon: 'disk', tone: 'safe', label: 'ISO file', showAt: 2, badge: { text: 'MOTW', tone: 'safe', at: 2 } },
-      { x: 490, y: 120, icon: 'file', tone: 'threat', label: 'Payload .exe', showAt: 3, pulseAt: 4, badge: { text: 'no MOTW', tone: 'threat', at: 3 } },
-      { x: 490, y: 34, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'right', crossAt: 4 },
+      { x: 190, y: 120, icon: 'pc', tone: 'safe', label: 'Victim' },
+      { x: 190, y: 34, icon: 'cloud', tone: 'threat', label: 'Public file share', labelPos: 'right', showAt: 1 },
+      { x: 320, y: 120, icon: 'disk', tone: 'safe', label: 'ISO file', showAt: 2, badge: { text: 'MOTW', tone: 'safe', at: 2 } },
+      { x: 450, y: 120, icon: 'file', tone: 'threat', label: 'Payload .exe', showAt: 3, pulseAt: 4, badge: { text: 'no MOTW', tone: 'threat', at: 3 } },
+      { x: 450, y: 34, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'right', crossAt: 4 },
     ],
     edges: [
-      { d: 'M88 120 H172', tone: 'threat', at: 1, label: 'email link', lx: 130, ly: 110 },
-      { d: 'M228 120 H316', tone: 'threat', at: 2, label: 'download', lx: 272, ly: 110 },
-      { d: 'M364 120 H464', tone: 'threat', at: 3, label: 'mount + run', lx: 414, ly: 110 },
+      { d: 'M88 120 H166', tone: 'threat', at: 1, label: 'email link', lx: 136, ly: 110 },
+      { d: 'M190 58 V96', tone: 'threat', at: 2 },
+      { d: 'M214 120 H296', tone: 'safe', at: 2, label: 'saved', lx: 255, ly: 110 },
+      { d: 'M344 120 H426', tone: 'threat', at: 3, label: 'mount + run', lx: 385, ly: 108 },
     ],
   },
   mitigation: {
     steps: [
-      { text: 'Web service online: users connected', tone: 'safe' },
-      { text: 'Attacker rents time on a large botnet', tone: 'threat' },
+      { text: 'The web service is online and users are connected', tone: 'safe' },
+      { text: 'The attacker rents time on a large botnet', tone: 'threat' },
       { text: 'Bots worldwide flood the service with UDP packets', tone: 'threat' },
-      { text: 'Bandwidth saturated: real users can’t reach the site', tone: 'threat' },
+      { text: 'The upstream bandwidth is saturated: real users can’t reach the site', tone: 'threat' },
       { text: 'The right defense: filter network traffic at the perimeter (M1037)', tone: 'safe' },
     ],
+    marks: [[472, 96], [100, 44], [250, 120], [349, 96], [199, 96]],
     nodes: [
       { x: 60, y: 44, icon: 'bot', tone: 'threat', label: 'Botnet', labelPos: 'above', showAt: 1 },
       { x: 60, y: 120, icon: 'bot', tone: 'threat', showAt: 1 },
@@ -118,12 +124,15 @@ export const SCENES: Record<string, Scene> = {
   },
   posture: {
     title: 'NETWORK VIEW',
+    // Not an attack: red marks exposure, not malicious activity.
+    legend: ['Direct exposure', 'Through firewall'],
     steps: [
       { text: 'dbs-310 sits in VLAN vlan_name2 (10.40.12.0/24)', tone: 'safe' },
       { text: 'Traffic from other subnets has to pass the router or firewall', tone: 'safe' },
       { text: 'Devices in the same VLAN skip that check and reach dbs-310 directly', tone: 'threat' },
       { text: 'Those same-VLAN devices are dbs-310’s direct exposure', tone: 'threat' },
     ],
+    marks: [[506, 96], [370, 120], [450, 74], [554, 96]],
     zones: [{ x: 330, y: 16, w: 262, h: 214, label: 'VLAN vlan_name2 · 10.40.12.0/24' }],
     nodes: [
       { x: 70, y: 120, icon: 'pc', tone: 'safe', label: 'Other subnets' },
@@ -141,20 +150,21 @@ export const SCENES: Record<string, Scene> = {
   },
   vuln: {
     steps: [
-      { text: 'The MME connects phones to the 4G network', tone: 'safe' },
-      { text: 'Attacker sends an Initial UE Message missing the PLMN Identity', tone: 'threat' },
-      { text: 'The code hits an assert(): a debug check exposed to network input', tone: 'threat' },
+      { text: 'The Open5GS MME connects phones to the 4G network', tone: 'safe' },
+      { text: 'The attacker sends an Initial UE Message over S1AP, missing the PLMN Identity', tone: 'threat' },
+      { text: 'The code hits an assert(): a debug check reachable from network input', tone: 'threat' },
       { text: 'The assertion fails and the MME process crashes', tone: 'threat' },
       { text: 'Phones lose service, and the attacker can repeat it at will', tone: 'threat' },
     ],
+    marks: [[380, 120], [120, 120], [338, 78], [274, 96], [554, 96]],
     nodes: [
       { x: 60, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 300, y: 120, icon: 'core', tone: 'safe', tones: { 3: 'threat' }, label: 'MME · 4G core', pulseAt: 3, crossAt: 3, badge: { text: 'assert()', tone: 'threat', at: 2 } },
+      { x: 300, y: 120, icon: 'core', tone: 'safe', tones: { 3: 'threat' }, label: 'Open5GS MME · 4G core', pulseAt: 3, crossAt: 3, badge: { text: 'assert()', tone: 'threat', at: 2 } },
       { x: 530, y: 120, icon: 'phone', tone: 'safe', tones: { 4: 'threat' }, label: 'Phones', crossAt: 4 },
     ],
     edges: [
-      { d: 'M88 120 H270', tone: 'threat', at: 1, label: 'Initial UE Message', lx: 179, ly: 110 },
-      { d: 'M330 120 H514', tone: 'safe', at: 0, tones: { 3: 'threat' }, label: 'service', lx: 422, ly: 110 },
+      { d: 'M88 120 H270', tone: 'threat', at: 1, label: 'Initial UE Message · S1AP', lx: 179, ly: 110 },
+      { d: 'M330 120 H514', tone: 'safe', at: 0, tones: { 3: 'threat' }, label: 'service', lx: 430, ly: 110 },
     ],
   },
 };
@@ -176,7 +186,7 @@ export default function AttackScene({ scene }: { scene: Scene }) {
     <div className="attack-scene">
       <div className="as-head">
         <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
-        <span className="as-legend"><i className="threat" />Attacker / compromised<i className="safe" />Legitimate</span>
+        <span className="as-legend"><i className="threat" />{scene.legend?.[0] ?? 'Malicious'}<i className="safe" />{scene.legend?.[1] ?? 'Legitimate'}</span>
       </div>
       <svg viewBox="0 0 600 240" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
         {scene.zones?.map((z) => (
@@ -218,9 +228,16 @@ export default function AttackScene({ scene }: { scene: Scene }) {
             </motion.g>
           );
         })}
+        {scene.marks.map(([x, y], i) => i <= now && (
+          <motion.g key={`${cycle}-m${i}`} className={`as-mark ${scene.steps[i].tone} ${i === now ? 'current' : ''}`}
+            initial={reduce ? false : { opacity: 0, scale: .4 }} animate={{ opacity: 1, scale: 1 }} style={{ transformOrigin: `${x}px ${y}px` }}>
+            <circle cx={x} cy={y} r={i === now ? 11 : 9} />
+            <text x={x} y={y + 3.5} textAnchor="middle">{i + 1}</text>
+          </motion.g>
+        ))}
       </svg>
       <motion.p key={`${cycle}-${now}`} className={`as-status ${caption.tone}`} initial={reduce ? false : { opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-        <b>{String(now + 1).padStart(2, '0')}/{String(last + 1).padStart(2, '0')}</b>{caption.text}
+        <b className="as-step-num">{now + 1}</b><span className="as-step-of">of {last + 1}</span>{caption.text}
       </motion.p>
     </div>
   );

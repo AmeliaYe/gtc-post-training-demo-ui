@@ -484,3 +484,120 @@
 .dream-theme .cyber-spec-steps { margin: 0; padding: 0; list-style: none; counter-reset: stage; display: grid; gap: 6px; }
 .dream-theme .cyber-spec-steps li { position: relative; padding-left: 30px; counter-increment: stage; }
 .dream-theme .cyber-spec-steps li::before { content: counter(stage); position: absolute; left: 0; top: 2px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--panel-glow); color: var(--accent); font-size: 11px; font-weight: 700; }
+.dream-theme .dream-tagline { font-weight: 600; color: var(--ink); }
+.dream-theme .prompt-label-note { text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 14px; }
+.dream-theme .as-legend { font-size: 13px; }
+.dream-theme .as-legend i { width: 9px; height: 9px; }
+.dream-theme .cyber-tabs-row .cyber-tabs { width: max-content; margin: 0 auto; }
+.dream-theme .cyber-chips:not(.rt-modes) { justify-content: center; }
+.dream-theme .hw-first { text-align: center; }
+/* Numbered step markers on the attack-flow drawing, matching the caption below. */
+.dream-theme .as-mark circle { fill: var(--panel-2); stroke-width: 1.6; transition: r .3s ease; }
+.dream-theme .as-mark.threat circle { stroke: var(--threat); }
+.dream-theme .as-mark.safe circle { stroke: var(--safe); }
+.dream-theme .attack-scene .as-mark text { font-size: 10px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+.dream-theme .as-mark.threat text { fill: var(--threat); }
+.dream-theme .as-mark.safe text { fill: var(--safe); }
+.dream-theme .as-mark.current.threat circle { fill: var(--threat); filter: drop-shadow(0 0 6px var(--threat)); }
+.dream-theme .as-mark.current.safe circle { fill: var(--safe); filter: drop-shadow(0 0 6px var(--safe)); }
+.dream-theme .attack-scene .as-mark.current text { fill: var(--dream-navy); font-size: 12px; }
+.dream-theme .as-status { display: flex; align-items: center; gap: 8px; }
+.dream-theme .as-status b.as-step-num { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; margin: 0; padding: 0; border-radius: 50%; background: currentColor; }
+.dream-theme .as-status b.as-step-num { color: inherit; }
+.dream-theme .as-step-num { font-size: 12px; }
+.dream-theme .as-status.threat b.as-step-num { background: var(--threat); color: var(--dream-navy); }
+.dream-theme .as-status.safe b.as-step-num { background: var(--safe); color: var(--dream-navy); }
+.dream-theme .as-step-of { flex: none; color: var(--muted); font-size: 12px; font-weight: 500; }
+/* Correct / wrong verdict replaces the "Answer" label and the runs footer. */
+.dream-theme { --correct: #5fd3b0; --wrong: #f08a85; }
+.dream-theme .cyber-verdict { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px 5px 9px; border: 1px solid; border-radius: var(--dream-radius-pill); font-size: 14px; font-weight: 700; }
+.dream-theme .cyber-verdict svg { width: 16px; flex: none; stroke-width: 2.5; }
+.dream-theme .cyber-verdict small { margin-left: 4px; padding-left: 10px; border-left: 1px solid currentColor; font-size: 12px; font-weight: 500; opacity: .85; }
+.dream-theme .cyber-verdict.ok { color: var(--correct); border-color: color-mix(in srgb, var(--correct) 45%, transparent); background: color-mix(in srgb, var(--correct) 12%, transparent); }
+.dream-theme .cyber-verdict.bad { color: var(--wrong); border-color: color-mix(in srgb, var(--wrong) 45%, transparent); background: color-mix(in srgb, var(--wrong) 12%, transparent); }
+.dream-theme .tuned .cyber-answer { color: var(--correct); }
+.dream-theme .cyber-verdict, .dream-theme .cyber-verdict small { white-space: nowrap; }
+.dream-theme .cyber-verdict { flex: none; }
+/* Narrow panels: the MITRE badge drops below the one-line verdict instead of overflowing. */
+.dream-theme .answer-head { flex-wrap: wrap; row-gap: 8px; }
+/* Narrower cards: scale the NVIDIA x Dream lockup down so it never runs off the header. */
+@media (max-width: 1240px) {
+  .dream-theme .partner-nvidia { height: 24px; }
+  .dream-theme .partner-dream { height: 17px; }
+  .dream-theme .partner-x { font-size: 14px; }
+  .dream-theme .dream-tagline { font-size: 14px; }
+  .dream-theme .dream-brand { min-width: 0; }
+}
+.dream-theme .cyber-verdict { gap: 6px; padding: 4px 10px 4px 8px; font-size: 13px; }
+.dream-theme .cyber-verdict small { margin-left: 2px; padding-left: 8px; }
+.dream-theme .answer-head { column-gap: 8px; }
+.dream-theme .model-mark.bad { color: var(--wrong); border-color: color-mix(in srgb, var(--wrong) 45%, transparent); background: color-mix(in srgb, var(--wrong) 10%, transparent); }
+.dream-theme .model-mark.ok { color: var(--correct); border-color: color-mix(in srgb, var(--correct) 45%, transparent); background: color-mix(in srgb, var(--correct) 10%, transparent); }
+.dream-theme .model-mark svg { stroke-width: 2.5; }
+.dream-theme .cyber-verdict { padding-left: 11px; }
+.dream-theme .tuned .dream-phase { background: var(--correct); color: var(--dream-navy); }
+.dream-theme .comparison-divider span { width: 40px; height: 40px; font-size: 14px; font-weight: 700; z-index: 3; }
+.dream-theme .comparison-divider span { text-transform: none; letter-spacing: 0; }
+/* Full response button sits at the foot of each panel, aligned across Before and After. */
+.dream-theme .comparison-grid .response-copy { display: flex; flex-direction: column; }
+.dream-theme .comparison-grid .response-copy .cyber-full { margin-top: auto; padding-top: var(--dream-space-4); }
+/* Emphasized "Why the CLM gets it right" heading, in the correct-answer green. */
+.dream-theme .cyber-why { border-color: color-mix(in srgb, var(--correct) 35%, transparent); background: linear-gradient(100deg, color-mix(in srgb, var(--correct) 9%, transparent), transparent 60%), var(--panel); }
+.dream-theme .cyber-why small { justify-self: start; padding: 5px 12px; border-radius: var(--dream-radius-pill); background: var(--correct); color: var(--dream-navy); font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+/* Center the why-strip: heading centered, each note centered in its column. */
+.dream-theme .cyber-why small { justify-self: center; }
+.dream-theme .cyber-why p { justify-self: center; max-width: 520px; }
+/* "Why" explanation inside each answer panel. */
+.dream-theme .cyber-why-note { margin-top: var(--dream-space-3); padding: 10px 14px; border-left: 3px solid; border-radius: 0 var(--dream-radius-sm) var(--dream-radius-sm) 0; font-size: 14px; line-height: 1.5; color: var(--ink); }
+.dream-theme .cyber-why-note b { display: block; margin-bottom: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.dream-theme .cyber-why-note.bad { border-color: var(--wrong); background: color-mix(in srgb, var(--wrong) 9%, transparent); }
+.dream-theme .cyber-why-note.bad b { color: var(--wrong); }
+.dream-theme .cyber-why-note.ok { border-color: var(--correct); background: color-mix(in srgb, var(--correct) 9%, transparent); }
+.dream-theme .cyber-why-note.ok b { color: var(--correct); }
+/* How we train: numbered step badges on the diagram, matching the caption. */
+.dream-theme .rt-step circle { fill: var(--panel-2); stroke: var(--accent); stroke-width: 1.6; }
+.dream-theme .rt-step.live circle { stroke: var(--live); }
+.dream-theme .rt-diagram .rt-step text { fill: var(--accent); font-size: 11px; font-weight: 700; }
+.dream-theme .rt-diagram .rt-step.live text { fill: var(--live); }
+.dream-theme .rt-step.current circle { fill: var(--accent); filter: drop-shadow(0 0 6px var(--accent)); }
+.dream-theme .rt-step.live.current circle { fill: var(--live); filter: drop-shadow(0 0 6px var(--live)); }
+.dream-theme .rt-diagram .rt-step.current text { fill: var(--dream-navy); font-size: 13px; }
+.dream-theme .rt-note { display: flex; align-items: center; gap: 8px; }
+.dream-theme .rt-note b.rt-step-num { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; margin: 0; border-radius: 50%; background: var(--accent); color: var(--dream-navy); font-size: 12px; }
+.dream-theme .rt-step-of { flex: none; color: var(--muted); font-size: 12px; }
+.dream-theme .rt-note.live b.rt-step-num { background: var(--live); }
+/* Map data note as a watermark in the top-right corner. */
+.dream-theme .cti-watermark { position: absolute; top: var(--dream-space-3); right: var(--dream-space-4); color: color-mix(in srgb, var(--ink) 45%, transparent); font-size: 12px; font-style: italic; letter-spacing: .02em; pointer-events: none; }
+.dream-theme .cti-watermark { font-size: 15px; }
+/* Map pause/resume. Paused also freezes the CSS beacon pulses. */
+.dream-theme .cti-play { position: absolute; top: var(--dream-space-3); left: 300px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line-strong); border-radius: var(--dream-radius-pill); background: color-mix(in srgb, var(--dream-navy) 88%, transparent); color: var(--ink); font-size: 12px; font-weight: 600; cursor: pointer; }
+.dream-theme .cti-play:hover { border-color: var(--accent); color: var(--accent); }
+.dream-theme .cti-play svg { width: 13px; }
+.dream-theme .cti-map.paused .cti-beacon-ring, .dream-theme .cti-map.paused * { animation-play-state: paused; }
+@media (max-width: 620px) { .dream-theme .cti-play { position: static; margin: 0 var(--dream-space-3) var(--dream-space-3); } }
+/* Map action bar: phase, status and pause/resume in one strip at the top-left. */
+.dream-theme .cti-actions { position: absolute; top: var(--dream-space-3); left: var(--dream-space-3); display: flex; align-items: center; gap: 10px; padding: 5px 6px 5px 5px; border: 1px solid var(--line-strong); border-radius: var(--dream-radius-pill); background: color-mix(in srgb, var(--dream-navy) 90%, transparent); backdrop-filter: blur(6px); }
+.dream-theme .cti-actions .cti-phases { position: static; border: 0; background: transparent; padding: 2px 6px; }
+.dream-theme .cti-actions .cti-status { margin: 0; padding-left: 10px; border-left: 1px solid var(--line-strong); color: var(--accent); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.dream-theme .cti-actions .cti-play { position: static; }
+@media (max-width: 620px) { .dream-theme .cti-actions { position: static; margin: var(--dream-space-3); flex-wrap: wrap; border-radius: var(--dream-radius-md); } }
+/* Never hide or clip the action bar text: it wraps within the map width instead. */
+.dream-theme .cti-actions { flex-wrap: wrap; row-gap: 6px; max-width: calc(100% - 24px); border-radius: 22px; }
+.dream-theme .cti-actions .cti-status { white-space: normal; }
+
+/* Narrower cards: the map is too short for floating panels, so stats and legend sit below it
+   and the watermark drops under the action bar; nothing overlaps or gets cut. */
+@media (max-width: 1240px) {
+  .dream-theme .cti-overlay { position: static; margin: var(--dream-space-3); }
+  .dream-theme .cti-legend { position: static; width: fit-content; margin: 0 var(--dream-space-3) var(--dream-space-3); }
+  .dream-theme .cti-watermark { top: 64px; }
+}
+/* Map status as its own bold overlay on the right side of the map. */
+/* Map result headline inside the stats panel, colored by outcome. */
+.dream-theme .cti-result { margin: 0; color: var(--ink); font-size: 16px; font-weight: 700; }
+.dream-theme .cti-result.bad { color: var(--wrong); }
+.dream-theme .cti-result.ok { color: var(--correct); }
+
+/* After training reads green on the map, matching the correct-answer color. */
+.dream-theme .cti-overlay .dream-phase.on { background: var(--correct); color: var(--dream-navy); }
+.dream-theme .cti-phases span.on.after { color: var(--correct); }
