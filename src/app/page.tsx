@@ -37,6 +37,7 @@ type PlaceholderDemo = DemoBase & {
   scoreLabel: string;
   scoreBefore: number;
   scoreAfter: number;
+  scoreLift?: number;
   latency: string;
   memory: string;
   prompt: string;
@@ -66,10 +67,10 @@ const demos: Demo[] = [
     tags: ['MITRE-aware', 'SOC-tuned', 'evidence-linked'],
   },
   {
-    kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Threat intelligence · Dream',
-    description: 'Connect scattered clues into a complete attack story.',
+    kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
+    description: 'Analyze threats, choose defenses, and diagnose vulnerabilities.',
     color: '#ff536b', glow: 'rgba(255, 83, 107, .18)', icon: NationalDefenseIcon,
-    scoreLabel: 'Attack-path recall', scoreBefore: 57.8, scoreAfter: 91.6, latency: '44 ms', memory: '5.9 GB',
+    scoreLabel: 'Overall security knowledge', scoreBefore: 65.4, scoreAfter: 74.1, scoreLift: 8.8, latency: '44 ms', memory: '5.9 GB',
     prompt: 'Connect the observed campaign activity to the complete attack path targeting protected state infrastructure.',
     before: 'The activity may indicate a coordinated intrusion. Review the available threat intelligence and monitor the affected systems for additional indicators.',
     after: 'HIGH · The evidence forms a complete path: initial access → credential theft → privileged movement → protected infrastructure. Isolate exposed access points, revoke compromised credentials, and validate segmentation before restoring connectivity.',
@@ -185,7 +186,7 @@ function ModelTile({ model }: { model: Demo }) {
       </span>
       {model.kind === 'placeholder' ? (
         <span className="tile-score">
-          <span><strong style={{ color: model.color }}>+{(model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
+          <span><strong style={{ color: model.color }}>+{(model.scoreLift ?? model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
           <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
@@ -215,7 +216,7 @@ function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: stri
 }
 
 function PlaceholderBody({ model, isRunning, runCount }: { model: PlaceholderDemo; isRunning: boolean; runCount: number }) {
-  const lift = model.scoreAfter - model.scoreBefore;
+  const lift = model.scoreLift ?? model.scoreAfter - model.scoreBefore;
   return (
     <>
       <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
