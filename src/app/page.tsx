@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import HealthcareDemo from './components/HealthcareDemo';
+import DreamDemoContent from './components/dream/DreamDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
@@ -373,7 +374,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
+                {model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
                   : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}
