@@ -67,6 +67,12 @@ const demos: Demo[] = [
     tags: ['MITRE-aware', 'SOC-tuned', 'evidence-linked'],
   },
   {
+    kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
+    description: 'Practice safer decisions before working with patients.',
+    color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: RodOfAsclepiusIcon,
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
+  },
+  {
     kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
     description: 'Analyze threats, choose defenses, and diagnose vulnerabilities.',
     color: '#ff536b', glow: 'rgba(255, 83, 107, .18)', icon: NationalDefenseIcon,
@@ -75,12 +81,6 @@ const demos: Demo[] = [
     before: 'The activity may indicate a coordinated intrusion. Review the available threat intelligence and monitor the affected systems for additional indicators.',
     after: 'HIGH · The evidence forms a complete path: initial access → credential theft → privileged movement → protected infrastructure. Isolate exposed access points, revoke compromised credentials, and validate segmentation before restoring connectivity.',
     tags: ['CTI-grounded', 'attack-path aware', 'evidence-linked'],
-  },
-  {
-    kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
-    description: 'Practice safer decisions before working with patients.',
-    color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: RodOfAsclepiusIcon,
-    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
