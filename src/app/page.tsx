@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import HealthcareDemo from './components/HealthcareDemo';
+import { CyberDefenseDemo } from './components/CyberDefenseDemo';
 import DreamDemoContent from './components/dream/DreamDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
@@ -53,18 +54,17 @@ type LiveDemo = DemoBase & {
   previewLabel?: string;
 };
 
-type Demo = PlaceholderDemo | LiveDemo;
+type CyberDemo = DemoBase & {
+  kind: 'cyber';
+};
+
+type Demo = PlaceholderDemo | LiveDemo | CyberDemo;
 
 const demos: Demo[] = [
   {
-    kind: 'placeholder', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
+    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
     description: 'Find security weaknesses before attackers do.',
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
-    scoreLabel: 'Threat accuracy', scoreBefore: 63.4, scoreAfter: 93.1, latency: '39 ms', memory: '5.8 GB',
-    prompt: 'Triage the endpoint alert: encoded PowerShell spawned by WINWORD with outbound DNS.',
-    before: 'This activity may be suspicious. Review the PowerShell command, inspect the parent process, and check the destination before deciding whether to escalate.',
-    after: 'HIGH · Escalate and isolate host. WINWORD → encoded PowerShell plus DNS egress maps to T1204.002, T1059.001, and likely T1071.004. Preserve process tree, decode the command, and hunt the domain across endpoints.',
-    tags: ['MITRE-aware', 'SOC-tuned', 'evidence-linked'],
   },
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
@@ -177,7 +177,7 @@ function ModelTile({ model }: { model: Demo }) {
         <span className="mini-traffic"><i /><i /><i /></span>
         <span className="expand-glyph">↗</span>
       </span>
-      <span className="tile-topline"><span className="status-pill"><i /> {model.id === 'health' ? 'DEMO' : 'LIVE'}</span></span>
+      <span className="tile-topline"><span className="status-pill"><i /> {model.id === 'health' || model.kind === 'cyber' ? 'DEMO' : 'LIVE'}</span></span>
       <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
       <span className="tile-copy">
         <strong>{model.name}</strong>
@@ -190,7 +190,7 @@ function ModelTile({ model }: { model: Demo }) {
           <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
-        <span className="tile-score"><span><strong style={{ color: model.color }}>{model.previewLabel || 'Live demo'}</strong></span></span>
+        <span className="tile-score"><span><strong style={{ color: model.color }}>{model.kind === 'cyber' ? 'Explore demo' : model.previewLabel || 'Live demo'}</strong></span></span>
       )}
       <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
@@ -244,6 +244,7 @@ export default function Home() {
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
   const introFrameRef = useRef<HTMLIFrameElement>(null);
+  const workspaceRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const stage = new URLSearchParams(window.location.search).get('stage');
@@ -279,6 +280,7 @@ export default function Home() {
     trackUseCaseSelection(useCase, selectedId ? 'dock' : 'gallery');
     setIsRunning(false);
     setSelectedId(useCase);
+    window.requestAnimationFrame(() => workspaceRef.current?.scrollIntoView({ block: 'start' }));
   };
 
   const resetView = (source: 'toolbar' | 'window') => {
@@ -320,7 +322,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="workspace" aria-label="Specialized model comparison">
+        <section ref={workspaceRef} className="workspace" aria-label="Specialized model comparison">
           <div className="window-bar">
             <div className="traffic-lights"><i /><i /><i /></div>
             <div className="window-meta">
@@ -370,12 +372,12 @@ export default function Home() {
                     <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">
-                    {model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
+                    {model.kind !== 'cyber' && model.id !== 'health' && <button className="ghost-button"><DocumentMagnifyingGlassIcon /> Model card</button>}
                     {model.kind === 'placeholder' && <button className={`run-button ${isRunning ? 'running' : ''}`} onClick={runEvaluation}>{isRunning ? <ArrowPathIcon /> : <PlayIcon />}{isRunning ? 'Running…' : 'Run evaluation'}</button>}
                   </div>
                 </div>
 
-                {model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'demo'
+                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
                   : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}

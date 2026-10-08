@@ -1,0 +1,68 @@
+.results { --result-green: #b7ff54; min-width: 0; }
+.eyebrow { color: var(--result-green); font: 18px/1.4 monospace; letter-spacing: .06em; text-transform: uppercase; }
+.benchmark { padding: 22px 32px; border: 1px solid #668541; border-radius: 12px; background: radial-gradient(ellipse at 80% 40%, #b7ff5410, transparent 60%), #0d150c; }
+.benchmarkHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
+.benchmarkHeading h4 { margin: 0; color: #e3eddc; font-size: 30px; line-height: 1.3; font-weight: 500; letter-spacing: -.025em; }
+.metric { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 100px; margin: 14px 0; }
+.metricLabel { display: block; color: #afc09f; font: 18px/1.4 monospace; text-transform: uppercase; letter-spacing: .06em; }
+.metric strong { display: flex; align-items: baseline; gap: 5px; margin: 0 0 10px; font-size: clamp(72px, 6vw, 110px); line-height: 1.08; font-weight: 500; letter-spacing: -.065em; font-variant-numeric: tabular-nums; }
+.metric strong > span { font-size: .47em; letter-spacing: -.04em; }
+.beforeMetric strong { color: #9eb28b; }
+.afterMetric strong { color: var(--result-green); text-shadow: 0 0 35px #b7ff5418; }
+.afterMetric .metricLabel { color: #d6e9c5; }
+.results .metricArrow { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; transform: translate(-50%, -25%); color: #a2bc88; }
+.meter { overflow: hidden; height: 7px; background: #293822; border-radius: 1px; }
+.meter > span { display: block; height: 100%; background: #81956a; }
+.afterMetric .meter > span { background: var(--result-green); box-shadow: 0 0 14px #b7ff5433; }
+.benchmarkFooter { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 18px; }
+.gain { display: flex; align-items: baseline; gap: 9px; margin: 0; color: #d2e4be; font-size: 20px; }
+.gain strong { color: var(--result-green); font-size: 36px; font-weight: 500; letter-spacing: -.035em; }
+.example { max-width: 680px; margin: 24px auto 0; }
+.comparison { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 54px; }
+.checkpoint { min-width: 0; }
+.checkpointLabel { display: block; color: #b3c4a3; font: 18px/1.4 monospace; }
+.later .checkpointLabel { color: #c7e3ac; }
+.outcome { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 38px; line-height: 1.2; font-weight: 500; letter-spacing: -.04em; }
+.results .outcome > svg { width: 28px; height: 28px; }
+.found { color: var(--result-green); }
+.missed { color: #c9bfad; }
+.comparisonArrow { position: absolute; display: grid; place-items: center; top: 50%; left: 50%; color: #9fb98a; transform: translate(-50%, -25%); }
+.results .comparisonArrow > svg { width: 30px; height: 30px; }
+.trainingNote { margin: 7px 0 0; color: #adbf9e; font-size: 18px; line-height: 1.4; }
+.details { margin-top: 12px; border-top: 1px solid #35452a; color: #b8c9aa; font-size: 18px; line-height: 1.6; }
+.details summary { width: fit-content; max-width: 100%; padding: 13px 0 2px; color: #c2d5b0; cursor: pointer; }
+.details summary:hover { color: var(--result-green); }
+.details :is(summary, a):focus-visible { outline: 2px solid var(--result-green); outline-offset: 4px; }
+.detailContent { padding-top: 3px; }
+.detailContent h5 { margin: 22px 0 9px; color: #e1eed6; font-size: 25px; font-weight: 500; }
+.detailContent h6 { margin: 0; color: #d0e6bb; font-size: 20px; font-weight: 500; line-height: 1.5; }
+.detailContent p { margin: 10px 0; }
+.detailContent code { overflow-wrap: anywhere; font-size: 18px; }
+.reportDetails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-top: 22px; }
+.reportDetails ul { padding-left: 23px; margin: 12px 0; }
+.reportDetails li { margin-bottom: 12px; }
+.reportDetails li > span { display: block; color: #a7bc98; font-size: 18px; }
+.detailContent a { display: inline-flex; align-items: center; gap: 7px; color: #c4dfa7; text-decoration: none; }
+.detailContent a:hover { text-decoration: underline; }
+.results .detailContent a > svg { width: 18px; height: 18px; }
+
+@media (max-width: 1100px) {
+  .benchmark { padding: 24px; }
+  .benchmarkHeading { align-items: flex-start; flex-direction: column; gap: 5px; }
+}
+
+@media (max-width: 600px) {
+  .benchmark { padding: 19px 16px; }
+  .benchmarkHeading h4 { font-size: 28px; }
+  .metric { column-gap: 30px; margin: 20px 0 14px; }
+  .metric strong { font-size: clamp(42px, 11.5vw, 69px); }
+  .results .metricArrow { width: 22px; height: 22px; }
+  .gain { flex-wrap: wrap; gap: 3px 8px; font-size: 18px; }
+  .gain strong { font-size: 30px; }
+  .comparison { gap: 32px; }
+  .checkpointLabel { font-size: 18px; }
+  .outcome { gap: 5px; font-size: 32px; }
+  .results .outcome > svg { width: 23px; height: 23px; }
+  .results .comparisonArrow > svg { width: 23px; height: 23px; }
+  .reportDetails { grid-template-columns: 1fr; gap: 18px; }
+}
