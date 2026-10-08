@@ -345,6 +345,7 @@ function App() {
   const [preview, setPreview] = useState(null);
   const [previewIdx, setPreviewIdx] = useState(0);
   const [editor, setEditor] = useState(null);
+  const [seedSmiles, setSeedSmiles] = useState(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState(null);
   const controller = useRef(null), dialogRef = useRef(null), questionRef = useRef(null);
@@ -427,17 +428,17 @@ function App() {
   const example = examples[suggestion];
   return <main>
     <header className="topbar"><span className="wordmark">NVIDIA <span>/</span> Nemotron</span><span className="caption">Molecular reasoning demo</span></header>
-    <section className="hero"><h1>Post-training Nemotron for Multimodal Input</h1><p>Draw a molecule, ask a question, and watch two models respond.</p></section>
+    <section className="hero"><h1>Post-training Nemotron for Multimodal Input</h1><p>Watch how post-training helps models reason efficiently about molecular structures</p></section>
     <section className="input-stage">
       <div className="input-molecule">
         <div className="input-section-label">Pick an example molecule</div>
         <div className="example-picker">
-          <button type="button" className="example-featured" disabled={busy || saving} title={library.examples[previewIdx].question} onClick={() => loadExample(library.examples[previewIdx])}>
+          <button type="button" className="example-featured" disabled={busy} title="Open in molecule editor" aria-label="Edit structure in molecule editor" onClick={() => {setError(''); setSeedSmiles(library.examples[previewIdx].smiles); setDialog(true);}}>
             {library.examples[previewIdx].image && <img src={library.examples[previewIdx].image} alt={library.examples[previewIdx].label} className="example-featured-img"/>}
+            <span className="example-edit" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Edit structure</span>
           </button>
           <div className="example-tabs">{library.examples.map((ex, i) => <button type="button" key={ex.id} disabled={busy || saving} className={i === previewIdx ? 'example-tab active' : 'example-tab'} onClick={() => { setPreviewIdx(i); loadExample(ex); }}>{ex.label}</button>)}</div>
         </div>
-        <button className="insert-button" type="button" disabled={busy || saving} onClick={() => {setError(''); setDialog(true);}}>＋ Create your own</button>
       </div>
       <form className="input-question" onSubmit={event => {event.preventDefault(); if (!saving) void submit();}}>
         <label htmlFor="question" className="input-section-label">Ask a question</label>
@@ -481,7 +482,7 @@ function App() {
     </section>
     <footer> Submitted inputs and model traces are stored on this machine.</footer>
     {preview && <MoleculePreview molecule={preview} onClose={() => setPreview(null)}/>}
-    {dialog && <dialog ref={dialogRef} onCancel={() => {setDialog(false);setEditor(null);}}><div className="dialog-head"><div><h2>Insert a molecule</h2><p>Draw a structure or paste SMILES using the editor's Open tool.</p></div><button onClick={() => {setDialog(false);setEditor(null);}}>Cancel</button></div><div className="editor"><EditorBoundary><Suspense fallback={<EditorLoading/>}><Editor onInit={async k => {try {if(molecule) await k.setMolecule(molecule.smiles);setEditor(k);} catch(e) {setError(e.message);}}}/></Suspense></EditorBoundary></div>{error && <p role="alert" className="error">{error}</p>}<div className="dialog-actions"><span className="caption">RDKit validates the structure and assigns canonical atom indices.</span><button className="primary" disabled={!editor || saving} onClick={async () => {try {await insert(await editor.getSmiles());} catch(e) {setError(e.message);}}}>{saving ? 'Validating…' : 'Insert molecule'}</button></div></dialog>}
+    {dialog && <dialog ref={dialogRef} onCancel={() => {setDialog(false);setEditor(null);}}><div className="dialog-head"><div><h2>Insert a molecule</h2><p>Draw a structure or paste SMILES using the editor's Open tool.</p></div><button onClick={() => {setDialog(false);setEditor(null);}}>Cancel</button></div><div className="editor"><EditorBoundary><Suspense fallback={<EditorLoading/>}><Editor onInit={async k => {try {const start = seedSmiles ?? molecule?.smiles; if(start) await k.setMolecule(start);setEditor(k);} catch(e) {setError(e.message);}}}/></Suspense></EditorBoundary></div>{error && <p role="alert" className="error">{error}</p>}<div className="dialog-actions"><span className="caption">RDKit validates the structure and assigns canonical atom indices.</span><button className="primary" disabled={!editor || saving} onClick={async () => {try {await insert(await editor.getSmiles());} catch(e) {setError(e.message);}}}>{saving ? 'Validating…' : 'Insert molecule'}</button></div></dialog>}
   </main>;
 }
 createRoot(document.getElementById('root')).render(<App/>);

@@ -4,7 +4,7 @@
 import {defineConfig} from 'vite';
 const backend = process.env.KERMT_BACKEND_URL || 'http://127.0.0.1:8080';
 export default defineConfig({
-  define: {global: 'globalThis'},
+  define: {global: 'globalThis', 'process.env': {}},
   resolve: {alias: {events: 'events/'}},
   server: {proxy: {'/api': backend}},
   // Ketcher's ES module distribution also imports Raphael through CommonJS.
