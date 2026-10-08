@@ -135,7 +135,7 @@ export default function CtiMap() {
           </dl>
         </div>
 
-        <span className="cti-watermark">Illustrative example data</span>
+        <span className="cti-watermark"><span>Illustrative</span><span>example</span><span>data</span></span>
 
         <div className="cti-legend">
           <span><i className="target" />Targeted country</span>

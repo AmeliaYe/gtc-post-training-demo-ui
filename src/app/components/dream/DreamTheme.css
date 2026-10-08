@@ -573,9 +573,8 @@
 .dream-theme .rt-note b.rt-step-num { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; margin: 0; border-radius: 50%; background: var(--accent); color: var(--dream-navy); font-size: 12px; }
 .dream-theme .rt-step-of { flex: none; color: var(--muted); font-size: 12px; }
 .dream-theme .rt-note.live b.rt-step-num { background: var(--live); }
-/* Map data note as a watermark in the top-right corner. */
-.dream-theme .cti-watermark { position: absolute; top: var(--dream-space-3); right: var(--dream-space-4); color: color-mix(in srgb, var(--ink) 45%, transparent); font-size: 12px; font-style: italic; letter-spacing: .02em; pointer-events: none; }
-.dream-theme .cti-watermark { font-size: 15px; }
+/* Make the illustrative-data label as prominent as the highlighted countries. */
+.dream-theme .cti-watermark { position: absolute; top: var(--dream-space-4); right: var(--dream-space-4); display: flex; flex-direction: column; align-items: flex-end; color: var(--dream-coral); font-size: 26px; font-style: normal; font-weight: 700; line-height: .96; letter-spacing: -.02em; text-align: right; text-shadow: 0 0 14px rgba(232, 132, 128, .4); pointer-events: none; }
 /* Map pause/resume. Paused also freezes the CSS beacon pulses. */
 .dream-theme .cti-play { position: absolute; top: var(--dream-space-3); left: 300px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line-strong); border-radius: var(--dream-radius-pill); background: color-mix(in srgb, var(--dream-navy) 88%, transparent); color: var(--ink); font-size: 12px; font-weight: 600; cursor: pointer; }
 .dream-theme .cti-play:hover { border-color: var(--accent); color: var(--accent); }

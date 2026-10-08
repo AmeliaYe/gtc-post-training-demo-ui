@@ -84,6 +84,11 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .workspace-body:has(.cyber-defense-content) > .model-tile { align-self: stretch; }
 .workspace-body:has(.cyber-defense-content) > .expanded-model { display: flex; flex-direction: column; min-height: 0; }
 .cyber-defense-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.workspace-body:has(.computer-use-content) { grid-template-rows: repeat(4, 175px); min-height: 700px; }
+.workspace-body:has(.computer-use-content) > .model-tile { align-self: stretch; }
+.workspace-body:has(.computer-use-content) > .expanded-model { display: flex; flex-direction: column; min-height: 0; }
+.app-shell:has(.workspace-body.has-selection) .intro-row { display: none; }
+.app-shell:has(.workspace-body.has-selection) .page-wrap { padding-top: 24px; }
 .dock-heading { grid-column: 1; grid-row: 1; align-self: center; display: flex; justify-content: space-between; color: #667064; margin: 0 13px; padding: 3px 2px 0; font: 8px monospace; letter-spacing: .12em; }
 .dock-heading small { color: #596157; letter-spacing: 0; }
 .model-tile { position: relative; grid-column: 1; min-height: 166px; margin: 0 13px 9px; text-align: left; transform-origin: top left; border: 1px solid var(--line); border-radius: 7px; padding: 0; color: inherit; background: linear-gradient(145deg, var(--tile-glow), transparent 48%), #121612; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; transition: border-color .22s ease, box-shadow .22s ease; }

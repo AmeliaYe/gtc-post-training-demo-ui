@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import HealthcareDemo from './components/HealthcareDemo';
 import { CyberDefenseDemo } from './components/CyberDefenseDemo';
+import ComputerUseDemo from './components/ComputerUseDemo';
 import DreamDemoContent from './components/dream/DreamDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
@@ -58,19 +59,34 @@ type CyberDemo = DemoBase & {
   kind: 'cyber';
 };
 
-type Demo = PlaceholderDemo | LiveDemo | CyberDemo;
+type ComputerDemo = DemoBase & {
+  kind: 'computer';
+};
+
+type Demo = PlaceholderDemo | LiveDemo | CyberDemo | ComputerDemo;
 
 const demos: Demo[] = [
   {
-    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
-    description: 'Find security weaknesses before attackers do.',
-    color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
+    kind: 'computer', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
+    description: 'Complete software tasks by seeing and using the screen.',
+    color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
   },
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     description: 'Practice safer decisions before working with patients.',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: RodOfAsclepiusIcon,
     embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
+  },
+  {
+    kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
+    description: 'Reason across molecules, structures, and scientific data.',
+    color: '#ffb86b', glow: 'rgba(255, 184, 107, .18)', icon: CircleStackIcon,
+    embedUrl: KERMT_DEMO_URL,
+  },
+  {
+    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
+    description: 'Find security weaknesses before attackers do.',
+    color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
   },
   {
     kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
@@ -81,22 +97,6 @@ const demos: Demo[] = [
     before: 'The activity may indicate a coordinated intrusion. Review the available threat intelligence and monitor the affected systems for additional indicators.',
     after: 'HIGH · The evidence forms a complete path: initial access → credential theft → privileged movement → protected infrastructure. Isolate exposed access points, revoke compromised credentials, and validate segmentation before restoring connectivity.',
     tags: ['CTI-grounded', 'attack-path aware', 'evidence-linked'],
-  },
-  {
-    kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
-    description: 'Reason across molecules, structures, and scientific data.',
-    color: '#ffb86b', glow: 'rgba(255, 184, 107, .18)', icon: CircleStackIcon,
-    embedUrl: KERMT_DEMO_URL,
-  },
-  {
-    kind: 'placeholder', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
-    description: 'Complete software tasks by seeing and using the screen.',
-    color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
-    scoreLabel: 'Task completion', scoreBefore: 46.8, scoreAfter: 84.7, latency: '54 ms', memory: '6.2 GB',
-    prompt: 'Reconcile the Q3 invoice in the ERP and attach the matching purchase order.',
-    before: 'Open the ERP, search for the invoice, find the purchase order, and attach it to the invoice record.',
-    after: 'Plan: open Accounts Payable → search INV-30418 → verify vendor and amount → open linked PO-7712 in a new tab → compare line totals → attach the PDF. Stop for approval before clicking “Post” because it changes financial state.',
-    tags: ['UI-grounded', 'approval-aware', 'recoverable'],
   },
 ];
 
@@ -190,7 +190,7 @@ function ModelTile({ model }: { model: Demo }) {
           <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
-        <span className="tile-score"><span><strong style={{ color: model.color }}>{model.kind === 'cyber' ? 'Explore demo' : model.previewLabel || 'Live demo'}</strong></span></span>
+        <span className="tile-score"><span><strong style={{ color: model.color }}>{model.kind === 'cyber' ? 'Explore demo' : model.kind === 'computer' ? 'Explore tasks' : model.previewLabel || 'Live demo'}</strong></span></span>
       )}
       <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
@@ -377,7 +377,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'demo'
+                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'computer' ? <ComputerUseDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
                   : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}
