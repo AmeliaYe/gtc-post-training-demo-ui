@@ -400,6 +400,10 @@ export default function Home() {
     );
   }
 
+  if (selectedId === 'cyber') {
+    return <main><CyberDefenseDemo onExit={() => resetView('window')} /></main>;
+  }
+
   return (
     <main className={`app-shell ${selectedId === 'health' ? 'healthcare-selected' : ''}`}>
       <header className="topbar">
@@ -476,9 +480,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
+                {model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
-                  : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} codingElapsed={codingElapsed} />}
+                  : model.kind === 'placeholder' ? <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} codingElapsed={codingElapsed} /> : null}
               </>}
                 </motion.article>
               );

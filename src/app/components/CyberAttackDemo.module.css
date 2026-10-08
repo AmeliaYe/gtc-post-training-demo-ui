@@ -1,34 +1,30 @@
-.attack { --path-color: #b7ed71; --path-tint: #b7ed7110; min-width: 0; }
-.normal { --path-color: #b7ed71; --path-tint: #b7ed7110; }
-.unsafe { --path-color: #f39889; --path-tint: #f398890d; }
-.consequence { --path-color: #edc67b; --path-tint: #edc67b0f; }
-.scene { position: relative; overflow: hidden; padding: 0 12px; border: 1px solid #38462f; border-radius: 10px; background: radial-gradient(ellipse at 45% 40%, #26392035, transparent 70%), #0d150e; }
-.scene::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(#92b28308 1px, transparent 1px), linear-gradient(90deg, #92b28308 1px, transparent 1px); background-size: 36px 36px; mask-image: linear-gradient(#000, transparent); }
-.desktopGraph { position: relative; height: clamp(310px, 32vw, 360px); color: var(--path-color); }
+.attack { --path-color: var(--cyber-blue, #2870ff); min-width: 0; color: #0c0c0c; font-family: inherit; }
+.desktopGraph { position: relative; height: 420px; color: var(--path-color); }
 .attack .desktopGraph .network { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.route { fill: none; stroke: #52604e; stroke-width: 2; opacity: .3; vector-effect: non-scaling-stroke; }
-.activeRoute { stroke: currentColor; stroke-width: 3.5; opacity: 1; }
-.packet { fill: currentColor; filter: drop-shadow(0 0 7px currentColor); }
-.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 16px 13px; border: 1px solid #34412f; border-radius: 9px; background: #111a13; box-shadow: 0 8px 20px #0002; }
-.nodeIcon { display: grid; flex-shrink: 0; place-items: center; width: 44px; height: 44px; margin-bottom: 10px; border-radius: 8px; background: #839b7515; color: #9aaa90; }
-.attack .nodeIcon svg { width: 28px; height: 28px; }
-.node strong, .mobileNode strong { display: block; color: #a6b29c; font-size: clamp(18px, 1.65vw, 28px); font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
-.activeNode { border-color: color-mix(in srgb, var(--path-color) 70%, #34412f); background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-.activeNode strong { color: #f0f6eb; }
-.activeNode .nodeIcon { color: var(--path-color); background: var(--path-tint); }
+.route { fill: none; stroke: #cccdd5; stroke-width: 1.8; opacity: .7; vector-effect: non-scaling-stroke; }
+.activeRoute { stroke: currentColor; stroke-width: 2.2; opacity: 1; }
+.packet { fill: currentColor; }
+.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 16px; border: 1px solid #e0e0e6; border-radius: 19px; background: #fff; }
+.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.nodeNumber { display: grid; flex-shrink: 0; place-items: center; width: 34px; height: 38px; border-radius: 11px; background: #f0f5ff; color: #2870ff; font-size: 21px; line-height: 1; }
+.nodeIcon { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; color: #aaaab5; }
+.attack .nodeIcon svg { width: 23px; height: 23px; }
+.node strong, .mobileNode strong { display: block; color: #2e2e36; font-size: clamp(17px, 1.15vw, 22px); font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+.nodeDetail { display: block; margin-top: 10px; color: #777782; font-size: 15px; line-height: 1.35; }
+.activeNode { border-color: #a8b6d2; box-shadow: 0 8px 24px #14142709; }
+.activeNode strong { color: #0c0c0c; }
+.activeNode .nodeIcon { color: #626d84; }
 .mobileRoute { display: none; }
-
 @media (max-width: 800px) {
   .desktopGraph { display: none; }
-  .scene { padding: 16px; }
-  .mobileRoute { position: relative; display: flex; flex-direction: column; max-width: 480px; padding: 0; margin: 0 auto; list-style: none; }
+  .mobileRoute { display: flex; flex-direction: column; max-width: 500px; padding: 15px 0; margin: 0 auto; list-style: none; }
   .mobileRoute li { min-width: 0; }
-  .mobileNode { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 12px; border: 1px solid color-mix(in srgb, var(--path-color) 55%, #34412f); border-radius: 7px; background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-  .mobileNode .nodeIcon { width: 38px; height: 38px; margin-bottom: 0; color: var(--path-color); }
-  .mobileNode strong { min-width: 0; color: #edf3e7; font-size: 20px; }
-  .attack .mobileArrow { display: block; width: 24px; height: 28px; margin: 3px auto; color: var(--path-color); }
+  .mobileNode { display: flex; align-items: center; gap: 13px; min-height: 100px; padding: 18px; border: 1px solid #d9dce5; border-radius: 18px; background: #fff; }
+  .mobileNode > div { flex: 1; min-width: 0; }
+  .mobileNode strong { font-size: 19px; }
+  .mobileNode .nodeDetail { margin-top: 6px; font-size: 15px; }
+  .attack .mobileArrow { display: block; width: 23px; height: 30px; margin: 4px auto; color: var(--path-color); }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .packet { display: none; }
 }

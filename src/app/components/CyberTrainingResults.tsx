@@ -11,8 +11,8 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
     <div className={styles.results}>
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
-          <span className={styles.eyebrow}>dfbench</span>
           <div><h4>Vulnerability recall</h4><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
+          <span className={styles.eyebrow}>dfbench</span>
         </header>
         <div className={styles.metric}>
           {[benchmark.before, benchmark.after].map((result, index) => (
@@ -38,12 +38,13 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
       </section>
 
       <section className={styles.example} aria-label={`${scenario.repo} recorded example results`}>
+        <p className={styles.exampleLabel}>Openfire · submitted report</p>
         <div className={styles.comparison}>
           {[scenario.before, scenario.after].map((run, index) => (
               <div key={index} className={`${styles.checkpoint} ${index === 1 ? styles.later : ''}`}>
                 <span className={styles.checkpointLabel}>{index === 0 ? 'Early · step 5' : 'Final · step 200'}</span>
-                <strong className={`${styles.outcome} ${run.matchedCount ? styles.found : styles.missed}`}>
-                  {run.matchedCount ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}{run.matchedCount ? 'Found' : 'Missed'}
+                <strong className={`${styles.outcome} ${run.matchedCount ? styles.found : styles.missed}`} aria-label={run.matchedCount ? 'SSRF reported' : 'SSRF omitted from the report'}>
+                  {run.matchedCount ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}{run.matchedCount ? 'Reported' : 'Omitted'}
                 </strong>
               </div>
           ))}
