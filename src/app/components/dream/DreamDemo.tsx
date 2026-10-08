@@ -80,7 +80,7 @@ const CATEGORIES: Category[] = [
 function MitreBadge({ id }: { id: string }) {
   return id.startsWith('CWE-')
     ? <span className="mitre-badge">MITRE CWE</span>
-    : <span className="mitre-badge" title="MITRE ATT&CK®"><Image src="/mitre-attack-logo.png" alt="MITRE ATT&CK" width={104} height={11} style={{ width: 'auto' }} /></span>;
+    : <span className="mitre-badge" title="MITRE ATT&CK®"><Image src="/mitre-attack-logo.png" alt="MITRE ATT&CK" width={1191} height={126} /></span>;
 }
 
 // Splits a response into text and Markdown-table blocks (runs of lines starting with '|').
@@ -337,7 +337,7 @@ function RuntimeDiagram() {
           <text key={text} className={`rt-edge-label ${isOn(kind) ? '' : 'off'}`} x={x} y={y} textAnchor={anchor}>{text}</text>
         ))}
 
-        <motion.rect className="rt-group train" x="16" y="30" width="190" height="270" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
+        <motion.rect className="rt-group train" x="16" y="30" width="190" height="270" rx="12" initial={false} animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="273" width="17" height="17" /><text className="rt-nv" x="50" y="286">NVIDIA</text>
         <text className="rt-kicker train" x="30" y="56">2 · PRACTICE</text>
         <Box x={30} y={72} w={162} h={70} kind="train" mode={mode} hero>
@@ -374,7 +374,7 @@ function RuntimeDiagram() {
           <text className="rt-sub" x="887" y="266" textAnchor="middle">synthetic, never from customer data</text>
         </Box>
 
-        <motion.rect className="rt-group train" x="16" y="314" width="674" height="88" rx="12" animate={{ opacity: mode === 'train' ? 1 : .3 }} />
+        <motion.rect className="rt-group train" x="16" y="314" width="674" height="88" rx="12" initial={false} animate={{ opacity: mode === 'train' ? 1 : .3 }} />
         <NvidiaLogo className="rt-nv-mark" x="30" y="320" width="17" height="17" /><text className="rt-nv" x="50" y="333">NVIDIA</text>
         <text className="rt-kicker train" x="676" y="333" textAnchor="end">1 · LEARN</text>
         <Box x={30} y={342} w={250} h={50} kind="train" mode={mode}>

@@ -197,7 +197,7 @@ export default function AttackScene({ scene }: { scene: Scene }) {
         ))}
         {scene.edges.map((e) => <path key={`bg-${e.d}`} d={e.d} className="as-track" />)}
         {scene.edges.map((e) => now >= e.at && (
-          <motion.g key={`${cycle}-${e.d}`} animate={{ opacity: e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
+          <motion.g key={`${cycle}-${e.d}`} initial={false} animate={{ opacity: e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
             <motion.path d={e.d} className={`as-line ${toneAt(e.tone, e.tones, now)}`} initial={{ pathLength: reduce || e.at === 0 ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} />
             {e.label && <motion.text x={e.lx} y={e.ly} textAnchor={e.anchor ?? 'middle'} className={`as-edge-label ${toneAt(e.tone, e.tones, now)}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}>{e.label}</motion.text>}
           </motion.g>
