@@ -1,0 +1,120 @@
+{
+  "revision": "introduction-handoff-r03",
+  "sourceRevision": "gym R09",
+  "sourceDirectory": "outputs/press-gym-journeys-r09",
+  "animationDurationSeconds": 73,
+  "validation": {
+    "sourceBrowserChecksPassed": 159,
+    "sourceBrowserChecksTotal": 159
+  },
+  "files": {
+    "introduction/index.html": {
+      "bytes": 4462,
+      "sha256": "2840bd4d19e9cf36d6f23989057e782265295a60c305297502aab270dabbcaa8"
+    },
+    "introduction/assets/opening.css": {
+      "bytes": 13041,
+      "sha256": "8f9c5038e46659f97a3a162c2b58044db3e479395ade0a746edbe82fc917370d",
+      "source": "outputs/press-gym-journeys-r09/assets/opening.css"
+    },
+    "introduction/assets/gym-opening-r02/training-room.png": {
+      "bytes": 2123695,
+      "sha256": "7e62a30ea0c6f287a5f6dba58a994327f0fc169f09a4b48a17cc284260173896",
+      "source": "outputs/press-gym-journeys-r09/assets/gym-opening-r02/training-room.png"
+    },
+    "introduction/assets/pause.svg": {
+      "bytes": 313,
+      "sha256": "f122ec4ea7f5693a0b1baafa9c708b53980dc87b4aacb297c6e6f71c1a4c115c",
+      "source": "outputs/press-gym-journeys-r09/assets/pause.svg"
+    },
+    "introduction/assets/rotate-ccw.svg": {
+      "bytes": 297,
+      "sha256": "622685386ab4017eabfde01cd74550a20b1924df233b353f73b6b155371f2afd",
+      "source": "outputs/press-gym-journeys-r09/assets/rotate-ccw.svg"
+    },
+    "introduction/assets/maximize.svg": {
+      "bytes": 366,
+      "sha256": "1f790856b0de805ab62e871609f1990b89d227d472022e57a11fde015aad4826",
+      "source": "outputs/press-gym-journeys-r09/assets/maximize.svg"
+    },
+    "introduction/assets/arrow-right.svg": {
+      "bytes": 261,
+      "sha256": "288397fdb73bb4f783cf9eabb726ff47357df1d4e3f1201dd748090579f108b9",
+      "source": "outputs/press-gym-journeys-r09/assets/arrow-right.svg"
+    },
+    "introduction/assets/opening-r09.js": {
+      "bytes": 8461,
+      "sha256": "f56da7cc5d632e85cb48f5d65c70e35647f4a6992f5bc0cae0e9570aa85b6160",
+      "source": "outputs/press-gym-journeys-r09/assets/opening-r09.js"
+    },
+    "introduction/assets/circuit-r09/scene.js": {
+      "bytes": 20432,
+      "sha256": "e2fefd1e5e3bcdea863d8dc6c4ca57619c570ca9e250316bfd5d4e4325b3d0c8",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/scene.js"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/three.module.js": {
+      "bytes": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+      "source": "outputs/press-gym-journeys-r09/assets/coffee-lab-r01/vendor/three.module.js"
+    },
+    "introduction/assets/framing.js": {
+      "bytes": 468,
+      "sha256": "faeb20bedc3cd2c28bfae145343606147c2b3a52ef147002ca96242ca0542758",
+      "source": "outputs/press-gym-journeys-r09/assets/framing.js"
+    },
+    "introduction/assets/gym-opening-r02/motion.js": {
+      "bytes": 2018,
+      "sha256": "93f7e8d5576828092e5c6945d3e827cea816dea9c063b8ef04ffa6500491124f",
+      "source": "outputs/press-gym-journeys-r09/assets/gym-opening-r02/motion.js"
+    },
+    "introduction/assets/circuit-r06/equipment.js": {
+      "bytes": 6800,
+      "sha256": "936eec3c5e2a1d570cb3b7608a1f0810518c3fd01c93a981b99e193f623d1984",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r06/equipment.js"
+    },
+    "introduction/assets/circuit-r08/timeline.js": {
+      "bytes": 4404,
+      "sha256": "f43c59d0c4ef71398d6f002436a1ba130269126ade27ae68c12ca8394ddd12dc",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r08/timeline.js"
+    },
+    "introduction/assets/circuit-r08/strength.js": {
+      "bytes": 1273,
+      "sha256": "c73f6abc85be358a7b899a50bcfcd6ae5662c8debc8e63ad18c466681b829290",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r08/strength.js"
+    },
+    "introduction/assets/circuit-r09/abdomen.js": {
+      "bytes": 1103,
+      "sha256": "c8db3a9869d57a5e6ee0172f18ff74edc76c64807911519e2098865fcc80747b",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/abdomen.js"
+    },
+    "introduction/assets/nim.png": {
+      "bytes": 6395,
+      "sha256": "9ff751943905a53fe86175c29af9c4f04c6b85f56098b89b0294dc473ed32b30",
+      "source": "outputs/press-gym-journeys-r09/assets/nim.png"
+    },
+    "introduction/assets/play.svg": {
+      "bytes": 306,
+      "sha256": "d7c34786135922a92b6896f6c2384ceeb0346afbf6041dc79982011411409833",
+      "source": "outputs/press-gym-journeys-r09/assets/play.svg"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/three.core.js": {
+      "bytes": 1403455,
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+      "source": "outputs/press-gym-journeys-r09/assets/coffee-lab-r01/vendor/three.core.js"
+    },
+    "introduction/assets/coffee-lab-r01/vendor/THREE-LICENSE.txt": {
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "source": "outputs/press-gym-journeys-r09/assets/coffee-lab-r01/vendor/THREE-LICENSE.txt"
+    },
+    "booth-walkthrough.md": {
+      "bytes": 1956,
+      "sha256": "8f5dff3682466d59e8310a06fa882b5240c1b0fb58d7e50305658d576453aac5",
+      "source": "outputs/press-gym-journeys-r09/booth-walkthrough.md"
+    },
+    "README.md": {
+      "bytes": 3759,
+      "sha256": "f57930184cf2906613d43667692fe29b96a48322cbacb2b78c02910ba7a65980"
+    }
+  }
+}

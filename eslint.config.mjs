@@ -10,6 +10,7 @@ export default defineConfig([
     // Versioned press-demo snapshot; verified independently of the React app.
     'public/healthcare/r01/**',
     'public/healthcare/r02/**',
+    'public/healthcare/r03/**',
     'healthcare-demo/**',
     // Standalone Python inference app; browser assets are checked separately.
     'ui/**',

@@ -1,11 +1,14 @@
-# Current Demo team handoff — October 6, 2026
+# Current Demo team handoff — October 7, 2026
 
-The active standalone deliverables are in [`../public/healthcare/r02/`](../public/healthcare/r02/README.md):
+- **Introduction R09:** [HTML entry point](../public/healthcare/r03/introduction/index.html) and [integration instructions](../public/healthcare/r03/README.md). The larger gym animation now shows completed reps before muscle growth, local halos and smooth abdominal contours. Copy the entire introduction/ directory with its assets/ folder.
+- **Post-training for healthcare:** [Four-page HTML](../public/healthcare/r02/healthcare/index.html). How It Learns → Before & After → Results → Getting Started; no repeated Introduction.
+- **Previous Introduction:** [r02 / gym R06](../public/healthcare/r02/introduction/index.html), preserved for rollback.
 
-- **Introduction:** [`introduction/index.html`](../public/healthcare/r02/introduction/index.html), the larger gym r06 robot training animation.
-- **Post-training for healthcare:** [`healthcare/index.html`](../public/healthcare/r02/healthcare/index.html), the latest r08 workflow with How It Learns, Before & After, Results and Getting Started. Introduction is removed.
-
-The Healthcare tile now loads the second deliverable with `?embed=1`. The first is ready for landing-page composition by the Demo team. Keep each HTML with its assets directory. The handoff includes a README and SHA-256 provenance; earlier full Press and Developer tracks below remain preserved. The split handoff is maintained on the `healthcare-demo` branch.
+The Healthcare tile uses the existing r02 healthcare bundle. Introduction R09 is
+ready for the Demo team to compose into the landing page. Delivery r03 includes a
+README, presenter cues and SHA-256 provenance. The approved animation source is
+gym R09; older dependency names inside assets/ remain active runtime modules.
+The healthcare-demo branch contains this handoff.
 
 ---
 
