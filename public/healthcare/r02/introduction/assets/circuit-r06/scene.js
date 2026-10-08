@@ -3,6 +3,8 @@ import {frameFor} from '../framing.js';
 import {exerciseClips,REP_SECONDS} from '../gym-opening-r02/motion.js';
 import {makeEquipment} from './equipment.js';
 import {smooth} from './timeline.js';
+import {strengthAt,growthPulseAt,coreAt,physique,chestExpansion} from './strength.js';
+import {sculptAbdomen} from './abdomen.js';
 
 export function createGymScene(host) {
   const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});
@@ -10,7 +12,7 @@ export function createGymScene(host) {
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
   renderer.domElement.className='go-canvas';renderer.domElement.setAttribute('role','img');
-  renderer.domElement.setAttribute('aria-label','The original robot practices dumbbells, bench press and elliptical, with coach feedback and model updates between attempts');host.append(renderer.domElement);
+  renderer.domElement.setAttribute('aria-label','The robot practices a bench press, receives feedback, and visibly grows stronger as the model is updated');host.append(renderer.domElement);
   const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,1,.1,60);
   scene.add(new THREE.HemisphereLight(0xf1faff,0x768277,2.0));
   const key=new THREE.DirectionalLight(0xffffff,3.6);key.position.set(-4,7,5);key.castShadow=true;
@@ -25,12 +27,29 @@ export function createGymScene(host) {
     steel:new THREE.MeshStandardMaterial({color:0xb2c3bf,roughness:.26,metalness:.85}),
     trim:new THREE.MeshStandardMaterial({color:0x93c854,roughness:.5,metalness:.2})
   };
+  const trainedShell=m.shell.clone();trainedShell.emissive.setHex(0x76b900);trainedShell.emissiveIntensity=0;
+  const shoulderShell=trainedShell.clone();shoulderShell.transparent=true;shoulderShell.opacity=0;
+  const haloMaterials=[
+    new THREE.MeshBasicMaterial({color:0x9bff37,transparent:true,opacity:0,side:THREE.BackSide,depthWrite:false,toneMapped:false}),
+    new THREE.MeshBasicMaterial({color:0x76b900,transparent:true,opacity:0,side:THREE.BackSide,depthWrite:false,toneMapped:false}),
+  ];
+  const halos=[];
+  function addHalo(part,region){
+    for(const [index,padding] of [1.10,1.22].entries()){
+      const halo=new THREE.Mesh(part.geometry.clone(),haloMaterials[index]);
+      halo.name=`${region} growth halo`;halo.visible=false;halo.scale.setScalar(padding);halo.renderOrder=2+index;
+      part.add(halo);halos.push({halo,part,region});
+    }
+  }
   const mesh=(g,material,parent,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,material);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;};
   const sphere=(parent,mat,x,y,z,sx,sy,sz)=>{const o=mesh(new THREE.SphereGeometry(1,40,28),mat,parent,x,y,z);o.scale.set(sx,sy,sz);return o;};
   const group=(name,parent,x=0,y=0,z=0)=>{const o=new THREE.Group();o.name=name;o.position.set(x,y,z);parent.add(o);return o;};
   const robot=group('robot',scene);robot.rotation.y=-.18;
   const torso=group('torso',robot,0,.82,0);
-  sphere(torso,m.shell,0,.53,0,.45,.58,.31);sphere(torso,m.seam,0,.1,0,.30,.17,.24);
+  const bodyShell=mesh(new THREE.SphereGeometry(1,96,80),trainedShell,torso,0,.53,0);bodyShell.scale.set(.45,.58,.31);
+  const originalBody=new Float32Array(bodyShell.geometry.attributes.position.array);
+  const originalNormals=new Float32Array(bodyShell.geometry.attributes.normal.array);
+  sphere(torso,m.seam,0,.1,0,.30,.17,.24);
   const badgeGeometry=new THREE.PlaneGeometry(.68,.68,20,20),positions=badgeGeometry.attributes.position;
   // Wrap the unmodified icon texture over the shell instead of floating a flat label in front.
   for(let i=0;i<positions.count;i++){
@@ -40,6 +59,9 @@ export function createGymScene(host) {
   badgeGeometry.computeVertexNormals();
   const badgeMaterial=new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,alphaTest:.02,toneMapped:false});
   const badge=mesh(badgeGeometry,badgeMaterial,torso);badge.name='NVIDIA NIM';badge.castShadow=false;badge.visible=false;
+  const coreHaloMaterial=new THREE.MeshBasicMaterial({color:0x9bff37,transparent:true,opacity:0,depthWrite:false,toneMapped:false});
+  const coreHalo=mesh(new THREE.TorusGeometry(1,.028,8,64),coreHaloMaterial,torso,0,.13,.32);
+  coreHalo.name='abdominal development halo';coreHalo.scale.set(.255,.19,.09);coreHalo.castShadow=false;coreHalo.visible=false;
   let nimLoaded=false;
   const badgeReady=new THREE.TextureLoader().loadAsync(new URL('../nim.png',import.meta.url).href).then(texture=>{
     texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());badgeMaterial.map=texture;badgeMaterial.needsUpdate=true;badge.visible=true;nimLoaded=true;
@@ -55,10 +77,12 @@ export function createGymScene(host) {
   for(const [side,sign] of [['left',-1],['right',1]]) {
     const shoulder=group(`${side}Shoulder`,torso,sign*.445,.86,0);
     sphere(shoulder,m.seam,0,0,0,.145,.145,.145);
-    mesh(new THREE.CapsuleGeometry(.133,.27,10,20),m.shell,shoulder,0,-.20,0);
+    const deltoid=sphere(shoulder,shoulderShell,0,0,0,.145,.145,.145);deltoid.visible=false;
+    const upperArm=mesh(new THREE.CapsuleGeometry(.133,.27,10,20),trainedShell,shoulder,0,-.20,0);
     const elbow=group(`${side}Elbow`,shoulder,0,-.43,0);
     sphere(elbow,m.seam,0,0,0,.105,.105,.105);
-    mesh(new THREE.CapsuleGeometry(.112,.23,10,20),m.shell,elbow,0,-.18,0);
+    const forearm=mesh(new THREE.CapsuleGeometry(.112,.23,10,20),trainedShell,elbow,0,-.18,0);
+    addHalo(deltoid,'shoulder');addHalo(upperArm,'upper arm');addHalo(forearm,'forearm');
     const wrist=group(`${side}Wrist`,elbow,0,-.40,0);
     sphere(wrist,m.shell,0,0,0,.127,.13,.105);
     const dumbbell=group(`${side}Dumbbell`,wrist,0,-.015,.03);
@@ -68,17 +92,17 @@ export function createGymScene(host) {
       const ring=mesh(new THREE.CylinderGeometry(.175,.175,.015,6),m.trim,dumbbell,plate*.32,0,0);ring.rotation.z=Math.PI/2;
       const cap=mesh(new THREE.CylinderGeometry(.048,.048,.018,24),m.steel,dumbbell,plate*.333,0,0);cap.rotation.z=Math.PI/2;
     }
-    arms.push({shoulder,elbow,wrist,dumbbell});
+    arms.push({shoulder,elbow,wrist,dumbbell,deltoid,upperArm,forearm});
   }
   for(const sign of [-1,1]) {
     const leg=group(`leg${sign}`,robot,sign*.23,.91,0);
-    mesh(new THREE.CapsuleGeometry(.145,.21,10,20),m.shell,leg,0,-.19,0);
+    const thigh=mesh(new THREE.CapsuleGeometry(.145,.21,10,20),m.shell,leg,0,-.19,0);
     const knee=group(`knee${sign}`,leg,0,-.41,0);
     sphere(knee,m.seam,0,0,0,.11,.11,.11);
     mesh(new THREE.CapsuleGeometry(.14,.17,10,20),m.shell,knee,0,-.18,0);
     const ankle=group(`ankle${sign}`,knee,0,-.37,0);
     sphere(ankle,m.shell,0,0,.08,.18,.12,.27);
-    legs.push({hip:leg,knee,ankle});
+    legs.push({hip:leg,knee,ankle,thigh});
   }
   const shadow=mesh(new THREE.PlaneGeometry(30,30),new THREE.ShadowMaterial({opacity:.26}),scene,0,.008,0);shadow.rotation.x=-Math.PI/2;shadow.castShadow=false;
   const clips=exerciseClips();
@@ -104,6 +128,48 @@ export function createGymScene(host) {
   }
   function armsTo(targets,amount=1){arms.forEach((a,i)=>{const start=worldPoint(a.wrist);ik(a.shoulder,a.elbow,a.wrist,mix(start,targets[i],amount),.43,.40,[(i?1:-1),-.3,.1]);});}
   function feetTo(targets){legs.forEach((l,i)=>{ik(l.hip,l.knee,l.ankle,targets[i],.41,.37,[0,0,1]);const q=l.knee.getWorldQuaternion(new THREE.Quaternion());l.ankle.quaternion.copy(q.invert());});}
+  let strength=-1,build=physique(0),growthPulse=0,core=0;
+  function updatePhysique(spec){
+    const gain=strengthAt(spec.time);
+    growthPulse=growthPulseAt(spec.time);
+    core=coreAt(spec.time);
+    coreHalo.visible=core>0&&growthPulse>.001;coreHaloMaterial.opacity=.9*growthPulse;
+    haloMaterials[0].opacity=.85*growthPulse;haloMaterials[1].opacity=.22*growthPulse;
+    halos.forEach(({halo,part})=>halo.visible=growthPulse>.001&&part.visible);
+    trainedShell.emissiveIntensity=.26*growthPulse;
+    shoulderShell.emissiveIntensity=.38*growthPulse;
+    if(gain===strength)return;
+    strength=gain;build=physique(gain);
+    // Only shell thickness changes; joint anchors and the existing movement
+    // timeline stay untouched.
+    arms.forEach(arm=>{
+      arm.upperArm.scale.set(build.upperArm,1,build.upperArm);
+      arm.forearm.scale.set(build.forearm,1,build.forearm);
+      arm.deltoid.visible=gain>0;
+      arm.deltoid.scale.set(build.shoulder,.145+.045*gain,build.shoulder);
+    });
+    shoulderShell.opacity=smooth(gain/.28);
+    legs.forEach(leg=>leg.thigh.scale.set(build.thigh,1,build.thigh));
+    const points=bodyShell.geometry.attributes.position;
+    for(let index=0;index<points.count;index++){
+      const x=originalBody[index*3],y=originalBody[index*3+1],z=originalBody[index*3+2];
+      const expansion=chestExpansion(y,gain);
+      const scaledX=x*expansion.width,scaledZ=z*expansion.depth;
+      points.setXYZ(index,scaledX,y,sculptAbdomen(scaledX*.45,.53+y*.58,scaledZ*.31,core)/.31);
+    }
+    points.needsUpdate=true;
+    if(gain===0){bodyShell.geometry.attributes.normal.array.set(originalNormals);bodyShell.geometry.attributes.normal.needsUpdate=true;}
+    else bodyShell.geometry.computeVertexNormals();
+    bodyShell.geometry.computeBoundingSphere();
+    // Keep the NIM artwork the same size and wrap it onto the fuller chest.
+    for(let index=0;index<positions.count;index++){
+      const x=positions.getX(index),y=positions.getY(index),unitY=(y-.53)/.58;
+      const expansion=chestExpansion(unitY,gain);
+      positions.setZ(index,.31*expansion.depth*Math.sqrt(Math.max(0,1-(x/(.45*expansion.width))**2-unitY**2))+.006);
+    }
+    positions.needsUpdate=true;badgeGeometry.computeVertexNormals();badgeGeometry.computeBoundingSphere();
+    halos.forEach(({halo,part})=>halo.visible=growthPulse>.001&&part.visible);
+  }
   function reset(){
     torso.rotation.set(0,0,0);head.rotation.set(0,0,0);
     arms.forEach(a=>{a.shoulder.rotation.set(0,0,0);a.elbow.rotation.set(0,0,0);a.wrist.rotation.set(0,0,0);});
@@ -146,7 +212,7 @@ export function createGymScene(host) {
   }
   function render(spec,skill) {
     currentSpec=spec;currentTime=spec.time;currentSkill=Math.min(1,Math.max(0,skill));if(!ready)return;
-    reset();const {action,station,progress:p}=spec,bad=1-currentSkill;
+    updatePhysique(spec);reset();const {action,station,progress:p}=spec,bad=1-currentSkill;
     equipment.reveal(action==='prepare'?p:spec.phase===0?0:1);
     const exercising=['try','retry','final'].includes(action),phase=exercising?p:0;
     const cadence=phase+bad*.12*Math.sin(phase*Math.PI*2);
@@ -180,7 +246,7 @@ export function createGymScene(host) {
     const point=head.getWorldPosition(new THREE.Vector3());point.y+=.19;point.project(camera);
     const r=host.getBoundingClientRect();
     const project=p=>{p=p.clone().project(camera);return{x:(p.x+1)*r.width/2+r.x,y:(1-p.y)*r.height/2+r.y};};
-    return{time:currentTime,skill:currentSkill,frames,station:currentSpec.station,action:currentSpec.action,repPhase:currentSpec.progress,torsoLean:torso.rotation.x,elbowAngle:arms[0].elbow.rotation.x,shoulderAngle:arms[0].shoulder.rotation.x,head:{x:(point.x+1)*r.width/2+r.x,y:(1-point.y)*r.height/2+r.y},chest:project(worldPoint(torso,[0,.53,.15])),badge:{name:badge.name,loaded:nimLoaded,center:project(worldPoint(torso,[0,.58,.32]))},position:robot.position.toArray(),contacts,stations:Object.fromEntries(Object.entries(equipment.stationPoints()).map(([k,p])=>[k,project(p)])),equipment:equipment.snapshot(),weights:arms.map(a=>a.dumbbell.getWorldPosition(new THREE.Vector3()).toArray()),pose:[...robot.position.toArray(),...robot.quaternion.toArray(),torso.rotation.x,torso.rotation.z,torso.position.y,...arms.flatMap(a=>[...a.shoulder.quaternion.toArray(),...a.elbow.quaternion.toArray()])],canvasWidth:renderer.domElement.width,canvasHeight:renderer.domElement.height};
+    return{time:currentTime,skill:currentSkill,physique:{...build,growthPulse,core,coreHalo:coreHalo.visible,abdomenDefined:core>0,abdomenSurface:'continuous torso',haloRegions:[...new Set([...halos.filter(({halo})=>halo.visible).map(({region})=>region),...(coreHalo.visible?['abdomen']:[])])],headScale:head.scale.toArray(),jointAnchors:arms.map(arm=>arm.shoulder.position.toArray())},frames,station:currentSpec.station,action:currentSpec.action,repPhase:currentSpec.progress,torsoLean:torso.rotation.x,elbowAngle:arms[0].elbow.rotation.x,shoulderAngle:arms[0].shoulder.rotation.x,head:{x:(point.x+1)*r.width/2+r.x,y:(1-point.y)*r.height/2+r.y},chest:project(worldPoint(torso,[0,.53,.15])),badge:{name:badge.name,loaded:nimLoaded,center:project(worldPoint(torso,[0,.58,.32]))},position:robot.position.toArray(),contacts,stations:Object.fromEntries(Object.entries(equipment.stationPoints()).map(([key,point])=>[key,project(point)])),equipment:equipment.snapshot(),weights:arms.map(arm=>arm.dumbbell.getWorldPosition(new THREE.Vector3()).toArray()),pose:[...robot.position.toArray(),...robot.quaternion.toArray(),torso.rotation.x,torso.rotation.z,torso.position.y,...arms.flatMap(arm=>[...arm.shoulder.quaternion.toArray(),...arm.elbow.quaternion.toArray()])],canvasWidth:renderer.domElement.width,canvasHeight:renderer.domElement.height};
   }
-  return{render,state,ready:badgeReady,dispose(){observer.disconnect();channels.forEach(c=>c.binding.unbind());scene.traverse(o=>o.geometry?.dispose());Object.values(m).forEach(mat=>mat.dispose());badgeMaterial.map?.dispose();badgeMaterial.dispose();equipment.dispose();renderer.dispose();}};
+  return{render,state,ready:badgeReady,dispose(){observer.disconnect();channels.forEach(channel=>channel.binding.unbind());scene.traverse(object=>object.geometry?.dispose());Object.values(m).forEach(material=>material.dispose());trainedShell.dispose();shoulderShell.dispose();coreHaloMaterial.dispose();haloMaterials.forEach(material=>material.dispose());badgeMaterial.map?.dispose();badgeMaterial.dispose();equipment.dispose();renderer.dispose();}};
 }

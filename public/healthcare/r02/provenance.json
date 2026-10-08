@@ -45,9 +45,19 @@
       "source": "outputs/press-gym-journeys-r06/assets/opening.js"
     },
     "introduction/assets/circuit-r06/scene.js": {
-      "bytes": 15611,
-      "sha256": "826b483e8a3106837643a6eb40bcaa3f2efab799efa38bbf28fb15055234b30d",
-      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/scene.js"
+      "bytes": 20358,
+      "sha256": "0196afdcc2fbe463428ed256ce7ddf1340dafb69dda40b0621f3d8b21f195365",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/scene.js (physique only; r06 timing retained)"
+    },
+    "introduction/assets/circuit-r06/strength.js": {
+      "bytes": 1105,
+      "sha256": "12079f7b448aa33f4c60eca9812dc5f4bdbd8e6a2eedf284d39eed6b616e82f6",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r08/strength.js (adapted to r06 timing)"
+    },
+    "introduction/assets/circuit-r06/abdomen.js": {
+      "bytes": 1099,
+      "sha256": "73514d55916b1cfa2966120678aff6d888aff02fa62fccfefc97814ac0b6dd11",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/abdomen.js"
     },
     "introduction/assets/coffee-lab-r01/vendor/three.module.js": {
       "bytes": 603113,
