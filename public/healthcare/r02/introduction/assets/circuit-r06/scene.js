@@ -128,16 +128,17 @@ export function createGymScene(host) {
   }
   function armsTo(targets,amount=1){arms.forEach((a,i)=>{const start=worldPoint(a.wrist);ik(a.shoulder,a.elbow,a.wrist,mix(start,targets[i],amount),.43,.40,[(i?1:-1),-.3,.1]);});}
   function feetTo(targets){legs.forEach((l,i)=>{ik(l.hip,l.knee,l.ankle,targets[i],.41,.37,[0,0,1]);const q=l.knee.getWorldQuaternion(new THREE.Quaternion());l.ankle.quaternion.copy(q.invert());});}
-  let strength=-1,build=physique(0),growthPulse=0,core=0;
+  let strength=-1,build=physique(0),growthPulse=0,highlightPulse=0,core=0;
   function updatePhysique(spec){
     const gain=strengthAt(spec.time);
     growthPulse=growthPulseAt(spec.time);
+    highlightPulse=spec.action==='showcase'?.20+.12*Math.sin(Math.PI*spec.progress):growthPulse;
     core=coreAt(spec.time);
-    coreHalo.visible=core>0&&growthPulse>.001;coreHaloMaterial.opacity=.9*growthPulse;
-    haloMaterials[0].opacity=.85*growthPulse;haloMaterials[1].opacity=.22*growthPulse;
-    halos.forEach(({halo,part})=>halo.visible=growthPulse>.001&&part.visible);
-    trainedShell.emissiveIntensity=.26*growthPulse;
-    shoulderShell.emissiveIntensity=.38*growthPulse;
+    coreHalo.visible=core>0&&highlightPulse>.001;coreHaloMaterial.opacity=.42*highlightPulse;
+    haloMaterials[0].opacity=.50*highlightPulse;haloMaterials[1].opacity=.15*highlightPulse;
+    halos.forEach(({halo,part})=>halo.visible=highlightPulse>.001&&part.visible);
+    trainedShell.emissiveIntensity=.26*highlightPulse;
+    shoulderShell.emissiveIntensity=.38*highlightPulse;
     if(gain===strength)return;
     strength=gain;build=physique(gain);
     // Only shell thickness changes; joint anchors and the existing movement
@@ -168,7 +169,7 @@ export function createGymScene(host) {
       positions.setZ(index,.31*expansion.depth*Math.sqrt(Math.max(0,1-(x/(.45*expansion.width))**2-unitY**2))+.006);
     }
     positions.needsUpdate=true;badgeGeometry.computeVertexNormals();badgeGeometry.computeBoundingSphere();
-    halos.forEach(({halo,part})=>halo.visible=growthPulse>.001&&part.visible);
+    halos.forEach(({halo,part})=>halo.visible=highlightPulse>.001&&part.visible);
   }
   function reset(){
     torso.rotation.set(0,0,0);head.rotation.set(0,0,0);
@@ -210,6 +211,14 @@ export function createGymScene(host) {
     const feet=equipment.pedalTargets().map((target,i)=>mix(equipment.ellipsePoint([-.80+(i?1:-1)*.23,.13,-.28]),target,q));
     feetTo(feet);armsTo(equipment.gripTargets(),q);
   }
+  function walkToCenter(p){
+    const start=benchEntry(),end=v([0,0,0]);
+    walk(start,start.clone().add(v([.85,0,.55])),end.clone().add(v([.75,0,.55])),end,p,.45,-.18);
+  }
+  function showcasePose(p){
+    const q=smooth(p/.35);robot.position.set(0,0,0);robot.rotation.set(0,-.18,0);
+    arms.forEach((arm,index)=>{const sign=index?1:-1;arm.shoulder.rotation.z=sign*.56*q;arm.shoulder.rotation.x=-.18*q;arm.elbow.rotation.z=-sign*1.62*q;});
+  }
   function render(spec,skill) {
     currentSpec=spec;currentTime=spec.time;currentSkill=Math.min(1,Math.max(0,skill));if(!ready)return;
     updatePhysique(spec);reset();const {action,station,progress:p}=spec,bad=1-currentSkill;
@@ -228,6 +237,8 @@ export function createGymScene(host) {
     else if(action==='walk-home'){const start=ellipseEntry();walk(start,start.clone().add(v([-.7,0,.6])),v([.7,0,.9]),v([0,0,0]),p,-.6,-.18);}
     else if(action==='mount-bench')benchPose(p);
     else if(action==='unmount-bench')benchPose(1-p);
+    else if(action==='walk-center')walkToCenter(p);
+    else if(action==='showcase')showcasePose(p);
     else if(station==='bench'){benchPose();}
     else if(action==='mount-elliptical')ellipsePose(p);
     else if(action==='unmount-elliptical')ellipsePose(1-p);
@@ -246,7 +257,7 @@ export function createGymScene(host) {
     const point=head.getWorldPosition(new THREE.Vector3());point.y+=.19;point.project(camera);
     const r=host.getBoundingClientRect();
     const project=p=>{p=p.clone().project(camera);return{x:(p.x+1)*r.width/2+r.x,y:(1-p.y)*r.height/2+r.y};};
-    return{time:currentTime,skill:currentSkill,physique:{...build,growthPulse,core,coreHalo:coreHalo.visible,abdomenDefined:core>0,abdomenSurface:'continuous torso',haloRegions:[...new Set([...halos.filter(({halo})=>halo.visible).map(({region})=>region),...(coreHalo.visible?['abdomen']:[])])],headScale:head.scale.toArray(),jointAnchors:arms.map(arm=>arm.shoulder.position.toArray())},frames,station:currentSpec.station,action:currentSpec.action,repPhase:currentSpec.progress,torsoLean:torso.rotation.x,elbowAngle:arms[0].elbow.rotation.x,shoulderAngle:arms[0].shoulder.rotation.x,head:{x:(point.x+1)*r.width/2+r.x,y:(1-point.y)*r.height/2+r.y},chest:project(worldPoint(torso,[0,.53,.15])),badge:{name:badge.name,loaded:nimLoaded,center:project(worldPoint(torso,[0,.58,.32]))},position:robot.position.toArray(),contacts,stations:Object.fromEntries(Object.entries(equipment.stationPoints()).map(([key,point])=>[key,project(point)])),equipment:equipment.snapshot(),weights:arms.map(arm=>arm.dumbbell.getWorldPosition(new THREE.Vector3()).toArray()),pose:[...robot.position.toArray(),...robot.quaternion.toArray(),torso.rotation.x,torso.rotation.z,torso.position.y,...arms.flatMap(arm=>[...arm.shoulder.quaternion.toArray(),...arm.elbow.quaternion.toArray()])],canvasWidth:renderer.domElement.width,canvasHeight:renderer.domElement.height};
+    return{time:currentTime,skill:currentSkill,physique:{...build,growthPulse,highlightPulse,core,coreHalo:coreHalo.visible,abdomenDefined:core>0,abdomenSurface:'continuous torso',haloRegions:[...new Set([...halos.filter(({halo})=>halo.visible).map(({region})=>region),...(coreHalo.visible?['abdomen']:[])])],headScale:head.scale.toArray(),jointAnchors:arms.map(arm=>arm.shoulder.position.toArray())},frames,station:currentSpec.station,action:currentSpec.action,repPhase:currentSpec.progress,torsoLean:torso.rotation.x,elbowAngle:arms[0].elbow.rotation.x,shoulderAngle:arms[0].shoulder.rotation.x,head:{x:(point.x+1)*r.width/2+r.x,y:(1-point.y)*r.height/2+r.y},chest:project(worldPoint(torso,[0,.53,.15])),badge:{name:badge.name,loaded:nimLoaded,center:project(worldPoint(torso,[0,.58,.32]))},position:robot.position.toArray(),contacts,stations:Object.fromEntries(Object.entries(equipment.stationPoints()).map(([key,point])=>[key,project(point)])),equipment:equipment.snapshot(),weights:arms.map(arm=>arm.dumbbell.getWorldPosition(new THREE.Vector3()).toArray()),pose:[...robot.position.toArray(),...robot.quaternion.toArray(),torso.rotation.x,torso.rotation.z,torso.position.y,...arms.flatMap(arm=>[...arm.shoulder.quaternion.toArray(),...arm.elbow.quaternion.toArray()])],canvasWidth:renderer.domElement.width,canvasHeight:renderer.domElement.height};
   }
   return{render,state,ready:badgeReady,dispose(){observer.disconnect();channels.forEach(channel=>channel.binding.unbind());scene.traverse(object=>object.geometry?.dispose());Object.values(m).forEach(material=>material.dispose());trainedShell.dispose();shoulderShell.dispose();coreHaloMaterial.dispose();haloMaterials.forEach(material=>material.dispose());badgeMaterial.map?.dispose();badgeMaterial.dispose();equipment.dispose();renderer.dispose();}};
 }

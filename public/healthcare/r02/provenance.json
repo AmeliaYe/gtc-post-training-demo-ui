@@ -45,9 +45,9 @@
       "source": "outputs/press-gym-journeys-r06/assets/opening.js"
     },
     "introduction/assets/circuit-r06/scene.js": {
-      "bytes": 20358,
-      "sha256": "0196afdcc2fbe463428ed256ce7ddf1340dafb69dda40b0621f3d8b21f195365",
-      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/scene.js (physique only; r06 timing retained)"
+      "bytes": 21059,
+      "sha256": "b19bcc50aaf0cb350a4ec51d812ca38eb13a9a088f8e3a4e7ac4ac588461b269",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/scene.js (physique only; final walk and showcase adapted locally)"
     },
     "introduction/assets/circuit-r06/strength.js": {
       "bytes": 1105,
@@ -80,9 +80,9 @@
       "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/equipment.js"
     },
     "introduction/assets/circuit-r06/timeline.js": {
-      "bytes": 1643,
-      "sha256": "0d1222fcf9dc55644569ae539f540d24f227e004c41f24e3511fde4897a25f80",
-      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js"
+      "bytes": 1868,
+      "sha256": "f447e29265bb577923a4cb7fec40641523da7cfb602cf2684e109ca6336d9363",
+      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js (final walk and showcase adapted locally)"
     },
     "introduction/assets/nim.png": {
       "bytes": 6395,
