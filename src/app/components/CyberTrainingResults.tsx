@@ -16,7 +16,6 @@ export function CyberTrainingResults({ onInteract }: { onInteract?: () => void }
             <a className={styles.eyebrow} href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer" onClick={onInteract} onFocus={onInteract} aria-label="Explore dfbench (opens in a new tab)">dfbench<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
           </div>
         </header>
-        <p className={styles.benchmarkContext}>dfbench: find, validate and track vulnerabilities as code changes, across 17 programming languages.</p>
         <div className={styles.metric}>
           {[benchmark.before, benchmark.after].map((result, index) => (
             <div key={result.model} className={index === 0 ? styles.beforeMetric : styles.afterMetric}>

@@ -36,7 +36,7 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Inspecting the network sink', seconds: 6, investigationStep: 4 },
   { scene: 'investigation', title: 'Confirming the endpoint mapping', seconds: 6, investigationStep: 5 },
   { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12 },
-  { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
+  { scene: 'rewards', title: 'Post-training enables vulnerability discovery', seconds: 12 },
   { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
   { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 12, detail: 'For individuals and teams.' },
 ] satisfies DemoStep[]).map((step, index, steps) => ({

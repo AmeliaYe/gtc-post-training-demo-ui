@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import styles from './CyberFindings.module.css';
@@ -35,9 +36,9 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
         {showFeedback && (
           <>
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
-            <div className={styles.missedCheckpoint} aria-label="Early checkpoint: SSRF omitted from report">
+            <div className={styles.missedCheckpoint} aria-label="Base Nemotron 3.5 Lightning: SSRF omitted from report">
               <div className={styles.missedSummary}>
-                <span>After depthfirst post-training, the vulnerability was found.</span>
+                <span>Base Nemotron 3.5 Lightning</span>
                 <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
               </div>
               <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} detection reward`}>
@@ -65,12 +66,12 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
               </tr>
             </thead>
             {[
-              { label: showFeedback ? 'Final · step 200' : 'Server-side requests', matched: true },
+              { label: showFeedback ? 'Post-trained by depthfirst' : 'Server-side requests', matched: true },
               { label: showFeedback ? 'Additional reports' : 'XML handling', matched: false },
             ].map((group) => (
               <tbody key={group.label}>
                 <tr className={styles.groupRow}>
-                  <th colSpan={6} scope="rowgroup"><div>{group.label}</div></th>
+                  <th colSpan={6} scope="rowgroup"><div>{showFeedback && group.matched ? <span className={styles.postTrainedLabel}>Post-trained by <Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} /></span> : group.label}</div></th>
                   {showFeedback && <td className={styles.feedbackCell} />}
                 </tr>
                 {REPORTS.filter((report) => (report.referenceMatch === 'matched') === group.matched).map((report) => {

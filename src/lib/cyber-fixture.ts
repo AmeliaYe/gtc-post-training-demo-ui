@@ -25,7 +25,9 @@ export type CyberScenario = {
   after: CyberRun;
 };
 
-// October 2026 periodic evaluation, policy steps 5 and 200, attempt 1 of 4.
+// October 2026 recorded evaluations, attempt 1 of 4.
+// The messaging-server comparison uses base Nemotron 3.5 Lightning and the
+// post-trained step-200 checkpoint.
 // Findings are condensed editorial summaries of recorded reports.
 // Counts come from the verifier; unassessed reports are not false positives.
 export const CYBER_SCENARIOS: CyberScenario[] = [
