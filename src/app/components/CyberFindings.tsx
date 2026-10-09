@@ -49,16 +49,18 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
     <div className={styles.findings}>
       <div className={styles.scroll} role="region" aria-label="Openfire submitted reports" tabIndex={0} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
         {showFeedback && (
-          <div className={styles.missedCheckpoint} aria-label="Early checkpoint: no reference vulnerability matched">
-            <div className={styles.missedSummary}>
-              <span>Early · step 5</span>
-              <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
+          <>
+            <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
+            <div className={styles.missedCheckpoint} aria-label="Early checkpoint: SSRF omitted from report">
+              <div className={styles.missedSummary}>
+                <span>Early · step 5</span>
+                <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
+              </div>
+              <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} detection reward`}>
+                <strong>{SCENARIO.before.matchedCount}</strong>
+              </span>
             </div>
-            <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} reference matches`}>
-              <strong>{SCENARIO.before.matchedCount}</strong>
-              <span>matches</span>
-            </span>
-          </div>
+          </>
         )}
         <div className={`${styles.surface} ${showFeedback ? styles.withFeedback : ''}`}>
           <table className={styles.table}>
@@ -76,11 +78,11 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
             <thead>
               <tr>
                 {['Inspect', 'Report', 'Finding', 'Description', 'Source file', 'Category', 'Review status'].map((label) => <th key={label} scope="col"><span className={styles.srOnly}>{label}</span></th>)}
-                {showFeedback && <th className={styles.feedbackHeading} scope="col">Reference<br />matches</th>}
+                {showFeedback && <th scope="col"><span className={styles.srOnly}>Detection reward</span></th>}
               </tr>
             </thead>
             {[
-              { label: showFeedback ? 'Final · step 200 · SSRF matched' : 'Server-side requests', matched: true },
+              { label: showFeedback ? 'Final · step 200' : 'Server-side requests', matched: true },
               { label: showFeedback ? 'Additional reports' : 'XML handling', matched: false },
             ].map((group) => (
               <tbody key={group.label}>
@@ -102,7 +104,7 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
                         <td><span className={`${styles.truncated} ${styles.fileName}`} title={report.path}>{report.path.split('/').at(-1)}</span></td>
                         <td><span className={`${styles.typePill} ${matched ? styles.ssrf : ''}`}><i aria-hidden="true" />{matched ? 'SSRF' : 'XML'}</span></td>
                         <td><span className={`${styles.statusPill} ${showFeedback && matched ? styles.matchedStatus : ''}`}>{showFeedback ? matched ? 'Matched' : 'No reference match' : 'Unreviewed'}</span></td>
-                        {showFeedback && <td className={styles.feedbackCell}>{matched ? <span className={styles.matchPill} aria-label="+1 reference match">+1</span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</td>}
+                        {showFeedback && <td className={styles.feedbackCell}>{matched ? <span className={styles.reward}><span className={styles.matchPill} aria-label="+1 detection reward">+1</span><span className={styles.rewardReason}>Found and reported SSRF</span></span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</td>}
                       </tr>
                       <tr hidden={!isOpen} className={styles.evidenceRow}>
                         <td colSpan={7}>

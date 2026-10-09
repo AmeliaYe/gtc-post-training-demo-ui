@@ -1,8 +1,8 @@
-import { ArrowRightIcon, CheckIcon, MinusIcon } from '@heroicons/react/24/outline';
-import { DFBENCH_RESULT, type CyberScenario } from '@/lib/cyber-fixture';
+import { ArrowRightIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { DFBENCH_RESULT } from '@/lib/cyber-fixture';
 import styles from './CyberTrainingResults.module.css';
 
-export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) {
+export function CyberTrainingResults({ onInteract }: { onInteract?: () => void }) {
   const benchmark = DFBENCH_RESULT;
 
   return (
@@ -10,7 +10,7 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
           <div><h4>Vulnerability recall</h4><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
-          <span className={styles.eyebrow}>dfbench</span>
+          <a className={styles.eyebrow} href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer" onClick={onInteract} onFocus={onInteract} aria-label="Explore dfbench (opens in a new tab)">dfbench<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
         </header>
         <div className={styles.metric}>
           {[benchmark.before, benchmark.after].map((result, index) => (
@@ -33,21 +33,6 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
         <footer className={styles.benchmarkFooter}>
           <p className={styles.gain}><strong>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)}</strong> percentage points</p>
         </footer>
-      </section>
-
-      <section className={styles.example} aria-label={`${scenario.repo} recorded example results`}>
-        <p className={styles.exampleLabel}>Openfire · submitted report</p>
-        <div className={styles.comparison}>
-          {[scenario.before, scenario.after].map((run, index) => (
-              <div key={index} className={`${styles.checkpoint} ${index === 1 ? styles.later : ''}`}>
-                <span className={styles.checkpointLabel}>{index === 0 ? 'Early · step 5' : 'Final · step 200'}</span>
-                <strong className={`${styles.outcome} ${run.matchedCount ? styles.found : styles.missed}`} aria-label={run.matchedCount ? 'SSRF reported' : 'SSRF omitted from the report'}>
-                  {run.matchedCount ? <CheckIcon aria-hidden="true" /> : <MinusIcon aria-hidden="true" />}{run.matchedCount ? 'Reported' : 'Omitted'}
-                </strong>
-              </div>
-          ))}
-          <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
-        </div>
       </section>
     </div>
   );

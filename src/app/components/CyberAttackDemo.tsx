@@ -25,7 +25,6 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
 }) {
   const carouselId = useId();
   const diagramId = `network-${carouselId.replaceAll(':', '')}`;
-  const sourceDetails = useRef<HTMLDetailsElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const cardElements = useRef<(HTMLLIElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -55,7 +54,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
   const centerCard = useCallback((index: number) => {
     const viewport = scroller.current;
     const card = cardElements.current[index];
-    if (!sourceDetails.current?.open || !viewport || !card || !viewport.clientWidth) return;
+    if (!viewport || !card || !viewport.clientWidth) return;
     const left = card.getBoundingClientRect().left - viewport.getBoundingClientRect().left + viewport.scrollLeft - (viewport.clientWidth - card.offsetWidth) / 2;
     viewport.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }, []);
@@ -125,9 +124,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
           })}
         </ol>
       </div>
-      <details ref={sourceDetails} className={styles.sourceDetails} onToggle={(event) => { if (event.currentTarget.open) { onInteract?.(); centerCard(activeIndex); } }}>
-        <summary>Inspect source call chain</summary>
-        <div role="region" aria-label="Source flow" aria-roledescription="carousel">
+      <div className={styles.sourceFlow} role="region" aria-label="Source flow" aria-roledescription="carousel">
       <div
         id={carouselId}
         ref={scroller}
@@ -185,8 +182,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
         <span aria-live={playing ? 'off' : 'polite'} aria-atomic="true">{activeIndex + 1} <span>of</span> {cards.length}</span>
         <button onClick={() => selectCard(activeIndex + 1)} disabled={activeIndex === cards.length - 1} aria-label="Next source step" aria-controls={carouselId}><ArrowRightIcon aria-hidden="true" /></button>
       </nav>
-        </div>
-      </details>
+      </div>
     </section>
   );
 }

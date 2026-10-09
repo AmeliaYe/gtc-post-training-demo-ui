@@ -23,9 +23,7 @@
 .unsafeNode .nodeNumber, .unsafeNode .routeBadge { color: #b82e37; background: #fff0f1; }
 .routeBadge { display: inline-block; margin-top: 9px; padding: 5px 8px; border-radius: 7px; font-size: 13px; font-weight: 500; line-height: 1.2; }
 .mobileGraph { display: none; }
-.sourceDetails { margin-top: 8px; border-top: 1px solid #e3e3e7; }
-.sourceDetails > summary { width: fit-content; max-width: 100%; margin: 0 auto; padding: 14px 8px; color: #63636f; font-size: 16px; cursor: pointer; }
-.sourceDetails[open] { padding-bottom: 8px; }
+.sourceFlow { margin-top: 8px; padding-bottom: 8px; }
 .scroller { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .scroller::-webkit-scrollbar { display: none; }
 .chain { display: flex; gap: 64px; width: max-content; min-width: 100%; margin: 0; padding: 24px max(32px, calc((100cqi - 560px) / 2)); list-style: none; }
@@ -52,7 +50,7 @@
 .attack .navigation svg { width: 20px; height: 20px; }
 .navigation > span { min-width: 48px; color: #3f3f49; font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
 .navigation > span > span { color: #8b8b96; }
-.attack :is(button, a, summary, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
+.attack :is(button, a, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
 .attack .scroller:focus-visible { outline-offset: -3px; }
 @container (max-width: 800px) {
   .desktopGraph { display: none; }

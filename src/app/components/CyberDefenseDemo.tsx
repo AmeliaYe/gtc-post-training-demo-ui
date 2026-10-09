@@ -7,14 +7,12 @@ import {
   ArrowsPointingOutIcon, ArrowsPointingInIcon, ArrowPathIcon, ArrowRightIcon,
   ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon,
 } from '@heroicons/react/24/outline';
-import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
 import { CyberFindings } from './CyberFindings';
 import { CyberTrainingLoop } from './CyberTrainingLoop';
 import styles from './CyberDefenseDemo.module.css';
 
-const SCENARIO = CYBER_SCENARIOS.find((scenario) => scenario.id === 'openfire')!;
 const inter = localFont({
   src: '../../../public/cyber/inter-latin-variable.woff2',
   display: 'swap',
@@ -29,7 +27,7 @@ const STEPS = [
   { title: 'Inspect the network sink', seconds: 6 },
   { title: 'Confirm the endpoint mapping', seconds: 6 },
   { title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
-  { title: 'Scoring the verified findings', seconds: 12, detail: 'Early checkpoint: SSRF omitted. Final checkpoint: SSRF reported and matched.' },
+  { title: 'Scoring the verified findings', seconds: 12 },
   { title: 'Training results', seconds: 12, hideCaption: true },
   { title: 'Keep training across new environments', seconds: 12 },
 ].map((step, index, steps) => ({
@@ -130,7 +128,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
           <input className={styles.timeline} type="range" aria-label="Investigation timeline" aria-valuetext={`Step ${step + 1} of ${STEPS.length}: ${current.title}`} min={0} max={STEPS.length - 1} value={step} onChange={(event) => navigate(Number(event.target.value))} style={{ background: `linear-gradient(to right, #2870ff ${(step + 1) / STEPS.length * 100}%, #dddde3 ${(step + 1) / STEPS.length * 100}%)` }} />
         </div>
         <div className={`${styles.scene} ${step === 1 ? styles.wideScene : ''}`}>
-          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults scenario={SCENARIO} /> : <CyberTrainingLoop progress={progress} />}
+          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults onInteract={() => setPlaying(false)} /> : <CyberTrainingLoop progress={progress} />}
         </div>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>
