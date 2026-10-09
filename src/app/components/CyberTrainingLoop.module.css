@@ -11,7 +11,18 @@
 .step p { margin: 7px 0 0; color: #63636f; font-size: 22px; line-height: 1.4; }
 .step.active { border-color: #2870ff; background: #f3f7ff; }
 .active .stepNumber { border-color: #2870ff; background: #2870ff; color: #fff; }
-.loop .connector { position: absolute; width: 34px; height: 34px; color: #b5bdcc; transition: color 180ms ease; }
+.loop .connector { position: absolute; width: 34px; height: 34px; color: #b5bdcc; transition: color 180ms ease; animation: loop-arrow-flow 4s ease-in-out infinite; }
+.step[data-phase='0'] { --arrow-x: 8px; --arrow-y: 0px; }
+.step[data-phase='1'] { --arrow-x: 0px; --arrow-y: 8px; }
+.step[data-phase='2'] { --arrow-x: -8px; --arrow-y: 0px; }
+.step[data-phase='3'] { --arrow-x: 0px; --arrow-y: -8px; }
+.step[data-phase='1'] .connector { animation-delay: 1s; }
+.step[data-phase='2'] .connector { animation-delay: 2s; }
+.step[data-phase='3'] .connector { animation-delay: 3s; }
+@keyframes loop-arrow-flow {
+  0%, 25%, 100% { translate: 0 0; opacity: .5; }
+  12.5% { translate: var(--arrow-x) var(--arrow-y); opacity: 1; color: #2870ff; }
+}
 .loop .active .connector { color: #2870ff; }
 .step[data-phase='0'] .connector { top: 50%; right: -54px; transform: translateY(-50%); }
 .step[data-phase='1'] .connector { bottom: -41px; left: 50%; transform: translateX(-50%) rotate(90deg); }
@@ -38,6 +49,7 @@
   .steps { grid-template-columns: 1fr; gap: 40px; }
   .step[data-phase] { grid-column: 1; grid-row: auto; min-height: 108px; }
   .loop .step .connector { top: auto; right: auto; bottom: -38px; left: 50%; transform: translateX(-50%) rotate(90deg); }
+  .loop .step { --arrow-x: 0px; --arrow-y: 8px; }
   .loop .step:last-child .connector { display: none; }
   .repeat { align-items: flex-start; gap: 10px; margin-top: 22px; font-size: 22px; text-align: left; }
   .loop .repeat > svg { margin-top: 3px; }
@@ -45,6 +57,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .step, .loop .connector { transition: none; }
+  .loop .connector { animation: none; }
   .step.active { border-color: #e3e3e7; background: #f8f8fa; }
   .active .stepNumber { border-color: #e3e3e7; background: #fff; color: #63636f; }
   .loop .active .connector { color: #b5bdcc; }

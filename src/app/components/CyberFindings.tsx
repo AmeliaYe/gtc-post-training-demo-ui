@@ -53,7 +53,7 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
             <div className={styles.missedCheckpoint} aria-label="Early checkpoint: SSRF omitted from report">
               <div className={styles.missedSummary}>
-                <span>Early · step 5</span>
+                <span>After depthfirst post-training, the vulnerability was found.</span>
                 <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
               </div>
               <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} detection reward`}>

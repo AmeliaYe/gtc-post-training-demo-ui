@@ -52,9 +52,9 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
       { id: 'private', label: 'Internal service', detail: 'May be reachable by the server', icon: 'lock', x: 825, y: 290 },
     ],
     edges: [
-      { id: 'request', path: 'M225 190 H350' },
-      { id: 'public-fetch', path: 'M550 170 C625 170 625 85 725 85' },
-      { id: 'private-fetch', path: 'M550 215 C625 215 625 290 725 290' },
+      { id: 'request', path: 'M240 190 H335' },
+      { id: 'public-fetch', path: 'M565 170 C625 170 625 85 710 85' },
+      { id: 'private-fetch', path: 'M565 215 C625 215 625 290 710 290' },
       { id: 'private-response', path: 'M725 320 C635 375 575 315 500 250' },
       { id: 'relay-response', path: 'M400 250 C355 305 270 275 225 220' },
     ],

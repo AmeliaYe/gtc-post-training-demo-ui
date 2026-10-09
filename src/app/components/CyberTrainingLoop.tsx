@@ -1,4 +1,4 @@
-import { ArrowPathIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import styles from './CyberTrainingLoop.module.css';
 
 const PHASES = [
@@ -25,7 +25,6 @@ export function CyberTrainingLoop({ progress }: { progress: number }) {
           </li>
         ))}
       </ol>
-      <p className={styles.repeat}><ArrowPathIcon aria-hidden="true" /><span>Continual Improvements</span></p>
     </section>
   );
 }

@@ -28,9 +28,9 @@ type DemoStep = {
 } & ({ scene: 'investigation'; investigationStep: number } | { scene: 'prompt' | 'findings' | 'rewards' | 'results' | 'training' });
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
-  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker can make Openfire fetch an internal address instead of a public website.' },
+  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker could make a server fetch an internal address instead of a public website.' },
   { scene: 'prompt', title: 'The security review prompt', seconds: 10, detail: 'The agent receives a scoped security audit, without the vulnerability name.' },
-  { scene: 'investigation', title: 'Exploring your codebase', seconds: 6, investigationStep: 0 },
+  { scene: 'investigation', title: 'Agents explore your codebase', seconds: 6, investigationStep: 0 },
   { scene: 'investigation', title: 'Trace untrusted input', seconds: 6, investigationStep: 2 },
   { scene: 'investigation', title: 'Trace URL construction', seconds: 6, investigationStep: 3 },
   { scene: 'investigation', title: 'Inspect the network sink', seconds: 6, investigationStep: 4 },
@@ -38,10 +38,11 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
   { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
   { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
-  { scene: 'training', title: 'Smaller open models. AI-native workflows.', seconds: 12, detail: 'Continual local training for individuals and teams as open-source code evolves.' },
+  { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 12, detail: 'For individuals and teams.' },
 ] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
-  startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds, 0),
+  seconds: step.seconds / 2,
+  startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds / 2, 0),
 }));
 const DEMO_SECONDS = STEPS.reduce((seconds, step) => seconds + step.seconds, 0);
 const TICK_SECONDS = 0.1;
@@ -78,6 +79,12 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   const step = Math.max(0, STEPS.findLastIndex((stage) => elapsed >= stage.startsAt));
   const current = STEPS[step];
   const progress = (elapsed - current.startsAt) / current.seconds;
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const timer = window.setTimeout(() => setPlaying(true), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!playing) return;
@@ -155,14 +162,28 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
     <div ref={container} className={`${styles.demo} ${inter.variable}`} role="region" aria-label="Openfire security review demo" tabIndex={-1}>
       <header className={styles.header}>
         <div className={styles.headerAction}>{onExit && <button onClick={onExit} aria-label="Back to all demos" title="All demos"><ChevronLeftIcon aria-hidden="true" /></button>}</div>
-        <div className={styles.brand}><span>Nemotron post-trained by</span><Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} loading="eager" /></div>
+        <div className={styles.brandBlock}>
+          <div className={styles.brand}><span>Nemotron post-trained by</span><Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} loading="eager" /></div>
+          <p className={styles.brandDescription}>Smaller, open models can enable AI-native workflows</p>
+        </div>
         <div className={styles.headerAction}><button onClick={toggleFullscreen} aria-label={fullscreen ? 'Exit full screen' : 'Full screen'} title={fullscreen ? 'Exit full screen' : 'Full screen'}>{fullscreen ? <ArrowsPointingInIcon aria-hidden="true" /> : <ArrowsPointingOutIcon aria-hidden="true" />}</button></div>
       </header>
       <section className={styles.presentation} aria-labelledby={titleId}>
         <div className={styles.topline}>
-          <div className={styles.exampleContext}><span>Openfire <span className={styles.repoDescription}>/ Java messaging server</span></span><span className={styles.historical}>Historical vulnerability</span></div>
-          <div className={styles.timeline} role="progressbar" aria-label={`Step ${step + 1} progress`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-valuetext={`${Math.round(progress * 100)}% of ${current.title}`}>
-            <span key={step} className={styles.timelineFill} style={{ transform: `scaleX(${progress})`, transitionDuration: playing ? `${TICK_SECONDS}s` : '0s' }} />
+            <div className={styles.stepProgress} role="group" aria-label={`Step ${step + 1} of ${STEPS.length}`}>
+              {STEPS.map((stage, index) => <button key={stage.title} className={styles.stepButton} onClick={() => navigate(index)} aria-label={`Go to step ${index + 1}: ${stage.title}`} aria-current={index === step ? 'step' : undefined} title={stage.title}>
+                {index === step
+                  ? <span className={`${styles.stepDot} ${styles.activeStep}`} role="progressbar" aria-label={`Step ${step + 1} progress`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-valuetext={`${Math.round(progress * 100)}% of ${current.title}`}>
+                      <span className={styles.timelineFill} style={{ transform: `scaleX(${Math.max(0, 1 - progress)})`, transitionDuration: playing ? `${TICK_SECONDS}s` : '0s' }} />
+                    </span>
+                  : <span className={styles.stepDot} aria-hidden="true" />}
+              </button>)}
+            </div>
+          <div className={styles.playbackControls}>
+            <button className={styles.play} onClick={play}>
+              <span className={styles.autoplayLabel}>{playing ? <PauseIcon aria-hidden="true" /> : <PlayIcon aria-hidden="true" />}<span>{playing ? 'Pause' : 'Resume auto-play'}</span></span>
+              <span className={styles.manualLabel}>{step === STEPS.length - 1 ? <ArrowPathIcon aria-hidden="true" /> : <ArrowRightIcon aria-hidden="true" />}<span className={styles.srOnly}>{step === STEPS.length - 1 ? 'Start over' : 'Next step'}</span></span>
+            </button>
           </div>
         </div>
         <FittedScene>
@@ -183,14 +204,11 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
             <h1 id={titleId} className={current.hideCaption ? styles.srOnly : undefined}>{current.title}</h1>
             {current.detail && <p>{current.detail}</p>}
             </div>
-            <button className={styles.play} onClick={play}>
-              <span className={styles.autoplayLabel}>{playing ? <PauseIcon aria-hidden="true" /> : elapsed >= DEMO_SECONDS ? <ArrowPathIcon aria-hidden="true" /> : <PlayIcon aria-hidden="true" />}{playing ? 'Pause' : elapsed >= DEMO_SECONDS ? 'Replay investigation' : elapsed === 0 ? 'Play investigation' : 'Resume'}</span>
-              <span className={styles.manualLabel}>{step === STEPS.length - 1 ? <ArrowPathIcon aria-hidden="true" /> : <ArrowRightIcon aria-hidden="true" />}{step === STEPS.length - 1 ? 'Start over' : 'Next step'}</span>
-            </button>
+
           </div>
           {step === STEPS.length - 1
             ? <button className={`${styles.arrow} ${styles.replayArrow}`} onClick={replay} aria-label="Replay investigation" title="Replay investigation"><ArrowPathIcon aria-hidden="true" /><span>Replay</span></button>
-            : <button className={styles.arrow} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><ChevronRightIcon aria-hidden="true" /></button>}
+            : <button className={`${styles.arrow} ${styles.nextArrow}`} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><span>Next</span><ChevronRightIcon aria-hidden="true" /></button>}
         </footer>
         <span className={styles.srOnly} role="status" aria-live="polite" aria-atomic="true">Step {step + 1} of {STEPS.length}: {current.title}.</span>
         {presentationMessage && <p className={styles.presentationMessage} role="status">{presentationMessage}</p>}
