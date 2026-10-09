@@ -28,13 +28,13 @@ type DemoStep = {
 } & ({ scene: 'investigation'; investigationStep: number } | { scene: 'prompt' | 'findings' | 'rewards' | 'results' | 'training' });
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
-  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker could make a server fetch an internal address instead of a public website.' },
+  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker may use the server to reach private services.' },
   { scene: 'prompt', title: 'Recover the vulnerability', seconds: 24, detail: 'Vulnerability undisclosed.' },
-  { scene: 'investigation', title: 'Agents explore your codebase', seconds: 6, investigationStep: 0 },
-  { scene: 'investigation', title: 'Trace untrusted input', seconds: 6, investigationStep: 2 },
-  { scene: 'investigation', title: 'Trace URL construction', seconds: 6, investigationStep: 3 },
-  { scene: 'investigation', title: 'Inspect the network sink', seconds: 6, investigationStep: 4 },
-  { scene: 'investigation', title: 'Confirm the endpoint mapping', seconds: 6, investigationStep: 5 },
+  { scene: 'investigation', title: 'Exploring your codebase', seconds: 6, investigationStep: 0 },
+  { scene: 'investigation', title: 'Tracing untrusted input', seconds: 6, investigationStep: 2 },
+  { scene: 'investigation', title: 'Tracing URL construction', seconds: 6, investigationStep: 3 },
+  { scene: 'investigation', title: 'Inspecting the network sink', seconds: 6, investigationStep: 4 },
+  { scene: 'investigation', title: 'Confirming the endpoint mapping', seconds: 6, investigationStep: 5 },
   { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12 },
   { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
   { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },

@@ -3,6 +3,7 @@
 .benchmarkHeading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .benchmarkHeading h4 { margin: 0; color: #0c0c0c; font-size: 30px; line-height: 1.25; font-weight: 500; letter-spacing: -.025em; }
 .trainingNote { margin: 7px 0 0; color: #63636f; font-size: 18px; line-height: 1.4; }
+.benchmarkContext { margin: 18px 0 0; color: #63636f; font-size: 18px; line-height: 1.4; }
 .eyebrow { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; min-height: 34px; padding: 5px 12px; border-radius: 9px; background: #edf3ff; color: #205bca; font-size: 17px; line-height: 1.4; }
 .eyebrow:hover { background: #e0eaff; }
 .eyebrow:focus-visible { outline: 3px solid var(--result-blue); outline-offset: 3px; }
