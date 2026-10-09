@@ -30,7 +30,7 @@ h1{font-size:20px;line-height:28px;letter-spacing:-.3px}.page-head p{font-size:1
 .why.payoff{color:#f5f5f5;border-left:3px solid var(--nv-green);padding-left:12px}
 
 /* Panels fit their content (equal heights) and only scroll once they would overflow the screen. */
-.comparison{flex:0 1 auto;min-height:260px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,auto);gap:16px}
+.comparison{flex:0 1 auto;min-height:260px;display:grid;grid-template-columns:repeat(2,minmax(360px,1fr));grid-template-rows:minmax(0,auto);gap:16px;overflow-x:auto}
 .model{display:flex;flex-direction:column;min-height:0;min-width:0;border:1px solid var(--nv-border);border-top:2px solid var(--nv-green);border-radius:6px;background:#141414;overflow:hidden}
 .model.is-correct{border-color:var(--nv-green)}.model.is-wrong{border-color:var(--bad)}
 .model-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px}
@@ -97,6 +97,6 @@ main{position:relative}
 .flight{position:fixed;z-index:10;object-fit:contain;pointer-events:none;transform-origin:center}
 .molecule{transition:opacity .3s}.molecule.sending{opacity:.25}
 
-/* Short or narrow screens: let the page scroll rather than squeeze the answers. */
-@media(max-width:900px),(max-height:680px){main{height:auto;min-height:100vh;padding:16px}.scene{grid-template-columns:1fr}.bubble{flex-direction:column;align-items:stretch}.molecule{width:100%}.scene-actions{max-width:none}.ask{font-size:20px;line-height:28px}.scientist{display:none}.bubble::before{display:none}.comparison{grid-template-columns:1fr}.transcript{flex:none;height:260px}}
+/* Short or narrow screens may scroll, but the two model answers always stay side by side. */
+@media(max-width:900px),(max-height:680px){main{height:auto;min-height:100vh;padding:16px}.scene{grid-template-columns:1fr}.bubble{flex-direction:column;align-items:stretch}.molecule{width:100%}.scene-actions{max-width:none}.ask{font-size:20px;line-height:28px}.scientist{display:none}.bubble::before{display:none}.transcript{flex:none;height:260px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
