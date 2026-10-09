@@ -1,24 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import HealthcareDemo from './components/HealthcareDemo';
 import { CyberDefenseDemo } from './components/CyberDefenseDemo';
+import ComputerUseDemo from './components/ComputerUseDemo';
+import DreamDemoContent from './components/dream/DreamDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
-import {
-  CODING_BASE_TOTAL_SECONDS,
-  formatSeconds,
-  modelState,
-  type ModelRun,
-} from '@/lib/coding-fixture';
 import {
   ArrowPathIcon,
   CheckIcon,
   CircleStackIcon,
-  CodeBracketIcon,
   CommandLineIcon,
   DocumentMagnifyingGlassIcon,
-  HeartIcon,
   PlayIcon,
   ServerStackIcon,
   ShieldCheckIcon,
@@ -33,9 +27,10 @@ type DemoBase = {
   id: string;
   name: string;
   task: string;
+  description: string;
   color: string;
   glow: string;
-  icon: typeof ShieldCheckIcon;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
 // Static sample content for a use case that has no integrated demo yet.
@@ -44,6 +39,7 @@ type PlaceholderDemo = DemoBase & {
   scoreLabel: string;
   scoreBefore: number;
   scoreAfter: number;
+  scoreLift?: number;
   latency: string;
   memory: string;
   prompt: string;
@@ -52,66 +48,99 @@ type PlaceholderDemo = DemoBase & {
   tags: string[];
 };
 
-// A live demo embedded in the expanded card.
+// An interactive experience embedded in the expanded card.
 type LiveDemo = DemoBase & {
   kind: 'demo';
   embedUrl: string;
-  previewLabel?: string;
 };
 
 type CyberDemo = DemoBase & {
   kind: 'cyber';
 };
 
-type Demo = PlaceholderDemo | LiveDemo | CyberDemo;
+type ComputerDemo = DemoBase & {
+  kind: 'computer';
+};
+
+type Demo = PlaceholderDemo | LiveDemo | CyberDemo | ComputerDemo;
 
 const demos: Demo[] = [
   {
-    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
-    color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
+    kind: 'computer', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
+    description: 'Complete software tasks by seeing and using the screen.',
+    color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
   },
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
-    color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    embedUrl: '/healthcare/r01/index-r02.html#how-it-learns', previewLabel: 'Explore demo',
+    description: 'Practice safer decisions before working with patients.',
+    color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: RodOfAsclepiusIcon,
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
+    description: 'Reason across molecules, structures, and scientific data.',
     color: '#ffb86b', glow: 'rgba(255, 184, 107, .18)', icon: CircleStackIcon,
     embedUrl: KERMT_DEMO_URL,
   },
   {
-    kind: 'placeholder', id: 'coding', name: 'Coding Agent', task: 'Software engineering · JetBrains',
-    color: '#ff84b7', glow: 'rgba(255, 132, 183, .18)', icon: CodeBracketIcon,
-    scoreLabel: 'Issues resolved', scoreBefore: 51.7, scoreAfter: 86.5, latency: '47 ms', memory: '5.9 GB',
-    prompt: 'Resolve DEMO-1842 (acme/py-runtime #16): parent cancellation can be swallowed while child cleanup runs, leaving callers waiting on a task group that should unwind.',
-    before: 'Add a retry check before processing tool calls and write a test to ensure the arguments are not duplicated.',
-    after: 'Root cause is replay after reconnect: the accumulator is keyed by chunk index, which resets. Key by response_id + call_id, ignore sequence ≤ last_sequence, and add a reconnect test covering a split UTF-8 argument. Files: stream.py, state.py, test_reconnect.py.',
-    tags: ['repo-aware', 'Mellum', 'test-driven'],
+    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
+    description: 'Find security weaknesses before attackers do.',
+    color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
   },
   {
-    kind: 'placeholder', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
-    color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
-    scoreLabel: 'Task completion', scoreBefore: 46.8, scoreAfter: 84.7, latency: '54 ms', memory: '6.2 GB',
-    prompt: 'Reconcile the Q3 invoice in the ERP and attach the matching purchase order.',
-    before: 'Open the ERP, search for the invoice, find the purchase order, and attach it to the invoice record.',
-    after: 'Plan: open Accounts Payable → search INV-30418 → verify vendor and amount → open linked PO-7712 in a new tab → compare line totals → attach the PDF. Stop for approval before clicking “Post” because it changes financial state.',
-    tags: ['UI-grounded', 'approval-aware', 'recoverable'],
+    kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
+    description: 'Analyze threats, choose defenses, and diagnose vulnerabilities.',
+    color: '#ff536b', glow: 'rgba(255, 83, 107, .18)', icon: NationalDefenseIcon,
+    scoreLabel: 'Overall security knowledge', scoreBefore: 65.4, scoreAfter: 74.1, scoreLift: 8.8, latency: '44 ms', memory: '5.9 GB',
+    prompt: 'Connect the observed campaign activity to the complete attack path targeting protected state infrastructure.',
+    before: 'The activity may indicate a coordinated intrusion. Review the available threat intelligence and monitor the affected systems for additional indicators.',
+    after: 'HIGH · The evidence forms a complete path: initial access → credential theft → privileged movement → protected infrastructure. Isolate exposed access points, revoke compromised credentials, and validate segmentation before restoring connectivity.',
+    tags: ['CTI-grounded', 'attack-path aware', 'evidence-linked'],
   },
 ];
 
-// Fixture seconds advanced per wall-clock second, so a 52s replay fits a booth visit.
-const PLAYBACK_RATE = 6;
-
-const codingBaseRun = modelState('base', Number.POSITIVE_INFINITY);
-const codingTrainedRun = modelState('trained', Number.POSITIVE_INFINITY);
-const codingLatencyReduction = Math.round((1 - codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100);
-const codingToolCallReduction = Math.round((1 - codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100);
+type IntroStage = 'landing' | 'how-it-learns' | 'gallery';
 function NvidiaLogo() {
   return (
     <svg className="nvidia-logo" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M8.948 8.798v-1.43a6.7 6.7 0 0 1 .424-.018c3.922-.124 6.493 3.374 6.493 3.374s-2.774 3.851-5.75 3.851c-.398 0-.787-.062-1.158-.185v-4.346c1.528.185 1.837.857 2.747 2.385l2.04-1.714s-1.492-1.952-4-1.952a6.016 6.016 0 0 0-.796.035m0-4.735v2.138l.424-.027c5.45-.185 9.01 4.47 9.01 4.47s-4.08 4.964-8.33 4.964c-.37 0-.733-.035-1.095-.097v1.325c.3.035.61.062.91.062 3.957 0 6.82-2.023 9.593-4.408.459.371 2.34 1.263 2.73 1.652-2.633 2.208-8.772 3.984-12.253 3.984-.335 0-.653-.018-.971-.053v1.864H24V4.063zm0 10.326v1.131c-3.657-.654-4.673-4.46-4.673-4.46s1.758-1.944 4.673-2.262v1.237H8.94c-1.528-.186-2.73 1.245-2.73 1.245s.68 2.412 2.739 3.11M2.456 10.9s2.164-3.197 6.5-3.533V6.201C4.153 6.59 0 10.653 0 10.653s2.35 6.802 8.948 7.42v-1.237c-4.84-.6-6.492-5.936-6.492-5.936z" />
     </svg>
+  );
+}
+
+function NationalDefenseIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <rect x="1.5" y="7" width="8.5" height="8" rx="1.3" />
+      <path d="m3.5 9.5 2 1.5-2 1.5M6.8 12.7h1.4M10.7 11h5.1" />
+      <path d="m17 8.1 6.5-4.4L30 8.1M18.1 9.2h10.8M19.1 9.2v7.1M23.5 9.2v7.1M27.9 9.2v7.1M17.7 16.3h11.6M16.8 19h13.4" />
+    </svg>
+  );
+}
+
+function RodOfAsclepiusIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M12 2.2v19.6" />
+      <circle cx="15.8" cy="5" r="1.1" />
+      <path d="M15 5.8c-5.7.2-6.5 3.4-1.1 4.1 4.8.7 4.3 3.8-1.3 4.5-4.5.6-4 3.5.5 4.1 2.5.3 2.4 1.7-1.1 2.4" />
+      <path d="M10.3 3.1h3.4" />
+    </svg>
+  );
+}
+
+function PageSwitcher({ stage, onChange }: { stage: IntroStage; onChange: (stage: IntroStage) => void }) {
+  const pages: Array<[IntroStage, string, string]> = [
+    ['landing', '1', 'Robot introduction'],
+    ['how-it-learns', '2', 'Post-training workflow'],
+    ['gallery', '3', 'Use cases'],
+  ];
+  return (
+    <nav className="page-switcher" aria-label="Demo pages">
+      {pages.map(([value, label, title]) => (
+        <button key={value} type="button" aria-label={`${label}. ${title}`} title={title} aria-pressed={stage === value} onClick={() => onChange(value)}>{label}</button>
+      ))}
+    </nav>
   );
 }
 
@@ -139,18 +168,6 @@ function ScoreBar({ label, display, fill, color, muted = false }: { label: strin
   );
 }
 
-function ReductionCell({ percent, label, baseDisplay, tunedDisplay, fill, color }: { percent: number; label: string; baseDisplay: string; tunedDisplay: string; fill: number; color: string }) {
-  return (
-    <div className="reduction-cell">
-      <div className="result-summary"><span className="lift-number" style={{ color }}>−{percent}%</span><span><strong>{label}</strong><small>vs. base model</small></span></div>
-      <div className="score-bars">
-        <ScoreBar label="Base model" display={baseDisplay} fill={100} color={color} muted />
-        <ScoreBar label="Post-trained" display={tunedDisplay} fill={fill} color={color} />
-      </div>
-    </div>
-  );
-}
-
 function ModelTile({ model }: { model: Demo }) {
   const Icon = model.icon;
   return (
@@ -159,23 +176,20 @@ function ModelTile({ model }: { model: Demo }) {
         <span className="mini-traffic"><i /><i /><i /></span>
         <span className="expand-glyph">↗</span>
       </span>
-      <span className="tile-topline">
-        <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
-        <span className="status-pill"><i /> {model.id === 'health' || model.kind === 'cyber' ? 'DEMO' : 'LIVE'}</span>
+      <span className="tile-topline"><span className="status-pill"><i /> {model.id === 'health' || model.kind === 'cyber' ? 'DEMO' : 'LIVE'}</span></span>
+      <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
+      <span className="tile-copy">
+        <strong>{model.name}</strong>
+        <small>{model.description}</small>
+        <em>{model.task}</em>
       </span>
-      <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
-      {model.kind === 'placeholder' ? (
+      {model.kind === 'placeholder' && model.id !== 'defense' ? (
         <span className="tile-score">
-          {model.id === 'coding' ? <>
-            <span><small>tool calls</small><strong style={{ color: model.color }}>−{codingToolCallReduction}%</strong><em>vs. base</em></span>
-            <MiniChart before={codingBaseRun.toolCalls} after={codingTrainedRun.toolCalls} color={model.color} domain={[4, 18]} label="Tool-call trend" />
-          </> : <>
-            <span><small>vs. base</small><strong style={{ color: model.color }}>+{(model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
-            <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
-          </>}
+          <span><strong style={{ color: model.color }}>+{(model.scoreLift ?? model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
+          <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
-        <span className="tile-score"><span><small>interactive</small><strong style={{ color: model.color }}>{model.kind === 'cyber' ? 'Explore demo' : model.previewLabel || 'Live demo'}</strong></span></span>
+        <span className="tile-spacer" aria-hidden="true" />
       )}
       <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
@@ -200,109 +214,22 @@ function OutputPanel({ type, text, model }: { type: 'base' | 'tuned'; text: stri
   );
 }
 
-function TrajectoryPanel({ run, model }: { run: ModelRun; model: PlaceholderDemo }) {
-  const tuned = run.id === 'trained';
-  return (
-    <section className={`output-panel ${tuned ? 'tuned' : ''}`} style={tuned ? { '--accent': model.color, '--panel-glow': model.glow } as React.CSSProperties : undefined}>
-      <header>
-        <span className="model-mark">{tuned ? <SparklesIcon /> : <CircleStackIcon />}</span>
-        <span><small>{tuned ? 'AFTER · POST-TRAINED' : 'BEFORE · GENERAL MODEL'}</small><strong>{run.name}</strong></span>
-        <span className={`run-state ${run.status}`}><i className="status-dot" />{run.status === 'complete' ? 'COMPLETE' : 'RUNNING'}</span>
-      </header>
-
-      <div className="trajectory-body">
-        <div className="progress-block">
-          <div className="progress-copy"><span>{run.currentStage}</span><strong>{Math.round(run.progress)}%</strong></div>
-          <div
-            className="progress-track"
-            role="progressbar"
-            aria-label={`${run.name} progress`}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(run.progress)}
-          >
-            <span style={{ width: `${run.progress}%` }} />
-          </div>
-        </div>
-
-        <dl className="run-metrics">
-          <div><dt>Elapsed</dt><dd>{formatSeconds(run.elapsedSeconds)}</dd></div>
-          <div><dt>Tool calls</dt><dd>{run.toolCalls}</dd></div>
-          <div><dt>Failures</dt><dd className={run.failures ? 'metric-warning' : 'metric-good'}>{run.failures}</dd></div>
-        </dl>
-
-        <ol className="timeline" aria-label={`${run.name} tool timeline`}>
-          {run.stages.map((stage, index) => (
-            <li className={`timeline-item ${stage.status}`} key={stage.id} aria-current={stage.status === 'active' ? 'step' : undefined}>
-              <div className="timeline-rail" aria-hidden="true">
-                <span className="timeline-node">{stage.status === 'complete' ? <CheckIcon /> : String(index + 1).padStart(2, '0')}</span>
-              </div>
-              <div className="timeline-content">
-                <div className="timeline-title">
-                  <strong>{stage.label}</strong>
-                  <span>{stage.status === 'queued' ? 'Queued' : `${stage.status === 'active' ? 'Active' : 'Complete'} · +${stage.atSeconds.toFixed(1)}s`}</span>
-                </div>
-                <div className="stage-attribution">
-                  <span className="agent-chip"><i aria-hidden="true" />{stage.agent}<small>Sim</small></span>
-                  <code>{stage.tool}</code>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <footer>
-        <span className={tuned ? 'result-chip pass' : 'result-chip'}>{tuned && <CheckIcon />}{run.currentStage}</span>
-        <span>{run.toolCalls} tool calls · local · fp8</span>
-      </footer>
-    </section>
-  );
-}
-
-function PlaceholderBody({ model, isRunning, runCount, codingElapsed }: { model: PlaceholderDemo; isRunning: boolean; runCount: number; codingElapsed: number }) {
-  const lift = model.scoreAfter - model.scoreBefore;
-  const isCoding = model.id === 'coding';
+function PlaceholderBody({ model, isRunning, runCount }: { model: PlaceholderDemo; isRunning: boolean; runCount: number }) {
+  const lift = model.scoreLift ?? model.scoreAfter - model.scoreBefore;
   return (
     <>
       <div className="prompt-bar"><span className="prompt-label">PROMPT</span><p>{model.prompt}</p><span className="prompt-tag">held-out eval</span></div>
 
-      <div className={`comparison-grid ${isRunning && !isCoding ? 'is-evaluating' : ''}`}>
-        {isCoding ? <>
-          <TrajectoryPanel run={modelState('base', codingElapsed)} model={model} />
-          <div className="comparison-divider"><span>VS</span></div>
-          <TrajectoryPanel run={modelState('trained', codingElapsed)} model={model} />
-        </> : <>
-          <OutputPanel type="base" text={model.before} model={model} />
-          <div className="comparison-divider"><span>VS</span></div>
-          <OutputPanel type="tuned" text={model.after} model={model} />
-        </>}
+      <div className={`comparison-grid ${isRunning ? 'is-evaluating' : ''}`}>
+        <OutputPanel type="base" text={model.before} model={model} />
+        <div className="comparison-divider"><span>VS</span></div>
+        <OutputPanel type="tuned" text={model.after} model={model} />
       </div>
 
-      <div className={`results-strip ${isCoding ? 'trajectory' : ''}`}>
-        {isCoding ? <>
-          <ReductionCell
-            percent={codingLatencyReduction}
-            label="latency reduction"
-            baseDisplay={formatSeconds(codingBaseRun.totalSeconds)}
-            tunedDisplay={formatSeconds(codingTrainedRun.totalSeconds)}
-            fill={(codingTrainedRun.totalSeconds / codingBaseRun.totalSeconds) * 100}
-            color={model.color}
-          />
-          <ReductionCell
-            percent={codingToolCallReduction}
-            label="fewer tool calls"
-            baseDisplay={`${codingBaseRun.toolCalls} calls`}
-            tunedDisplay={`${codingTrainedRun.toolCalls} calls`}
-            fill={(codingTrainedRun.toolCalls / codingBaseRun.toolCalls) * 100}
-            color={model.color}
-          />
-          <div className="result-metrics"><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
-        </> : <>
-          <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
-          <div className="score-bars"><ScoreBar label="Base model" display={`${model.scoreBefore.toFixed(1)}%`} fill={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" display={`${model.scoreAfter.toFixed(1)}%`} fill={model.scoreAfter} color={model.color} /></div>
-          <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
-        </>}
+      <div className="results-strip">
+        <div className="result-summary"><span className="lift-number" style={{ color: model.color }}>+{lift.toFixed(1)}</span><span><strong>point lift</strong><small>on held-out evaluation</small></span></div>
+        <div className="score-bars"><ScoreBar label="Base model" display={`${model.scoreBefore.toFixed(1)}%`} fill={model.scoreBefore} color={model.color} muted /><ScoreBar label="Post-trained" display={`${model.scoreAfter.toFixed(1)}%`} fill={model.scoreAfter} color={model.color} /></div>
+        <div className="result-metrics"><div><small>{model.scoreLabel}</small><strong>{model.scoreAfter.toFixed(1)}%</strong></div><div><small>p50 latency</small><strong>{model.latency}</strong></div><div><small>VRAM</small><strong>{model.memory}</strong></div></div>
       </div>
 
       <div className="expanded-footer"><div className="tag-list">{model.tags.map((tag) => <span key={tag}><CheckIcon /> {tag}</span>)}</div><span>Evaluation run #{runCount} · 1,000 prompts · seed 42</span></div>
@@ -311,13 +238,17 @@ function PlaceholderBody({ model, isRunning, runCount, codingElapsed }: { model:
 }
 
 export default function Home() {
-  const [introStage, setIntroStage] = useState<'landing' | 'how-it-learns' | 'gallery'>('landing');
+  const [introStage, setIntroStage] = useState<IntroStage>('landing');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
-  const [codingElapsed, setCodingElapsed] = useState(Number.POSITIVE_INFINITY);
-  const frameRef = useRef<number | null>(null);
   const introFrameRef = useRef<HTMLIFrameElement>(null);
+  const workspaceRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const stage = new URLSearchParams(window.location.search).get('stage');
+    if (stage && ['landing', 'how-it-learns', 'gallery'].includes(stage)) setIntroStage(stage as IntroStage);
+  }, []);
 
   useEffect(() => {
     if (introStage === 'gallery') return;
@@ -329,61 +260,30 @@ export default function Home() {
       if (introStage === 'how-it-learns' && event.data?.type === 'gtc-demo:enter-gallery') {
         setIntroStage('gallery');
       }
+      if (event.data?.type === 'gtc-demo:navigate' && ['landing', 'how-it-learns', 'gallery'].includes(event.data.stage)) {
+        setIntroStage(event.data.stage as IntroStage);
+      }
     };
     window.addEventListener('message', advanceIntro);
     return () => window.removeEventListener('message', advanceIntro);
   }, [introStage]);
 
-  const stopPlayback = useCallback(() => {
-    if (frameRef.current === null) return;
-    cancelAnimationFrame(frameRef.current);
-    frameRef.current = null;
-  }, []);
-
-  useEffect(() => stopPlayback, [stopPlayback]);
-
-  const playCodingTrajectory = useCallback(() => {
-    stopPlayback();
-    const startedAt = performance.now();
-    setCodingElapsed(0);
-    const step = (now: number) => {
-      const elapsed = ((now - startedAt) / 1000) * PLAYBACK_RATE;
-      if (elapsed >= CODING_BASE_TOTAL_SECONDS) {
-        frameRef.current = null;
-        setCodingElapsed(Number.POSITIVE_INFINITY);
-        setIsRunning(false);
-        setRunCount((count) => count + 1);
-        return;
-      }
-      setCodingElapsed(elapsed);
-      frameRef.current = requestAnimationFrame(step);
-    };
-    frameRef.current = requestAnimationFrame(step);
-  }, [stopPlayback]);
-
   const runEvaluation = () => {
     if (isRunning) return;
     trackInteraction('evaluation_run', { use_case: selectedId });
     setIsRunning(true);
-    if (selectedId === 'coding') {
-      playCodingTrajectory();
-      return;
-    }
     window.setTimeout(() => { setIsRunning(false); setRunCount((count) => count + 1); }, 900);
   };
 
   const selectUseCase = (useCase: string) => {
     trackUseCaseSelection(useCase, selectedId ? 'dock' : 'gallery');
-    stopPlayback();
-    setCodingElapsed(Number.POSITIVE_INFINITY);
     setIsRunning(false);
     setSelectedId(useCase);
+    window.requestAnimationFrame(() => workspaceRef.current?.scrollIntoView({ block: 'start' }));
   };
 
   const resetView = (source: 'toolbar' | 'window') => {
     trackInteraction('view_reset', { source, selected_use_case: selectedId });
-    stopPlayback();
-    setCodingElapsed(Number.POSITIVE_INFINITY);
     setIsRunning(false);
     setSelectedId(null);
   };
@@ -393,7 +293,7 @@ export default function Home() {
       <main className="demo-landing">
         <iframe
           ref={introFrameRef}
-          src={introStage === 'landing' ? '/healthcare/r01/landing.html' : '/healthcare/r01/how-it-learns.html'}
+          src={introStage === 'landing' ? '/healthcare/r02/introduction/index.html?embed=1' : '/healthcare/r01/how-it-learns.html?embed=1'}
           title={introStage === 'landing' ? 'Post-training with practice and feedback' : 'How post-training works'}
         />
       </main>
@@ -409,7 +309,7 @@ export default function Home() {
       <header className="topbar">
         <div className="brand" role="img" aria-label="NVIDIA"><NvidiaLogo /></div>
         <div className="topbar-center"><span className="crumb-muted">DGX Station</span></div>
-        <div className="topbar-actions"><span className="local-badge"><i /> LOCAL</span></div>
+        <div className="topbar-actions"><PageSwitcher stage={introStage} onChange={setIntroStage} /><span className="local-badge"><i /> LOCAL</span></div>
       </header>
 
       <div className="page-wrap">
@@ -425,7 +325,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="workspace" aria-label="Specialized model comparison">
+        <section ref={workspaceRef} className="workspace" aria-label="Specialized model comparison">
           <div className="window-bar">
             <div className="traffic-lights"><i /><i /><i /></div>
             <div className="window-meta">
@@ -480,9 +380,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                {model.id === 'health' ? <HealthcareDemo /> : model.kind === 'demo'
+                {model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'computer' ? <ComputerUseDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
-                  : model.kind === 'placeholder' ? <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} codingElapsed={codingElapsed} /> : null}
+                  : model.kind === 'placeholder' ? <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} /> : null}
               </>}
                 </motion.article>
               );
