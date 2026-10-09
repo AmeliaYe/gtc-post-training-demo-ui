@@ -23,7 +23,7 @@
 .repeat { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 24px 0 0; color: #63636f; font-size: 22px; line-height: 1.4; text-align: center; }
 .loop .repeat > svg { flex-shrink: 0; width: 25px; height: 25px; color: #2870ff; }
 
-@media (max-width: 950px) {
+@container cyber-scene (max-width: 950px) {
   .loop { padding: 25px; }
   .steps { column-gap: 48px; }
   .step { gap: 12px; padding: 17px; }
@@ -33,7 +33,7 @@
   .step[data-phase='2'] .connector { left: -42px; }
 }
 
-@media (max-width: 700px) {
+@container cyber-scene (max-width: 700px) {
   .loop { padding: 23px 18px; border-radius: 20px; }
   .steps { grid-template-columns: 1fr; gap: 40px; }
   .step[data-phase] { grid-column: 1; grid-row: auto; min-height: 108px; }

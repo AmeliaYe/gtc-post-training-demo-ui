@@ -1,11 +1,11 @@
-.stage { width: min(100%, 60vw); min-width: 0; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
+.stage { width: min(100%, 1100px); min-width: 0; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
 .reasoning { padding: 14px 24px; margin-bottom: 16px; border: 1px solid #e4e4e7; border-radius: 16px; background: #fff; }
 .reasoning header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px 18px; margin-bottom: 7px; }
 .reasoning h4 { margin: 0; color: #27272a; font-size: 16px; font-weight: 500; }
-.reasoning blockquote { margin: 0; color: #3f3f46; font-size: clamp(17px, 1.25vw, 22px); line-height: 1.4; }
+.reasoning blockquote { margin: 0; color: #3f3f46; font-size: clamp(17px, 1.25cqw, 22px); line-height: 1.4; }
 .editor { min-width: 0; border: 1px solid #e4e4e7; border-radius: 22px; background: #fff; }
 .toolBar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 28px 14px; }
-.toolBar h4 { margin: 0; font-size: clamp(22px, 1.7vw, 28px); font-weight: 400; line-height: 1.25; letter-spacing: -.03em; }
+.toolBar h4 { margin: 0; font-size: clamp(22px, 1.7cqw, 28px); font-weight: 400; line-height: 1.25; letter-spacing: -.03em; }
 .fileBar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 28px 10px; }
 .fileBar > code { min-width: 0; overflow-wrap: anywhere; color: #44444b; font: 16px/1.4 monospace; }
 .fileBadge { padding: 5px 9px; border-radius: 6px; background: #f2f2f4; color: #64646e; font-size: 13px; white-space: nowrap; }
@@ -13,29 +13,29 @@
 .commands > code { color: #5f5f6b; font: 15px/1.5 monospace; overflow-wrap: anywhere; }
 .commands code > span { color: #a1a1aa; }
 .codeFrame { margin: 0 16px 16px; }
-.source { margin: 0; padding: 14px 0; min-height: 225px; overflow: auto; border: 1px solid #e8e8ec; border-radius: 15px; background: #f5f5f6; color: #24242b; font: clamp(17px, 1.35vw, 24px)/1.4 monospace; scrollbar-width: thin; }
-.source > span { display: flex; min-height: 1.4em; min-width: max-content; padding-right: 16px; border-left: 4px solid transparent; }
-.source > span > code { font: inherit; }
+.source { margin: 0; padding: 14px 0; min-height: 225px; border: 1px solid #e8e8ec; border-radius: 15px; background: #f5f5f6; color: #24242b; font: clamp(17px, 1.35cqw, 24px)/1.4 monospace; }
+.source > span { display: flex; min-height: 1.4em; min-width: 0; padding-right: 16px; border-left: 4px solid transparent; }
+.source > span > code { flex: 1; min-width: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .lineNumber { flex-shrink: 0; width: 49px; margin-right: 12px; padding-right: 8px; color: #85858f; text-align: right; user-select: none; }
 .source > .highlight { border-left-color: #3499ef; background: #dfebf7; }
 .source > .activeLine { border-left-color: #2870ff; background: #cfe2f9; }
 .highlight > .lineNumber { color: #3499ef; }
-.fileList { color: #337dab; font-size: clamp(17px, 1.2vw, 21px); padding-top: 12px; }
+.fileList { color: #337dab; font-size: clamp(17px, 1.2cqw, 21px); padding-top: 12px; }
 .fileList > span { padding-top: 1px; padding-bottom: 1px; }
 .comment { color: #838b91; }
 .string { color: #009947; }
 .keyword { color: #9761e2; }
 .number, .type { color: #e16512; }
 .function { color: #3499ef; }
-.routeOutput { color: #287c95; font-size: clamp(16px, 1.1vw, 20px); }
+.routeOutput { color: #287c95; font-size: clamp(16px, 1.1cqw, 20px); }
 .routeOutput > span > code { margin-left: 14px; }
 .diagramStage { width: 100%; min-width: 0; }
 .threatNote { margin: 12px auto 0; padding: 0 24px; text-align: center; color: #71717a; font-size: 14px; line-height: 1.4; }
 .stage pre:focus-visible { outline: 2px solid #2870ff; outline-offset: 3px; }
-@media (max-width: 1000px) {
+@container cyber-scene (max-width: 1000px) {
   .stage { width: 100%; }
 }
-@media (max-width: 600px) {
+@container cyber-scene (max-width: 600px) {
   .reasoning { padding: 14px 16px; }
   .toolBar { padding: 20px 18px; flex-wrap: wrap; gap: 8px; }
   .toolBar h4 { font-size: 23px; }

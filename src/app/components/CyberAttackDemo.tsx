@@ -55,7 +55,10 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
     const viewport = scroller.current;
     const card = cardElements.current[index];
     if (!viewport || !card || !viewport.clientWidth) return;
-    const left = card.getBoundingClientRect().left - viewport.getBoundingClientRect().left + viewport.scrollLeft - (viewport.clientWidth - card.offsetWidth) / 2;
+    const viewportBounds = viewport.getBoundingClientRect();
+    if (!viewportBounds.width) return;
+    const scale = viewportBounds.width / viewport.clientWidth;
+    const left = (card.getBoundingClientRect().left - viewportBounds.left) / scale + viewport.scrollLeft - (viewport.clientWidth - card.offsetWidth) / 2;
     viewport.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }, []);
 
@@ -72,6 +75,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
 
   return (
     <section className={styles.attack} aria-label={attack.title}>
+      <div className={styles.requestFlow}>
       <div className={styles.legend} aria-label="Request route legend">
         <span className={styles.expectedLegend}><i aria-hidden="true" />Expected request</span>
         <span className={styles.unsafeLegend}><i aria-hidden="true" />{attackLabel}</span>
@@ -124,6 +128,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
           })}
         </ol>
       </div>
+      </div>
       <div className={styles.sourceFlow} role="region" aria-label="Source flow" aria-roledescription="carousel">
       <div
         id={carouselId}
@@ -143,7 +148,8 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
         onScroll={() => {
           const viewport = scroller.current;
           if (!viewport) return;
-          const center = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+          const viewportBounds = viewport.getBoundingClientRect();
+          const center = viewportBounds.left + viewportBounds.width / 2;
           let nearest = 0;
           let distance = Infinity;
           cardElements.current.forEach((card, index) => {

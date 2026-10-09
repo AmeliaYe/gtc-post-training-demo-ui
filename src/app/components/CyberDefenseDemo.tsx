@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import localFont from 'next/font/local';
 import {
@@ -35,7 +35,29 @@ const STEPS = [
   startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds, 0),
 }));
 const DEMO_SECONDS = STEPS.reduce((seconds, step) => seconds + step.seconds, 0);
-const TICK_SECONDS = 0.5;
+const TICK_SECONDS = 0.1;
+
+function FittedScene({ children }: { children: ReactNode }) {
+  const viewport = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLDivElement>(null);
+  const fit = useCallback(() => {
+    const frame = viewport.current;
+    const content = canvas.current;
+    if (!frame || !content || !content.offsetHeight || !content.offsetWidth) return;
+    const scale = Math.min(frame.clientWidth / content.offsetWidth, frame.clientHeight / content.offsetHeight);
+    if (scale > 0) content.style.setProperty('--scene-scale', String(scale));
+  }, []);
+
+  useLayoutEffect(() => {
+    const observer = new ResizeObserver(fit);
+    if (viewport.current) observer.observe(viewport.current);
+    if (canvas.current) observer.observe(canvas.current);
+    return () => observer.disconnect();
+  }, [fit]);
+  useLayoutEffect(fit, [children, fit]);
+
+  return <div ref={viewport} className={styles.scene}><div ref={canvas} className={styles.sceneCanvas}>{children}</div></div>;
+}
 
 export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   const [elapsed, setElapsed] = useState(0);
@@ -46,12 +68,12 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   const titleId = useId();
   const step = Math.max(0, STEPS.findLastIndex((stage) => elapsed >= stage.startsAt));
   const current = STEPS[step];
-  const progress = elapsed >= DEMO_SECONDS ? 0 : (elapsed - current.startsAt) / current.seconds;
+  const progress = (elapsed - current.startsAt) / current.seconds;
 
   useEffect(() => {
     if (!playing) return;
     const timer = window.setTimeout(() => {
-      const next = Math.min(elapsed + TICK_SECONDS, DEMO_SECONDS);
+      const next = Math.min(Math.round((elapsed + TICK_SECONDS) * 10) / 10, DEMO_SECONDS);
       setElapsed(next);
       if (next === DEMO_SECONDS) setPlaying(false);
     }, TICK_SECONDS * 1000);
@@ -105,6 +127,11 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
     setPlaying(true);
   }
 
+  function replay() {
+    setElapsed(0);
+    setPlaying(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
   async function toggleFullscreen() {
     try {
       if (document.fullscreenElement === container.current) await document.exitFullscreen();
@@ -125,22 +152,28 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
       <section className={styles.presentation} aria-labelledby={titleId}>
         <div className={styles.topline}>
           <div className={styles.exampleContext}><span>Openfire <span className={styles.repoDescription}>/ Java messaging server</span></span><span className={styles.historical}>Historical vulnerability</span></div>
-          <input className={styles.timeline} type="range" aria-label="Investigation timeline" aria-valuetext={`Step ${step + 1} of ${STEPS.length}: ${current.title}`} min={0} max={STEPS.length - 1} value={step} onChange={(event) => navigate(Number(event.target.value))} style={{ background: `linear-gradient(to right, #2870ff ${(step + 1) / STEPS.length * 100}%, #dddde3 ${(step + 1) / STEPS.length * 100}%)` }} />
+          <div className={styles.timeline} role="progressbar" aria-label={`Step ${step + 1} progress`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-valuetext={`${Math.round(progress * 100)}% of ${current.title}`}>
+            <span key={step} className={styles.timelineFill} style={{ transform: `scaleX(${progress})`, transitionDuration: playing ? `${TICK_SECONDS}s` : '0s' }} />
+          </div>
         </div>
-        <div className={`${styles.scene} ${step === 1 ? styles.wideScene : ''}`}>
-          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults onInteract={() => setPlaying(false)} /> : <CyberTrainingLoop progress={progress} />}
-        </div>
+        <FittedScene>
+          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults onInteract={() => setPlaying(false)} /> : <CyberTrainingLoop progress={elapsed >= DEMO_SECONDS ? 0 : progress} />}
+        </FittedScene>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>
           <div className={styles.caption}>
+            <div className={styles.captionCopy}>
             <h1 id={titleId} className={current.hideCaption ? styles.srOnly : undefined}>{current.title}</h1>
             {current.detail && <p>{current.detail}</p>}
+            </div>
             <button className={styles.play} onClick={play}>
               <span className={styles.autoplayLabel}>{playing ? <PauseIcon aria-hidden="true" /> : elapsed >= DEMO_SECONDS ? <ArrowPathIcon aria-hidden="true" /> : <PlayIcon aria-hidden="true" />}{playing ? 'Pause' : elapsed >= DEMO_SECONDS ? 'Replay investigation' : elapsed === 0 ? 'Play investigation' : 'Resume'}</span>
               <span className={styles.manualLabel}>{step === STEPS.length - 1 ? <ArrowPathIcon aria-hidden="true" /> : <ArrowRightIcon aria-hidden="true" />}{step === STEPS.length - 1 ? 'Start over' : 'Next step'}</span>
             </button>
           </div>
-          <button className={styles.arrow} disabled={step === STEPS.length - 1} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><ChevronRightIcon aria-hidden="true" /></button>
+          {step === STEPS.length - 1
+            ? <button className={`${styles.arrow} ${styles.replayArrow}`} onClick={replay} aria-label="Replay investigation" title="Replay investigation"><ArrowPathIcon aria-hidden="true" /><span>Replay</span></button>
+            : <button className={styles.arrow} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><ChevronRightIcon aria-hidden="true" /></button>}
         </footer>
         <span className={styles.srOnly} role="status" aria-live="polite" aria-atomic="true">Step {step + 1} of {STEPS.length}: {current.title}.</span>
         {presentationMessage && <p className={styles.presentationMessage} role="status">{presentationMessage}</p>}

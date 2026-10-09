@@ -1,4 +1,5 @@
-.attack { width: 100%; min-width: 0; container-type: inline-size; color: #0c0c0c; font-family: inherit; }
+.attack { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: center; gap: 28px; width: 100%; min-width: 0; container: attack / inline-size; color: #0c0c0c; font-family: inherit; }
+.requestFlow { min-width: 0; }
 .legend { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 30px; min-height: 32px; font-size: 15px; }
 .legend > span { display: inline-flex; align-items: center; gap: 10px; }
 .legend i { display: block; width: 30px; border-top: 3px solid currentColor; }
@@ -10,20 +11,20 @@
 .route { fill: none; stroke: #a8a8b4; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 .expectedRoute { stroke: #17834a; stroke-width: 3; }
 .unsafeRoute { stroke: #cf3942; stroke-width: 3; stroke-dasharray: 8 6; }
-.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 15px; border: 1.5px solid #dedee5; border-radius: 18px; background: #fff; }
-.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; color: #83838e; }
-.nodeNumber { display: grid; place-items: center; width: 30px; height: 34px; border-radius: 10px; background: #f2f2f5; color: #63636f; font-size: 20px; line-height: 1; }
-.attack .nodeTop > svg { width: 24px; height: 24px; }
-.node strong, .mobileGraph strong { display: block; color: #272730; font-size: clamp(18px, 2cqi, 23px); font-weight: 500; line-height: 1.2; }
-.nodeDetail { display: block; margin-top: 8px; color: #777782; font-size: 14px; line-height: 1.35; }
+.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 12px; border: 1.5px solid #dedee5; border-radius: 18px; background: #fff; }
+.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; color: #83838e; }
+.nodeNumber { display: grid; place-items: center; width: 26px; height: 28px; border-radius: 8px; background: #f2f2f5; color: #63636f; font-size: 18px; line-height: 1; }
+.attack .nodeTop > svg { width: 22px; height: 22px; }
+.node strong, .mobileGraph strong { display: block; color: #272730; font-size: 18px; font-weight: 500; line-height: 1.2; }
+.nodeDetail { display: block; margin-top: 7px; color: #777782; font-size: 13px; line-height: 1.35; }
 .expectedNode { color: #17834a; border-color: #87c4a1; }
 .unsafeNode { color: #cf3942; border-color: #e8a0a5; }
 .expectedNode .nodeTop, .unsafeNode .nodeTop { color: inherit; }
 .expectedNode .nodeNumber, .expectedNode .routeBadge { color: #126c3b; background: #edf8f1; }
 .unsafeNode .nodeNumber, .unsafeNode .routeBadge { color: #b82e37; background: #fff0f1; }
-.routeBadge { display: inline-block; margin-top: 9px; padding: 5px 8px; border-radius: 7px; font-size: 13px; font-weight: 500; line-height: 1.2; }
+.routeBadge { display: inline-block; margin-top: 8px; padding: 5px 6px; border-radius: 7px; font-size: 12px; font-weight: 500; line-height: 1.2; }
 .mobileGraph { display: none; }
-.sourceFlow { margin-top: 8px; padding-bottom: 8px; }
+.sourceFlow { min-width: 0; padding: 16px 0; border-left: 1px solid #dedee5; container: source-flow / inline-size; }
 .scroller { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .scroller::-webkit-scrollbar { display: none; }
 .chain { display: flex; gap: 64px; width: max-content; min-width: 100%; margin: 0; padding: 24px max(32px, calc((100cqi - 560px) / 2)); list-style: none; }
@@ -52,7 +53,7 @@
 .navigation > span > span { color: #8b8b96; }
 .attack :is(button, a, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
 .attack .scroller:focus-visible { outline-offset: -3px; }
-@container (max-width: 800px) {
+@container attack (max-width: 800px) {
   .desktopGraph { display: none; }
   .mobileGraph { display: block; max-width: 470px; margin: 14px auto 0; }
   .sharedNodes, .mobileBranches { padding: 0; margin: 0; list-style: none; }
@@ -73,7 +74,7 @@
   .legend { gap: 10px 20px; font-size: 14px; }
   .legend i { width: 24px; }
 }
-@container (max-width: 640px) {
+@container source-flow (max-width: 640px) {
   .chain { gap: 32px; padding-block: 18px; }
   .card { height: 282px; padding: 18px; border-radius: 20px; }
   .card h4 { margin-top: 16px; font-size: 26px; }
@@ -87,7 +88,7 @@
   .sourcePath { font-size: 14px; }
   .attack .connector { top: 127px; width: 32px; }
 }
-@container (max-width: 390px) {
+@container source-flow (max-width: 390px) {
   .github { width: 43px; padding: 8px; }
   .github > span { display: none; }
   .card h4 { font-size: 23px; }
