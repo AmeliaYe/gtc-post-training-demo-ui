@@ -1,6 +1,13 @@
 .findings { width: 100%; max-width: 1320px; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
 .scroll { overflow-x: auto; padding: 3px; scrollbar-width: thin; scrollbar-color: #b9b9c2 transparent; }
 .scroll:focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; border-radius: 16px; }
+.missedCheckpoint { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 18px; }
+.missedSummary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 21px 28px; border: 1px solid #e3e3e7; border-radius: 20px; background: #fff; color: #63636f; font-size: 20px; line-height: 1.4; }
+.missedSummary strong { display: flex; align-items: center; gap: 10px; color: #b32d38; font-weight: 500; }
+.findings .missedSummary svg { width: 24px; height: 24px; }
+.missedCount { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding-left: 25px; color: #b32d38; }
+.missedCount strong { min-width: 76px; padding: 6px 14px; border-radius: 24px; background: #fce4e6; font-size: 28px; line-height: 1.1; font-weight: 500; text-align: center; }
+.missedCount > span { font-size: 16px; line-height: 1.2; }
 .surface { --feedback-width: 0px; position: relative; width: 1120px; min-width: 1120px; margin: 0 auto; padding-bottom: 15px; }
 .surface::before { position: absolute; z-index: 0; top: 0; right: var(--feedback-width); bottom: 0; left: 0; border: 1px solid #e3e3e7; border-radius: 24px; background: #fff; content: ''; }
 .withFeedback { --feedback-width: 160px; width: 1280px; min-width: 1280px; }

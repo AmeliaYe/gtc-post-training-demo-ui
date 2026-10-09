@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useId, useState } from 'react';
-import { ArrowTopRightOnSquareIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ArrowTopRightOnSquareIcon, ChevronDownIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import styles from './CyberFindings.module.css';
 
@@ -48,6 +48,18 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
   return (
     <div className={styles.findings}>
       <div className={styles.scroll} role="region" aria-label="Openfire submitted reports" tabIndex={0} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
+        {showFeedback && (
+          <div className={styles.missedCheckpoint} aria-label="Early checkpoint: no reference vulnerability matched">
+            <div className={styles.missedSummary}>
+              <span>Early · step 5</span>
+              <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
+            </div>
+            <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} reference matches`}>
+              <strong>{SCENARIO.before.matchedCount}</strong>
+              <span>matches</span>
+            </span>
+          </div>
+        )}
         <div className={`${styles.surface} ${showFeedback ? styles.withFeedback : ''}`}>
           <table className={styles.table}>
             <caption className={styles.srOnly}>{SCENARIO.after.findingsCount} recorded reports from the final Openfire checkpoint{showFeedback ? `; ${SCENARIO.after.matchedCount} reference vulnerability matched` : ''}.</caption>
@@ -68,7 +80,7 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
               </tr>
             </thead>
             {[
-              { label: showFeedback ? 'Known vulnerability matched' : 'Server-side requests', matched: true },
+              { label: showFeedback ? 'Final · step 200 · SSRF matched' : 'Server-side requests', matched: true },
               { label: showFeedback ? 'Additional reports' : 'XML handling', matched: false },
             ].map((group) => (
               <tbody key={group.label}>

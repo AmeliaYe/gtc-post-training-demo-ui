@@ -1,11 +1,9 @@
-import { ArrowRightIcon, ArrowTopRightOnSquareIcon, CheckIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, CheckIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { DFBENCH_RESULT, type CyberScenario } from '@/lib/cyber-fixture';
-import { CYBER_ATTACKS } from '@/lib/cyber-attacks';
 import styles from './CyberTrainingResults.module.css';
 
 export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) {
   const benchmark = DFBENCH_RESULT;
-  const attack = CYBER_ATTACKS.openfire;
 
   return (
     <div className={styles.results}>
@@ -51,35 +49,6 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
           <span className={styles.comparisonArrow} aria-hidden="true"><ArrowRightIcon /></span>
         </div>
       </section>
-
-      <details className={styles.details} key={scenario.id}>
-        <summary>Evidence</summary>
-        <div className={styles.detailContent}>
-          <section>
-            <h5>Openfire: {scenario.repo}</h5>
-            <p>Two checkpoints after reinforcement learning (RL) training, at steps 5 and 200, reviewing the same repository revision. Recorded evaluation: October 2026, attempt 1 of 4.</p>
-            <div className={styles.reportDetails}>
-              {[scenario.before, scenario.after].map((run, index) => (
-                <div key={index}>
-                  <h6>{index === 0 ? 'Early · step 5' : 'Final · step 200'} · {run.findingsCount} total {run.findingsCount === 1 ? 'report' : 'reports'}</h6>
-                  <p>{index === 0 ? attack.training.before : attack.training.after}</p>
-                  <ul>{run.findings.map((finding) => <li key={finding.title}><strong>{finding.count}×</strong> {finding.title}<span>{finding.referenceMatch === 'matched' ? 'Matches the reference flaw' : finding.referenceMatch === 'unassessed' ? 'Not assessed' : 'Does not match the reference flaw'}</span></li>)}</ul>
-                  <p>Verifier: {run.matchedCount} of {run.referenceTotal} reference {run.referenceTotal === 1 ? 'flaw' : 'flaws'} matched.</p>
-                </div>
-              ))}
-            </div>
-            <p>Historical reference: {scenario.cve}, published in 2019 · {scenario.reference.title}. This replay evaluates a historical code snapshot. SSRF means server-side request forgery: making a server fetch an address chosen by someone else. Reports that do not match this reference are not confirmed false positives.</p>
-            <p>{attack.caveat}</p>
-            <a href={scenario.url} target="_blank" rel="noopener noreferrer">Evaluated source revision<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
-          </section>
-          <section>
-            <h5>Broader benchmark: dfbench</h5>
-            <p>Recall is the share of known vulnerabilities found. This separate comparison uses <code>{benchmark.before.model}</code> and <code>{benchmark.after.model}</code>. Its step-180 result is distinct from this step-200 Openfire example.</p>
-            <p>Full benchmark scope: 253 real-world examples, 910 known vulnerabilities, and 17 languages in vulnerable code. These scope statistics describe the full benchmark.</p>
-            <a href="https://depthfirst.com/research/dfbench-v1" target="_blank" rel="noopener noreferrer">How dfbench works<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
-          </section>
-        </div>
-      </details>
     </div>
   );
 }

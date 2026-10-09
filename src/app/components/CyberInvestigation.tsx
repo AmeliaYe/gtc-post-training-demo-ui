@@ -36,7 +36,11 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
   const calls = step === 0 ? [SCOPE_CALL] : snippet ? [SOURCE_CALL] : ROUTE_CALLS;
   const reasoning = snippet ? OPENFIRE_SOURCE_ASSESSMENT.text : calls[0].rationale;
   const files = SCOPE_CALL.output.split('\n');
-  const scanLine = Math.min(Math.floor(progress * files.length), files.length - 1);
+  const rows: { number?: number | string; text: string; highlight: boolean; path?: string }[] = step === 0
+    ? files.map((path, index) => ({ number: String(index + 1).padStart(2, '0'), text: path.split('/').at(-1)!, highlight: false, path }))
+    : snippet ? snippet.lines : ROUTE_CALLS[1].output.split('\n').map((text) => ({ text, highlight: /<servlet-name>|<url-pattern>/.test(text) }));
+  const focusRows = rows.flatMap((row, index) => step === 0 || row.highlight ? [index] : []);
+  const activeRow = focusRows[Math.min(Math.floor(Math.max(0, progress) * focusRows.length), focusRows.length - 1)];
 
   if (step === 1) return (
     <div className={styles.diagramStage}>
@@ -63,14 +67,17 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
           {calls.map((call) => <code key={call.id}><span aria-hidden="true">$ </span>{SHORT_COMMANDS[call.id]}</code>)}
         </div>
         <div className={styles.codeFrame} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
-          {step === 0 && <pre className={`${styles.source} ${styles.fileList}`} tabIndex={0} aria-label="Files returned by recorded search, paths shortened">
-            {files.map((path, index) => <span key={path} className={index === scanLine ? styles.highlight : ''}><span className={styles.lineNumber}>{String(index + 1).padStart(2, '0')}</span><code title={path}>{path.split('/').at(-1)}</code></span>)}
-          </pre>}
-          {snippet && <pre className={styles.source} tabIndex={0} aria-label={`${snippet.title}, exact source excerpt`}>
-            {snippet.lines.map((line) => <span key={line.number} className={line.highlight ? styles.highlight : ''}><span className={styles.lineNumber}>{line.number}</span><code><HighlightedCode text={line.text || ' '} /></code></span>)}
-          </pre>}
-          {step === 5 && <pre className={`${styles.source} ${styles.routeOutput}`} tabIndex={0} aria-label="Recorded servlet mapping output excerpt"><code>{ROUTE_CALLS[1].output}</code></pre>}
-          <Image className={styles.agentCursor} src="/cyber/agent-cursor.svg" alt="" aria-hidden="true" width={183} height={127} style={{ top: `${12 + progress * 38}%` }} loading="eager" />
+          <pre className={`${styles.source} ${step === 0 ? styles.fileList : step === 5 ? styles.routeOutput : ''}`} tabIndex={0} aria-label={step === 0 ? 'Files returned by recorded search, paths shortened' : snippet ? `${snippet.title}, exact source excerpt` : 'Recorded servlet mapping output excerpt'}>
+            {rows.map((row, index) => (
+              <span key={row.number ?? index} className={`${row.highlight || index === activeRow ? styles.highlight : ''} ${index === activeRow ? styles.activeLine : ''}`}>
+                {row.number !== undefined && <span className={styles.lineNumber}>{row.number}</span>}
+                <code title={row.path}>
+                  {snippet ? <HighlightedCode text={row.text || ' '} /> : row.text}
+                  {index === activeRow && <Image className={styles.agentCursor} src="/cyber/agent-cursor.svg" alt="" aria-hidden="true" width={183} height={127} style={{ left: `${Math.max(0, row.text.search(/\S/))}ch` }} loading="eager" />}
+                </code>
+              </span>
+            ))}
+          </pre>
         </div>
         <details className={styles.transcript}>
           <summary>Exact recorded {calls.length === 1 ? 'command and output' : 'commands and outputs'}</summary>

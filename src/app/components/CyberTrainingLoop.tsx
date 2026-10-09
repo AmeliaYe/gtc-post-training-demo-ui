@@ -2,7 +2,7 @@ import { ArrowPathIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import styles from './CyberTrainingLoop.module.css';
 
 const PHASES = [
-  { title: 'N environments', detail: 'Batch of repository tasks' },
+  { title: 'Environments', detail: 'Batch of repository tasks' },
   { title: 'Rollouts + rewards', detail: 'Tool calls · verified findings' },
   { title: 'Update LLM weights', detail: null },
   { title: 'New checkpoint', detail: 'Updated model' },
@@ -25,7 +25,7 @@ export function CyberTrainingLoop({ progress }: { progress: number }) {
           </li>
         ))}
       </ol>
-      <p className={styles.repeat}><ArrowPathIcon aria-hidden="true" /><span>Conceptual loop · repeat with the updated checkpoint.</span></p>
+      <p className={styles.repeat}><ArrowPathIcon aria-hidden="true" /><span>Continual Improvements</span></p>
     </section>
   );
 }

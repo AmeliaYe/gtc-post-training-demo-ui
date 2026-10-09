@@ -29,8 +29,8 @@ const STEPS = [
   { title: 'Inspect the network sink' },
   { title: 'Confirm the endpoint mapping' },
   { title: 'Reviewing the submitted findings', detail: 'Select a report to inspect the evidence behind it.' },
-  { title: 'Scoring the verified findings', detail: 'One reference match in this recorded evaluation. RL rewards successful vulnerability detection.' },
-  { title: 'Compare checkpoint results', detail: 'Both checkpoints inspected FaviconServlet.java. Only the final checkpoint reported its SSRF vulnerability.' },
+  { title: 'Scoring the verified findings', detail: 'Early checkpoint: SSRF omitted. Final checkpoint: SSRF reported and matched.' },
+  { title: 'Training results', hideCaption: true },
   { title: 'Keep training across new environments' },
 ];
 const STEP_SECONDS = 12;
@@ -131,7 +131,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>
           <div className={styles.caption}>
-            <h1 id={titleId}>{current.title}</h1>
+            <h1 id={titleId} className={current.hideCaption ? styles.srOnly : undefined}>{current.title}</h1>
             {current.detail && <p>{current.detail}</p>}
             <button className={styles.play} onClick={play}>
               <span className={styles.autoplayLabel}>{playing ? <PauseIcon aria-hidden="true" /> : elapsed >= DEMO_SECONDS ? <ArrowPathIcon aria-hidden="true" /> : <PlayIcon aria-hidden="true" />}{playing ? 'Pause' : elapsed >= DEMO_SECONDS ? 'Replay investigation' : elapsed === 0 ? 'Play investigation' : 'Resume'}</span>
