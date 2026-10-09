@@ -24,10 +24,11 @@ type DemoStep = {
   title: string;
   seconds: number;
   detail?: string;
+  hideCaption?: boolean;
 } & ({ scene: 'investigation'; investigationStep: number } | { scene: 'prompt' | 'findings' | 'rewards' | 'results' | 'training' });
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
-  { scene: 'investigation', title: 'Agent must detect this server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker may use the server to reach private services.' },
+  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker may use the server to reach private services.' },
   { scene: 'prompt', title: 'Agent is tasked with finding the vulnerability in the audit slice', seconds: 24 },
   { scene: 'investigation', title: 'Agent locates the files in the audit scope', seconds: 6, investigationStep: 0 },
   { scene: 'investigation', title: 'Agent traces untrusted input from the request', seconds: 6, investigationStep: 2 },
@@ -35,9 +36,9 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Agent inspects the code that sends the HTTP request', seconds: 6, investigationStep: 4 },
   { scene: 'investigation', title: 'Agent confirms how the endpoint reaches this code', seconds: 6, investigationStep: 5 },
   { scene: 'findings', title: 'Agent submits its security findings', seconds: 12 },
-  { scene: 'rewards', title: 'Agent finds the vulnerability after post-training', seconds: 12 },
-  { scene: 'results', title: 'Agent detects more known vulnerabilities after post-training', seconds: 12 },
-  { scene: 'training', title: 'Agent can keep learning through local training', seconds: 12 },
+  { scene: 'rewards', title: 'Post-training enables vulnerability discovery', seconds: 12 },
+  { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
+  { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 12, detail: 'For individuals and teams.' },
 ] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
   seconds: step.seconds / 2,
@@ -212,7 +213,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>
           <div className={styles.caption}>
             <div className={styles.captionCopy}>
-            <h1 id={titleId}>{current.title}</h1>
+            <h1 id={titleId} className={current.hideCaption ? styles.srOnly : undefined}>{current.title}</h1>
             {current.detail && <p>{current.detail}</p>}
             </div>
 
