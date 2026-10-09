@@ -17,7 +17,8 @@
 .timeline { appearance: none; display: block; width: 110px; height: 12px; margin: 0; border: 0; border-radius: 8px; cursor: pointer; }
 .timeline::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; border: 2px solid #2870ff; border-radius: 50%; background: #fff; }
 .timeline::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid #2870ff; border-radius: 50%; background: #fff; }
-.scene { display: flex; flex: 1; align-items: center; width: 100%; max-width: 1100px; min-width: 0; margin: 0 auto; padding: 10px 0; }
+.scene { display: flex; flex: 1; align-items: center; width: 100%; max-width: 1320px; min-width: 0; margin: 0 auto; padding: 10px 0; }
+.wideScene { max-width: none; width: calc(100% + 76px); margin-left: -38px; }
 .navigation { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 30px; }
 .arrow { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid #dddde3; border-radius: 10px; background: #fff; color: #0c0c0c; }
 .arrow:not(:disabled):hover { border-color: #2870ff; color: #2870ff; background: #f8faff; }
@@ -34,8 +35,7 @@
 .presentationMessage { margin: 0; color: #63636f; font-size: 16px; text-align: center; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (max-width: 1600px) {
-  .header { min-height: 100px; }
-  .presentation { min-height: calc(100dvh - 112px); padding-top: 20px; padding-bottom: 22px; gap: 18px; }
+  .presentation { padding-top: 20px; padding-bottom: 22px; gap: 18px; }
 }
 @media (max-width: 800px) {
   .demo { padding: 0 8px 8px; }
@@ -48,6 +48,7 @@
   .timeline { width: 90px; }
   .replayNote { display: none; }
   .scene { padding: 0; }
+  .wideScene { width: calc(100% + 32px); margin-left: -16px; }
   .navigation { grid-template-columns: 40px minmax(0, 1fr) 40px; align-items: end; gap: 12px; }
   .arrow { width: 40px; height: 40px; }
   .caption h1 { font-size: 27px; }
@@ -58,6 +59,7 @@
   .brand img { width: 130px; }
   .repoDescription { display: none; }
   .presentation { padding: 18px 10px; }
+  .wideScene { width: calc(100% + 20px); margin-left: -10px; }
   .navigation { gap: 8px; }
   .caption h1 { font-size: 23px; }
   .caption p { font-size: 15px; }

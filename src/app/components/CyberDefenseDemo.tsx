@@ -5,11 +5,12 @@ import Image from 'next/image';
 import localFont from 'next/font/local';
 import {
   ArrowsPointingOutIcon, ArrowsPointingInIcon, ArrowPathIcon, ArrowRightIcon,
-  ChevronLeftIcon, PauseIcon, PlayIcon,
+  ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon,
 } from '@heroicons/react/24/outline';
 import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
+import { CyberFindings } from './CyberFindings';
 import styles from './CyberDefenseDemo.module.css';
 
 const SCENARIO = CYBER_SCENARIOS.find((scenario) => scenario.id === 'openfire')!;
@@ -20,13 +21,14 @@ const inter = localFont({
   weight: '100 900',
 });
 const STEPS = [
-  { title: 'Explore the Java codebase' },
-  { title: 'Map the SSRF risk', detail: 'Server-side request forgery (SSRF) lets an attacker direct a server’s requests. Here, the destination comes from user input.' },
+  { title: 'Exploring your codebase' },
+  { title: 'Producing the threat model & findings', detail: 'Server-side request forgery (SSRF): user input directs a request made by the server.' },
   { title: 'Trace untrusted input' },
   { title: 'Trace URL construction' },
   { title: 'Inspect the network sink' },
   { title: 'Confirm the endpoint mapping' },
-  { title: 'Verify the submitted finding', detail: 'The agent reports SSRF. The evaluator matches that report against the known vulnerability in this repository.' },
+  { title: 'Reviewing the submitted findings', detail: 'Select a report to inspect the evidence behind it.' },
+  { title: 'Scoring the verified findings', detail: 'One reference match in this recorded evaluation. RL rewards successful vulnerability detection.' },
   { title: 'Compare checkpoint results', detail: 'Both checkpoints inspected FaviconServlet.java. Only the final checkpoint reported its SSRF vulnerability.' },
 ];
 const STEP_SECONDS = 12;
@@ -122,8 +124,8 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
           <input className={styles.timeline} type="range" aria-label="Investigation timeline" aria-valuetext={`Step ${step + 1} of ${STEPS.length}: ${current.title}`} min={0} max={STEPS.length - 1} value={step} onChange={(event) => navigate(Number(event.target.value))} style={{ background: `linear-gradient(to right, #2870ff ${(step + 1) / STEPS.length * 100}%, #dddde3 ${(step + 1) / STEPS.length * 100}%)` }} />
           <span className={styles.replayNote}>Recorded replay · {DEMO_SECONDS} seconds</span>
         </div>
-        <div className={styles.scene}>
-          {step < 7 ? <CyberInvestigation step={step} playing={playing} /> : <CyberTrainingResults scenario={SCENARIO} />}
+        <div className={`${styles.scene} ${step === 1 ? styles.wideScene : ''}`}>
+          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : <CyberTrainingResults scenario={SCENARIO} />}
         </div>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>
@@ -135,7 +137,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
               <span className={styles.manualLabel}>{step === STEPS.length - 1 ? <ArrowPathIcon aria-hidden="true" /> : <ArrowRightIcon aria-hidden="true" />}{step === STEPS.length - 1 ? 'Start over' : 'Next step'}</span>
             </button>
           </div>
-          <button className={styles.arrow} disabled={step === STEPS.length - 1} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><ArrowRightIcon aria-hidden="true" /></button>
+          <button className={styles.arrow} disabled={step === STEPS.length - 1} onClick={() => navigate(step + 1)} aria-label="Next step" title="Next step"><ChevronRightIcon aria-hidden="true" /></button>
         </footer>
         <span className={styles.srOnly} role="status" aria-live="polite" aria-atomic="true">Step {step + 1} of {STEPS.length}: {current.title}.</span>
         {presentationMessage && <p className={styles.presentationMessage} role="status">{presentationMessage}</p>}

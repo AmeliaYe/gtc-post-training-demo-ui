@@ -1,83 +1,117 @@
 'use client';
 
-import { useId } from 'react';
-import {
-  ArrowDownIcon, CircleStackIcon, CodeBracketIcon, GlobeAltIcon,
-  LockClosedIcon, ServerIcon, UserIcon,
-} from '@heroicons/react/24/outline';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import type { CyberAttack } from '@/lib/cyber-attacks';
 import type { CyberScenario } from '@/lib/cyber-fixture';
+import { CYBER_VISUALS } from '@/lib/cyber-visuals';
 import styles from './CyberAttackDemo.module.css';
 
-const NODE_ICONS = {
-  person: UserIcon,
-  server: ServerIcon,
-  globe: GlobeAltIcon,
-  lock: LockClosedIcon,
-  code: CodeBracketIcon,
-  data: CircleStackIcon,
-};
-
-export function CyberAttackDemo({ attack, scenarioId, step, playing }: {
+export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInteract }: {
   attack: CyberAttack;
   scenarioId: CyberScenario['id'];
   step: number;
   playing: boolean;
+  progress?: number;
+  onInteract?: () => void;
 }) {
-  const instanceId = useId();
-  const diagramId = `attack-${scenarioId}-${instanceId.replaceAll(':', '')}`;
-  const stage = attack.stages[step];
-  const activeRoute = stage.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)).filter((node) => node !== undefined);
-  const columns = Array.from(new Set(attack.nodes.map((node) => node.x))).sort((left, right) => left - right);
+  const carouselId = useId();
+  const scroller = useRef<HTMLDivElement>(null);
+  const cardElements = useRef<(HTMLLIElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const source = CYBER_VISUALS[scenarioId].code;
+  const cards = scenarioId === 'openfire' ? [
+    { title: 'User-provided host', kind: 'Entry', call: 'Request parameter', source: source[0] },
+    { title: 'URL construction', kind: 'Call', call: 'Build icon URL', source: source[1] },
+    { title: 'Server-side request', kind: 'Exit', call: 'HTTP request', source: source[2] },
+    { title: 'Returned response', kind: 'Return', call: 'HTTP 200 bytes', source: source[2] },
+  ] : source.map((entry, index) => ({
+    title: CYBER_VISUALS[scenarioId].flow[index].label,
+    kind: ['Entry', 'Call', 'Exit'][index],
+    call: ['Input', 'Propagation', 'Sink'][index],
+    source: entry,
+  }));
+  const hasProgress = progress !== undefined;
+  const automaticIndex = Math.min(cards.length - 1, Math.floor(Math.max(0, Math.min(progress ?? 0, 1)) * cards.length));
+
+  const centerCard = useCallback((index: number) => {
+    const viewport = scroller.current;
+    const card = cardElements.current[index];
+    if (!viewport || !card) return;
+    const left = card.getBoundingClientRect().left - viewport.getBoundingClientRect().left + viewport.scrollLeft - (viewport.clientWidth - card.offsetWidth) / 2;
+    viewport.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    if (playing && hasProgress) centerCard(automaticIndex);
+  }, [automaticIndex, playing, hasProgress, centerCard]);
+
+  function selectCard(index: number) {
+    onInteract?.();
+    const nextIndex = Math.max(0, Math.min(cards.length - 1, index));
+    setActiveIndex(nextIndex);
+    centerCard(nextIndex);
+  }
 
   return (
-    <div className={styles.attack}>
-      <div className={styles.desktopGraph} role="img" aria-label={`Active path: ${activeRoute.map((node) => node.label).join(' → ')}. ${stage.description}`}>
-        <svg className={styles.network} viewBox="0 0 1000 380" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <marker id={`${diagramId}-muted`} markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0 0 L10 5 L0 10Z" fill="#ccccd4" />
-            </marker>
-            <marker id={`${diagramId}-active`} markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0 0 L14 7 L0 14Z" fill="currentColor" />
-            </marker>
-          </defs>
-          {attack.edges.filter((edge) => stage.activeEdges.includes(edge.id) || attack.stages[0].activeEdges.includes(edge.id)).map((edge) => (
-            <path key={edge.id} d={edge.path} className={`${styles.route} ${stage.activeEdges.includes(edge.id) ? styles.activeRoute : ''}`} markerEnd={`url(#${diagramId}-${stage.activeEdges.includes(edge.id) ? 'active' : 'muted'})`} />
-          ))}
-          {playing && attack.edges.filter((edge) => stage.activeEdges.includes(edge.id)).map((edge, index) => (
-            <circle key={`${step}-${edge.id}`} r="5.5" opacity="0" className={styles.packet}>
-              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.05;0.9;1" dur="2.8s" begin={`${index * 0.6}s`} repeatCount="indefinite" />
-              <animateMotion path={edge.path} dur="2.8s" begin={`${index * 0.6}s`} repeatCount="indefinite" />
-            </circle>
-          ))}
-        </svg>
-        {attack.nodes.map((node) => {
-          const Icon = NODE_ICONS[node.icon];
-          return (
-            <div key={node.id} className={`${styles.node} ${stage.activeNodes.includes(node.id) ? styles.activeNode : ''}`} style={{ left: `${node.x / 10}%`, top: `${node.y / 3.8}%` }}>
-              <div className={styles.nodeTop}><span className={styles.nodeNumber}>{columns.indexOf(node.x) + 1}</span><span className={styles.nodeIcon}><Icon /></span></div>
-              <strong>{node.label}</strong>
-              <span className={styles.nodeDetail}>{node.detail}</span>
-            </div>
-          );
-        })}
-      </div>
-      <ol className={styles.mobileRoute} aria-label="Active path">
-        {activeRoute.map((node, index) => {
-          const Icon = NODE_ICONS[node.icon];
-          return (
-            <li key={`${node.id}-${index}`}>
-              {index > 0 && <ArrowDownIcon className={styles.mobileArrow} aria-hidden="true" />}
-              <div className={styles.mobileNode}>
-                <span className={styles.nodeNumber}>{columns.indexOf(node.x) + 1}</span>
-                <div><strong>{node.label}</strong><span className={styles.nodeDetail}>{node.detail}</span></div>
-                <span className={styles.nodeIcon}><Icon /></span>
-              </div>
+    <section className={styles.attack} aria-label={`Source flow: ${attack.title}`} aria-roledescription="carousel">
+      <div
+        id={carouselId}
+        ref={scroller}
+        className={styles.scroller}
+        tabIndex={0}
+        aria-label="Source call chain. Use the arrow keys or swipe to explore."
+        onFocusCapture={() => onInteract?.()}
+        onPointerDown={() => onInteract?.()}
+        onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}
+        onKeyDown={(event) => {
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Home' || event.key === 'End') {
+            event.preventDefault();
+            selectCard(event.key === 'Home' ? 0 : event.key === 'End' ? cards.length - 1 : activeIndex + (event.key === 'ArrowLeft' ? -1 : 1));
+          }
+        }}
+        onScroll={() => {
+          const viewport = scroller.current;
+          if (!viewport) return;
+          const center = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+          let nearest = 0;
+          let distance = Infinity;
+          cardElements.current.forEach((card, index) => {
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            const candidate = Math.abs(rect.left + rect.width / 2 - center);
+            if (candidate < distance) { nearest = index; distance = candidate; }
+          });
+          setActiveIndex(nearest);
+        }}
+      >
+        <ol className={styles.chain}>
+          {cards.map((card, index) => (
+            <li key={`${scenarioId}-${index}`} ref={(element) => { cardElements.current[index] = element; }} className={styles.slide} aria-current={index === activeIndex ? 'step' : undefined}>
+              <article className={`${styles.card} ${index === activeIndex ? styles.activeCard : ''}`} aria-label={`${index + 1} of ${cards.length}: ${card.title}`}>
+                <div className={styles.cardTop}>
+                  <button className={styles.number} onClick={() => selectCard(index)} aria-label={`Select ${card.title}`} aria-pressed={index === activeIndex}>{index + 1}</button>
+                  <a className={styles.github} href={card.source.url} target="_blank" rel="noreferrer" onClick={() => onInteract?.()} tabIndex={index === activeIndex ? 0 : -1} aria-hidden={index !== activeIndex} aria-label={`View ${card.title} in GitHub (opens a new tab)`}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.51-.29-5.15-1.26-5.15-5.61 0-1.24.44-2.25 1.16-3.04-.12-.29-.5-1.44.11-3 0 0 .95-.3 3.08 1.16a10.7 10.7 0 0 1 5.6 0c2.14-1.45 3.08-1.16 3.08-1.16.61 1.56.23 2.71.12 3 .72.79 1.15 1.8 1.15 3.04 0 4.36-2.64 5.32-5.16 5.6.4.35.76 1.04.76 2.1v3.08c0 .3.21.65.77.54A11.2 11.2 0 0 0 12 .8Z" /></svg>
+                    <span>View in GitHub</span>
+                  </a>
+                </div>
+                <h4>{card.title}</h4>
+                <div className={styles.cardFoot}>
+                  <p className={styles.callType}><span>{card.kind}</span><ArrowRightIcon aria-hidden="true" /><span>{card.call}</span></p>
+                  <code className={styles.sourcePath} title={card.source.path}>{card.source.path.includes('/') ? `…/${card.source.path.split('/').slice(-2).join('/')}` : card.source.path}<span>:{card.source.lines[0].number}–{card.source.lines.at(-1)?.number}</span></code>
+                </div>
+              </article>
+              {index < cards.length - 1 && <ArrowRightIcon className={styles.connector} aria-hidden="true" />}
             </li>
-          );
-        })}
-      </ol>
-    </div>
+          ))}
+        </ol>
+      </div>
+      <nav className={styles.navigation} aria-label="Source call chain navigation">
+        <button onClick={() => selectCard(activeIndex - 1)} disabled={activeIndex === 0} aria-label="Previous source step" aria-controls={carouselId}><ArrowLeftIcon aria-hidden="true" /></button>
+        <span aria-live={playing ? 'off' : 'polite'} aria-atomic="true">{activeIndex + 1} <span>of</span> {cards.length}</span>
+        <button onClick={() => selectCard(activeIndex + 1)} disabled={activeIndex === cards.length - 1} aria-label="Next source step" aria-controls={carouselId}><ArrowRightIcon aria-hidden="true" /></button>
+      </nav>
+    </section>
   );
 }

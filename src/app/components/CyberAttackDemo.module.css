@@ -1,30 +1,52 @@
-.attack { --path-color: var(--cyber-blue, #2870ff); min-width: 0; color: #0c0c0c; font-family: inherit; }
-.desktopGraph { position: relative; height: 420px; color: var(--path-color); }
-.attack .desktopGraph .network { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.route { fill: none; stroke: #cccdd5; stroke-width: 1.8; opacity: .7; vector-effect: non-scaling-stroke; }
-.activeRoute { stroke: currentColor; stroke-width: 2.2; opacity: 1; }
-.packet { fill: currentColor; }
-.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 16px; border: 1px solid #e0e0e6; border-radius: 19px; background: #fff; }
-.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-.nodeNumber { display: grid; flex-shrink: 0; place-items: center; width: 34px; height: 38px; border-radius: 11px; background: #f0f5ff; color: #2870ff; font-size: 21px; line-height: 1; }
-.nodeIcon { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; color: #aaaab5; }
-.attack .nodeIcon svg { width: 23px; height: 23px; }
-.node strong, .mobileNode strong { display: block; color: #2e2e36; font-size: clamp(17px, 1.15vw, 22px); font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
-.nodeDetail { display: block; margin-top: 10px; color: #777782; font-size: 15px; line-height: 1.35; }
-.activeNode { border-color: #a8b6d2; box-shadow: 0 8px 24px #14142709; }
-.activeNode strong { color: #0c0c0c; }
-.activeNode .nodeIcon { color: #626d84; }
-.mobileRoute { display: none; }
-@media (max-width: 800px) {
-  .desktopGraph { display: none; }
-  .mobileRoute { display: flex; flex-direction: column; max-width: 500px; padding: 15px 0; margin: 0 auto; list-style: none; }
-  .mobileRoute li { min-width: 0; }
-  .mobileNode { display: flex; align-items: center; gap: 13px; min-height: 100px; padding: 18px; border: 1px solid #d9dce5; border-radius: 18px; background: #fff; }
-  .mobileNode > div { flex: 1; min-width: 0; }
-  .mobileNode strong { font-size: 19px; }
-  .mobileNode .nodeDetail { margin-top: 6px; font-size: 15px; }
-  .attack .mobileArrow { display: block; width: 23px; height: 30px; margin: 4px auto; color: var(--path-color); }
+.attack { width: 100%; min-width: 0; container-type: inline-size; color: #0c0c0c; font-family: inherit; }
+.scroller { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.scroller::-webkit-scrollbar { display: none; }
+.chain { display: flex; gap: 64px; width: max-content; min-width: 100%; margin: 0; padding: 24px max(32px, calc((100cqi - 560px) / 2)); list-style: none; }
+.slide { position: relative; flex: 0 0 min(560px, calc(100cqi - 64px)); width: min(560px, calc(100cqi - 64px)); scroll-snap-align: center; scroll-snap-stop: always; }
+.card { display: flex; flex-direction: column; height: 294px; padding: 24px; border: 2px solid #e3e3e7; border-radius: 22px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.activeCard { border-color: #a8a8b5; box-shadow: 0 8px 36px #14142709; }
+.cardTop { display: flex; align-items: center; justify-content: space-between; gap: 15px; height: 50px; }
+.number { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 48px; padding: 0; border: 0; border-radius: 16px; background: #f0f5ff; color: #0759ed; font: inherit; font-size: 25px; cursor: pointer; }
+.github { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 8px 18px; border: 2px solid #f0f0f3; border-radius: 13px; color: #0c0c0c; font-size: 23px; line-height: 1.2; text-decoration: none; white-space: nowrap; visibility: hidden; }
+.activeCard .github { visibility: visible; }
+.github:hover { border-color: #c7c7d0; background: #fafafa; }
+.attack .github svg { width: 24px; height: 24px; flex-shrink: 0; }
+.card h4 { margin: 12px 0 0; color: #0c0c0c; font-size: 30px; line-height: 1.25; font-weight: 500; letter-spacing: -.025em; }
+.cardFoot { min-width: 0; margin-top: auto; padding-bottom: 17px; }
+.callType { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; margin: 0 0 11px; padding: 8px 15px; border-radius: 17px; background: #f2f2f4; color: #3f3f49; font-size: 23px; line-height: 1.3; white-space: nowrap; }
+.attack .callType svg { width: 20px; height: 20px; flex-shrink: 0; }
+.sourcePath { display: block; overflow: hidden; color: #63636f; font: 18px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+.sourcePath > span { color: #8b8b96; }
+.attack .connector { position: absolute; top: 133px; left: 100%; width: 64px; height: 28px; color: #cfcfd5; stroke-width: 1.5; }
+.navigation { display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 46px; }
+.navigation button { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid #e0e0e6; border-radius: 12px; background: #fff; color: #17171d; cursor: pointer; }
+.navigation button:disabled { opacity: .3; cursor: default; }
+.navigation button:hover:not(:disabled) { border-color: #a8a8b5; }
+.attack .navigation svg { width: 20px; height: 20px; }
+.navigation > span { min-width: 48px; color: #3f3f49; font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
+.navigation > span > span { color: #8b8b96; }
+.attack :is(button, a, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
+.attack .scroller:focus-visible { outline-offset: -3px; }
+@container (max-width: 640px) {
+  .chain { gap: 32px; padding-block: 18px; }
+  .card { height: 282px; padding: 18px; border-radius: 20px; }
+  .card h4 { margin-top: 16px; font-size: 26px; }
+  .number { width: 39px; height: 43px; border-radius: 13px; font-size: 22px; }
+  .github { min-height: 42px; padding: 8px 11px; font-size: 16px; }
+  .attack .github svg { width: 22px; height: 22px; }
+  .cardFoot { padding-bottom: 6px; }
+  .callType { gap: 6px; padding: 8px 10px; border-radius: 13px; font-size: 17px; }
+  .callType > span:last-child { min-width: 0; white-space: normal; }
+  .attack .callType svg { width: 16px; height: 16px; }
+  .sourcePath { font-size: 14px; }
+  .attack .connector { top: 127px; width: 32px; }
+}
+@container (max-width: 390px) {
+  .github { width: 43px; padding: 8px; }
+  .github > span { display: none; }
+  .card h4 { font-size: 23px; }
+  .callType { gap: 5px; font-size: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .packet { display: none; }
+  .card { transition: none; }
 }
