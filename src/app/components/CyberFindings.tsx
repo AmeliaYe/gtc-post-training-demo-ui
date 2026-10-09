@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useId, useState } from 'react';
-import { ArrowTopRightOnSquareIcon, ChevronDownIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowTopRightOnSquareIcon, CheckCircleIcon, ChevronDownIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import styles from './CyberFindings.module.css';
 
@@ -104,7 +104,7 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
                         <td><span className={`${styles.truncated} ${styles.fileName}`} title={report.path}>{report.path.split('/').at(-1)}</span></td>
                         <td><span className={`${styles.typePill} ${matched ? styles.ssrf : ''}`}><i aria-hidden="true" />{matched ? 'SSRF' : 'XML'}</span></td>
                         <td><span className={`${styles.statusPill} ${showFeedback && matched ? styles.matchedStatus : ''}`}>{showFeedback ? matched ? 'Matched' : 'No reference match' : 'Unreviewed'}</span></td>
-                        {showFeedback && <td className={styles.feedbackCell}>{matched ? <span className={styles.reward}><span className={styles.matchPill} aria-label="+1 detection reward">+1</span><span className={styles.rewardReason}>Found and reported SSRF</span></span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</td>}
+                        {showFeedback && <td className={styles.feedbackCell}>{matched ? <span className={styles.reward}><span className={styles.matchPill} aria-label="+1 detection reward">+1</span><span className={styles.rewardReason}><CheckCircleIcon aria-hidden="true" />Vulnerability recovered</span></span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</td>}
                       </tr>
                       <tr hidden={!isOpen} className={styles.evidenceRow}>
                         <td colSpan={7}>

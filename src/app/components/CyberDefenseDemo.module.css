@@ -22,7 +22,12 @@
 .prompt header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 30px; color: #205bca; font-size: 20px; }
 .promptScope { padding: 8px 12px; border-radius: 8px; background: #f2f2f4; color: #63636f; font-size: 18px; }
 .prompt blockquote { margin: 0; color: #0c0c0c; font-size: 34px; line-height: 1.4; letter-spacing: -.025em; overflow-wrap: anywhere; }
-.prompt > p { margin: 28px 0 0; padding-top: 26px; border-top: 1px solid #e3e3e7; color: #63636f; font-size: 24px; line-height: 1.45; }
+.recoveryTask { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; padding: 0; margin: 32px 0 0; list-style: none; }
+.recoveryTask li { position: relative; display: flex; align-items: center; gap: 14px; min-width: 0; padding: 20px 16px; border: 1px solid #e3e3e7; border-radius: 14px; color: #63636f; font-size: 20px; line-height: 1.3; }
+.recoveryTask svg { flex-shrink: 0; width: 28px; height: 28px; }
+.recoveryTask .taskArrow { position: absolute; left: calc(100% + 10px); color: #b5bdcc; }
+.recoveryTask .taskAgent { border-color: #a9c5fb; background: #f3f7ff; color: #205bca; }
+.recoveryTask .taskTarget { border-style: dashed; }
 .navigation { display: grid; grid-template-columns: 96px minmax(0, 1fr) 96px; align-items: center; gap: 24px; min-height: 0; height: 100%; }
 .arrow { display: grid; place-items: center; justify-self: center; width: 48px; height: 48px; border: 1px solid #dddde3; border-radius: 10px; background: #fff; color: #0c0c0c; }
 .arrow:not(:disabled):hover { border-color: #2870ff; color: #2870ff; background: #f8faff; }
