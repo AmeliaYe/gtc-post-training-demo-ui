@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { ArrowRightIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { DFBENCH_RESULT } from '@/lib/cyber-fixture';
 import styles from './CyberTrainingResults.module.css';
@@ -10,7 +11,10 @@ export function CyberTrainingResults({ onInteract }: { onInteract?: () => void }
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
           <div><h4>Vulnerability recall</h4><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
-          <a className={styles.eyebrow} href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer" onClick={onInteract} onFocus={onInteract} aria-label="Explore dfbench (opens in a new tab)">dfbench<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
+          <div className={styles.benchmarkBrand}>
+            <Image className={styles.depthfirstLogo} src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} />
+            <a className={styles.eyebrow} href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer" onClick={onInteract} onFocus={onInteract} aria-label="Explore dfbench (opens in a new tab)">dfbench<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
+          </div>
         </header>
         <p className={styles.benchmarkContext}>dfbench: find, validate and track vulnerabilities as code changes, across 17 programming languages.</p>
         <div className={styles.metric}>
