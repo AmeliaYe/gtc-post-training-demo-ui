@@ -36,7 +36,7 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Trace URL construction', seconds: 6, investigationStep: 3 },
   { scene: 'investigation', title: 'Inspect the network sink', seconds: 6, investigationStep: 4 },
   { scene: 'investigation', title: 'Confirm the endpoint mapping', seconds: 6, investigationStep: 5 },
-  { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
+  { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12 },
   { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
   { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
   { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 12, detail: 'For individuals and teams.' },
@@ -165,7 +165,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         <div className={styles.headerAction}>{onExit && <button onClick={onExit} aria-label="Back to all demos" title="All demos"><ChevronLeftIcon aria-hidden="true" /></button>}</div>
         <div className={styles.brandBlock}>
           <div className={styles.brand}><span>Nemotron post-trained by</span><Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} loading="eager" /></div>
-          <p className={styles.brandDescription}>Smaller, open models can enable AI-native workflows</p>
+          <p className={styles.brandDescription}>Smaller, open models can enable AI-native workflows at scale</p>
         </div>
         <div className={styles.headerAction}><button onClick={toggleFullscreen} aria-label={fullscreen ? 'Exit full screen' : 'Full screen'} title={fullscreen ? 'Exit full screen' : 'Full screen'}>{fullscreen ? <ArrowsPointingInIcon aria-hidden="true" /> : <ArrowsPointingOutIcon aria-hidden="true" />}</button></div>
       </header>
@@ -198,7 +198,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
                 <li className={styles.taskTarget}><DocumentTextIcon aria-hidden="true" /><span>Vulnerability report</span></li>
               </ol>
             </section>
-            : current.scene === 'findings' || current.scene === 'rewards' ? <CyberFindings key={current.scene} showFeedback={current.scene === 'rewards'} onInteract={() => setPlaying(false)} />
+            : current.scene === 'findings' || current.scene === 'rewards' ? <CyberFindings key={current.scene} showFeedback={current.scene === 'rewards'} />
             : current.scene === 'results' ? <CyberTrainingResults onInteract={() => setPlaying(false)} />
             : <CyberTrainingLoop progress={elapsed >= DEMO_SECONDS ? 0 : progress} />}
         </FittedScene>
