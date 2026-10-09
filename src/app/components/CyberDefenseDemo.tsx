@@ -11,6 +11,7 @@ import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
 import { CyberFindings } from './CyberFindings';
 import { CyberTrainingLoop } from './CyberTrainingLoop';
+import { OPENFIRE_REVIEW_PROMPT } from '@/lib/cyber-replay';
 import styles from './CyberDefenseDemo.module.css';
 
 const inter = localFont({
@@ -19,18 +20,26 @@ const inter = localFont({
   variable: '--font-cyber-inter',
   weight: '100 900',
 });
-const STEPS = [
-  { title: 'Understanding the attack path', seconds: 12, investigationStep: 1, detail: 'Server-side request forgery (SSRF): user input directs a request made by the server.' },
-  { title: 'Exploring your codebase', seconds: 6, investigationStep: 0 },
-  { title: 'Trace untrusted input', seconds: 6 },
-  { title: 'Trace URL construction', seconds: 6 },
-  { title: 'Inspect the network sink', seconds: 6 },
-  { title: 'Confirm the endpoint mapping', seconds: 6 },
-  { title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
-  { title: 'Scoring the verified findings', seconds: 12 },
-  { title: 'Training results', seconds: 12, hideCaption: true },
-  { title: 'Smaller open models. AI-native workflows.', seconds: 12, detail: 'Continual local training for individuals and teams as open-source code evolves.' },
-].map((step, index, steps) => ({
+type DemoStep = {
+  title: string;
+  seconds: number;
+  detail?: string;
+  hideCaption?: boolean;
+} & ({ scene: 'investigation'; investigationStep: number } | { scene: 'prompt' | 'findings' | 'rewards' | 'results' | 'training' });
+
+const STEPS: (DemoStep & { startsAt: number })[] = ([
+  { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker can make Openfire fetch an internal address instead of a public website.' },
+  { scene: 'prompt', title: 'The security review prompt', seconds: 10, detail: 'The agent receives a scoped security audit, without the vulnerability name.' },
+  { scene: 'investigation', title: 'Exploring your codebase', seconds: 6, investigationStep: 0 },
+  { scene: 'investigation', title: 'Trace untrusted input', seconds: 6, investigationStep: 2 },
+  { scene: 'investigation', title: 'Trace URL construction', seconds: 6, investigationStep: 3 },
+  { scene: 'investigation', title: 'Inspect the network sink', seconds: 6, investigationStep: 4 },
+  { scene: 'investigation', title: 'Confirm the endpoint mapping', seconds: 6, investigationStep: 5 },
+  { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
+  { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
+  { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
+  { scene: 'training', title: 'Smaller open models. AI-native workflows.', seconds: 12, detail: 'Continual local training for individuals and teams as open-source code evolves.' },
+] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
   startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds, 0),
 }));
@@ -157,7 +166,15 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
           </div>
         </div>
         <FittedScene>
-          {step < 6 ? <CyberInvestigation step={current.investigationStep ?? step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults onInteract={() => setPlaying(false)} /> : <CyberTrainingLoop progress={elapsed >= DEMO_SECONDS ? 0 : progress} />}
+          {current.scene === 'investigation' ? <CyberInvestigation step={current.investigationStep} progress={progress} onInteract={() => setPlaying(false)} />
+            : current.scene === 'prompt' ? <section className={styles.prompt} aria-label="Recorded security review prompt excerpts">
+              <header><span>Security review</span><span className={styles.promptScope}>Audit scope · {OPENFIRE_REVIEW_PROMPT.scope}</span></header>
+              <blockquote>{OPENFIRE_REVIEW_PROMPT.goal}</blockquote>
+              <p>{OPENFIRE_REVIEW_PROMPT.method}</p>
+            </section>
+            : current.scene === 'findings' || current.scene === 'rewards' ? <CyberFindings key={current.scene} showFeedback={current.scene === 'rewards'} onInteract={() => setPlaying(false)} />
+            : current.scene === 'results' ? <CyberTrainingResults onInteract={() => setPlaying(false)} />
+            : <CyberTrainingLoop progress={elapsed >= DEMO_SECONDS ? 0 : progress} />}
         </FittedScene>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>

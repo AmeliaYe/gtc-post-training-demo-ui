@@ -25,9 +25,8 @@ function HighlightedCode({ text }: { text: string }) {
   });
 }
 
-export function CyberInvestigation({ step, playing, progress = 0, onInteract }: {
+export function CyberInvestigation({ step, progress = 0, onInteract }: {
   step: number;
-  playing: boolean;
   progress?: number;
   onInteract?: () => void;
 }) {
@@ -43,8 +42,7 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
 
   if (step === 1) return (
     <div className={styles.diagramStage}>
-      <CyberAttackDemo attack={CYBER_ATTACKS.openfire} scenarioId="openfire" step={2} playing={playing} progress={progress} onInteract={onInteract} />
-      <p className={styles.threatNote}>The supplied host controls the server’s request. Internal access depends on deployment.</p>
+      <CyberAttackDemo attack={CYBER_ATTACKS.openfire} scenarioId="openfire" />
     </div>
   );
 

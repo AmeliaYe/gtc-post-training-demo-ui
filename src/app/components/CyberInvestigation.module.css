@@ -30,7 +30,6 @@
 .routeOutput { color: #287c95; font-size: clamp(16px, 1.1cqw, 20px); }
 .routeOutput > span > code { margin-left: 14px; }
 .diagramStage { width: 100%; min-width: 0; }
-.threatNote { margin: 12px auto 0; padding: 0 24px; text-align: center; color: #71717a; font-size: 14px; line-height: 1.4; }
 .stage pre:focus-visible { outline: 2px solid #2870ff; outline-offset: 3px; }
 @container cyber-scene (max-width: 1000px) {
   .stage { width: 100%; }
