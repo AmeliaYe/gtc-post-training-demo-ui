@@ -38,7 +38,7 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
             <div className={styles.missedCheckpoint} aria-label="Base Nemotron 3.5 Lightning: SSRF omitted from report">
               <div className={styles.missedSummary}>
-                <span>Base Nemotron 3.5 Lightning</span>
+                <span className={styles.baseModelLabel}>Base Nemotron 3.5 Lightning</span>
                 <strong><XCircleIcon aria-hidden="true" />SSRF omitted from report</strong>
               </div>
               <span className={styles.missedCount} aria-label={`${SCENARIO.before.matchedCount} detection reward`}>
@@ -66,12 +66,12 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
               </tr>
             </thead>
             {[
-              { label: showFeedback ? 'Post-trained by depthfirst' : 'Server-side requests', matched: true },
+              { label: showFeedback ? 'Post-trained by depthfirst · step 200' : 'Server-side requests', matched: true },
               { label: showFeedback ? 'Additional reports' : 'XML handling', matched: false },
             ].map((group) => (
               <tbody key={group.label}>
                 <tr className={styles.groupRow}>
-                  <th colSpan={6} scope="rowgroup"><div>{showFeedback && group.matched ? <span className={styles.postTrainedLabel}>Post-trained by <Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} /></span> : group.label}</div></th>
+                  <th colSpan={6} scope="rowgroup"><div>{showFeedback && group.matched ? <span className={styles.postTrainedLabel}>Post-trained by <Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} /><span>· step 200</span></span> : group.label}</div></th>
                   {showFeedback && <td className={styles.feedbackCell} />}
                 </tr>
                 {REPORTS.filter((report) => (report.referenceMatch === 'matched') === group.matched).map((report) => {
