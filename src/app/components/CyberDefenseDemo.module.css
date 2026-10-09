@@ -37,7 +37,8 @@
 .prompt strong, .prompt dt { color: #292930; font-weight: 500; }
 .promptComponent strong { margin-right: 8px; }
 .promptColumns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
-.promptColumns > section { min-width: 0; }
+.promptColumns > section { min-width: 0; padding-block: 20px; }
+.promptColumns .threatModelPanel { padding: 20px; border: 1px solid #dddde5; border-radius: 16px; background: #f8f8fa; }
 .prompt h2 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 16px; color: #205bca; font-size: 22px; font-weight: 500; }
 .prompt h2 span { color: #63636f; font-size: 16px; font-weight: 400; }
 .threatModel { display: grid; gap: 14px; margin: 0; }

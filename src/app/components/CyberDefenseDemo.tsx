@@ -188,12 +188,12 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         </div>
         <FittedScene>
           {current.scene === 'investigation' ? <CyberInvestigation step={current.investigationStep} progress={progress} onInteract={() => setPlaying(false)} />
-            : current.scene === 'prompt' ? <section className={styles.prompt} aria-label="Condensed and anonymized recorded security review prompt">
-              <header><span>Agent prompt</span><span className={styles.promptScope}>Condensed · anonymized</span></header>
+            : current.scene === 'prompt' ? <section className={styles.prompt} aria-label="Anonymized security review prompt">
+              <header><span>Agent prompt</span><span className={styles.promptScope}>Anonymized</span></header>
               <blockquote>{OPENFIRE_REVIEW_PROMPT.goal}</blockquote>
               <p className={styles.promptComponent}><strong>Component</strong> {OPENFIRE_REVIEW_PROMPT.component}</p>
               <div className={styles.promptColumns}>
-                <section>
+                <section className={styles.threatModelPanel}>
                   <h2>Threat model</h2>
                   <dl className={styles.threatModel}>{OPENFIRE_REVIEW_PROMPT.threatModel.map(({ label, text }) => <div key={label}><dt>{label}</dt><dd>{text}</dd></div>)}</dl>
                 </section>
