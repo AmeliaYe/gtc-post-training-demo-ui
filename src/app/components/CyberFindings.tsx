@@ -47,7 +47,7 @@ export function CyberFindings({ showFeedback, onInteract }: { showFeedback: bool
 
   return (
     <div className={styles.findings}>
-      <div className={styles.scroll} role="region" aria-label="Openfire submitted reports" tabIndex={0} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
+      <div className={styles.scroll} role="region" aria-label="Openfire submitted reports" tabIndex={0} onFocusCapture={onInteract} onPointerDown={onInteract}>
         {showFeedback && (
           <>
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>

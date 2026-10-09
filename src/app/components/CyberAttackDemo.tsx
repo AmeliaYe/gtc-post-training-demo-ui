@@ -135,10 +135,9 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
         ref={scroller}
         className={styles.scroller}
         tabIndex={0}
-        aria-label="Source call chain. Use the arrow keys or swipe to explore."
+        aria-label="Source call chain. Use the arrow keys or source step buttons to explore."
         onFocusCapture={() => onInteract?.()}
         onPointerDown={() => onInteract?.()}
-        onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}
         onKeyDown={(event) => {
           if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Home' || event.key === 'End') {
             event.preventDefault();
@@ -166,7 +165,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
             <li key={`${scenarioId}-${index}`} ref={(element) => { cardElements.current[index] = element; }} className={styles.slide} aria-current={index === activeIndex ? 'step' : undefined}>
               <article className={`${styles.card} ${index === activeIndex ? styles.activeCard : ''}`} aria-label={`${index + 1} of ${cards.length}: ${card.title}`}>
                 <div className={styles.cardTop}>
-                  <button className={styles.number} onClick={() => selectCard(index)} aria-label={`Select ${card.title}`} aria-pressed={index === activeIndex}>{index + 1}</button>
+                  <button className={styles.number} onClick={() => selectCard(index)} tabIndex={index === activeIndex ? 0 : -1} aria-label={`Select ${card.title}`} aria-pressed={index === activeIndex}>{index + 1}</button>
                   <a className={styles.github} href={card.source.url} target="_blank" rel="noreferrer" onClick={() => onInteract?.()} tabIndex={index === activeIndex ? 0 : -1} aria-hidden={index !== activeIndex} aria-label={`View ${card.title} in GitHub (opens a new tab)`}>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.51-.29-5.15-1.26-5.15-5.61 0-1.24.44-2.25 1.16-3.04-.12-.29-.5-1.44.11-3 0 0 .95-.3 3.08 1.16a10.7 10.7 0 0 1 5.6 0c2.14-1.45 3.08-1.16 3.08-1.16.61 1.56.23 2.71.12 3 .72.79 1.15 1.8 1.15 3.04 0 4.36-2.64 5.32-5.16 5.6.4.35.76 1.04.76 2.1v3.08c0 .3.21.65.77.54A11.2 11.2 0 0 0 12 .8Z" /></svg>
                     <span>View in GitHub</span>

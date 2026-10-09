@@ -2,7 +2,7 @@ import { ArrowPathIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import styles from './CyberTrainingLoop.module.css';
 
 const PHASES = [
-  { title: 'Environments', detail: 'Batch of repository tasks' },
+  { title: 'Environments', detail: 'Evolving open-source code' },
   { title: 'Rollouts + rewards', detail: 'Tool calls · verified findings' },
   { title: 'Update LLM weights', detail: null },
   { title: 'New checkpoint', detail: 'Updated model' },

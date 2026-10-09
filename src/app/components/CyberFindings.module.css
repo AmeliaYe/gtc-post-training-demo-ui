@@ -1,5 +1,5 @@
 .findings { width: 100%; max-width: 1320px; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
-.scroll { overflow-x: auto; padding: 3px; scrollbar-width: thin; scrollbar-color: #b9b9c2 transparent; }
+.scroll { padding: 3px; }
 .scroll:focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; border-radius: 16px; }
 .feedbackHeader { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 12px; }
 .feedbackHeader > span { grid-column: 2; padding-left: 25px; color: #63636f; font-size: 17px; line-height: 1.2; text-align: center; }

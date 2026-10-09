@@ -25,8 +25,7 @@
 .routeBadge { display: inline-block; margin-top: 8px; padding: 5px 6px; border-radius: 7px; font-size: 12px; font-weight: 500; line-height: 1.2; }
 .mobileGraph { display: none; }
 .sourceFlow { min-width: 0; padding: 16px 0; border-left: 1px solid #dedee5; container: source-flow / inline-size; }
-.scroller { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
-.scroller::-webkit-scrollbar { display: none; }
+.scroller { width: 100%; overflow: hidden; scroll-snap-type: x mandatory; }
 .chain { display: flex; gap: 64px; width: max-content; min-width: 100%; margin: 0; padding: 24px max(32px, calc((100cqi - 560px) / 2)); list-style: none; }
 .slide { position: relative; flex: 0 0 min(560px, calc(100cqi - 64px)); width: min(560px, calc(100cqi - 64px)); scroll-snap-align: center; scroll-snap-stop: always; }
 .card { display: flex; flex-direction: column; height: 294px; padding: 24px; border: 2px solid #e3e3e7; border-radius: 22px; background: #fff; transition: border-color .2s, box-shadow .2s; }
