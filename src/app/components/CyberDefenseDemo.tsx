@@ -6,7 +6,6 @@ import localFont from 'next/font/local';
 import {
   ArrowsPointingOutIcon, ArrowsPointingInIcon, ArrowPathIcon, ArrowRightIcon,
   ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon,
-  CodeBracketIcon, MagnifyingGlassIcon, DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
@@ -30,7 +29,7 @@ type DemoStep = {
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Server-side request forgery (SSRF)', seconds: 12, investigationStep: 1, detail: 'An attacker could make a server fetch an internal address instead of a public website.' },
-  { scene: 'prompt', title: 'Recover the vulnerability', seconds: 10, detail: 'Vulnerability undisclosed.' },
+  { scene: 'prompt', title: 'Recover the vulnerability', seconds: 24, detail: 'Vulnerability undisclosed.' },
   { scene: 'investigation', title: 'Agents explore your codebase', seconds: 6, investigationStep: 0 },
   { scene: 'investigation', title: 'Trace untrusted input', seconds: 6, investigationStep: 2 },
   { scene: 'investigation', title: 'Trace URL construction', seconds: 6, investigationStep: 3 },
@@ -160,7 +159,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   }
 
   return (
-    <div ref={container} className={`${styles.demo} ${inter.variable}`} role="region" aria-label="Openfire security review demo" tabIndex={-1}>
+    <div ref={container} className={`${styles.demo} ${inter.variable}`} role="region" aria-label="Messaging server security review demo" tabIndex={-1}>
       <header className={styles.header}>
         <div className={styles.headerAction}>{onExit && <button onClick={onExit} aria-label="Back to all demos" title="All demos"><ChevronLeftIcon aria-hidden="true" /></button>}</div>
         <div className={styles.brandBlock}>
@@ -189,14 +188,27 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         </div>
         <FittedScene>
           {current.scene === 'investigation' ? <CyberInvestigation step={current.investigationStep} progress={progress} onInteract={() => setPlaying(false)} />
-            : current.scene === 'prompt' ? <section className={styles.prompt} aria-label="Recorded security review prompt excerpts">
-              <header><span>Agent prompt</span><span className={styles.promptScope}>Audit scope · {OPENFIRE_REVIEW_PROMPT.scope}</span></header>
+            : current.scene === 'prompt' ? <section className={styles.prompt} aria-label="Condensed and anonymized recorded security review prompt">
+              <header><span>Agent prompt</span><span className={styles.promptScope}>Condensed · anonymized</span></header>
               <blockquote>{OPENFIRE_REVIEW_PROMPT.goal}</blockquote>
-              <ol className={styles.recoveryTask} aria-label="Agent task: recover the known vulnerability from source code and report it">
-                <li><CodeBracketIcon aria-hidden="true" /><span>Openfire codebase</span><ArrowRightIcon className={styles.taskArrow} aria-hidden="true" /></li>
-                <li className={styles.taskAgent}><MagnifyingGlassIcon aria-hidden="true" /><span>Investigate</span><ArrowRightIcon className={styles.taskArrow} aria-hidden="true" /></li>
-                <li className={styles.taskTarget}><DocumentTextIcon aria-hidden="true" /><span>Vulnerability report</span></li>
-              </ol>
+              <p className={styles.promptComponent}><strong>Component</strong> {OPENFIRE_REVIEW_PROMPT.component}</p>
+              <div className={styles.promptColumns}>
+                <section>
+                  <h2>Threat model</h2>
+                  <dl className={styles.threatModel}>{OPENFIRE_REVIEW_PROMPT.threatModel.map(({ label, text }) => <div key={label}><dt>{label}</dt><dd>{text}</dd></div>)}</dl>
+                  <h2>Evidence</h2>
+                  <p>{OPENFIRE_REVIEW_PROMPT.evidence}</p>
+                </section>
+                <section>
+                  <h2>Audit scope <span>6 Java files</span></h2>
+                  <code className={styles.promptPath}>{OPENFIRE_REVIEW_PROMPT.directory}</code>
+                  <ul className={styles.promptFiles}>{OPENFIRE_REVIEW_PROMPT.files.map((file) => <li key={file}><code>{file}</code></li>)}</ul>
+                  <h2>Review method</h2>
+                  <ol className={styles.promptMethod}>{OPENFIRE_REVIEW_PROMPT.method.map((instruction) => <li key={instruction}>{instruction}</li>)}</ol>
+                </section>
+              </div>
+              <div className={styles.promptConstraints}><strong>Constraints</strong><p>{OPENFIRE_REVIEW_PROMPT.constraints}</p></div>
+              <footer className={styles.promptTools}><code>{OPENFIRE_REVIEW_PROMPT.tools}</code><span>Relative paths from <code>{OPENFIRE_REVIEW_PROMPT.workingDirectory}</code></span></footer>
             </section>
             : current.scene === 'findings' || current.scene === 'rewards' ? <CyberFindings key={current.scene} showFeedback={current.scene === 'rewards'} />
             : current.scene === 'results' ? <CyberTrainingResults onInteract={() => setPlaying(false)} />

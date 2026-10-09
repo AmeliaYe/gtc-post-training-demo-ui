@@ -40,14 +40,14 @@ export type CyberAttack = {
 // They explain possible behavior, not additional observed attacks or tool calls.
 export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
   openfire: {
-    context: 'Openfire is a messaging server. One of its features fetches website icons for users.',
+    context: 'This Java messaging server fetches website icons for users.',
     title: 'An icon request can reach a private service',
     term: 'Server-side request forgery (SSRF)',
     termExplanation: 'Someone makes a server send a request to a destination they choose, using the server’s network access.',
     caveat: 'Illustrative network: access depends on the server’s deployment. The recorded evaluation identified the flaw; it did not demonstrate customer data being exposed.',
     nodes: [
       { id: 'requester', label: 'Requester', detail: 'Supplies a website address', icon: 'person', x: 125, y: 190 },
-      { id: 'server', label: 'Openfire server', detail: 'Fetches the website icon', icon: 'server', x: 450, y: 190 },
+      { id: 'server', label: 'Java messaging server', detail: 'Fetches the website icon', icon: 'server', x: 450, y: 190 },
       { id: 'public', label: 'Public website', detail: 'The expected destination', icon: 'globe', x: 825, y: 85 },
       { id: 'private', label: 'Internal service', detail: 'May be reachable by the server', icon: 'lock', x: 825, y: 290 },
     ],
@@ -62,7 +62,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
       {
         label: 'Normal request',
         title: 'A user asks for a website icon',
-        description: 'The user provides a public website address. Openfire sends a request to fetch that website’s icon.',
+        description: 'The user provides a public website address. The server sends a request to fetch that website’s icon.',
         badge: 'Normal use',
         activeEdges: ['request', 'public-fetch'],
         activeNodes: ['requester', 'server', 'public'],
@@ -82,7 +82,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
       {
         label: 'Private request',
         title: 'The server sends the request inside',
-        description: 'Openfire does not check whether this destination should be allowed. It can contact an internal service using its own network access.',
+        description: 'The server does not check whether this destination should be allowed. It can contact an internal service using its own network access.',
         badge: 'Unsafe behavior',
         activeEdges: ['request', 'private-fetch'],
         activeNodes: ['requester', 'server', 'private'],
@@ -92,7 +92,7 @@ export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
       {
         label: 'Possible exposure',
         title: 'A private response can be sent back',
-        description: 'If the internal service is reachable and returns a successful response, Openfire can send its contents back as though they were the requested icon.',
+        description: 'If the internal service is reachable and returns a successful response, the server can send its contents back as though they were the requested icon.',
         badge: 'Possible impact',
         activeEdges: ['private-response', 'relay-response'],
         activeNodes: ['private', 'server', 'requester'],

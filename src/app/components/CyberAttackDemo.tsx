@@ -15,15 +15,15 @@ const NODE_ICONS = {
 
 const OPENFIRE_LABELS: Record<string, { label: string; detail: string }> = {
   requester: { label: 'User-supplied address', detail: 'Input to the icon request' },
-  server: { label: 'Openfire server', detail: 'Fetches the website icon' },
+  server: { label: 'Java messaging server', detail: 'Fetches the website icon' },
   public: { label: 'Public website', detail: 'Expected destination' },
   private: { label: 'Internal service', detail: 'Attacker-selected destination' },
 };
 
 const OPENFIRE_EXPLANATIONS: Record<string, string> = {
-  requester: 'The user provides a website address whose icon Openfire should fetch. An attacker can supply an internal address instead.',
-  server: 'Openfire makes the request on the user’s behalf. Without checking the destination, it can be directed to private services.',
-  public: 'A public website is the intended destination. Openfire fetches its icon to display to the user.',
+  requester: 'The user provides a website address whose icon the messaging server should fetch. An attacker can supply an internal address instead.',
+  server: 'The messaging server makes the request on the user’s behalf. Without checking the destination, it can be directed to private services.',
+  public: 'A public website is the intended destination. The server fetches its icon to display to the user.',
   private: 'An internal service is an unintended destination. The server may reach it even when the user cannot access it directly.',
 };
 
@@ -54,7 +54,7 @@ export function CyberAttackDemo({ attack, scenarioId }: {
   const isOpenfire = scenarioId === 'openfire';
   const attackLabel = isOpenfire ? 'SSRF attack' : 'Attack route';
   const description = isOpenfire
-    ? 'A user supplies an address to Openfire’s icon-fetching feature. The expected request goes to a public website along the solid green path. Without destination validation, an attacker can supply an internal address and make Openfire request an internal service along the dashed red path.'
+    ? 'A user supplies an address to the messaging server’s icon-fetching feature. The expected request goes to a public website along the solid green path. Without destination validation, an attacker can supply an internal address and make the server request an internal service along the dashed red path.'
     : `Expected request: ${expected.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)?.label).join(' → ')}. Solid green path. ${attackLabel}: ${unsafe.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)?.label).join(' → ')}. Dashed red path.`;
 
   return (

@@ -33,7 +33,10 @@ export function CyberInvestigation({ step, progress = 0, onInteract }: {
   const snippet = step >= 2 && step <= 4 ? VISUAL.code[step - 2] : null;
   const calls = step === 0 ? [SCOPE_CALL] : snippet ? [SOURCE_CALL] : ROUTE_CALLS;
   const reasoning = snippet ? OPENFIRE_SOURCE_ASSESSMENT.text : calls[0].rationale;
-  const files = SCOPE_CALL.output.split('\n');
+  const files = SCOPE_CALL.output
+    .replaceAll('/app/igniterealtime/Openfire', '/app/server')
+    .replaceAll('org/jivesoftware', 'org/example')
+    .split('\n');
   const rows: { number?: number | string; text: string; highlight: boolean; path?: string }[] = step === 0
     ? files.map((path, index) => ({ number: String(index + 1).padStart(2, '0'), text: path.split('/').at(-1)!, highlight: false, path }))
     : snippet ? snippet.lines : ROUTE_CALLS[1].output.split('\n').map((text) => ({ text, highlight: /<servlet-name>|<url-pattern>/.test(text) }));
@@ -57,7 +60,7 @@ export function CyberInvestigation({ step, progress = 0, onInteract }: {
           <h4>{step === 0 ? 'Scanning repositories' : snippet ? 'Inspecting source code' : 'Checking the endpoint'}</h4>
         </header>
         <div className={styles.fileBar}>
-          <code>{step === 0 ? 'Openfire / Java files' : snippet ? 'FaviconServlet.java' : 'WEB-INF/web.xml'}</code>
+          <code>{step === 0 ? 'Messaging server / Java files' : snippet ? 'FaviconServlet.java' : 'WEB-INF/web.xml'}</code>
           <span className={styles.fileBadge}>{snippet ? ['Untrusted input', 'URL construction', 'HTTP request'][step - 2] : 'shell_tool'}</span>
         </div>
         <div className={styles.commands}>

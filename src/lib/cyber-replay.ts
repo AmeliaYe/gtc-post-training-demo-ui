@@ -27,12 +27,27 @@ export const OPENFIRE_REPLAY_PROVENANCE = {
   note: 'Selected recorded calls; source details are editorial zooms. The checker matched the report to a known flaw; no live exploit was run in this trace.',
 } as const;
 
-// Excerpts from generations[0].prompt in the same rollout, without Markdown markers.
-// The audit scope lists six files; the task does not disclose SSRF or the CVE.
+// Condensed from generations[0].prompt in the same rollout. The goal is literal;
+// the remaining sections retain the task's requirements with repository/package
+// names anonymized. The task does not disclose SSRF or the CVE.
 export const OPENFIRE_REVIEW_PROMPT = {
   goal: 'Find all real, exploitable security issues in the files listed in <audit_scope>.',
-  method: 'Track data flow end-to-end',
-  scope: '6 Java files in Openfire',
+  component: 'Java XMPP messaging server: lifecycle, authentication, users/groups, routing, sessions, packet interception, clustering, MUC, PubSub and PEP.',
+  threatModel: [
+    { label: 'Exposure', text: 'Public XMPP client/server/component ports; BOSH/WebSocket HTTP, admin console and WebDAV.' },
+    { label: 'Attacker inputs', text: 'Stored vCard, PubSub and offline-message XML; update feeds; WebDAV GET/PUT paths.' },
+    { label: 'Potential impact', text: 'Plugin/JSP code execution, file read/write, XML entity-expansion DoS and stored-password decryption via the database key.' },
+  ],
+  directory: 'xmppserver/src/main/java/org/example/util/',
+  files: ['AesEncryptor.java', 'FaviconServlet.java', 'S2STestService.java', 'WebManager.java', 'WebXmlUtils.java', 'XMLProperties.java'],
+  method: [
+    'Read each file fully, one at a time; record obvious candidates in memory. Then investigate cross-file issues.',
+    'Trace inputs through transformations, validation and branches to the sink. Verify reachability, authorization and deployment in code.',
+  ],
+  evidence: 'Record file, function, bug class, root cause, attack surface and data flow. Put the trace in root_cause_analysis; justify attacker control in rationale.',
+  constraints: 'Local environment only; no internet. Inspect related code, but report only exploitable issues whose sink or path is in scope. Exclude hardening-only gaps. Treat the threat model as context, not proof or an exhaustive list.',
+  tools: 'shell_tool · memory_editor_tool · memory_viewer_tool',
+  workingDirectory: '/app/server',
 } as const;
 
 // Literal excerpt after call 3 returned, from generation 4 before call 4.

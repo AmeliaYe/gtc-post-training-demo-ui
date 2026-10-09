@@ -10,17 +10,17 @@ const REPORT_DETAILS = [
   {
     title: 'Server-side request forgery',
     description: 'A supplied host controls the server’s request.',
-    path: 'xmppserver/src/main/java/org/jivesoftware/util/FaviconServlet.java',
+    path: 'xmppserver/src/main/java/org/example/util/FaviconServlet.java',
   },
   {
     title: 'XML external entity injection',
     description: 'The report flags an unprotected XML reader.',
-    path: 'xmppserver/src/main/java/org/jivesoftware/util/XMLProperties.java',
+    path: 'xmppserver/src/main/java/org/example/util/XMLProperties.java',
   },
   {
     title: 'Incomplete XML protections',
     description: 'The report flags a possible XML protection bypass.',
-    path: 'xmppserver/src/main/java/org/jivesoftware/util/WebXmlUtils.java',
+    path: 'xmppserver/src/main/java/org/example/util/WebXmlUtils.java',
   },
 ];
 
@@ -31,7 +31,7 @@ const REPORTS = SCENARIO.after.findings
 export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
   return (
     <div className={styles.findings}>
-      <div className={styles.reports} role="region" aria-label="Openfire submitted reports">
+      <div className={styles.reports} role="region" aria-label="Messaging server submitted reports">
         {showFeedback && (
           <>
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
@@ -48,7 +48,7 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
         )}
         <div className={`${styles.surface} ${showFeedback ? styles.withFeedback : ''}`}>
           <table className={styles.table}>
-            <caption className={styles.srOnly}>{SCENARIO.after.findingsCount} recorded reports from the final Openfire checkpoint{showFeedback ? `; ${SCENARIO.after.matchedCount} reference vulnerability matched` : ''}.</caption>
+            <caption className={styles.srOnly}>{SCENARIO.after.findingsCount} recorded reports from the final checkpoint{showFeedback ? `; ${SCENARIO.after.matchedCount} reference vulnerability matched` : ''}.</caption>
             <colgroup>
               <col className={styles.signalColumn} />
               <col className={styles.titleColumn} />
