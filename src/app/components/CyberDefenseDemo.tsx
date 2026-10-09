@@ -112,7 +112,7 @@ export function CyberDefenseDemo() {
       <div className={styles.content}>
         <header className={styles.header}><div><span>NEMOTRON · SECURITY INVESTIGATION</span><p>Openfire / Java messaging server</p></div><button onClick={toggleFullscreen}>{fullscreen ? <ArrowsPointingInIcon /> : <ArrowsPointingOutIcon />}{fullscreen ? 'Exit full screen' : 'Full screen'}</button></header>
         <nav className={styles.progress} aria-label="Investigation stages">{PHASES.map((phase, index) => <button key={phase.label} aria-current={index === activePhase ? 'step' : undefined} className={index < activePhase ? styles.complete : ''} onClick={() => navigate(phase.step)}><span>{String(index + 1).padStart(2, '0')}</span>{phase.label}<i aria-hidden="true" /></button>)}</nav>
-        <section className={styles.scene} aria-labelledby={titleId}>
+        <section className={`${styles.scene} ${step === 7 ? styles.resultsScene : ''}`} aria-labelledby={titleId}>
           <div className={styles.headline}><h3 id={titleId}>{current.title}</h3>{current.detail && <p>{current.detail}</p>}</div>
           {step < 7 ? <CyberInvestigation step={step} playing={playing} /> : <CyberTrainingResults scenario={SCENARIO} />}
         </section>
