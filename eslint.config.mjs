@@ -9,6 +9,7 @@ export default defineConfig([
     'node_modules/**',
     // Versioned press-demo snapshot; verified independently of the React app.
     'public/healthcare/r01/**',
+    'public/healthcare/r02/**',
     'healthcare-demo/**',
     '.next/**',
     '.vercel/**',
