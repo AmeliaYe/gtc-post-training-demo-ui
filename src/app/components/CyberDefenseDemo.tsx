@@ -39,7 +39,7 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'findings', title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
   { scene: 'rewards', title: 'Scoring the verified findings', seconds: 12 },
   { scene: 'results', title: 'Training results', seconds: 12, hideCaption: true },
-  { scene: 'training', title: 'Smaller open models. AI-native workflows.', seconds: 12, detail: 'Train locally on NVIDIA hardware you own—for you and your team.' },
+  { scene: 'training', title: 'Smaller open models. AI-native workflows.', seconds: 12, detail: 'Train on your NVIDIA hardware.' },
 ] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
   startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds, 0),
