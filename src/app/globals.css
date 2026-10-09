@@ -87,6 +87,7 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .workspace-body:has(.computer-use-content) { grid-template-rows: repeat(4, 175px); min-height: 700px; }
 .workspace-body:has(.computer-use-content) > .model-tile { align-self: stretch; }
 .workspace-body:has(.computer-use-content) > .expanded-model { display: flex; flex-direction: column; min-height: 0; }
+.workspace-body:has(.computer-use-content) .expanded-header { display: none; }
 .app-shell:has(.workspace-body.has-selection) .intro-row { display: none; }
 .app-shell:has(.workspace-body.has-selection) .page-wrap { padding-top: 24px; }
 .dock-heading { grid-column: 1; grid-row: 1; align-self: center; display: flex; justify-content: space-between; color: #667064; margin: 0 13px; padding: 3px 2px 0; font: 8px monospace; letter-spacing: .12em; }
@@ -111,6 +112,7 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .tile-copy strong { display: block; font-size: 12px; letter-spacing: -.01em; }
 .tile-copy small { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #a3aca0; font-size: 9px; line-height: 1.35; margin-top: 5px; }
 .tile-copy em { display: block; overflow: hidden; margin-top: 5px; color: #626b60; font: normal 7px/1.2 monospace; letter-spacing: .04em; text-overflow: ellipsis; white-space: nowrap; }
+.tile-spacer { margin-top: auto; }
 .tile-score { margin-top: auto; height: 39px; padding: 0 12px; }
 .tile-score > span { white-space: nowrap; }
 .tile-score small { color: #5e675c; display: block; font-size: 7px; letter-spacing: .08em; text-transform: uppercase; }

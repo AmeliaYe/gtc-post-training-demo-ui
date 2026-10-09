@@ -48,11 +48,10 @@ type PlaceholderDemo = DemoBase & {
   tags: string[];
 };
 
-// A live demo embedded in the expanded card.
+// An interactive experience embedded in the expanded card.
 type LiveDemo = DemoBase & {
   kind: 'demo';
   embedUrl: string;
-  previewLabel?: string;
 };
 
 type CyberDemo = DemoBase & {
@@ -75,7 +74,7 @@ const demos: Demo[] = [
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     description: 'Practice safer decisions before working with patients.',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: RodOfAsclepiusIcon,
-    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
@@ -184,13 +183,13 @@ function ModelTile({ model }: { model: Demo }) {
         <small>{model.description}</small>
         <em>{model.task}</em>
       </span>
-      {model.kind === 'placeholder' ? (
+      {model.kind === 'placeholder' && model.id !== 'defense' ? (
         <span className="tile-score">
           <span><strong style={{ color: model.color }}>+{(model.scoreLift ?? model.scoreAfter - model.scoreBefore).toFixed(1)}</strong><em>pts</em></span>
           <MiniChart before={model.scoreBefore} after={model.scoreAfter} color={model.color} />
         </span>
       ) : (
-        <span className="tile-score"><span><strong style={{ color: model.color }}>{model.kind === 'cyber' ? 'Explore demo' : model.kind === 'computer' ? 'Explore tasks' : model.previewLabel || 'Live demo'}</strong></span></span>
+        <span className="tile-spacer" aria-hidden="true" />
       )}
       <span className="tile-footer"><span>Click to expand <b>↗</b></span></span>
     </>
