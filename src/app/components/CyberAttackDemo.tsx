@@ -1,11 +1,19 @@
 'use client';
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, CircleStackIcon, CodeBracketIcon,
+  GlobeAltIcon, LockClosedIcon, ServerIcon, UserIcon,
+} from '@heroicons/react/24/outline';
 import type { CyberAttack } from '@/lib/cyber-attacks';
 import type { CyberScenario } from '@/lib/cyber-fixture';
 import { CYBER_VISUALS } from '@/lib/cyber-visuals';
 import styles from './CyberAttackDemo.module.css';
+
+const NODE_ICONS = {
+  person: UserIcon, server: ServerIcon, globe: GlobeAltIcon,
+  lock: LockClosedIcon, code: CodeBracketIcon, data: CircleStackIcon,
+};
 
 export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInteract }: {
   attack: CyberAttack;
@@ -16,9 +24,19 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
   onInteract?: () => void;
 }) {
   const carouselId = useId();
+  const diagramId = `network-${carouselId.replaceAll(':', '')}`;
+  const sourceDetails = useRef<HTMLDetailsElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const cardElements = useRef<(HTMLLIElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const expected = attack.stages[0];
+  const unsafe = attack.stages[2];
+  const expectedDestination = expected.mobilePath.at(-1);
+  const unsafeDestination = unsafe.mobilePath.at(-1);
+  const sharedNodes = expected.mobilePath.filter((id) => unsafe.mobilePath.includes(id));
+  const destinations = attack.nodes.filter((node) => node.id === expectedDestination || node.id === unsafeDestination);
+  const columns = Array.from(new Set(attack.nodes.map((node) => node.x))).sort((left, right) => left - right);
+  const attackLabel = scenarioId === 'openfire' ? 'SSRF attack' : 'Attack route';
   const source = CYBER_VISUALS[scenarioId].code;
   const cards = scenarioId === 'openfire' ? [
     { title: 'User-provided host', kind: 'Entry', call: 'Request parameter', source: source[0] },
@@ -37,7 +55,7 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
   const centerCard = useCallback((index: number) => {
     const viewport = scroller.current;
     const card = cardElements.current[index];
-    if (!viewport || !card) return;
+    if (!sourceDetails.current?.open || !viewport || !card || !viewport.clientWidth) return;
     const left = card.getBoundingClientRect().left - viewport.getBoundingClientRect().left + viewport.scrollLeft - (viewport.clientWidth - card.offsetWidth) / 2;
     viewport.scrollTo({ left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }, []);
@@ -54,7 +72,62 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
   }
 
   return (
-    <section className={styles.attack} aria-label={`Source flow: ${attack.title}`} aria-roledescription="carousel">
+    <section className={styles.attack} aria-label={attack.title}>
+      <div className={styles.legend} aria-label="Request route legend">
+        <span className={styles.expectedLegend}><i aria-hidden="true" />Expected request</span>
+        <span className={styles.unsafeLegend}><i aria-hidden="true" />{attackLabel}</span>
+      </div>
+      <div className={styles.desktopGraph} role="img" aria-label={`Expected request: ${expected.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)?.label).join(' → ')}. Solid green path. ${attackLabel}: ${unsafe.mobilePath.map((id) => attack.nodes.find((node) => node.id === id)?.label).join(' → ')}. Dashed red path.`}>
+        <svg className={styles.network} viewBox="0 0 1000 380" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <marker id={`${diagramId}-shared`} markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12Z" fill="#a8a8b4" /></marker>
+            <marker id={`${diagramId}-expected`} markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12Z" fill="#17834a" /></marker>
+            <marker id={`${diagramId}-unsafe`} markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12Z" fill="#cf3942" /></marker>
+          </defs>
+          {attack.edges.filter((edge) => expected.activeEdges.includes(edge.id) || unsafe.activeEdges.includes(edge.id)).map((edge) => {
+            const route = expected.activeEdges.includes(edge.id) && unsafe.activeEdges.includes(edge.id) ? 'shared' : expected.activeEdges.includes(edge.id) ? 'expected' : 'unsafe';
+            return <path key={edge.id} d={edge.path} className={`${styles.route} ${route === 'expected' ? styles.expectedRoute : route === 'unsafe' ? styles.unsafeRoute : ''}`} markerEnd={`url(#${diagramId}-${route})`} />;
+          })}
+        </svg>
+        {attack.nodes.map((node) => {
+          const Icon = NODE_ICONS[node.icon];
+          const isExpected = node.id === expectedDestination;
+          const isUnsafe = node.id === unsafeDestination;
+          return (
+            <div key={node.id} className={`${styles.node} ${isExpected ? styles.expectedNode : isUnsafe ? styles.unsafeNode : ''}`} style={{ left: `${node.x / 10}%`, top: `${node.y / 3.8}%` }}>
+              <div className={styles.nodeTop}><span className={styles.nodeNumber}>{columns.indexOf(node.x) + 1}</span><Icon aria-hidden="true" /></div>
+              <strong>{node.label}</strong>
+              <span className={styles.nodeDetail}>{node.detail}</span>
+              {(isExpected || isUnsafe) && <span className={styles.routeBadge}>{isExpected ? 'Expected request' : attackLabel}</span>}
+            </div>
+          );
+        })}
+      </div>
+      <div className={styles.mobileGraph}>
+        <ol className={styles.sharedNodes} aria-label="Shared request path">
+          {sharedNodes.map((id, index) => {
+            const node = attack.nodes.find((item) => item.id === id)!;
+            const Icon = NODE_ICONS[node.icon];
+            return <li key={id}>{index > 0 && <ArrowDownIcon className={styles.sharedArrow} aria-hidden="true" />}<div className={styles.mobileNode}><Icon aria-hidden="true" /><div><strong>{node.label}</strong><span className={styles.nodeDetail}>{node.detail}</span></div></div></li>;
+          })}
+        </ol>
+        <div className={styles.mobileSplit} aria-hidden="true" />
+        <ol className={styles.mobileBranches} aria-label="Expected and attack destinations">
+          {destinations.map((node) => {
+            const Icon = NODE_ICONS[node.icon];
+            const isExpected = node.id === expectedDestination;
+            return (
+              <li key={node.id} className={isExpected ? styles.expectedNode : styles.unsafeNode}>
+                <svg className={styles.branchArrow} viewBox="0 0 20 30" aria-hidden="true"><path d="M10 0 V25" strokeDasharray={isExpected ? undefined : '4 3'} /><path d="M4 20 L10 26 L16 20" /></svg>
+                <div className={styles.destinationNode}><Icon aria-hidden="true" /><strong>{node.label}</strong><span className={styles.routeBadge}>{isExpected ? 'Expected request' : attackLabel}</span></div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+      <details ref={sourceDetails} className={styles.sourceDetails} onToggle={(event) => { if (event.currentTarget.open) { onInteract?.(); centerCard(activeIndex); } }}>
+        <summary>Inspect source call chain</summary>
+        <div role="region" aria-label="Source flow" aria-roledescription="carousel">
       <div
         id={carouselId}
         ref={scroller}
@@ -112,6 +185,8 @@ export function CyberAttackDemo({ attack, scenarioId, playing, progress, onInter
         <span aria-live={playing ? 'off' : 'polite'} aria-atomic="true">{activeIndex + 1} <span>of</span> {cards.length}</span>
         <button onClick={() => selectCard(activeIndex + 1)} disabled={activeIndex === cards.length - 1} aria-label="Next source step" aria-controls={carouselId}><ArrowRightIcon aria-hidden="true" /></button>
       </nav>
+        </div>
+      </details>
     </section>
   );
 }

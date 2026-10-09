@@ -11,6 +11,7 @@ import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
 import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
 import { CyberFindings } from './CyberFindings';
+import { CyberTrainingLoop } from './CyberTrainingLoop';
 import styles from './CyberDefenseDemo.module.css';
 
 const SCENARIO = CYBER_SCENARIOS.find((scenario) => scenario.id === 'openfire')!;
@@ -30,6 +31,7 @@ const STEPS = [
   { title: 'Reviewing the submitted findings', detail: 'Select a report to inspect the evidence behind it.' },
   { title: 'Scoring the verified findings', detail: 'One reference match in this recorded evaluation. RL rewards successful vulnerability detection.' },
   { title: 'Compare checkpoint results', detail: 'Both checkpoints inspected FaviconServlet.java. Only the final checkpoint reported its SSRF vulnerability.' },
+  { title: 'Keep training across new environments' },
 ];
 const STEP_SECONDS = 12;
 const DEMO_SECONDS = STEPS.length * STEP_SECONDS;
@@ -120,12 +122,11 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
       </header>
       <section className={styles.presentation} aria-labelledby={titleId}>
         <div className={styles.topline}>
-          <span>Openfire <span className={styles.repoDescription}>/ Java messaging server</span></span>
+          <div className={styles.exampleContext}><span>Openfire <span className={styles.repoDescription}>/ Java messaging server</span></span><span className={styles.historical}>Historical vulnerability</span></div>
           <input className={styles.timeline} type="range" aria-label="Investigation timeline" aria-valuetext={`Step ${step + 1} of ${STEPS.length}: ${current.title}`} min={0} max={STEPS.length - 1} value={step} onChange={(event) => navigate(Number(event.target.value))} style={{ background: `linear-gradient(to right, #2870ff ${(step + 1) / STEPS.length * 100}%, #dddde3 ${(step + 1) / STEPS.length * 100}%)` }} />
-          <span className={styles.replayNote}>Recorded replay · {DEMO_SECONDS} seconds</span>
         </div>
         <div className={`${styles.scene} ${step === 1 ? styles.wideScene : ''}`}>
-          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : <CyberTrainingResults scenario={SCENARIO} />}
+          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults scenario={SCENARIO} /> : <CyberTrainingLoop progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} />}
         </div>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>

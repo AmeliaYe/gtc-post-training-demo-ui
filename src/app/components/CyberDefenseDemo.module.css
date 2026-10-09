@@ -13,10 +13,11 @@
 .presentation { display: flex; flex-direction: column; min-height: calc(100dvh - 124px); gap: 22px; padding: 26px 38px 28px; border-radius: 10px; background: #f2f2f4; }
 .topline { display: grid; grid-template-columns: 1fr 110px 1fr; align-items: center; gap: 24px; min-height: 26px; color: #686873; font-size: 14px; line-height: 1.4; }
 .repoDescription { color: #898993; }
-.replayNote { justify-self: end; text-align: right; }
+.exampleContext { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.historical { padding: 4px 9px; border: 1px solid #dddde3; border-radius: 7px; color: #555560; font-size: 14px; }
 .timeline { appearance: none; display: block; width: 110px; height: 12px; margin: 0; border: 0; border-radius: 8px; cursor: pointer; }
-.timeline::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; border: 2px solid #2870ff; border-radius: 50%; background: #fff; }
-.timeline::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid #2870ff; border-radius: 50%; background: #fff; }
+.timeline::-webkit-slider-thumb { appearance: none; width: 0; height: 12px; border: 0; background: transparent; }
+.timeline::-moz-range-thumb { width: 0; height: 12px; border: 0; background: transparent; }
 .scene { display: flex; flex: 1; align-items: center; width: 100%; max-width: 1320px; min-width: 0; margin: 0 auto; padding: 10px 0; }
 .wideScene { max-width: none; width: calc(100% + 76px); margin-left: -38px; }
 .navigation { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 30px; }
@@ -46,7 +47,6 @@
   .presentation { min-height: calc(100dvh - 112px); gap: 22px; padding: 20px 16px; }
   .topline { grid-template-columns: 1fr 90px; gap: 12px; font-size: 13px; }
   .timeline { width: 90px; }
-  .replayNote { display: none; }
   .scene { padding: 0; }
   .wideScene { width: calc(100% + 32px); margin-left: -16px; }
   .navigation { grid-template-columns: 40px minmax(0, 1fr) 40px; align-items: end; gap: 12px; }

@@ -2,19 +2,16 @@
 .reasoning { padding: 14px 24px; margin-bottom: 16px; border: 1px solid #e4e4e7; border-radius: 16px; background: #fff; }
 .reasoning header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px 18px; margin-bottom: 7px; }
 .reasoning h4 { margin: 0; color: #27272a; font-size: 16px; font-weight: 500; }
-.reasoning header > span { color: #71717a; font-size: 12px; }
 .reasoning blockquote { margin: 0; color: #3f3f46; font-size: clamp(17px, 1.25vw, 22px); line-height: 1.4; }
 .editor { min-width: 0; border: 1px solid #e4e4e7; border-radius: 22px; background: #fff; }
 .toolBar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 28px 14px; }
 .toolBar h4 { margin: 0; font-size: clamp(22px, 1.7vw, 28px); font-weight: 400; line-height: 1.25; letter-spacing: -.03em; }
-.toolBar > span { color: #8b8b91; font-size: 13px; white-space: nowrap; }
 .fileBar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 28px 10px; }
 .fileBar > code { min-width: 0; overflow-wrap: anywhere; color: #44444b; font: 16px/1.4 monospace; }
 .fileBadge { padding: 5px 9px; border-radius: 6px; background: #f2f2f4; color: #64646e; font-size: 13px; white-space: nowrap; }
 .commands { display: flex; flex-direction: column; gap: 4px; padding: 0 28px 13px; }
 .commands > code { color: #5f5f6b; font: 15px/1.5 monospace; overflow-wrap: anywhere; }
 .commands code > span { color: #a1a1aa; }
-.commands > span { color: #85858f; font-size: 11px; }
 .codeFrame { position: relative; margin: 0 16px; }
 .source { margin: 0; padding: 14px 0; min-height: 225px; overflow: auto; border: 1px solid #e8e8ec; border-radius: 15px; background: #f5f5f6; color: #24242b; font: clamp(17px, 1.35vw, 24px)/1.4 monospace; scrollbar-width: thin; }
 .source > span { display: flex; min-width: max-content; padding-right: 16px; border-left: 4px solid transparent; }
@@ -25,10 +22,6 @@
 .fileList { color: #337dab; font-size: clamp(17px, 1.2vw, 21px); padding: 12px 0; }
 .fileList > span { padding-top: 1px; padding-bottom: 1px; }
 .agentCursor { position: absolute; right: -44px; width: clamp(126px, 12vw, 183px); height: auto; pointer-events: none; z-index: 2; transition: top .65s ease; }
-.sourceMeta { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0 0; color: #85858f; font-size: 13px; }
-.sourceMeta a { display: inline-flex; align-items: center; gap: 5px; color: #62626e; text-decoration: none; }
-.sourceMeta a:hover { color: #2870ff; }
-.sourceMeta svg { width: 14px; height: 14px; }
 .comment { color: #838b91; }
 .string { color: #009947; }
 .keyword { color: #9761e2; }
@@ -49,10 +42,8 @@
 }
 @media (max-width: 600px) {
   .reasoning { padding: 14px 16px; }
-  .reasoning header > span { font-size: 11px; }
   .toolBar { padding: 20px 18px; flex-wrap: wrap; gap: 8px; }
   .toolBar h4 { font-size: 23px; }
-  .toolBar > span { font-size: 12px; }
   .fileBar { padding: 0 18px 12px; flex-wrap: wrap; gap: 8px; }
   .fileBar > code { font-size: 14px; }
   .fileBadge { font-size: 12px; }
@@ -62,7 +53,6 @@
   .source { min-height: 225px; font-size: 15px; }
   .lineNumber { width: 36px; margin-right: 8px; }
   .agentCursor { width: 108px; right: -7px; }
-  .sourceMeta { padding: 12px 18px; font-size: 12px; }
   .transcript { padding: 12px 18px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -68,7 +68,7 @@ export function CyberTrainingResults({ scenario }: { scenario: CyberScenario }) 
                 </div>
               ))}
             </div>
-            <p>Reference: {scenario.cve} · {scenario.reference.title}. SSRF means server-side request forgery: making a server fetch an address chosen by someone else. Reports that do not match this reference are not confirmed false positives.</p>
+            <p>Historical reference: {scenario.cve}, published in 2019 · {scenario.reference.title}. This replay evaluates a historical code snapshot. SSRF means server-side request forgery: making a server fetch an address chosen by someone else. Reports that do not match this reference are not confirmed false positives.</p>
             <p>{attack.caveat}</p>
             <a href={scenario.url} target="_blank" rel="noopener noreferrer">Evaluated source revision<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
           </section>

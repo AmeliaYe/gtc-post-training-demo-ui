@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { CYBER_VISUALS } from '@/lib/cyber-visuals';
 import { CYBER_ATTACKS } from '@/lib/cyber-attacks';
 import { OPENFIRE_REPLAY_PROVENANCE, OPENFIRE_SOURCE_ASSESSMENT, OPENFIRE_TOOL_CALLS } from '@/lib/cyber-replay';
@@ -42,20 +41,19 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
   if (step === 1) return (
     <div className={styles.diagramStage}>
       <CyberAttackDemo attack={CYBER_ATTACKS.openfire} scenarioId="openfire" step={2} playing={playing} progress={progress} onInteract={onInteract} />
-      <p className={styles.threatNote}>Source-level call chain · internal access depends on deployment</p>
+      <p className={styles.threatNote}>The supplied host controls the server’s request. Internal access depends on deployment.</p>
     </div>
   );
 
   return (
     <div className={styles.stage}>
       <section className={styles.reasoning} aria-label="Recorded agent reasoning">
-        <header><h4>Agent reasoning</h4><span>{snippet ? 'Recorded after reading the file' : 'Recorded before the tool call'}</span></header>
+        <header><h4>{snippet ? 'Agent assessment' : 'Agent reasoning'}</h4></header>
         <blockquote>{reasoning}</blockquote>
       </section>
       <div className={styles.editor}>
         <header className={styles.toolBar}>
           <h4>{step === 0 ? 'Scanning repositories' : snippet ? 'Inspecting source code' : 'Checking the endpoint'}</h4>
-          <span>Recorded replay</span>
         </header>
         <div className={styles.fileBar}>
           <code>{step === 0 ? 'Openfire / Java files' : snippet ? 'FaviconServlet.java' : 'WEB-INF/web.xml'}</code>
@@ -63,7 +61,6 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
         </div>
         <div className={styles.commands}>
           {calls.map((call) => <code key={call.id}><span aria-hidden="true">$ </span>{SHORT_COMMANDS[call.id]}</code>)}
-          <span>Abbreviated command{calls.length > 1 ? 's' : ''}</span>
         </div>
         <div className={styles.codeFrame} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
           {step === 0 && <pre className={`${styles.source} ${styles.fileList}`} tabIndex={0} aria-label="Files returned by recorded search, paths shortened">
@@ -77,10 +74,7 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
         </div>
         <details className={styles.transcript}>
           <summary>Exact recorded {calls.length === 1 ? 'command and output' : 'commands and outputs'}</summary>
-          <div className={styles.sourceMeta}>
-            <span>{snippet ? `Lines ${snippet.lines[0].number}–${snippet.lines.at(-1)!.number}` : step === 0 ? `${files.length} files located` : 'Servlet mapping'}</span>
-            <a href={snippet?.url || calls.at(-1)!.source} target="_blank" rel="noopener noreferrer" onClick={onInteract}>View in GitHub<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
-          </div>
+          <p>{snippet ? `Lines ${snippet.lines[0].number}–${snippet.lines.at(-1)!.number}. The assessment above was recorded after this file read.` : step === 0 ? `${files.length} files located; paths shortened in the editor above.` : 'Servlet mapping output.'}</p>
           <p>Final checkpoint · training step {OPENFIRE_REPLAY_PROVENANCE.policyStep}. Selected calls from {OPENFIRE_REPLAY_PROVENANCE.totalToolCalls} recorded tools. The cursor and highlights illustrate the review; source highlights show three details of the same file read.</p>
           {calls.map((call) => <div key={call.id}><p>Call {call.ordinal} · {call.tool} · exit {call.exitCode}</p><blockquote>{call.rationale}</blockquote><pre tabIndex={0} aria-label={`Exact command for call ${call.ordinal}`}><code>{call.command}</code></pre><pre tabIndex={0} aria-label={`Recorded output excerpt for call ${call.ordinal}`}><code>{call.output}</code></pre></div>)}
         </details>

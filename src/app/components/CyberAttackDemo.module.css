@@ -1,4 +1,31 @@
 .attack { width: 100%; min-width: 0; container-type: inline-size; color: #0c0c0c; font-family: inherit; }
+.legend { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 30px; min-height: 32px; font-size: 15px; }
+.legend > span { display: inline-flex; align-items: center; gap: 10px; }
+.legend i { display: block; width: 30px; border-top: 3px solid currentColor; }
+.expectedLegend { color: #14703f; }
+.unsafeLegend { color: #bb3039; }
+.unsafeLegend i { border-top-style: dashed; }
+.desktopGraph { position: relative; height: 420px; }
+.attack .desktopGraph .network { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.route { fill: none; stroke: #a8a8b4; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.expectedRoute { stroke: #17834a; stroke-width: 3; }
+.unsafeRoute { stroke: #cf3942; stroke-width: 3; stroke-dasharray: 8 6; }
+.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 15px; border: 1.5px solid #dedee5; border-radius: 18px; background: #fff; }
+.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; color: #83838e; }
+.nodeNumber { display: grid; place-items: center; width: 30px; height: 34px; border-radius: 10px; background: #f2f2f5; color: #63636f; font-size: 20px; line-height: 1; }
+.attack .nodeTop > svg { width: 24px; height: 24px; }
+.node strong, .mobileGraph strong { display: block; color: #272730; font-size: clamp(18px, 2cqi, 23px); font-weight: 500; line-height: 1.2; }
+.nodeDetail { display: block; margin-top: 8px; color: #777782; font-size: 14px; line-height: 1.35; }
+.expectedNode { color: #17834a; border-color: #87c4a1; }
+.unsafeNode { color: #cf3942; border-color: #e8a0a5; }
+.expectedNode .nodeTop, .unsafeNode .nodeTop { color: inherit; }
+.expectedNode .nodeNumber, .expectedNode .routeBadge { color: #126c3b; background: #edf8f1; }
+.unsafeNode .nodeNumber, .unsafeNode .routeBadge { color: #b82e37; background: #fff0f1; }
+.routeBadge { display: inline-block; margin-top: 9px; padding: 5px 8px; border-radius: 7px; font-size: 13px; font-weight: 500; line-height: 1.2; }
+.mobileGraph { display: none; }
+.sourceDetails { margin-top: 8px; border-top: 1px solid #e3e3e7; }
+.sourceDetails > summary { width: fit-content; max-width: 100%; margin: 0 auto; padding: 14px 8px; color: #63636f; font-size: 16px; cursor: pointer; }
+.sourceDetails[open] { padding-bottom: 8px; }
 .scroller { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .scroller::-webkit-scrollbar { display: none; }
 .chain { display: flex; gap: 64px; width: max-content; min-width: 100%; margin: 0; padding: 24px max(32px, calc((100cqi - 560px) / 2)); list-style: none; }
@@ -25,8 +52,29 @@
 .attack .navigation svg { width: 20px; height: 20px; }
 .navigation > span { min-width: 48px; color: #3f3f49; font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
 .navigation > span > span { color: #8b8b96; }
-.attack :is(button, a, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
+.attack :is(button, a, summary, .scroller):focus-visible { outline: 3px solid #2870ff; outline-offset: 3px; }
 .attack .scroller:focus-visible { outline-offset: -3px; }
+@container (max-width: 800px) {
+  .desktopGraph { display: none; }
+  .mobileGraph { display: block; max-width: 470px; margin: 14px auto 0; }
+  .sharedNodes, .mobileBranches { padding: 0; margin: 0; list-style: none; }
+  .mobileNode { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1px solid #dedee5; border-radius: 16px; background: #fff; }
+  .attack .mobileNode > svg { width: 26px; height: 26px; flex-shrink: 0; color: #83838e; }
+  .mobileNode strong { font-size: 20px; }
+  .mobileNode .nodeDetail { margin-top: 4px; }
+  .attack .sharedArrow { display: block; width: 22px; height: 26px; margin: 2px auto; color: #a8a8b4; }
+  .mobileSplit { height: 15px; width: 2px; margin: 0 auto; background: #b9b9c3; }
+  .mobileBranches { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .mobileBranches::before { position: absolute; top: 0; left: 25%; right: 25%; border-top: 2px solid #b9b9c3; content: ''; }
+  .mobileBranches > li { min-width: 0; }
+  .attack .branchArrow { position: relative; display: block; width: 20px; height: 30px; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 2; }
+  .destinationNode { min-height: 128px; padding: 13px 10px; border: 1.5px solid; border-color: inherit; border-radius: 16px; background: #fff; text-align: center; }
+  .attack .destinationNode > svg { display: block; width: 24px; height: 24px; margin: 0 auto 8px; }
+  .destinationNode strong { font-size: 19px; }
+  .destinationNode .routeBadge { font-size: 12px; }
+  .legend { gap: 10px 20px; font-size: 14px; }
+  .legend i { width: 24px; }
+}
 @container (max-width: 640px) {
   .chain { gap: 32px; padding-block: 18px; }
   .card { height: 282px; padding: 18px; border-radius: 20px; }
