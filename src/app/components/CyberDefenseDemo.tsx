@@ -22,19 +22,22 @@ const inter = localFont({
   weight: '100 900',
 });
 const STEPS = [
-  { title: 'Exploring your codebase' },
-  { title: 'Producing the threat model & findings', detail: 'Server-side request forgery (SSRF): user input directs a request made by the server.' },
-  { title: 'Trace untrusted input' },
-  { title: 'Trace URL construction' },
-  { title: 'Inspect the network sink' },
-  { title: 'Confirm the endpoint mapping' },
-  { title: 'Reviewing the submitted findings', detail: 'Select a report to inspect the evidence behind it.' },
-  { title: 'Scoring the verified findings', detail: 'Early checkpoint: SSRF omitted. Final checkpoint: SSRF reported and matched.' },
-  { title: 'Training results', hideCaption: true },
-  { title: 'Keep training across new environments' },
-];
-const STEP_SECONDS = 12;
-const DEMO_SECONDS = STEPS.length * STEP_SECONDS;
+  { title: 'Exploring your codebase', seconds: 6 },
+  { title: 'Producing the threat model & findings', seconds: 12, detail: 'Server-side request forgery (SSRF): user input directs a request made by the server.' },
+  { title: 'Trace untrusted input', seconds: 6 },
+  { title: 'Trace URL construction', seconds: 6 },
+  { title: 'Inspect the network sink', seconds: 6 },
+  { title: 'Confirm the endpoint mapping', seconds: 6 },
+  { title: 'Reviewing the submitted findings', seconds: 12, detail: 'Select a report to inspect the evidence behind it.' },
+  { title: 'Scoring the verified findings', seconds: 12, detail: 'Early checkpoint: SSRF omitted. Final checkpoint: SSRF reported and matched.' },
+  { title: 'Training results', seconds: 12, hideCaption: true },
+  { title: 'Keep training across new environments', seconds: 12 },
+].map((step, index, steps) => ({
+  ...step,
+  startsAt: steps.slice(0, index).reduce((seconds, previous) => seconds + previous.seconds, 0),
+}));
+const DEMO_SECONDS = STEPS.reduce((seconds, step) => seconds + step.seconds, 0);
+const TICK_SECONDS = 0.5;
 
 export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   const [elapsed, setElapsed] = useState(0);
@@ -43,16 +46,17 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   const [presentationMessage, setPresentationMessage] = useState('');
   const container = useRef<HTMLDivElement>(null);
   const titleId = useId();
-  const step = Math.min(Math.floor(elapsed / STEP_SECONDS), STEPS.length - 1);
+  const step = Math.max(0, STEPS.findLastIndex((stage) => elapsed >= stage.startsAt));
   const current = STEPS[step];
+  const progress = elapsed >= DEMO_SECONDS ? 0 : (elapsed - current.startsAt) / current.seconds;
 
   useEffect(() => {
     if (!playing) return;
     const timer = window.setTimeout(() => {
-      const next = Math.min(elapsed + 1, DEMO_SECONDS);
+      const next = Math.min(elapsed + TICK_SECONDS, DEMO_SECONDS);
       setElapsed(next);
       if (next === DEMO_SECONDS) setPlaying(false);
-    }, 1000);
+    }, TICK_SECONDS * 1000);
     return () => window.clearTimeout(timer);
   }, [elapsed, playing]);
 
@@ -87,7 +91,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
 
   function navigate(next: number) {
     setPlaying(false);
-    setElapsed(Math.max(0, Math.min(STEPS.length - 1, next)) * STEP_SECONDS);
+    setElapsed(STEPS[Math.max(0, Math.min(STEPS.length - 1, next))].startsAt);
   }
 
   function play() {
@@ -126,7 +130,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
           <input className={styles.timeline} type="range" aria-label="Investigation timeline" aria-valuetext={`Step ${step + 1} of ${STEPS.length}: ${current.title}`} min={0} max={STEPS.length - 1} value={step} onChange={(event) => navigate(Number(event.target.value))} style={{ background: `linear-gradient(to right, #2870ff ${(step + 1) / STEPS.length * 100}%, #dddde3 ${(step + 1) / STEPS.length * 100}%)` }} />
         </div>
         <div className={`${styles.scene} ${step === 1 ? styles.wideScene : ''}`}>
-          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults scenario={SCENARIO} /> : <CyberTrainingLoop progress={(elapsed % STEP_SECONDS) / STEP_SECONDS} />}
+          {step < 6 ? <CyberInvestigation step={step} playing={playing} progress={progress} onInteract={() => setPlaying(false)} /> : step < 8 ? <CyberFindings key={step} showFeedback={step === 7} onInteract={() => setPlaying(false)} /> : step === 8 ? <CyberTrainingResults scenario={SCENARIO} /> : <CyberTrainingLoop progress={progress} />}
         </div>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" title="Previous step"><ChevronLeftIcon aria-hidden="true" /></button>

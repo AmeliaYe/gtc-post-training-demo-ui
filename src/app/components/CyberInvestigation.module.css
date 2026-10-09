@@ -12,17 +12,16 @@
 .commands { display: flex; flex-direction: column; gap: 4px; padding: 0 28px 13px; }
 .commands > code { color: #5f5f6b; font: 15px/1.5 monospace; overflow-wrap: anywhere; }
 .commands code > span { color: #a1a1aa; }
-.codeFrame { position: relative; margin: 0 16px; }
-.source { margin: 0; padding: 14px 0 88px; min-height: 225px; overflow: auto; border: 1px solid #e8e8ec; border-radius: 15px; background: #f5f5f6; color: #24242b; font: clamp(17px, 1.35vw, 24px)/1.4 monospace; scrollbar-width: thin; }
+.codeFrame { margin: 0 16px 16px; }
+.source { margin: 0; padding: 14px 0; min-height: 225px; overflow: auto; border: 1px solid #e8e8ec; border-radius: 15px; background: #f5f5f6; color: #24242b; font: clamp(17px, 1.35vw, 24px)/1.4 monospace; scrollbar-width: thin; }
 .source > span { display: flex; min-height: 1.4em; min-width: max-content; padding-right: 16px; border-left: 4px solid transparent; }
-.source > span > code { position: relative; font: inherit; }
+.source > span > code { font: inherit; }
 .lineNumber { flex-shrink: 0; width: 49px; margin-right: 12px; padding-right: 8px; color: #85858f; text-align: right; user-select: none; }
 .source > .highlight { border-left-color: #3499ef; background: #dfebf7; }
 .source > .activeLine { border-left-color: #2870ff; background: #cfe2f9; }
 .highlight > .lineNumber { color: #3499ef; }
 .fileList { color: #337dab; font-size: clamp(17px, 1.2vw, 21px); padding-top: 12px; }
 .fileList > span { padding-top: 1px; padding-bottom: 1px; }
-.agentCursor { position: absolute; top: .7em; width: clamp(126px, 12vw, 183px); height: auto; transform: translate(-16.4%, -22.05%); pointer-events: none; z-index: 2; }
 .comment { color: #838b91; }
 .string { color: #009947; }
 .keyword { color: #9761e2; }
@@ -32,15 +31,9 @@
 .routeOutput > span > code { margin-left: 14px; }
 .diagramStage { width: 100%; min-width: 0; }
 .threatNote { margin: 12px auto 0; padding: 0 24px; text-align: center; color: #71717a; font-size: 14px; line-height: 1.4; }
-.transcript { padding: 12px 28px; border-top: 1px solid #ededf0; color: #71717a; font-size: 14px; line-height: 1.5; }
-.transcript summary { cursor: pointer; width: fit-content; max-width: 100%; }
-.transcript p { margin: 16px 0 8px; color: #50505b; }
-.transcript blockquote { margin: 8px 0 12px; padding-left: 14px; border-left: 2px solid #a6c5ff; color: #42424e; }
-.transcript pre { max-height: 280px; overflow: auto; padding: 12px; margin: 8px 0; border: 1px solid #e3e3e7; border-radius: 10px; background: #f7f7f9; color: #45454f; font: 14px/1.5 monospace; scrollbar-width: thin; }
-.stage :is(a, pre, summary):focus-visible { outline: 2px solid #2870ff; outline-offset: 3px; }
+.stage pre:focus-visible { outline: 2px solid #2870ff; outline-offset: 3px; }
 @media (max-width: 1000px) {
   .stage { width: 100%; }
-  .agentCursor { width: 138px; }
 }
 @media (max-width: 600px) {
   .reasoning { padding: 14px 16px; }
@@ -51,9 +44,7 @@
   .fileBadge { font-size: 12px; }
   .commands { padding: 0 18px 12px; }
   .commands > code { font-size: 13px; }
-  .codeFrame { margin: 0 10px; }
-  .source { min-height: 225px; padding-bottom: 65px; font-size: 15px; }
+  .codeFrame { margin: 0 10px 10px; }
+  .source { min-height: 225px; font-size: 15px; }
   .lineNumber { width: 36px; margin-right: 8px; }
-  .agentCursor { width: 108px; }
-  .transcript { padding: 12px 18px; font-size: 13px; }
 }

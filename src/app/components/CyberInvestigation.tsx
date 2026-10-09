@@ -1,9 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { CYBER_VISUALS } from '@/lib/cyber-visuals';
 import { CYBER_ATTACKS } from '@/lib/cyber-attacks';
-import { OPENFIRE_REPLAY_PROVENANCE, OPENFIRE_SOURCE_ASSESSMENT, OPENFIRE_TOOL_CALLS } from '@/lib/cyber-replay';
+import { OPENFIRE_SOURCE_ASSESSMENT, OPENFIRE_TOOL_CALLS } from '@/lib/cyber-replay';
 import { CyberAttackDemo } from './CyberAttackDemo';
 import styles from './CyberInvestigation.module.css';
 
@@ -73,18 +72,11 @@ export function CyberInvestigation({ step, playing, progress = 0, onInteract }: 
                 {row.number !== undefined && <span className={styles.lineNumber}>{row.number}</span>}
                 <code title={row.path}>
                   {snippet ? <HighlightedCode text={row.text || ' '} /> : row.text}
-                  {index === activeRow && <Image className={styles.agentCursor} src="/cyber/agent-cursor.svg" alt="" aria-hidden="true" width={183} height={127} style={{ left: `${Math.max(0, row.text.search(/\S/))}ch` }} loading="eager" />}
                 </code>
               </span>
             ))}
           </pre>
         </div>
-        <details className={styles.transcript}>
-          <summary>Exact recorded {calls.length === 1 ? 'command and output' : 'commands and outputs'}</summary>
-          <p>{snippet ? `Lines ${snippet.lines[0].number}–${snippet.lines.at(-1)!.number}. The assessment above was recorded after this file read.` : step === 0 ? `${files.length} files located; paths shortened in the editor above.` : 'Servlet mapping output.'}</p>
-          <p>Final checkpoint · training step {OPENFIRE_REPLAY_PROVENANCE.policyStep}. Selected calls from {OPENFIRE_REPLAY_PROVENANCE.totalToolCalls} recorded tools. The cursor and highlights illustrate the review; source highlights show three details of the same file read.</p>
-          {calls.map((call) => <div key={call.id}><p>Call {call.ordinal} · {call.tool} · exit {call.exitCode}</p><blockquote>{call.rationale}</blockquote><pre tabIndex={0} aria-label={`Exact command for call ${call.ordinal}`}><code>{call.command}</code></pre><pre tabIndex={0} aria-label={`Recorded output excerpt for call ${call.ordinal}`}><code>{call.output}</code></pre></div>)}
-        </details>
       </div>
     </div>
   );
