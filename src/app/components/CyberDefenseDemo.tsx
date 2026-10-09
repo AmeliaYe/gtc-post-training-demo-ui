@@ -196,19 +196,14 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
                 <section>
                   <h2>Threat model</h2>
                   <dl className={styles.threatModel}>{OPENFIRE_REVIEW_PROMPT.threatModel.map(({ label, text }) => <div key={label}><dt>{label}</dt><dd>{text}</dd></div>)}</dl>
-                  <h2>Evidence</h2>
-                  <p>{OPENFIRE_REVIEW_PROMPT.evidence}</p>
                 </section>
                 <section>
                   <h2>Audit scope <span>6 Java files</span></h2>
-                  <code className={styles.promptPath}>{OPENFIRE_REVIEW_PROMPT.directory}</code>
                   <ul className={styles.promptFiles}>{OPENFIRE_REVIEW_PROMPT.files.map((file) => <li key={file}><code>{file}</code></li>)}</ul>
-                  <h2>Review method</h2>
-                  <ol className={styles.promptMethod}>{OPENFIRE_REVIEW_PROMPT.method.map((instruction) => <li key={instruction}>{instruction}</li>)}</ol>
                 </section>
               </div>
               <div className={styles.promptConstraints}><strong>Constraints</strong><p>{OPENFIRE_REVIEW_PROMPT.constraints}</p></div>
-              <footer className={styles.promptTools}><code>{OPENFIRE_REVIEW_PROMPT.tools}</code><span>Relative paths from <code>{OPENFIRE_REVIEW_PROMPT.workingDirectory}</code></span></footer>
+              <footer className={styles.promptTools}><strong>Tools</strong><code>{OPENFIRE_REVIEW_PROMPT.tools}</code></footer>
             </section>
             : current.scene === 'findings' || current.scene === 'rewards' ? <CyberFindings key={current.scene} showFeedback={current.scene === 'rewards'} />
             : current.scene === 'results' ? <CyberTrainingResults onInteract={() => setPlaying(false)} />
