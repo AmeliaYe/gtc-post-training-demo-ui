@@ -9,9 +9,9 @@ import {
 import styles from './CyberPromptDemo.module.css';
 
 const INPUTS = [
-  { title: 'A URL', Icon: GlobeAltIcon, focus: 'Follow the destination', trace: 'Where does the server send the request?', verify: 'Check public vs. private addresses', impacts: ['services'], detail: 'A server request could reach a private service.' },
-  { title: 'XML content', Icon: CodeBracketIcon, focus: 'Inspect entity handling', trace: 'How does the parser handle entities?', verify: 'Check file reads and resource limits', impacts: ['files', 'disruption'], detail: 'Entity handling could expose files or exhaust resources.' },
-  { title: 'A file path', Icon: FolderOpenIcon, focus: 'Follow file access', trace: 'Does access stay inside permitted directories?', verify: 'Check path boundaries and permissions', impacts: ['files'], detail: 'A path could reach restricted files for reading or writing.' },
+  { title: 'A URL', Icon: GlobeAltIcon, focus: 'Follow the destination', trace: 'Host input → URL → HTTP request', verify: 'Check destination restrictions', impacts: ['services'], detail: 'Reach private services through the server’s network access.' },
+  { title: 'XML content', Icon: CodeBracketIcon, focus: 'Inspect entity handling', trace: 'XML → entity parsing', verify: 'Check external entities and expansion limits', impacts: ['files', 'disruption'], detail: 'Entity handling could expose files or exhaust resources.' },
+  { title: 'A file path', Icon: FolderOpenIcon, focus: 'Follow file access', trace: 'Path → file access', verify: 'Check directory boundaries and permissions', impacts: ['files'], detail: 'A path could reach restricted files for reading or writing.' },
 ];
 const IMPACTS = [
   { id: 'code', title: 'Run code', Icon: CodeBracketIcon, technical: 'Code execution: run unauthorized code on the server.' },
