@@ -60,3 +60,19 @@
 .tooltip { position: absolute; z-index: 4; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); width: 220px; padding: 12px; border-radius: 8px; background: #0c0c0c; color: #fff; font-size: 14px; line-height: 1.4; visibility: hidden; pointer-events: none; box-shadow: 0 4px 16px #00000020; }
 .impact:hover .tooltip, .impact:focus-visible .tooltip { visibility: visible; }
 .evidenceNote { margin: 16px 0 0; color: #63636f; font-size: 14px; line-height: 1.4; }
+
+.compact { --cyber-title-size: 22px; box-sizing: border-box; height: 420px; padding: 16px 20px; }
+.compact .header { margin-bottom: 8px; font-size: 13px; }
+.compact .columns { margin-top: 24px; }
+.compact .columns > section { padding: 12px; }
+.compact .columns h3 { margin-bottom: 8px; font-size: 16px; }
+.compact .input { padding: 10px; margin-bottom: 8px; }
+.compact .input strong, .compact .focus { font-size: 16px; }
+.compact .trace { gap: 10px; margin: 12px 0 0; }
+.compact .trace li > p { font-size: 15px; }
+.compact .impact { min-height: 65px; padding: 9px; gap: 6px; }
+.compact .impact svg { width: 22px; height: 22px; }
+.compact .impact strong { font-size: 14px; }
+.compact .impactDetail { min-height: 38px; margin-top: 8px; font-size: 14px; }
+.compact .evidenceNote { margin-top: 8px; font-size: 13px; }
+.compact .footer { margin-top: 10px; padding-top: 8px; font-size: 13px; }

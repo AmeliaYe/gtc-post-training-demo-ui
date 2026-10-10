@@ -26,7 +26,7 @@ type DemoStep = {
   seconds: number;
   detail?: string;
   hideCaption?: boolean;
-} & ({ scene: 'investigation'; investigationStep: number } | { scene: 'prompt' | 'findings' | 'results' | 'training' });
+} & ({ scene: 'investigation'; investigationStep: number } | { scene: 'findings' | 'summary' });
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Example vulnerability: Server-side request forgery (SSRF)', seconds: 3, investigationStep: 1, detail: 'An attacker may use the server to reach private services.' },
@@ -36,9 +36,7 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Agent inspects the code that sends the HTTP request', seconds: 3, investigationStep: 4 },
   { scene: 'investigation', title: 'Agent confirms how the endpoint reaches this code', seconds: 3, investigationStep: 5 },
   { scene: 'findings', title: 'Security findings and vulnerability discovery', seconds: 3 },
-  { scene: 'results', title: 'Post-training improves vulnerability recall', seconds: 3 },
-  { scene: 'prompt', title: 'Agent is tasked with finding the vulnerability in the audit slice', seconds: 3 },
-  { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 3, detail: 'For individuals and teams.' },
+  { scene: 'summary', title: 'Summary', seconds: 3 },
 ] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
   seconds: step.seconds,
@@ -168,12 +166,12 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         </div>
         <div className={styles.headerAction}><button onClick={toggleFullscreen} aria-label={fullscreen ? 'Exit full screen' : 'Full screen'} title={fullscreen ? 'Exit full screen' : 'Full screen'}>{fullscreen ? <ArrowsPointingInIcon aria-hidden="true" /> : <ArrowsPointingOutIcon aria-hidden="true" />}</button></div>
       </header>
-      <section className={styles.presentation} aria-labelledby={titleId}>
+      <section className={`${styles.presentation} ${current.scene === 'summary' ? styles.summaryCanvas : ''}`} aria-labelledby={titleId}>
         <div className={styles.topline}>
             <div className={styles.stepProgress} role="group" aria-label={`Step ${step + 1} of ${STEPS.length}`}>
               {STEPS.map((stage, index) => <button key={stage.title} className={styles.stepButton} onClick={() => navigate(index)} aria-label={`Go to step ${index + 1}: ${stage.title}`} aria-current={index === step ? 'step' : undefined} title={stage.title}>
                 <span className={`${styles.stepDot} ${index === step ? styles.activeStep : ''}`}>
-                  <span className={styles.stepLabel}>{index === step ? `Step ${index + 1}` : index + 1}</span>
+                  <span className={styles.stepLabel}>{index === step ? stage.scene === 'summary' ? 'Summary' : `Step ${index + 1}` : index + 1}</span>
                   {index === step && <span className={styles.timelineFill} role="progressbar" aria-label={`Step ${step + 1} progress`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} style={{ transform: `scaleX(${Math.min(1, Math.max(0, progress))})`, transitionDuration: playing ? `${TICK_SECONDS}s` : '0s' }} />}
                 </span>
               </button>)}
@@ -186,10 +184,13 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
         </div>
         <FittedScene>
           {current.scene === 'investigation' ? <CyberInvestigation step={current.investigationStep} progress={progress} playing={playing} onInteract={() => {}} />
-            : current.scene === 'prompt' ? <CyberPromptDemo onInteract={() => {}} />
             : current.scene === 'findings' ? <CyberFindings showFeedback={progress >= .5} />
-            : current.scene === 'results' ? <CyberTrainingResults onInteract={() => {}} />
-            : <CyberTrainingLoop progress={elapsed >= DEMO_SECONDS ? 0 : progress} />}
+            : <div className={styles.bento}>
+                <CyberTrainingResults compact />
+                <CyberTrainingLoop compact progress={progress} />
+                <CyberPromptDemo compact onInteract={() => {}} />
+              </div>}
+
         </FittedScene>
         <footer className={styles.navigation} aria-label="Investigation playback">
           <button className={styles.arrow} data-key-pressed={pressedArrow?.direction === 'left'} disabled={step === 0} onClick={() => navigate(step - 1)} aria-label="Previous step" aria-keyshortcuts="ArrowLeft" title="Previous step (Left arrow)"><ChevronLeftIcon aria-hidden="true" /></button>

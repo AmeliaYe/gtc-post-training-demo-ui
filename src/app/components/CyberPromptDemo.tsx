@@ -21,16 +21,15 @@ const IMPACTS = [
   { id: 'services', title: 'Reach private services', Icon: GlobeAltIcon, technical: 'Server-side request forgery (SSRF): make the server request an internal destination.' },
 ];
 
-export function CyberPromptDemo({ onInteract }: { onInteract: () => void }) {
+export function CyberPromptDemo({ onInteract, compact = false }: { onInteract: () => void; compact?: boolean }) {
   const [input, setInput] = useState(0);
   const reducedMotion = useReducedMotion();
   const duration = reducedMotion ? 0 : .35;
   const delay = reducedMotion ? 0 : .2;
   const selected = INPUTS[input];
 
-  return <section className={styles.prompt} aria-label="Visual security audit prompt">
-    <header className={styles.header}><span>Agent prompt</span></header>
-    <h2>{OPENFIRE_REVIEW_PROMPT.goal}</h2>
+  return <section className={`${styles.prompt} ${compact ? styles.compact : ''}`} aria-label="Visual security audit prompt">
+    <h2>Trace attacker input to possible impact</h2>
     <div className={styles.columns}>
       <section className={styles.inputs} aria-label="Attacker inputs">
         <h3>Attacker controls</h3>

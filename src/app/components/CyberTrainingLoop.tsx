@@ -8,11 +8,12 @@ const PHASES = [
   { title: 'New checkpoint', detail: 'Updated model' },
 ];
 
-export function CyberTrainingLoop({ progress }: { progress: number }) {
+export function CyberTrainingLoop({ progress, compact = false }: { progress: number; compact?: boolean }) {
   const activePhase = Math.min(PHASES.length - 1, Math.floor(Math.max(0, Math.min(progress, 1)) * PHASES.length));
 
   return (
-    <section className={styles.loop} aria-label="Conceptual reinforcement learning training loop">
+    <section className={`${styles.loop} ${compact ? styles.compact : ''}`} aria-label="Conceptual reinforcement learning training loop">
+      {compact && <h2 className={styles.heading}>Continuous local training on new open-source vulnerabilities</h2>}
       <ol className={styles.steps} aria-label="Repeat this sequence for each training batch">
         {PHASES.map((phase, index) => (
           <li key={phase.title} className={`${styles.step} ${index === activePhase ? styles.active : ''}`} data-phase={index} aria-current={index === activePhase ? 'step' : undefined}>
