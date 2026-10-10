@@ -1,0 +1,23 @@
+# Allowlist: credentials, local sessions, virtualenvs and unrelated repo files stay out.
+**
+!__init__.py
+!backend/
+!backend/__init__.py
+!backend/app/
+!backend/app/**
+!backend/vendor/
+!backend/vendor/**
+!backend/requirements.lock
+!backend/requirements-dev.txt
+!frontend/
+!frontend/nginx.conf
+!frontend/public/
+!frontend/public/**
+!data/
+!data/cases.json
+!data/cases.live-demo.json
+!tests/
+!tests/**
+**/__pycache__
+**/*.pyc
+**/*.egg-info

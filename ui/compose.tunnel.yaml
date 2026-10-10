@@ -1,0 +1,34 @@
+# Optional overlay: reach the remote model server through an SSH tunnel inside the Compose network.
+# Create ./.secrets/model_host_password first (see README), then add:
+#   MODEL_HOST_ADDRESS=10.110.16.185   MODEL_HOST_USER=nvidia   (to ui/.env)
+services:
+  model-tunnel:
+    build: ./tunnel
+    image: gtc-healthcare-tunnel:local
+    init: true
+    restart: unless-stopped
+    environment:
+      TUNNEL_HOST: ${MODEL_HOST_ADDRESS:?set MODEL_HOST_ADDRESS in ui/.env}
+      TUNNEL_USER: ${MODEL_HOST_USER:?set MODEL_HOST_USER in ui/.env}
+      TUNNEL_PORT: ${MODEL_TUNNEL_PORT:-18045}
+    secrets:
+      - model_host_password
+    volumes:
+      - tunnel-ssh:/home/tunnel/.ssh
+    healthcheck:
+      test: [CMD, nc, -z, 127.0.0.1, "${MODEL_TUNNEL_PORT:-18045}"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 15s
+  backend:
+    environment:
+      CHECKPOINT_BASE_URL: http://model-tunnel:${MODEL_TUNNEL_PORT:-18045}/v1
+    depends_on:
+      model-tunnel:
+        condition: service_healthy
+secrets:
+  model_host_password:
+    file: ./.secrets/model_host_password
+volumes:
+  tunnel-ssh:

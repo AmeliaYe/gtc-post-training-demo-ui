@@ -1,0 +1,19 @@
+[Unit]
+Description=Private network access to the healthcare demo
+After=gtc-healthcare-ui.service
+Wants=gtc-healthcare-ui.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=%h/gtc-post-training-demo-ui
+EnvironmentFile=%h/.config/gtc-healthcare-ui-share.env
+ExecStart=%h/gtc-post-training-demo-ui/ui/.venv/bin/python -m ui.backend.app.share
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=30
+UMask=0077
+
+[Install]
+WantedBy=default.target

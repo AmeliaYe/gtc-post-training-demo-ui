@@ -1,0 +1,20 @@
+[Unit]
+Description=Healthcare policy comparison demo
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=%h/gtc-post-training-demo-ui
+Environment=DEMO_PORT=4193
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/gtc-healthcare-ui.env
+ExecStart=/bin/bash %h/gtc-post-training-demo-ui/ui/run.sh
+Restart=on-failure
+RestartSec=3
+KillMode=control-group
+TimeoutStopSec=30
+UMask=0077
+
+[Install]
+WantedBy=default.target
