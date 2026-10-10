@@ -1,0 +1,52 @@
+.findings { width: 100%; max-width: 1320px; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
+.reports { padding: 3px; }
+.comparison { min-height: 116px; position: relative; top: -58px; }
+.feedbackHeader { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 12px; }
+.feedbackHeader > span { grid-column: 2; padding-left: 25px; color: #63636f; font-size: 17px; line-height: 1.2; text-align: center; }
+.missedCheckpoint { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 18px; }
+.missedSummary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 22px; border: 1px solid #e3e3e7; border-radius: 20px; background: #fff; color: #63636f; font-size: 20px; line-height: 1.4; }
+.baseModelLabel { flex: 1; }
+.missedSummary strong { display: flex; align-items: center; gap: 10px; color: #b32d38; font-weight: 500; }
+.findings .missedSummary svg { width: 24px; height: 24px; }
+.missedCount { display: flex; align-items: center; justify-content: center; padding-left: 25px; color: #b32d38; }
+.missedCount strong { min-width: 76px; padding: 6px 14px; border-radius: 24px; background: #fce4e6; font-size: 28px; line-height: 1.1; font-weight: 500; text-align: center; }
+.surface { --feedback-width: 0px; position: relative; width: 1120px; min-width: 1120px; margin: 0 auto; padding-bottom: 15px; }
+.surface::before { position: absolute; z-index: 0; top: 0; right: var(--feedback-width); bottom: 0; left: 0; border: 1px solid #e3e3e7; border-radius: 24px; background: #fff; content: ''; }
+.withFeedback { --feedback-width: 160px; width: 1280px; min-width: 1280px; }
+.table { position: relative; z-index: 1; width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
+.signalColumn { width: 80px; }
+.titleColumn { width: 236px; }
+.descriptionColumn { width: 220px; }
+.fileColumn { width: 170px; }
+.typeColumn { width: 94px; }
+.statusColumn { width: 220px; }
+.feedbackColumn { width: 160px; }
+.table thead { height: 0; }
+.table thead th { padding: 0; font-weight: 400; text-align: left; }
+.groupRow th { padding: 16px 22px 0; text-align: left; font-weight: 400; }
+.groupRow th > div, .baseModelLabel { padding: 14px 26px; border-radius: 16px; background: #f8f8fa; color: #63636f; font-size: 21px; line-height: 1.4; }
+.postTrainedLabel { display: inline-flex; align-items: center; gap: 12px; }
+.postTrainedLabel img { width: 145px; height: auto; filter: brightness(0); }
+.reportRow > :is(th, td) { height: 96px; padding: 17px 10px; color: #0c0c0c; font-size: 20px; line-height: 1.45; font-weight: 400; text-align: left; vertical-align: middle; }
+.reportRow > td:first-child { padding-left: 22px; }
+.reportRow > td:nth-child(6) { padding-right: 12px; }
+.table tbody:last-child .reportRow:last-of-type > :is(th, td) { border-bottom: 0; }
+.reportSignal { display: flex; align-items: flex-end; justify-content: center; gap: 4px; width: 31px; height: 29px; }
+.reportSignal i { display: block; width: 4px; height: 10px; border-radius: 3px; background: #0c0c0c; }
+.reportSignal i:nth-child(2) { height: 17px; }
+.reportSignal i:nth-child(3) { height: 24px; }
+.reportSignal i:nth-child(4) { height: 29px; background: #dedee4; }
+.truncated { display: block; overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; }
+.fileName { color: #63636f; }
+.typePill, .statusPill { display: inline-flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; padding: 7px 12px; border-radius: 7px; background: #f2f2f4; color: #63636f; font-size: 19px; line-height: 1.3; }
+.typePill i { flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; background: #858593; }
+.ssrf i { background: #2870ff; }
+.statusPill { padding-right: 9px; padding-left: 9px; letter-spacing: -.025em; white-space: nowrap; }
+.matchedStatus { background: #edf3ff; color: #205bca; }
+.table .feedbackCell { padding-left: 28px; padding-right: 3px; border: 0; background: transparent; text-align: center; }
+.reward { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.rewardReason { color: #00874b; font-size: 16px; line-height: 1.25; }
+.rewardReason svg { display: block; width: 23px; height: 23px; margin: 0 auto 4px; }
+.matchPill { display: inline-block; min-width: 76px; padding: 6px 14px; border-radius: 24px; background: #c9f5de; color: #00874b; font-size: 28px; line-height: 1.1; font-weight: 500; }
+.noMatch { color: #858590; font-size: 26px; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

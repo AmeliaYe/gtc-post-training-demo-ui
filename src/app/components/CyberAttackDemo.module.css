@@ -1,34 +1,37 @@
-.attack { --path-color: #b7ed71; --path-tint: #b7ed7110; min-width: 0; }
-.normal { --path-color: #b7ed71; --path-tint: #b7ed7110; }
-.unsafe { --path-color: #f39889; --path-tint: #f398890d; }
-.consequence { --path-color: #edc67b; --path-tint: #edc67b0f; }
-.scene { position: relative; overflow: hidden; padding: 0 12px; border: 1px solid #38462f; border-radius: 10px; background: radial-gradient(ellipse at 45% 40%, #26392035, transparent 70%), #0d150e; }
-.scene::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(#92b28308 1px, transparent 1px), linear-gradient(90deg, #92b28308 1px, transparent 1px); background-size: 36px 36px; mask-image: linear-gradient(#000, transparent); }
-.desktopGraph { position: relative; height: clamp(310px, 32vw, 360px); color: var(--path-color); }
-.attack .desktopGraph .network { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.route { fill: none; stroke: #52604e; stroke-width: 2; opacity: .3; vector-effect: non-scaling-stroke; }
-.activeRoute { stroke: currentColor; stroke-width: 3.5; opacity: 1; }
-.packet { fill: currentColor; filter: drop-shadow(0 0 7px currentColor); }
-.node { position: absolute; width: 20%; min-width: 0; transform: translate(-50%, -50%); padding: 16px 13px; border: 1px solid #34412f; border-radius: 9px; background: #111a13; box-shadow: 0 8px 20px #0002; }
-.nodeIcon { display: grid; flex-shrink: 0; place-items: center; width: 44px; height: 44px; margin-bottom: 10px; border-radius: 8px; background: #839b7515; color: #9aaa90; }
-.attack .nodeIcon svg { width: 28px; height: 28px; }
-.node strong, .mobileNode strong { display: block; color: #a6b29c; font-size: clamp(18px, 1.65vw, 28px); font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
-.activeNode { border-color: color-mix(in srgb, var(--path-color) 70%, #34412f); background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-.activeNode strong { color: #f0f6eb; }
-.activeNode .nodeIcon { color: var(--path-color); background: var(--path-tint); }
-.mobileRoute { display: none; }
-
-@media (max-width: 800px) {
-  .desktopGraph { display: none; }
-  .scene { padding: 16px; }
-  .mobileRoute { position: relative; display: flex; flex-direction: column; max-width: 480px; padding: 0; margin: 0 auto; list-style: none; }
-  .mobileRoute li { min-width: 0; }
-  .mobileNode { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 12px; border: 1px solid color-mix(in srgb, var(--path-color) 55%, #34412f); border-radius: 7px; background: linear-gradient(var(--path-tint), var(--path-tint)), #111a13; }
-  .mobileNode .nodeIcon { width: 38px; height: 38px; margin-bottom: 0; color: var(--path-color); }
-  .mobileNode strong { min-width: 0; color: #edf3e7; font-size: 20px; }
-  .attack .mobileArrow { display: block; width: 24px; height: 28px; margin: 3px auto; color: var(--path-color); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .packet { display: none; }
-}
+.attack { width: 100%; min-width: 0; color: #0c0c0c; font-family: inherit; }
+.routeLabel { position: absolute; transform: translate(-50%, -50%); padding: 4px 8px; background: #f2f2f4; font-size: 20px; line-height: 1.3; white-space: nowrap; }
+.expectedLegend { color: #14703f; }
+.unsafeLegend { color: #bb3039; }
+.graph { position: relative; height: 500px; }
+.attack .network { position: absolute; inset: 0; width: 100%; height: 100%; }
+.route { fill: none; stroke: #a8a8b4; stroke-width: 1.5; vector-effect: none; animation: connector-pulse 3s ease-in-out infinite; }
+.expectedRoute { stroke: #14703f; stroke-width: 1.5; vector-effect: none; }
+.unsafeRoute { stroke: #cf3942; stroke-width: 1.5; stroke-dasharray: 8 6; }
+@keyframes connector-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .route { animation: none; } }
+.node { position: absolute; display: flex; flex-direction: column; box-sizing: border-box; width: 23%; height: 260px; min-width: 0; transform: translate(-50%, -50%); padding: 20px; border: 1.5px solid #dedee5; border-radius: 20px; background: #fff; }
+.node { transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
+.node:hover, .node:focus-visible { z-index: 2; border-color: #9999a5; background: #fafafa; box-shadow: 0 10px 28px #00000020; }
+.expectedNode:hover, .expectedNode:focus-visible { border-color: #14703f; background: #f3faf5; }
+.unsafeNode:hover, .unsafeNode:focus-visible { border-color: #cf3942; background: #fff5f5; }
+.node:focus-visible { outline: 3px solid #2870ff; outline-offset: 4px; }
+.tooltip { position: absolute; z-index: 3; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 10px; background: #0c0c0c; color: #fff; font-size: 17px; line-height: 1.4; font-weight: 400; text-align: left; visibility: hidden; box-shadow: 0 6px 18px #00000026; }
+.tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-top-color: #0c0c0c; }
+.tooltip::before { content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 12px; }
+.tooltipBelow { bottom: auto; top: calc(100% + 12px); }
+.tooltipBelow::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: #0c0c0c; }
+.tooltipBelow::before { top: auto; bottom: 100%; }
+.node:not([data-tooltip-dismissed='true']):is(:hover, :focus-within) .tooltip { visibility: visible; }
+.nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; color: #83838e; }
+.nodeNumber { display: grid; place-items: center; width: 34px; height: 36px; border-radius: 10px; background: #f2f2f5; color: #63636f; font-size: 23px; line-height: 1; }
+.attack .nodeTop > svg { width: 28px; height: 28px; }
+.node strong { display: block; color: #272730; font-size: var(--cyber-title-size, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -.025em; }
+.nodeDetail { display: block; margin-top: 10px; color: #686873; font-size: 20px; line-height: 1.35; }
+.expectedNode { color: #17834a; border-color: #14703f; }
+.unsafeNode { color: #cf3942; border-color: #e8a0a5; }
+.expectedNode .nodeTop, .unsafeNode .nodeTop { color: inherit; }
+.expectedNode .nodeNumber { color: #126c3b; background: #edf8f1; }
+.unsafeNode .nodeNumber { color: #b82e37; background: #fff0f1; }
+.flaw, .impact { display: block; margin-top: auto; padding: 8px 10px; border-radius: 8px; color: #b82e37; background: #fff0f1; font-size: 16px; font-weight: 500; line-height: 1.3; }
+.note { margin: 16px 0 0; color: #71717a; font-size: 16px; line-height: 1.4; text-align: center; }
+@media (prefers-reduced-motion: reduce) { .node { transition: none; } }
