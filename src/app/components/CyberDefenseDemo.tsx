@@ -30,6 +30,7 @@ type DemoStep = {
 
 const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Example vulnerability: Server-side request forgery (SSRF)', seconds: 3, investigationStep: 1, detail: 'An attacker may use the server to reach private services.' },
+  { scene: 'prompt', title: 'Agent traces attacker-controlled input to potentially dangerous operations.', seconds: 3 },
   { scene: 'investigation', title: 'Agent locates the files in the audit scope', seconds: 3, investigationStep: 0 },
   { scene: 'investigation', title: 'Agent traces untrusted input from the request', seconds: 3, investigationStep: 2 },
   { scene: 'investigation', title: 'Agent follows the input into URL construction', seconds: 3, investigationStep: 3 },
@@ -37,7 +38,6 @@ const STEPS: (DemoStep & { startsAt: number })[] = ([
   { scene: 'investigation', title: 'Agent confirms how the endpoint reaches this code', seconds: 3, investigationStep: 5 },
   { scene: 'findings', title: 'Security findings and vulnerability discovery', seconds: 3 },
   { scene: 'results', title: 'Post-training improves vulnerability recall', seconds: 3 },
-  { scene: 'prompt', title: 'Agent is tasked with finding the vulnerability in the audit slice', seconds: 3 },
   { scene: 'training', title: 'Continuous local training on new open-source vulnerabilities', seconds: 3, detail: 'For individuals and teams.' },
 ] satisfies DemoStep[]).map((step, index, steps) => ({
   ...step,
