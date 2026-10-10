@@ -1,5 +1,6 @@
 .findings { width: 100%; max-width: 1320px; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
 .reports { padding: 3px; }
+.comparison { min-height: 116px; position: relative; top: -58px; }
 .feedbackHeader { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 12px; }
 .feedbackHeader > span { grid-column: 2; padding-left: 25px; color: #63636f; font-size: 17px; line-height: 1.2; text-align: center; }
 .missedCheckpoint { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 18px; }
@@ -26,7 +27,7 @@
 .groupRow th > div, .baseModelLabel { padding: 14px 26px; border-radius: 16px; background: #f8f8fa; color: #63636f; font-size: 21px; line-height: 1.4; }
 .postTrainedLabel { display: inline-flex; align-items: center; gap: 12px; }
 .postTrainedLabel img { width: 145px; height: auto; filter: brightness(0); }
-.reportRow > :is(th, td) { height: 96px; padding: 17px 10px; border-bottom: 1px solid #e3e3e7; color: #0c0c0c; font-size: 20px; line-height: 1.45; font-weight: 400; text-align: left; vertical-align: middle; }
+.reportRow > :is(th, td) { height: 96px; padding: 17px 10px; color: #0c0c0c; font-size: 20px; line-height: 1.45; font-weight: 400; text-align: left; vertical-align: middle; }
 .reportRow > td:first-child { padding-left: 22px; }
 .reportRow > td:nth-child(6) { padding-right: 12px; }
 .table tbody:last-child .reportRow:last-of-type > :is(th, td) { border-bottom: 0; }

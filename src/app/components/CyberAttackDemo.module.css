@@ -25,7 +25,7 @@
 .nodeTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; color: #83838e; }
 .nodeNumber { display: grid; place-items: center; width: 34px; height: 36px; border-radius: 10px; background: #f2f2f5; color: #63636f; font-size: 23px; line-height: 1; }
 .attack .nodeTop > svg { width: 28px; height: 28px; }
-.node strong { display: block; color: #272730; font-size: 27px; font-weight: 500; line-height: 1.2; letter-spacing: -.02em; }
+.node strong { display: block; color: #272730; font-size: var(--cyber-title-size, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -.025em; }
 .nodeDetail { display: block; margin-top: 10px; color: #686873; font-size: 20px; line-height: 1.35; }
 .expectedNode { color: #17834a; border-color: #14703f; }
 .unsafeNode { color: #cf3942; border-color: #e8a0a5; }

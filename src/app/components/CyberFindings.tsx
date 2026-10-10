@@ -1,3 +1,6 @@
+'use client';
+
+import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CYBER_SCENARIOS } from '@/lib/cyber-fixture';
@@ -30,11 +33,11 @@ const REPORTS = SCENARIO.after.findings
   .map((finding, index) => ({ ...finding, ...REPORT_DETAILS[index], id: index }));
 
 export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
+  const reducedMotion = useReducedMotion();
   return (
     <div className={styles.findings}>
       <div className={styles.reports} role="region" aria-label="Messaging server submitted reports">
-        {showFeedback && (
-          <>
+        <motion.div className={styles.comparison} initial={false} animate={{ opacity: showFeedback ? 1 : 0, y: showFeedback ? 0 : 8 }} transition={{ duration: reducedMotion ? 0 : .55, delay: showFeedback && !reducedMotion ? .5 : 0, ease: [.22, 1, .36, 1] }} aria-hidden={!showFeedback}>
             <div className={styles.feedbackHeader} aria-hidden="true"><span>Detection reward</span></div>
             <div className={styles.missedCheckpoint} aria-label="Base Nemotron 3.5 Lightning: SSRF omitted from report">
               <div className={styles.missedSummary}>
@@ -45,9 +48,8 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
                 <strong>{SCENARIO.before.matchedCount}</strong>
               </span>
             </div>
-          </>
-        )}
-        <div className={`${styles.surface} ${showFeedback ? styles.withFeedback : ''}`}>
+        </motion.div>
+        <motion.div className={`${styles.surface} ${styles.withFeedback}`} initial={false} animate={{ x: showFeedback ? 0 : 80, y: -58 }} transition={{ duration: reducedMotion ? 0 : .75, ease: [.22, 1, .36, 1] }}>
           <table className={styles.table}>
             <caption className={styles.srOnly}>{SCENARIO.after.findingsCount} recorded reports from the final checkpoint{showFeedback ? `; ${SCENARIO.after.matchedCount} reference vulnerability matched` : ''}.</caption>
             <colgroup>
@@ -57,22 +59,22 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
               <col className={styles.fileColumn} />
               <col className={styles.typeColumn} />
               <col className={styles.statusColumn} />
-              {showFeedback && <col className={styles.feedbackColumn} />}
+              <col className={styles.feedbackColumn} />
             </colgroup>
             <thead>
               <tr>
                 {['Report', 'Finding', 'Description', 'Source file', 'Category', 'Review status'].map((label) => <th key={label} scope="col"><span className={styles.srOnly}>{label}</span></th>)}
-                {showFeedback && <th scope="col"><span className={styles.srOnly}>Detection reward</span></th>}
+                <th scope="col"><span className={styles.srOnly}>Detection reward</span></th>
               </tr>
             </thead>
             {[
               { label: showFeedback ? 'Post-trained by depthfirst · step 200' : 'Server-side requests', matched: true },
               { label: showFeedback ? 'Additional reports' : 'XML handling', matched: false },
             ].map((group) => (
-              <tbody key={group.label}>
+              <tbody key={String(group.matched)}>
                 <tr className={styles.groupRow}>
-                  <th colSpan={6} scope="rowgroup"><div>{showFeedback && group.matched ? <span className={styles.postTrainedLabel}>Post-trained by <Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} /><span>· step 200</span></span> : group.label}</div></th>
-                  {showFeedback && <td className={styles.feedbackCell} />}
+                  <th colSpan={6} scope="rowgroup"><motion.div initial={false} animate={{ opacity: 1 }} transition={{ duration: reducedMotion ? 0 : .4 }}>{showFeedback && group.matched ? <span className={styles.postTrainedLabel}>Post-trained by <Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} /><span>· step 200</span></span> : group.label}</motion.div></th>
+                  <td className={styles.feedbackCell} />
                 </tr>
                 {REPORTS.filter((report) => (report.referenceMatch === 'matched') === group.matched).map((report) => {
                   const matched = report.referenceMatch === 'matched';
@@ -83,15 +85,15 @@ export function CyberFindings({ showFeedback }: { showFeedback: boolean }) {
                       <td><span className={styles.truncated} title={report.description}>{report.description}</span></td>
                       <td><span className={`${styles.truncated} ${styles.fileName}`} title={report.path}>{report.path.split('/').at(-1)}</span></td>
                       <td><span className={`${styles.typePill} ${matched ? styles.ssrf : ''}`}><i aria-hidden="true" />{matched ? 'SSRF' : 'XML'}</span></td>
-                      <td><span className={`${styles.statusPill} ${showFeedback && matched ? styles.matchedStatus : ''}`}>{showFeedback ? matched ? 'Matched' : 'No reference match' : 'Unreviewed'}</span></td>
-                      {showFeedback && <td className={styles.feedbackCell}>{matched ? <span className={styles.reward}><span className={styles.matchPill} aria-label="+1 detection reward">+1</span><span className={styles.rewardReason}><CheckCircleIcon aria-hidden="true" />Vulnerability recovered</span></span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</td>}
+                      <td><motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: reducedMotion ? 0 : .4 }} className={`${styles.statusPill} ${showFeedback && matched ? styles.matchedStatus : ''}`}>{showFeedback ? matched ? 'Matched' : 'No reference match' : 'Unreviewed'}</motion.span></td>
+                      <td className={styles.feedbackCell}><motion.div initial={false} animate={{ opacity: showFeedback ? 1 : 0, x: showFeedback ? 0 : 10 }} transition={{ duration: reducedMotion ? 0 : .55, delay: showFeedback && !reducedMotion ? .3 : 0, ease: [.22, 1, .36, 1] }} aria-hidden={!showFeedback}>{matched ? <span className={styles.reward}><span className={styles.matchPill} aria-label="+1 detection reward">+1</span><span className={styles.rewardReason}><CheckCircleIcon aria-hidden="true" />Vulnerability recovered</span></span> : <span className={styles.noMatch} aria-label="No reference match">—</span>}</motion.div></td>
                     </tr>
                   );
                 })}
               </tbody>
             ))}
           </table>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

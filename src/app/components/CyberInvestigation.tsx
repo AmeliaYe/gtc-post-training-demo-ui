@@ -25,9 +25,10 @@ function HighlightedCode({ text }: { text: string }) {
   });
 }
 
-export function CyberInvestigation({ step, progress = 0, onInteract }: {
+export function CyberInvestigation({ step, progress = 0, playing = true, onInteract }: {
   step: number;
   progress?: number;
+  playing?: boolean;
   onInteract?: () => void;
 }) {
   const snippet = step >= 2 && step <= 4 ? VISUAL.code[step - 2] : null;
@@ -51,17 +52,22 @@ export function CyberInvestigation({ step, progress = 0, onInteract }: {
 
   return (
     <div className={styles.stage}>
-      <section className={styles.reasoning} aria-label="Recorded agent reasoning">
-        <header><h4>{snippet ? 'Agent assessment' : 'Agent reasoning'}</h4></header>
+      <section className={styles.reasoning} data-playing={playing} aria-label="Recorded agent reasoning">
+        <header>
+          <h2>{snippet ? 'Agent assessment' : 'Agent reasoning'}</h2>
+          <span className={styles.thinking} aria-label={playing ? 'Thinking' : 'Thinking animation paused'}>
+            <span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" />
+          </span>
+        </header>
         <blockquote>{reasoning}</blockquote>
       </section>
       <div className={styles.editor}>
         <header className={styles.toolBar}>
-          <h4>{step === 0 ? 'Scanning repositories' : snippet ? 'Inspecting source code' : 'Checking the endpoint'}</h4>
+          <h2>{step === 0 ? 'Scanning repositories' : snippet ? 'Inspecting source code' : 'Checking the endpoint'}</h2>
+          <span className={styles.fileBadge}>{snippet ? ['Untrusted input', 'URL construction', 'HTTP request'][step - 2] : 'shell_tool'}</span>
         </header>
         <div className={styles.fileBar}>
           <code>{step === 0 ? 'Messaging server / Java files' : snippet ? 'FaviconServlet.java' : 'WEB-INF/web.xml'}</code>
-          <span className={styles.fileBadge}>{snippet ? ['Untrusted input', 'URL construction', 'HTTP request'][step - 2] : 'shell_tool'}</span>
         </div>
         <div className={styles.commands}>
           {calls.map((call) => <code key={call.id}><span aria-hidden="true">$ </span>{SHORT_COMMANDS[call.id]}</code>)}
@@ -69,7 +75,7 @@ export function CyberInvestigation({ step, progress = 0, onInteract }: {
         <div className={styles.codeFrame} onFocusCapture={onInteract} onPointerDown={onInteract} onWheel={(event) => { if (event.deltaX || event.shiftKey) onInteract?.(); }}>
           <pre className={`${styles.source} ${step === 0 ? styles.fileList : step === 5 ? styles.routeOutput : ''}`} tabIndex={0} aria-label={step === 0 ? 'Files returned by recorded search, paths shortened' : snippet ? `${snippet.title}, exact source excerpt` : 'Recorded servlet mapping output excerpt'}>
             {rows.map((row, index) => (
-              <span key={row.number ?? index} className={`${row.highlight || index === activeRow ? styles.highlight : ''} ${index === activeRow ? styles.activeLine : ''}`}>
+              <span key={row.number ?? index} className={`${row.highlight || index === activeRow ? styles.highlight : ''} ${index === activeRow ? styles.activeLine : ''} ${step === 4 && (row.number === 195 || row.number === 197) ? styles.riskLine : ''}`}>
                 {row.number !== undefined && <span className={styles.lineNumber}>{row.number}</span>}
                 <code title={row.path}>
                   {snippet ? <HighlightedCode text={row.text || ' '} /> : row.text}

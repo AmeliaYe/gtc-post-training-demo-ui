@@ -18,7 +18,7 @@ export function CyberTrainingLoop({ progress }: { progress: number }) {
           <li key={phase.title} className={`${styles.step} ${index === activePhase ? styles.active : ''}`} data-phase={index} aria-current={index === activePhase ? 'step' : undefined}>
             <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
             <div>
-              <h4>{phase.title}</h4>
+              <h2>{phase.title}</h2>
               {phase.detail ? <p>{phase.detail}</p> : <p className={styles.weights} aria-label="The reinforcement learning optimizer updates model weights from theta t to theta t plus one using batch feedback"><span aria-hidden="true">θ<sub>t</sub><span className={styles.weightArrow}>→</span>θ<sub>t+1</sub></span></p>}
             </div>
             <ArrowRightIcon className={styles.connector} aria-hidden="true" />

@@ -1,0 +1,62 @@
+.prompt { width: 100%; padding: 26px 30px; border: 1px solid #e3e3e7; border-radius: 24px; background: #fff; color: #292930; font-family: inherit; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 15px; letter-spacing: normal; color: #63636f; }
+.badge { padding: 5px 10px; border-radius: 7px; background: #f2f2f4; letter-spacing: 0; }
+.prompt h2 { margin: 0; font-size: var(--cyber-title-size, 28px); line-height: 1.25; font-weight: 500; letter-spacing: -.025em; }
+.component { margin: 8px 0 22px; color: #63636f; font-size: 18px; }
+.columns { display: grid; grid-template-columns: 1fr 28px 1.15fr 28px 1.1fr; gap: 12px; margin-top: 24px; }
+.columns > section { min-width: 0; padding: 18px; border: 1px solid #e3e3e7; border-radius: 16px; background: #fafafa; }
+.columns h3 { display: flex; align-items: baseline; gap: 8px; margin: 0 0 12px; font-size: 18px; font-weight: 500; line-height: 1.35; }
+.columns h3 > span { color: #8a8a94; font-size: 13px; }
+.columns h3 small { margin-left: auto; color: #82828b; font-size: 12px; font-weight: 400; }
+.hint { margin: 0 0 14px; color: #63636f; font-size: 15px; line-height: 1.35; }
+.prompt button { font-family: inherit; text-align: left; cursor: pointer; }
+.prompt button:focus-visible { outline: 2px solid #0c0c0c; outline-offset: 3px; }
+.input { display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 10px; padding: 13px 12px; border: 1px solid #dddde3; border-radius: 10px; background: #fff; color: #63636f; }
+.input > svg { width: 24px; height: 24px; flex-shrink: 0; }
+.input > svg:last-child { width: 18px; margin-left: auto; }
+.input strong { display: block; color: #292930; font-size: 18px; font-weight: 500; }
+.input small { display: block; margin-top: 3px; font-size: 14px; line-height: 1.35; }
+.input:hover { border-color: #9696a0; }
+.input.selectedInput { border-color: #0c0c0c; background: #f0f0f3; color: #0c0c0c; }
+.exposure { margin: 14px 0 0; color: #63636f; font-size: 14px; line-height: 1.5; }
+.exposure strong { font-weight: 500; color: #292930; }
+.focus { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: #0c0c0c; color: #fff; font-size: 18px; }
+.focus svg { width: 24px; height: 24px; flex-shrink: 0; }
+.focus strong { font-weight: 500; }
+.trace { display: grid; gap: 16px; padding: 0; margin: 18px 0; list-style: none; }
+.trace li { display: flex; align-items: flex-start; gap: 10px; }
+.trace li > span { display: grid; place-items: center; width: 24px; height: 24px; flex-shrink: 0; border: 1px solid #d0d0d8; border-radius: 50%; font-size: 13px; }
+.trace strong { font-size: 17px; font-weight: 500; }
+.trace p { margin: 4px 0 0; color: #63636f; font-size: 15px; line-height: 1.35; }
+.trace li > svg { width: 20px; height: 20px; margin-top: 3px; flex-shrink: 0; color: #82828b; }
+.trace li > p { font-size: 17px; }
+.editorial { margin: 12px 0 0; color: #82828b; font-size: 13px; line-height: 1.4; }
+.impactGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.impact { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; min-height: 100px; padding: 13px; border: 1px solid #e3e3e7; border-radius: 10px; background: #fff; color: #63636f; }
+.impact svg { width: 27px; height: 27px; }
+.impact strong { font-size: 16px; font-weight: 500; line-height: 1.25; }
+.impact:hover, .impact:focus-visible { border-color: #9696a0; outline: none; }
+.impact.selectedImpact { border-color: #b82e37; background: #fff0f1; color: #a72b33; }
+.impactDetail { min-height: 66px; margin: 14px 0 0; font-size: 16px; line-height: 1.4; color: #96343b; }
+.footer { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-top: 20px; padding-top: 16px; font-size: 14px; }
+.scope { display: flex; align-items: center; gap: 14px; }
+.scope strong { flex-shrink: 0; font-weight: 500; }
+.scope > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.scope code { padding: 4px 6px; border-radius: 5px; background: #f2f2f4; color: #63636f; font-size: 12px; }
+.constraints { display: flex; align-items: center; flex-shrink: 0; gap: 8px; margin: 0; color: #63636f; }
+.constraints svg { width: 18px; height: 18px; }
+.detailsHover { flex-shrink: 0; }
+.detailsButton { padding: 8px 12px; margin-top: -8px; border: 1px solid #dddde3; border-radius: 8px; background: #f2f2f4; color: #63636f; font-size: inherit; transition: background 180ms ease, color 180ms ease, border-color 180ms ease; }
+.detailsHover:hover .detailsButton, .detailsHover:focus-within .detailsButton { background: #e7e7eb; color: #292930; border-color: #b9b9c2; }
+.detailsHover:hover .original, .detailsHover:focus-within .original { visibility: visible; opacity: 1; transform: translateY(0); pointer-events: auto; }
+.original { position: absolute; z-index: 3; right: 0; bottom: 100%; visibility: hidden; opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity 180ms ease, transform 180ms ease, visibility 180ms; width: min(760px, 100%); box-sizing: border-box; max-height: 300px; overflow: auto; padding: 18px; border: 1px solid #dddde3; border-radius: 12px; background: #fff; box-shadow: 0 8px 30px #00000020; color: #63636f; font-size: 16px; line-height: 1.5; }
+.original p { margin: 0 0 8px; }
+
+@media (prefers-reduced-motion: reduce) { .detailsButton, .original { transition: none; } }
+
+.connection { display: flex; align-items: center; justify-content: center; color: #292930; }
+.connection svg { width: 28px; height: 28px; }
+.mutedImpact:hover, .mutedImpact:focus-visible { opacity: 1 !important; }
+.tooltip { position: absolute; z-index: 4; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); width: 220px; padding: 12px; border-radius: 8px; background: #0c0c0c; color: #fff; font-size: 14px; line-height: 1.4; visibility: hidden; pointer-events: none; box-shadow: 0 4px 16px #00000020; }
+.impact:hover .tooltip, .impact:focus-visible .tooltip { visibility: visible; }
+.evidenceNote { margin: 16px 0 0; color: #63636f; font-size: 14px; line-height: 1.4; }

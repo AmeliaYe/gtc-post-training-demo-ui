@@ -10,7 +10,7 @@ export function CyberTrainingResults({ onInteract }: { onInteract?: () => void }
     <div className={styles.results}>
       <section className={styles.benchmark} aria-label="Broader dfbench benchmark results">
         <header className={styles.benchmarkHeading}>
-          <div><h4>Vulnerability recall</h4><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
+          <div><h2>Vulnerability recall</h2><p className={styles.trainingNote}>Share of known vulnerabilities detected</p></div>
           <div className={styles.benchmarkBrand}>
             <Image className={styles.depthfirstLogo} src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} />
             <a className={styles.eyebrow} href="https://depthfirst.com/research/dfbench" target="_blank" rel="noopener noreferrer" onClick={onInteract} onFocus={onInteract} aria-label="Explore dfbench (opens in a new tab)">dfbench<ArrowTopRightOnSquareIcon aria-hidden="true" /></a>
@@ -34,10 +34,10 @@ export function CyberTrainingResults({ onInteract }: { onInteract?: () => void }
           ))}
           <ArrowRightIcon className={styles.metricArrow} aria-hidden="true" />
         </div>
-        <footer className={styles.benchmarkFooter}>
-          <p className={styles.gain}><strong>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)}</strong> percentage points</p>
-        </footer>
       </section>
+      <footer className={styles.benchmarkFooter}>
+        <p className={styles.gain}><strong>+{(benchmark.after.recall - benchmark.before.recall).toFixed(1)}</strong> percentage points</p>
+      </footer>
     </div>
   );
 }
