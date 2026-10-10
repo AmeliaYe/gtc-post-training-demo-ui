@@ -17,6 +17,7 @@ services:
       DEMO_SERVE_FRONTEND: 0
       DEMO_ALLOWED_HOSTS: localhost,127.0.0.1,::1,frontend
       DEMO_RUNTIME_DIR: /var/lib/healthcare-ui
+      DEMO_CASES_FILE: ${DEMO_CASES_FILE:-/opt/demo/ui/data/cases.live-demo.json}
       DEMO_TURN_TIMEOUT: ${DEMO_TURN_TIMEOUT:-900}
       BASELINE_BASE_URL: ${BASELINE_BASE_URL:-https://inference-api.nvidia.com/v1}
       BASELINE_MODEL: ${BASELINE_MODEL:-}

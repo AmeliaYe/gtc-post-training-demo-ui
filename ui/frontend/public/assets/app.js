@@ -1,11 +1,49 @@
 'use strict';
 (() => {
   const root = document.getElementById('nv-care-lab');
+  // Embedded in the landing site (?embed=1): host supplies the header; follow-ups are hidden.
+  const embedded = new URLSearchParams(location.search).get('embed') === '1';
+  if (embedded) { document.documentElement.classList.add('is-embedded'); root.classList.add('is-embedded'); }
   const appBase = new URL('.', document.baseURI);
   const appURL = path => new URL(path.replace(/^\/+/, ''), appBase).href;
   const $ = s => root.querySelector(s);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const fmt = s => esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*\*/g, '');
+  const inline = s => esc(s).replace(/`([^`\n]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*\*/g, '');
+  // Small, escape-first Markdown subset for assistant replies: tables, lists, headings, bold, code.
+  const cells = line => line.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+  const isRule = line => /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(line) && line.includes('-');
+  const fmt = text => {
+    const lines = String(text ?? '').replace(/\r/g, '').split('\n'), out = [];
+    for (let i = 0; i < lines.length;) {
+      const line = lines[i];
+      if (!line.trim()) { i++; continue; }
+      if (line.includes('|') && i + 1 < lines.length && isRule(lines[i + 1])) {
+        const head = cells(line), align = cells(lines[i + 1]).map(c => c.startsWith(':') && c.endsWith(':') ? 'center' : c.endsWith(':') ? 'right' : 'left');
+        const cell = (tag, c, n) => `<${tag} class="nv-align-${align[n] || 'left'}">${inline(c)}</${tag}>`;
+        const rows = [];
+        for (i += 2; i < lines.length && lines[i].includes('|') && lines[i].trim(); i++) rows.push(cells(lines[i]));
+        out.push(`<div class="nv-table-wrap"><table class="nv-table"><thead><tr>${head.map((c, n) => cell('th', c, n)).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${head.map((_, n) => cell('td', r[n] ?? '', n)).join('')}</tr>`).join('')}</tbody></table></div>`);
+        continue;
+      }
+      const item = /^\s*(?:([-*•])|(\d+)[.)])\s+(.*)$/.exec(line);
+      if (item) {
+        const ordered = !item[1], items = [];
+        for (; i < lines.length; i++) {
+          const m = /^\s*(?:([-*•])|(\d+)[.)])\s+(.*)$/.exec(lines[i]);
+          if (!m || !m[1] !== ordered) break;
+          items.push(`<li>${inline(m[3])}</li>`);
+        }
+        out.push(`<${ordered ? 'ol' : 'ul'}>${items.join('')}</${ordered ? 'ol' : 'ul'}>`);
+        continue;
+      }
+      const heading = /^#{1,6}\s+(.*)$/.exec(line);
+      if (heading) { out.push(`<p class="nv-md-heading">${inline(heading[1])}</p>`); i++; continue; }
+      const para = [];
+      for (; i < lines.length && lines[i].trim() && !/^\s*(?:[-*•]|\d+[.)])\s+/.test(lines[i]) && !/^#{1,6}\s/.test(lines[i]) && !(lines[i].includes('|') && lines[i + 1] && isRule(lines[i + 1])); i++) para.push(inline(lines[i]));
+      out.push(`<p>${para.join('<br>')}</p>`);
+    }
+    return out.join('');
+  };
   const icon = name => `<i data-lucide="${esc(name)}" aria-hidden="true"></i>`;
   const state = {cases:[], settings:null, selected:null, mode:'live', target:'both', run:null, runCase:null, cursor:0,
     stream:null, busy:false, starting:false, recorded:null, recordVersion:0, lanes:{}};
@@ -129,8 +167,9 @@
     root.querySelectorAll('[data-run]').forEach(b=>{b.disabled=state.starting || state.busy || !selected();});
     $('#stop-run').hidden=!state.busy;
     $('#patient-prompt').disabled=state.busy || state.starting;
-    $('#followup-panel').hidden=!live || !state.run || state.runCase!==state.selected;
+    $('#followup-panel').hidden=embedded || !live || !state.run || state.runCase!==state.selected;
     root.querySelectorAll('[data-followup]').forEach(b=>{b.disabled=!canFollowup(b.dataset.followup);});
+    root.querySelector('.nv-segment').hidden=!selected()?.has_recorded;
     $('#connections').disabled=state.starting;
     root.querySelectorAll('[data-mode]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode));b.disabled=state.starting;});
     $('#context-note').textContent=live?(sameEndpoint()?'Same-endpoint test: run the same model together or separately, with independent Hermes conversations and patient records.':'Run both for a shared prompt, or run either model separately. Each has its own conversation and patient record.'):'Actual saved responses from the same case; patient openings differ between the two recorded runs.';
@@ -256,8 +295,8 @@
   (async()=>{
     try{
       const [settings,cases]=await Promise.all([api('/api/settings'),api('/api/cases')]);setSettings(settings);state.cases=cases.cases;
-      state.selected=state.cases[0]?.id;$('#cohort-label').textContent=`${state.cases.length} selected / ${cases.cohort_size} held-out cases`;
-      $('#patient-prompt').value=selected()?.opening || '';clearRun();renderChips();renderPanels();controls();
+      state.selected=state.cases[0]?.id;$('#cohort-label').textContent=cases.cohort_label||`${state.cases.length} selected / ${cases.cohort_size} held-out cases`;
+      $('#patient-prompt').value=selected()?.opening || '';clearRun();renderChips();$('#case-picker').hidden=state.cases.length<2;renderPanels();controls();
       if(!state.cases.length)notice('Prepare the local held-out case bundle to populate the patient chips.',true);
       else if(!configured())notice(state.settings?.shared_access?'The demo owner needs to configure the selected models. Recorded preview is available now.':'Open Connections to set your baseline model ID and credentials. Recorded preview is available now.');
     }catch(error){notice(error.message,true);}

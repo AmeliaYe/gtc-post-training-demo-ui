@@ -102,3 +102,33 @@
 @media(max-width:650px){#nv-care-lab .nv-main{padding:19px 15px}#nv-care-lab .nv-heading{gap:14px;margin-bottom:21px}#nv-care-lab h1{font-size:25px}#nv-care-lab .nv-columns,#nv-care-lab .nv-config-grid{grid-template-columns:minmax(0,1fr)}#nv-care-lab .nv-chrome{padding:15px 100px 15px 16px;gap:8px}#nv-care-lab .nv-preview{margin-left:0}#nv-care-lab .nv-divider{display:none}#nv-care-lab .nv-product{width:100%}#nv-care-lab .nv-config{padding:15px}#nv-care-lab .nv-chip{font-size:11px;padding:9px 10px}#nv-care-lab .nv-chips{gap:7px}#nv-care-lab .nv-footer{font-size:11px}}
 @media(pointer:coarse){#nv-care-lab button,#nv-care-lab summary{min-height:44px}#nv-care-lab .nv-field input,#nv-care-lab textarea{font-size:16px}}
 html{color-scheme:dark;background:#101310}body{margin:0;padding:24px 16px;font-family:Arial,Helvetica,sans-serif}#nv-care-lab{max-width:1200px;margin:0 auto}#nv-care-lab button,#nv-care-lab summary{cursor:pointer}#nv-care-lab .nv-chrome{padding-right:26px}#nv-care-lab svg{width:16px;height:16px;flex:none}#nv-care-lab .actions{display:flex;gap:8px;flex-wrap:wrap}#nv-care-lab .key-clear{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--nv-muted)}#nv-care-lab .connection-result{font-size:12px;margin:12px 0;color:var(--nv-muted)}#nv-care-lab .notice{background:var(--nv-tint);padding:12px 15px;border-left:3px solid var(--nv-green);font-size:13px;margin-bottom:20px}#nv-care-lab .nv-policy{padding-bottom:16px}#nv-care-lab .generation-status{display:flex;gap:8px;align-items:center;color:var(--nv-muted);font-size:12px;padding:12px 0}#nv-care-lab .activity-dot{height:7px;width:7px;background:var(--nv-green);border-radius:50%}#nv-care-lab .lane-error{background:var(--nv-soft);border-left:3px solid #d7a36b;padding:12px;font-size:13px;color:var(--nv-ink)}#nv-care-lab .run-metrics{color:var(--nv-muted);font-size:11px;padding:10px 0 0}#nv-care-lab .followup{margin-top:20px}#nv-care-lab .nv-reply{margin-bottom:20px}#nv-care-lab .nv-tools{margin-bottom:8px}#nv-care-lab .nv-button:disabled{cursor:not-allowed}#nv-care-lab .nv-chip:disabled{cursor:wait}#nv-care-lab .nv-patient{max-height:none}#nv-care-lab .nv-field input{font-size:14px}@media(max-width:650px){body{padding:0}#nv-care-lab{border-radius:0}#nv-care-lab .nv-chrome{border-radius:0;padding:16px}#nv-care-lab .nv-product{width:auto}#nv-care-lab .nv-preview{margin-left:auto}#nv-care-lab .nv-field input{font-size:16px}}@media(prefers-reduced-motion:no-preference){#nv-care-lab .activity-dot{animation:nv-pulse 1.6s ease-in-out infinite}@keyframes nv-pulse{50%{opacity:.3}}}
+
+/* Embedded in the landing site: match the recorded Healthcare demo (dark #080a09, green accent, hairlines). */
+html.is-embedded,html.is-embedded body{background:#080a09}
+html.is-embedded body{padding:0}
+#nv-care-lab.is-embedded{--nv-bg:#080a09;--nv-panel:#111612;--nv-soft:#161b17;--nv-ink:#f2f4f1;--nv-muted:#a6aea8;--nv-line:#303730;--nv-tint:#18240f;--nv-accent-ink:#a7df61;--nv-radius:4px;max-width:1376px;border-radius:0;font-size:14px}
+#nv-care-lab.is-embedded .nv-chrome{display:none}
+#nv-care-lab.is-embedded .nv-main{padding:30px 24px 32px}
+#nv-care-lab.is-embedded .nv-heading{margin-bottom:25px}
+#nv-care-lab.is-embedded .nv-eyebrow{color:#a7df61;font-weight:600;margin-bottom:10px}
+#nv-care-lab.is-embedded h1{font-size:30px;line-height:1.17;letter-spacing:0;font-weight:600;margin-bottom:10px}
+#nv-care-lab.is-embedded .nv-subtitle{font-size:14px}
+#nv-care-lab.is-embedded .nv-footer{border-color:#202521}
+@media(max-width:650px){#nv-care-lab.is-embedded .nv-main{padding:24px 14px}}
+
+/* Assistant Markdown: tables, lists, code. Replies render block HTML, so normal whitespace applies. */
+#nv-care-lab .nv-reply{white-space:normal}
+#nv-care-lab .nv-reply p{margin:0 0 10px}
+#nv-care-lab .nv-reply p:last-child,#nv-care-lab .nv-reply ul:last-child,#nv-care-lab .nv-reply ol:last-child{margin-bottom:0}
+#nv-care-lab .nv-reply ul,#nv-care-lab .nv-reply ol{margin:0 0 10px;padding-left:20px}
+#nv-care-lab .nv-reply li{margin:3px 0}
+#nv-care-lab .nv-reply code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:var(--nv-soft);border:1px solid var(--nv-line);border-radius:3px;padding:1px 5px;overflow-wrap:anywhere}
+#nv-care-lab .nv-md-heading{font-weight:600;color:var(--nv-ink)}
+#nv-care-lab .nv-table-wrap{overflow-x:auto;margin:2px 0 12px;border:1px solid var(--nv-line);border-radius:4px}
+#nv-care-lab .nv-table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.45}
+#nv-care-lab .nv-table th,#nv-care-lab .nv-table td{padding:8px 10px;border-bottom:1px solid var(--nv-line);vertical-align:top;overflow-wrap:anywhere}
+#nv-care-lab .nv-table th{background:var(--nv-soft);font-weight:600;font-size:11px;letter-spacing:.04em;color:var(--nv-muted);white-space:nowrap}
+#nv-care-lab .nv-table tbody tr:last-child td{border-bottom:0}
+#nv-care-lab .nv-table .nv-align-center{text-align:center}
+#nv-care-lab .nv-table .nv-align-right{text-align:right}
+#nv-care-lab .nv-table code{white-space:nowrap}

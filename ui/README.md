@@ -9,7 +9,8 @@ uses external OpenAI-compatible model servers; this stack does not serve weights
 ## Start with Docker Compose
 
 Requires Docker Engine/Desktop with the Compose plugin. No host Python, Node, GPU,
-API key, or original evaluation checkout is needed for recorded preview.
+API key, or original evaluation checkout is needed to start it; live runs need model
+endpoints (and recorded preview needs the six-case bundle).
 From the GTC repository root:
 
 ```bash
@@ -18,7 +19,9 @@ cp .env.example .env
 docker compose up --build -d --wait
 ```
 
-Open <http://127.0.0.1:4193>, select **Recorded preview**, and choose a case.
+Open <http://127.0.0.1:4193>. The default bundle is one live case without recordings,
+so there is no Recorded preview; to browse the six recorded cases, set
+`DEMO_CASES_FILE=/opt/demo/ui/data/cases.json` in `ui/.env` and recreate the backend.
 Blank model IDs intentionally leave live inference unconfigured. `UI_PORT` in `.env`
 changes the published owner port. The owner interface binds to localhost.
 
@@ -55,6 +58,7 @@ the same host port will conflict; stop one or choose a different `UI_PORT`.
 | `tests/` | API, streaming, actual Hermes-worker and sharing checks |
 | `compose.yaml` | Frontend and backend services, health checks and runtime volume |
 | `compose.secrets.yaml`, `compose.share.yaml` | Optional mounted credentials and guest-sharing overlays |
+| `compose.tunnel.yaml`, `tunnel/` | Optional SSH-tunnel sidecar to a remote model host |
 | `deploy/systemd/`, `run.sh` | Alternative native Python service launch templates |
 | `backend/app/prepare_cases.py` | Explicit preparation of a new case bundle |
 | `provenance.json`, `provenance.import-r01.json` | Current paths/hashes and preserved original import lineage |
@@ -70,7 +74,8 @@ shared session store and run coordination.
 `ui/` is an independent application, not a Next.js route. The root Next.js landing
 site, `public/healthcare/r02/` narrative/opening assets, and `healthcare-demo/`
 handoff collateral retain their existing layout. Embedding or integrating the
-inference view into the landing site is a separate integration step.
+inference view is described under
+[Embed in the landing site](#embed-in-the-landing-site).
 
 ## Connect live models
 
@@ -115,6 +120,93 @@ included. A host service bound only to loopback is **not** reachable through the
 Linux bridge: provide a reachable, appropriately restricted host interface or
 forwarder. Remote model servers can use their reachable DNS name/IP. No model
 server, port forwarding, or GPU configuration is changed by Compose.
+
+## Case bundles
+
+Compose defaults to `data/cases.live-demo.json`: one case (`adult-validation-0076`,
+a 72-year-old with heart failure who needs to move a September 20th appointment)
+and no recordings, so the Recorded preview toggle is hidden. The chart and starting
+appointments were reconstructed from a checkpoint rollout (its `get_profile` result
+and turn-0 runtime context); the original case record was unavailable and the opening
+prompt was supplied by the demo owner. `data/cases.json` still holds the six recorded
+step-25 cases. Select a bundle with `DEMO_CASES_FILE` (Compose:
+`/opt/demo/ui/data/cases.json`; native default is `data/cases.json`).
+
+## Reach a remote model through an SSH tunnel
+
+Use this when the checkpoint model is served on a remote machine that is only
+reachable over SSH. Under Compose, `127.0.0.1` inside the backend container is the
+container itself, so a tunnel on your laptop's loopback is invisible to it. The
+`model-tunnel` sidecar opens the tunnel inside the Compose network instead, so every
+user of the stack gets the same checkpoint endpoint without a personal tunnel.
+
+1. **Start the model server** on the remote machine (SSH in and confirm the container
+   serving the checkpoint is up). The sidecar cannot do this for you. The server must
+   listen on the remote host's loopback or network port you set below (default 18045).
+2. **Store the SSH password** in an ignored secret file. From `ui/`:
+
+   ```bash
+   mkdir -p .secrets
+   chmod 700 .secrets
+   printf '%s' 'REMOTE_PASSWORD' > .secrets/model_host_password
+   chmod 644 .secrets/model_host_password
+   ```
+
+3. **Set the host in `ui/.env`** (the checkpoint URL is set by the overlay, so any
+   `CHECKPOINT_BASE_URL` in `.env` is overridden; keep `CHECKPOINT_MODEL`):
+
+   ```dotenv
+   MODEL_HOST_ADDRESS=10.110.16.185
+   MODEL_HOST_USER=nvidia
+   # MODEL_TUNNEL_PORT=18045   # default; remote and local port
+   CHECKPOINT_MODEL=pab-astra-step25-heldout
+   ```
+
+4. **Start with both Compose files** (use the same pair for every later command):
+
+   ```bash
+   docker compose -f compose.yaml -f compose.tunnel.yaml up --build -d --wait
+   ```
+
+5. **Verify the tunnel from the backend:**
+
+   ```bash
+   docker compose -f compose.yaml -f compose.tunnel.yaml exec -T backend python -c \
+     "import urllib.request as u;print(u.urlopen('http://model-tunnel:18045/v1/models',timeout=8).read()[:120])"
+   ```
+
+   You should see the checkpoint's model ID. This verifies model discovery only; run
+   one case in the UI to test full inference. A personal laptop tunnel on the same port
+   does not conflict, because the sidecar's port is not published to the host.
+
+The sidecar reconnects every 5 seconds if SSH drops and trusts the host key on first
+connect, then pins it in the `tunnel-ssh` volume. If the remote host is reinstalled
+or its key changes, run `docker compose -f compose.yaml -f compose.tunnel.yaml down -v`
+(this also removes session data) or remove the `tunnel-ssh` volume. The tunnel is
+reachable only from inside the Compose network. Treat `.secrets/` as sensitive, since
+it holds a login for the model host; prefer a dedicated key or restricted account if
+your environment allows it. To share with guests, add
+`-f compose.share.yaml --profile share` to the same command.
+
+## Embed in the landing site
+
+The Healthcare tile in the Next.js site has a **Cached / Live demo** toggle.
+Live demo iframes this UI, which is `http://127.0.0.1:4193` by default; set
+`NEXT_PUBLIC_HEALTHCARE_LIVE_URL` in the landing site's `.env.local` to change it.
+
+- The embed loads the UI with `?embed=1`, which hides the NVIDIA header bar and the
+  patient follow-up panel and applies the recorded demo's dark styling. Opening the
+  UI directly (without `embed=1`) keeps the standalone look and follow-ups.
+- **Compose:** the Nginx frontend allows embedding from `http://localhost:3000` and
+  `http://127.0.0.1:3000` (`frame-ancestors` in `frontend/nginx.conf`). Add other
+  landing-site origins there and rebuild the frontend image.
+- **Native:** set `DEMO_FRAME_ANCESTORS` in the env file to space-separated exact
+  origins, for example `DEMO_FRAME_ANCESTORS=http://localhost:3000 http://127.0.0.1:3000`.
+  The default is `'none'`. Restart after changing it.
+- Open the landing site on the same loopback name as the frame (`127.0.0.1:3000` for
+  `127.0.0.1:4193`); mixing `localhost` and `127.0.0.1` is blocked by the native
+  cross-site check.
+- The guest-sharing gateway still forbids embedding.
 
 ## Optional sharing with the demo team
 
@@ -248,6 +340,8 @@ follow-ups and cancellation through the Nginx proxy.
 | Address already in use | Stop a previous native/Compose instance or change `UI_PORT` |
 | Backend unhealthy | Check logs and `/healthz`; it verifies loaded cases, not remote models |
 | Live run asks for configuration | Set the selected lane's exact model ID in Connections or `.env` |
+| Checkpoint fails only under Compose | `127.0.0.1` is the container; use the [SSH tunnel sidecar](#reach-a-remote-model-through-an-ssh-tunnel) or a reachable host |
+| Live demo iframe is blank | Check the frame-ancestors setting under [Embed in the landing site](#embed-in-the-landing-site) |
 | Model discovery fails | Check URL, credentials and network reachability from the backend container |
 | Model discovery works but run fails | Check tool-call/context compatibility and the full inference endpoint |
 | 403 from owner API | Use localhost/SSH forwarding; Host and Origin must agree |

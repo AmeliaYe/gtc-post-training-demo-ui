@@ -73,7 +73,7 @@ const demos: Demo[] = [
   {
     kind: 'demo', id: 'health', name: 'Healthcare', task: 'Nemotron · Post-training',
     color: '#82aaff', glow: 'rgba(130, 170, 255, .18)', icon: HeartIcon,
-    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns', previewLabel: 'Explore demo',
+    embedUrl: '/healthcare/r02/healthcare/index.html?embed=1#how-it-learns',
   },
   {
     kind: 'demo', id: 'bio', name: 'Multimodal Biology', task: 'Molecular Reasoning',
@@ -161,7 +161,7 @@ function ModelTile({ model }: { model: Demo }) {
       </span>
       <span className="tile-topline">
         <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
-        <span className="status-pill"><i /> {model.id === 'health' ? 'DEMO' : 'LIVE'}</span>
+        <span className="status-pill"><i /> LIVE</span>
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
       {model.kind === 'placeholder' ? (

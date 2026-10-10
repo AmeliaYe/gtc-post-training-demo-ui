@@ -41,7 +41,7 @@ CHECKPOINT_MODEL=...
 CHECKPOINT_API_KEY=...</pre><p class="nv-config-note">Set these server environment variables before launch, or use the fields above. API: PUT /api/settings.</p></details>
     </section>
     <div id="notice" class="notice" role="status" hidden></div>
-    <section aria-label="Patient prompt chips"><div class="nv-section-top"><h2>Choose a patient request</h2><span class="nv-source" id="cohort-label">Loading cases…</span></div><div class="nv-chips" id="chips"></div></section>
+    <section id="case-picker" aria-label="Patient prompt chips"><div class="nv-section-top"><h2>Choose a patient request</h2><span class="nv-source" id="cohort-label">Loading cases…</span></div><div class="nv-chips" id="chips"></div></section>
     <div class="nv-casebar"><div class="nv-casemeta"><strong id="selected-label">Patient request</strong><span class="nv-dot" aria-hidden="true"></span><span id="case-id"></span></div><div class="nv-segment" aria-label="Comparison mode"><button data-mode="live" aria-pressed="true">Live comparison</button><button data-mode="recorded" aria-pressed="false">Recorded preview</button></div></div>
     <p class="nv-contextline" id="context-note">Same patient prompt and starting record. Each model has its own conversation and tool state.</p>
     <section class="nv-prompt-editor" id="prompt-editor">

@@ -39,6 +39,8 @@ def create_app(data_path=None, python=None, runtime_root=None):
     path = Path(data_path or os.getenv("DEMO_CASES_FILE", UI_ROOT / "data/cases.json"))
     bundle = json.loads(path.read_text()) if path.is_file() else {"cases": [], "cohort_size": 0}
     cases = {c["id"]: c for c in bundle["cases"]}
+    # Exact origins allowed to embed this UI (the landing site). Default: no embedding.
+    frame_ancestors = os.getenv("DEMO_FRAME_ANCESTORS", "").strip() or "'none'"
     allowed_hosts = {h.strip() for h in os.getenv("DEMO_ALLOWED_HOSTS", "localhost,127.0.0.1,::1").split(",") if h.strip()}
     endpoints = initial_endpoints()
     runs = {}
@@ -78,7 +80,7 @@ def create_app(data_path=None, python=None, runtime_root=None):
         response.headers.update({
             "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
             "Referrer-Policy": "no-referrer",
-            "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+            "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors " + frame_ancestors + "; base-uri 'none'; form-action 'self'",
         })
         return response
 
@@ -138,13 +140,14 @@ def create_app(data_path=None, python=None, runtime_root=None):
 
     @app.get("/api/cases")
     async def public_cases():
-        return dict(cohort_size=bundle["cohort_size"], cases=[{k: c[k] for k in
-                    ("id", "label", "icon", "category", "task", "opening")} for c in cases.values()])
+        return dict(cohort_size=bundle["cohort_size"], cohort_label=bundle.get("cohort_label"),
+                    cases=[{**{k: c[k] for k in ("id", "label", "icon", "category", "task", "opening")},
+                            "has_recorded": bool(c.get("recorded"))} for c in cases.values()])
 
     @app.get("/api/cases/{ident}/recorded")
     async def recorded(ident: str):
-        if ident not in cases:
-            raise HTTPException(404, "Unknown case")
+        if ident not in cases or not cases[ident].get("recorded"):
+            raise HTTPException(404, "No recording for this case")
         return dict(recorded=cases[ident]["recorded"], note="Recorded runs have different patient openings. Hosted baseline and local BF16 serving are not proven equivalent.")
 
     def get_run(ident):
