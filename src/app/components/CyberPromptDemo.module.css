@@ -45,7 +45,7 @@
 .scope code { padding: 4px 6px; border-radius: 5px; background: #f2f2f4; color: #63636f; font-size: 12px; }
 .constraints { display: flex; align-items: center; flex-shrink: 0; gap: 8px; margin: 0; color: #63636f; }
 .constraints svg { width: 18px; height: 18px; }
-.detailsHover { flex-shrink: 0; }
+.detailsHover { flex-shrink: 0; margin-left: auto; }
 .detailsButton { padding: 8px 12px; margin-top: -8px; border: 1px solid #dddde3; border-radius: 8px; background: #f2f2f4; color: #63636f; font-size: inherit; transition: background 180ms ease, color 180ms ease, border-color 180ms ease; }
 .detailsHover:hover .detailsButton, .detailsHover:focus-within .detailsButton { background: #e7e7eb; color: #292930; border-color: #b9b9c2; }
 .detailsHover:hover .original, .detailsHover:focus-within .original { visibility: visible; opacity: 1; transform: translateY(0); pointer-events: auto; }

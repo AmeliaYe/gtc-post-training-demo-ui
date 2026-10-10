@@ -130,3 +130,6 @@
 .bento > :last-child { grid-column: 1 / -1; }
 
 .summaryCanvas { background-image: none; }
+
+.nemotronBrand { display: inline-flex; align-items: center; gap: 10px; }
+.nvidiaMark { width: 1em; height: 1em; flex-shrink: 0; fill: currentColor; }

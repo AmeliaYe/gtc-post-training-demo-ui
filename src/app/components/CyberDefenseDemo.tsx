@@ -8,6 +8,7 @@ import {
   ArrowsPointingOutIcon, ArrowsPointingInIcon, ArrowPathIcon,
   ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon,
 } from '@heroicons/react/24/outline';
+import NvidiaLogo from './dream/NvidiaLogo';
 import { CyberInvestigation } from './CyberInvestigation';
 import { CyberTrainingResults } from './CyberTrainingResults';
 import { CyberFindings } from './CyberFindings';
@@ -161,7 +162,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
       <header className={styles.header}>
         <div className={styles.headerAction}>{onExit && <button onClick={onExit} aria-label="Back to all demos" title="All demos"><ChevronLeftIcon aria-hidden="true" /></button>}</div>
         <div className={styles.brandBlock}>
-          <div className={styles.brand}><span>Nemotron post-trained by</span><Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} loading="eager" /></div>
+          <div className={styles.brand}><span className={styles.nemotronBrand}><NvidiaLogo className={styles.nvidiaMark} /><span>Nemotron</span></span><span>post-trained by</span><Image src="/cyber/depthfirst.svg" alt="depthfirst" width={205} height={34} loading="eager" /></div>
           <p className={styles.brandDescription}>Smaller, open models can enable AI-native workflows at scale</p>
         </div>
         <div className={styles.headerAction}><button onClick={toggleFullscreen} aria-label={fullscreen ? 'Exit full screen' : 'Full screen'} title={fullscreen ? 'Exit full screen' : 'Full screen'}>{fullscreen ? <ArrowsPointingInIcon aria-hidden="true" /> : <ArrowsPointingOutIcon aria-hidden="true" />}</button></div>

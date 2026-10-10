@@ -6,7 +6,6 @@ import {
   ArrowRightIcon, CodeBracketIcon, DocumentTextIcon, FolderOpenIcon,
   GlobeAltIcon, MagnifyingGlassIcon, ServerIcon, ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
-import { OPENFIRE_REVIEW_PROMPT } from '@/lib/cyber-replay';
 import styles from './CyberPromptDemo.module.css';
 
 const INPUTS = [
@@ -63,12 +62,5 @@ export function CyberPromptDemo({ onInteract, compact = false }: { onInteract: (
       </section>
     </div>
     <p className={styles.evidenceNote}>Input guides the investigation. Code and evidence determine whether a vulnerability exists.</p>
-    <footer className={styles.footer}>
-      <p className={styles.constraints}><ShieldCheckIcon aria-hidden="true" /><span>Local only · No internet</span></p>
-      <div className={styles.detailsHover} onMouseEnter={onInteract} onFocus={onInteract}>
-        <button type="button" className={styles.detailsButton} aria-describedby="original-prompt-details">Original prompt details</button>
-        <div id="original-prompt-details" className={styles.original}><p><strong>Component:</strong> {OPENFIRE_REVIEW_PROMPT.component}</p><p><strong>Audit scope:</strong> {OPENFIRE_REVIEW_PROMPT.files.join(', ')}</p><p><strong>Threat model:</strong> {OPENFIRE_REVIEW_PROMPT.threatModel.map(item => `${item.label}: ${item.text}`).join(' ')}</p><p><strong>Constraints:</strong> {OPENFIRE_REVIEW_PROMPT.constraints}</p><p><strong>Tools:</strong> {OPENFIRE_REVIEW_PROMPT.tools}</p></div>
-      </div>
-    </footer>
   </section>;
 }
