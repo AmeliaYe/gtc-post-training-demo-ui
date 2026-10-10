@@ -1,0 +1,27 @@
+html, body { min-height: 100%; }
+.gtc-landing { overflow: hidden; }
+.gtc-landing > main {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  padding: clamp(18px, 3vh, 34px) clamp(22px, 3vw, 52px);
+}
+.gtc-landing [data-screen-panel="break-ice"] { min-height: calc(100vh - clamp(36px, 6vh, 68px)); }
+.gtc-landing .gym-opening.r03 {
+  display: grid;
+  grid-template-rows: auto minmax(320px, 1fr) auto auto;
+  width: 100%;
+  max-width: 1600px !important;
+  min-height: calc(100vh - clamp(36px, 6vh, 68px));
+  margin: 0 auto;
+}
+.gtc-landing .gym-opening.r03 .go-stage { height: auto; min-height: 320px; }
+
+@media (max-width: 650px), (max-height: 700px) {
+  .gtc-landing { overflow: auto; }
+  .gtc-landing > main { padding: 18px; }
+  .gtc-landing [data-screen-panel="break-ice"],
+  .gtc-landing .gym-opening.r03 { min-height: calc(100vh - 36px); }
+  .gtc-landing .gym-opening.r03 { grid-template-rows: auto minmax(280px, 1fr) auto auto; }
+  .gtc-landing .gym-opening.r03 .go-stage { min-height: 280px; }
+}

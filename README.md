@@ -90,6 +90,15 @@ npm start
 The **multimodal biology** and **healthcare live** views are embedded as iframes; see
 [Run the full demo](#run-the-full-demo) for how to start each service.
 
+The **multimodal biology** demo (`kermt-web-ui/`) is embedded as an iframe pointed at `http://127.0.0.1:5173`. Its frontend lives in this repo; the inference backend (model checkpoints, molecule validation, generation endpoints) needs to be set up and run separately.
+
+```bash
+npm run dev:bio      # just the biology demo frontend (for testing)
+npm run dev:all      # the main app + the biology demo frontend together
+```
+
+The frontend expects `/api/health`, `/api/molecule`, and `/api/{base,kermt}/generate` from a backend proxied at `KERMT_BACKEND_URL` (defaults to `http://127.0.0.1:8080`, see [kermt-web-ui/vite.config.js](kermt-web-ui/vite.config.js)). Make sure to update the URL if the backend is running elsewhere.
+
 ## Private analytics
 
 The demo can send privacy-conscious aggregate events to PostHog and expose a password-protected dashboard at `/admin/analytics`. The route is not linked from the public interface.

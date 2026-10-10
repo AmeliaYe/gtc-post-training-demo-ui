@@ -6,12 +6,12 @@
   },
   "files": {
     "introduction/index.html": {
-      "bytes": 4443,
-      "sha256": "e542365cc11f0f9607d5185b048d70a1f975603509eca7a7ad87fb7d6f8e8c37"
+      "bytes": 4624,
+      "sha256": "c06f971132408d3a67d626fe4b60dd0ab1f738ec11d3a38bb3520f179cf5b330"
     },
     "introduction/assets/opening.css": {
-      "bytes": 13041,
-      "sha256": "8f9c5038e46659f97a3a162c2b58044db3e479395ade0a746edbe82fc917370d",
+      "bytes": 13514,
+      "sha256": "3e3393b249dcb26787d3bc742ad0a5a8da567d0b2cf3fe59a0fcedda911769ea",
       "source": "outputs/press-gym-journeys-r06/assets/opening.css"
     },
     "introduction/assets/gym-opening-r02/training-room.png": {
@@ -40,14 +40,24 @@
       "source": "outputs/press-gym-journeys-r06/assets/arrow-right.svg"
     },
     "introduction/assets/opening.js": {
-      "bytes": 8357,
-      "sha256": "21c82adf5d467760db6f7d2c156929d760a9a9ae6137463efd37b74175e2b745",
+      "bytes": 8556,
+      "sha256": "aa3353b16cc00b1c187392bf5e3f28e3683121f7b807f134f8c9b3241af4010d",
       "source": "outputs/press-gym-journeys-r06/assets/opening.js"
     },
     "introduction/assets/circuit-r06/scene.js": {
-      "bytes": 15570,
-      "sha256": "41bd28ea4ffced61630218e8f1ff29357603d16f12c3f181c56bb41663c916b1",
-      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/scene.js"
+      "bytes": 21059,
+      "sha256": "b19bcc50aaf0cb350a4ec51d812ca38eb13a9a088f8e3a4e7ac4ac588461b269",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/scene.js (physique only; final walk and showcase adapted locally)"
+    },
+    "introduction/assets/circuit-r06/strength.js": {
+      "bytes": 1105,
+      "sha256": "12079f7b448aa33f4c60eca9812dc5f4bdbd8e6a2eedf284d39eed6b616e82f6",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r08/strength.js (adapted to r06 timing)"
+    },
+    "introduction/assets/circuit-r06/abdomen.js": {
+      "bytes": 1099,
+      "sha256": "73514d55916b1cfa2966120678aff6d888aff02fa62fccfefc97814ac0b6dd11",
+      "source": "outputs/press-gym-journeys-r09/assets/circuit-r09/abdomen.js"
     },
     "introduction/assets/coffee-lab-r01/vendor/three.module.js": {
       "bytes": 603113,
@@ -65,14 +75,14 @@
       "source": "outputs/press-gym-journeys-r06/assets/gym-opening-r02/motion.js"
     },
     "introduction/assets/circuit-r06/equipment.js": {
-      "bytes": 6800,
-      "sha256": "936eec3c5e2a1d570cb3b7608a1f0810518c3fd01c93a981b99e193f623d1984",
+      "bytes": 7181,
+      "sha256": "9a7af2ad03f80a99c9fdee01bb742daf52564528e4aed3741578fc2996974799",
       "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/equipment.js"
     },
     "introduction/assets/circuit-r06/timeline.js": {
-      "bytes": 3416,
-      "sha256": "88a76d7b06536ebb9e7cca04db0ca44b70a0f63a77a5f9a1ef2dde4dda24d48c",
-      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js"
+      "bytes": 1868,
+      "sha256": "f447e29265bb577923a4cb7fec40641523da7cfb602cf2684e109ca6336d9363",
+      "source": "outputs/press-gym-journeys-r06/assets/circuit-r06/timeline.js (final walk and showcase adapted locally)"
     },
     "introduction/assets/nim.png": {
       "bytes": 6395,

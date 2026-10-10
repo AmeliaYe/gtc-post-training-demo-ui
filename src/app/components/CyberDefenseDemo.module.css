@@ -1,0 +1,66 @@
+.demo { --acid: #b7ff54; padding: clamp(20px, 2.2vw, 40px); color: #e3ecdc; background: #0a110b; }
+.demo :is(button, a, summary, pre, input):focus-visible { outline: 3px solid var(--acid); outline-offset: 4px; }
+.demo svg { width: 22px; height: 22px; flex-shrink: 0; }
+.content { width: 100%; max-width: 1560px; margin: 0 auto; }
+.header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.header > div > span { color: #a9bd97; font: 16px/1.5 monospace; letter-spacing: .07em; }
+.header button { display: flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 46px; color: #c1d7ae; background: transparent; border: 1px solid #405537; border-radius: 6px; cursor: pointer; font-size: 16px; }
+.header p { margin: 6px 0 0; color: #90a780; font-size: 16px; }
+.progress { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; padding: 0; margin: 24px 0; list-style: none; }
+.progress > button { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 0; border: 0; background: none; color: #8da27f; font-size: clamp(15px, 1.1vw, 20px); line-height: 1.4; text-align: left; cursor: pointer; }
+.progress > button > span { font-family: monospace; }
+.progress > button > i { display: block; width: 100%; height: 4px; margin-top: 5px; background: #293724; border-radius: 3px; }
+.progress > button[aria-current=step] { color: var(--acid); }
+.progress > button[aria-current=step] > i { background: var(--acid); }
+.progress > .complete { color: #c1d7ab; }
+.progress > .complete > i { background: #70964b; }
+.headline { margin-bottom: 23px; }
+.headline h3 { margin: 0; color: #eff6e8; font-size: clamp(28px, 2.5vw, 48px); font-weight: 500; line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
+.headline p { max-width: 1440px; margin: 12px 0 0; color: #b7c9a8; font-size: clamp(20px, 1.3vw, 26px); line-height: 1.4; }
+.resultsScene .headline { margin-bottom: 16px; }
+.resultsScene .headline h3 { font-size: clamp(22px, 1.7vw, 32px); }
+.resultsScene .headline p { margin-top: 7px; font-size: clamp(15px, 1vw, 18px); }
+.controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 24px; }
+.controls button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 12px 22px; border-radius: 7px; font-size: 20px; cursor: pointer; }
+.secondary { border: 1px solid #52683f; background: #141f10; color: #c4d9b1; }
+.controls button:disabled { opacity: .35; cursor: default; }
+.play { min-width: 260px; color: #142108; background: var(--acid); border: 1px solid var(--acid); font-weight: 600; }
+.play:hover { background: #cbff86; }
+.autoplayLabel, .manualLabel { align-items: center; justify-content: center; gap: 9px; }
+.autoplayLabel { display: flex; }
+.manualLabel { display: none; }
+.timeline { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
+.timeline input { flex: 1; min-width: 0; accent-color: var(--acid); height: 6px; cursor: pointer; }
+.timeline span { color: #b6c9a5; font: 16px monospace; }
+.replayNote { margin: 14px 0 0; color: #8fa67f; font-size: 15px; text-align: center; }
+.presentationMessage { color: #c7d8ba; font-size: 16px; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.demo:fullscreen { width: 100vw; height: 100dvh; overflow-y: auto; padding: clamp(24px, 3vh, 48px) clamp(24px, 4vw, 80px); }
+.demo:fullscreen .content { display: flex; flex-direction: column; min-height: 100%; max-width: 1640px; }
+.demo:fullscreen .header > div { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 22px; }
+.demo:fullscreen .header p { margin: 0; }
+.demo:fullscreen .progress { margin: 18px 0; }
+.demo:fullscreen .scene { flex: 1; }
+@media (max-width: 700px) {
+  .demo { padding: 18px; }
+  .header > div > span { font-size: 12px; }
+  .header button { font-size: 14px; padding: 8px 10px; }
+  .progress { gap: 10px; margin: 20px 0; }
+  .progress > button { font-size: 12px; }
+  .progress > button > span { display: block; width: 100%; }
+  .headline h3 { font-size: 28px; }
+  .headline p { font-size: 19px; }
+  .controls { gap: 8px; flex-wrap: wrap; }
+  .controls button { min-height: 48px; padding: 10px 13px; font-size: 16px; }
+  .play { min-width: 0; flex: 1; }
+  .controls button svg { width: 18px; height: 18px; }
+  .autoplayLabel { gap: 6px; }
+}
+@media (max-width: 430px) {
+  .play { order: -1; flex-basis: 100%; }
+  .secondary { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .autoplayLabel { display: none; }
+  .manualLabel { display: flex; }
+}

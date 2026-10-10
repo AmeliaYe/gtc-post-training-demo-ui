@@ -1,5 +1,5 @@
 import {createGymScene} from './circuit-r06/scene.js';
-import {smooth,script,duration,starts,stationStarts} from './circuit-r06/timeline.js';
+import {smooth,script,duration,starts} from './circuit-r06/timeline.js';
 import {frameFor} from './framing.js';
 const $=s=>document.querySelector(s),host=$('#gym'),image=$('#backdrop'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const overlay=$('#signals'),ctx=overlay.getContext('2d');
@@ -22,19 +22,16 @@ function draw(spec){
  if(spec.action==='environment'){
   const points=[[0,.61],[.17,.5],[.5,.433],[.82,.49],[1,.61]].map(([x,y])=>imagePoint(g,x,y));ctx.save();ctx.strokeStyle='#a6df5a';ctx.lineWidth=3;ctx.globalAlpha=.8;ctx.beginPath();ctx.moveTo(points[0].x,points[0].y);points.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.stroke();ctx.restore();
  }
- for(const start of [7.25,12.25,20.25,25.25,34.25,39.25])if(time>=start&&time<start+.9){const p=(time-start)/.9;signal(target,left,p,'#4bc8d0');signal(target,right,p,'#4bc8d0');effectState.outbound=true;}
+ if(spec.action==='feedback'){const p=spec.progress;signal(target,left,p,'#4bc8d0');signal(target,right,p,'#4bc8d0');effectState.outbound=true;}
  if(spec.action==='update'){
   const p=spec.progress;signal(left,target,p,'#a6df5a');signal(right,target,p,'#a6df5a');effectState.update=true;
   ctx.save();ctx.strokeStyle='#a6df5a';ctx.lineWidth=3;ctx.globalAlpha=Math.sin(p*Math.PI)*.85;ctx.beginPath();ctx.ellipse(target.x,target.y,g.width*.052,g.width*.08,0,0,2*Math.PI);ctx.stroke();ctx.restore();
  }
- document.querySelectorAll('button.station').forEach(el=>{const point=state.stations[el.dataset.station];el.style.left=`${point.x-bounds.x}px`;el.style.top=`${Math.min(g.height-el.offsetHeight-4,point.y-bounds.y+25)}px`;el.dataset.active=String(el.dataset.station===spec.station);});
+ document.querySelectorAll('.station').forEach(el=>{const point=state.stations[el.dataset.station];el.style.left=`${point.x-bounds.x}px`;el.style.top=`${Math.min(g.height-el.offsetHeight-4,point.y-bounds.y+25)}px`;const waiting=spec.action==='prepare'&&((el.dataset.station==='bench'&&spec.progress<.03)||(el.dataset.station==='elliptical'&&spec.progress<.44)),inactive=spec.phase>=2&&el.dataset.station!==spec.station;el.hidden=spec.phase===0||waiting||inactive;el.dataset.active=String(spec.action==='prepare'||el.dataset.station===spec.station);});
 }
 const criteria={dumbbells:{labels:['Movement','Control'],bad:['Use the full range','Keep the body steady'],good:['Full range','Steady body']},bench:{labels:['Range','Stability'],bad:['Lower with control','Keep the bar level'],good:['Controlled press','Level bar']},elliptical:{labels:['Rhythm','Balance'],bad:['Smooth the cadence','Steady upper body'],good:['Even cadence','Stable posture']}};
 function feedback(spec){
- let station=spec.station,good=false,show=['feedback','update','retry','final','hold'].includes(spec.action);
- if(time>=13&&time<18){station='dumbbells';good=true;show=true;}
- if(time>=26&&time<32){station='bench';good=true;show=true;}
- if(time>=40){station=time>=44?'dumbbells':'elliptical';good=true;show=true;}
+ const station=spec.station,good=['retry','final','hold'].includes(spec.action),show=['feedback','update','retry','final','hold'].includes(spec.action);
  const config=criteria[station];
  [$('#left-feedback'),$('#right-feedback')].forEach((el,i)=>{el.hidden=!show;el.dataset.pass=String(good);el.dataset.rewarded='true';el.querySelector('.coach-title').textContent=`${{dumbbells:'Dumbbells',bench:'Bench press',elliptical:'Elliptical'}[station]} / ${config.labels[i]}`;el.querySelector('strong span').textContent=config[good?'good':'bad'][i];});
 }
@@ -57,17 +54,17 @@ function tick(now){raf=0;if(!canRun()){last=0;return;}const dt=last?Math.min((no
 function pause(){playing=false;last=0;cancelAnimationFrame(raf);raf=0;render();}
 function play(){if(time>=duration)time=0;playing=true;last=0;render();schedule();}
 function seek(t){pause();time=Math.max(0,Math.min(duration,Number(t)||0));render();}
-function chooseStation(value){if(!(value in stationStarts))return;seek(stationStarts[value]);if(!reduced.matches)play();}
 function resize(){const r=frameFor(host),dpr=Math.min(devicePixelRatio,2);overlay.width=Math.round(r.width*dpr);overlay.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);render();}
 $('#play').addEventListener('click',()=>playing?pause():play());$('#reset').addEventListener('click',()=>{seek(0);if(!reduced.matches)play();});$('#timeline').addEventListener('input',e=>seek(e.target.value));
 document.querySelectorAll('[data-step]').forEach(el=>el.addEventListener('click',()=>seek(starts[Number(el.dataset.step)])));
-document.querySelectorAll('button.station').forEach(el=>el.addEventListener('click',()=>chooseStation(el.dataset.station)));
+document.querySelectorAll('[data-demo-stage]').forEach(el=>el.addEventListener('click',()=>{const stage=el.dataset.demoStage;if(parent===window)location.assign(`/?stage=${stage}`);else parent.postMessage({type:'gtc-demo:navigate',stage},location.origin);}));
+$('#continue-demo').addEventListener('click',event=>{if(window.parent!==window){event.preventDefault();parent.postMessage({type:'gtc-demo:enter'},location.origin);}});
 $('#fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('#experience').requestFullscreen();}catch(error){console.warn('Fullscreen unavailable:',error.message);}});
 document.addEventListener('fullscreenchange',()=>{const label=document.fullscreenElement?'Exit fullscreen':'Enter fullscreen';$('#fullscreen').setAttribute('aria-label',label);$('#fullscreen').title=label;resize();});
 document.addEventListener('visibilitychange',()=>{last=0;if(document.hidden){cancelAnimationFrame(raf);raf=0;}else schedule();});
 new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;last=0;if(!visible){cancelAnimationFrame(raf);raf=0;}else schedule();},{threshold:.2}).observe(host);
 reduced.addEventListener('change',()=>{if(reduced.matches)pause();});new ResizeObserver(resize).observe(host);
-window.gymWorkflow={seek,play,pause,chooseStation,restart(){seek(0);if(!reduced.matches)play();},getState(){const spec=script(time);return{time,duration,playing,reward,skill,phase:spec.phase,action:spec.action,station:spec.station,frames,ready,visible,effects:effectState,scene:scene?.state()};}};
+window.gymWorkflow={seek,play,pause,restart(){seek(0);if(!reduced.matches)play();},getState(){const spec=script(time);return{time,duration,playing,reward,skill,phase:spec.phase,action:spec.action,station:spec.station,frames,ready,visible,effects:effectState,scene:scene?.state()};}};
 try{await image.decode();}catch{$('#fallback').hidden=false;$('#fallback').textContent='The gym background could not load.';}
 try{await scene?.ready;}catch{$('#fallback').hidden=false;$('#fallback').textContent="The robot's NIM icon could not load.";playing=false;}
 resize();ready=!!scene&&image.naturalWidth>0&&scene.state().badge.loaded;document.documentElement.dataset.ready=String(ready);render();schedule();

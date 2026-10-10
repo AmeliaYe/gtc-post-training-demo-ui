@@ -6,7 +6,7 @@ WebGL require a browser with those capabilities. The animation has no CDN depend
 
 | Deliverable | Entry point | Content |
 | --- | --- | --- |
-| Introduction | `introduction/index.html` | Larger NeMo Gym robot scene from gym r06; 58-second practice circuit, three exercise stations, feedback, model updates and three final controlled reps. |
+| Introduction | `introduction/index.html` | 30-second robot practice workflow with task setup, an imperfect attempt, coach feedback, a model update and improved controlled reps. |
 | Post-training for healthcare | `healthcare/index.html` | How It Learns → Before & After → Results → Getting Started. Opens on How It Learns. No Introduction page, robot runtime or gym backdrop. |
 
 The Introduction's “See the NVIDIA workflow” link opens the adjacent Healthcare
@@ -29,10 +29,12 @@ The Healthcare tile loads `/healthcare/r02/healthcare/index.html?embed=1#how-it-
 `?embed=1` hides the duplicate brand masthead and enables the same-origin
 `healthcare-demo:resize` message used by `HealthcareDemo.tsx`.
 
-The Introduction is available at `/healthcare/r02/introduction/index.html` for
-the Demo team to compose into the landing page. This handoff does not replace
-the GTC landing-page layout. The standalone default keeps the complete header;
-there are no links to earlier experiments or workstation-only source previews.
+The Introduction at `/healthcare/r02/introduction/index.html` is the canonical
+robot landing-page source for the GTC UI. The main shell loads it first with
+`?embed=1`; while embedded, “See the NVIDIA workflow” advances to the shell's
+general workflow page. When opened standalone, that link continues to the
+adjacent Healthcare experience. Apply future robot-feedback updates here rather
+than to the earlier `public/healthcare/r01/landing.html` implementation.
 
 ## Source and narrative
 
