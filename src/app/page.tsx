@@ -35,7 +35,7 @@ type DemoBase = {
   task: string;
   color: string;
   glow: string;
-  icon: typeof ShieldCheckIcon;
+  icon?: typeof ShieldCheckIcon;
 };
 
 // Static sample content for a use case that has no integrated demo yet.
@@ -164,7 +164,7 @@ function ModelTile({ model }: { model: Demo }) {
         <span className="expand-glyph">↗</span>
       </span>
       <span className="tile-topline">
-        <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
+        {Icon && <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>}
         <span className="status-pill"><i /> {model.id === 'health' ? 'DEMO' : 'LIVE'}</span>
       </span>
       <span className="tile-copy"><strong>{model.name}</strong><small>{model.task}</small></span>
@@ -471,7 +471,7 @@ export default function Home() {
                 </div>
                 <div className="expanded-header">
                   <div className="expanded-identity">
-                    <span className="expanded-icon"><ModelIcon /></span>
+                    {ModelIcon && <span className="expanded-icon"><ModelIcon /></span>}
                     <div><h2>{model.name} </h2></div>
                   </div>
                   <div className="header-actions">

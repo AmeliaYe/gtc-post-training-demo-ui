@@ -9,7 +9,7 @@ import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
 import { Inter, Instrument_Serif } from 'next/font/google';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
-import { CheckIcon, ChevronDownIcon, LockClosedIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronDownIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
@@ -29,7 +29,7 @@ const CATEGORIES: Category[] = [
   {
     id: 'cti', label: 'Threat Intelligence',
     bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
-    prompt: 'An attacker with access to a host’s Docker API sent a remote build request containing a Dockerfile that pulled a vanilla alpine base image and then fetched a malware binary from their C2 to bake into the image. The build completed locally on the host, avoiding alerts tied to downloading malicious images. The adversary then used the resulting custom image to deploy a container for follow-on activity.',
+    prompt: 'An attacker with access to a host’s Docker API sent a remote build request. The Dockerfile pulled a clean alpine base image, then fetched malware from the attacker’s C2 into it. Building on the host avoided malicious-image alerts, and the attacker then ran a container from it.',
     why: { base: "Base describes the build correctly, then labels the final step (deploying a container).", ours: "Ours sees that the evasion happens at build time, which is exactly T1612." },
     key: 'T1612',
     before: { answer: 'T1610 · Deploy Container', runs: 'T1610 · T1610 · T1610', quote: 'This represents the use of the container build process to create and deploy malicious resources within the container environment.' },
@@ -39,7 +39,7 @@ const CATEGORIES: Category[] = [
   {
     id: 'triage', label: 'Alert Triage',
     bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
-    prompt: 'An attacker emailed a victim a malicious ISO file hosted on a public file-share, which was saved with a MOTW tag. The victim mounted the ISO and executed the contained EXE, which lacked the MOTW because the disk image did not preserve NTFS alternate data streams. This allowed the payload to run without SmartScreen or Protected View restrictions.',
+    prompt: 'An attacker emailed a link to a malicious ISO on a public file share, saved with a MOTW tag. The victim mounted it and ran the EXE inside. Disk images don’t keep NTFS alternate data streams, so the EXE had no MOTW and bypassed SmartScreen.',
     why: { base: "Base labels the victim's click instead of the trick.", ours: "Ours explains why the payload escapes SmartScreen (the ISO drops the MOTW stream) and maps it to Subvert Trust Controls, the parent of the MOTW-bypass sub-technique." },
     key: 'T1553',
     before: { answer: 'T1204 · User Execution', runs: 'T1204 · T1204 · T1204', quote: 'This is categorized as a user execution method that evades defenses designed to flag or block downloaded executables.' },
@@ -49,7 +49,7 @@ const CATEGORIES: Category[] = [
   {
     id: 'mitigation', label: 'Mitigation',
     bench: { name: 'risk mitigation strategy', plain: 'Choosing the right defense', before: 22.9, after: 55.7 },
-    prompt: 'An adversary rented time on a large botnet and instructed compromised hosts worldwide to flood a target web service with UDP packets. The sustained high-volume traffic saturated the service’s upstream bandwidth, preventing legitimate clients from reaching the site.',
+    prompt: 'An adversary rented a botnet and had compromised hosts worldwide flood a web service with UDP packets. The traffic saturated its upstream bandwidth, so legitimate users couldn’t reach the site.',
     why: { base: "Base has the right idea but every ID is wrong: T1499 is Endpoint DoS, and M1032 is MFA (Network Intrusion Prevention is M1031).", ours: "Ours gives the correct control with its correct ID and name." },
     key: 'M1037',
     before: { answer: 'M1032 · Multi-factor Authentication', runs: 'M1032 · M1042 · M1025', quote: 'This activity corresponds to the MITRE ATT&CK technique Network Denial of Service (T1499). Among the available mitigations for this technique, Network Intrusion Prevention (M1032) is the most appropriate' },
@@ -59,7 +59,7 @@ const CATEGORIES: Category[] = [
   {
     id: 'vuln', label: 'Vulnerability Analysis',
     bench: { name: 'root-cause mapping', plain: 'Finding the root cause', before: 61.3, after: 73.7 },
-    prompt: 'Open5GS MME versions <= 2.6.4 contain an assertion that can be remotely triggered via a malformed ASN.1 packet over the S1AP interface. An attacker may send an `Initial UE Message` message missing a required `PLMN Identity` field to repeatedly crash the MME, resulting in denial of service.',
+    prompt: 'Open5GS MME ≤ 2.6.4 has an assertion attackers can trigger remotely over S1AP. An Initial UE Message missing the required PLMN Identity field crashes the MME, and repeating it causes denial of service.',
     why: { base: "Base falls back to the catch-all CWE-20, which is true but uninformative.", ours: "Ours names the precise weakness: a debug-time assertion that remote traffic can reach." },
     key: 'CWE-617',
     before: { answer: 'CWE-20 · Improper Input Validation', runs: 'CWE-20 · CWE-20 · CWE-20', quote: 'The absence of this expected field triggers an assertion failure, which causes the service to crash. This is a classic case of insufficient input validation' },
@@ -188,7 +188,7 @@ function BeforeAfter() {
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="dream-scenario">
             <div className="dream-question">
-              <span className="prompt-label">CASE <span className="prompt-label-note">(original prompt)</span></span>
+              <span className="prompt-label">CASE</span>
               <p>{active.prompt}</p>
             </div>
             <AttackScene scene={SCENES[active.id]} />
@@ -401,7 +401,7 @@ function RuntimeDiagram() {
 
       <AnimatePresence mode="wait">
         <motion.p key={`${mode}-${step}`} className={`rt-note ${mode}`} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: .2 }}>
-          <b className="rt-step-num">{step + 1}</b><span className="rt-step-of">of {seq.length}</span>{seq[step].caption}
+          <b className="rt-step-num">{step + 1}/{seq.length}</b>{seq[step].caption}
         </motion.p>
       </AnimatePresence>
     </div>
@@ -511,15 +511,15 @@ type CyberTab = (typeof TABS)[number]['id'];
 
 // Gallery entry for Dream's standalone card; page.tsx adds it to the use-case list.
 export const DREAM_DEMO = {
-  kind: 'demo' as const, id: 'dream', name: 'Cybersecurity for Nations', task: 'Cybersecurity · Dream',
-  color: '#E88480', glow: 'rgba(232, 132, 128, .18)', icon: LockClosedIcon, // Dream coral
+  kind: 'demo' as const, id: 'dream', name: 'National Sovereign Cyber Defense', task: 'Cybersecurity · Dream',
+  color: '#E88480', glow: 'rgba(232, 132, 128, .18)', // Dream coral; no icon
   embedUrl: '', // unused: DreamCard renders the expanded view itself
   previewLabel: 'Real simulation',
 };
 
 function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab) => void }) {
   return (
-    <div className="cyber-tabs" role="tablist" aria-label="Cybersecurity for Nations demo">
+    <div className="cyber-tabs" role="tablist" aria-label="National Sovereign Cyber Defense demo">
       {TABS.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'active' : ''} onClick={() => onChange(t.id)}>
           {tab === t.id && <motion.span layoutId="cyber-tab" className="cyber-tab-bg" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
@@ -541,13 +541,10 @@ export default function DreamCard({ onBack }: { onBack: () => void }) {
         <button className="view-all-button" onClick={onBack}>← All use cases</button>
       </div>
       <div className="expanded-header dream-header">
-        <div className="expanded-identity">
-          <span className="expanded-icon"><LockClosedIcon /></span>
-          <div><h2>{DREAM_DEMO.name}</h2></div>
-        </div>
         <div className="dream-brand">
           <PartnerLogo className="partner-logo" />
-          <p className="dream-tagline">Cyber language built into the model, on hardware your nation owns</p>
+          <h2>{DREAM_DEMO.name}</h2>
+          <p className="dream-tagline">Cyber Language Model with Nemotron 3.5 Super</p>
         </div>
       </div>
       <div className="cyber-tabs-row"><CyberTabs tab={tab} onChange={setTab} /></div>

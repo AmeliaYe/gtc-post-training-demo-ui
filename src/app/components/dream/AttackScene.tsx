@@ -10,7 +10,7 @@ type Tone = 'safe' | 'threat';
 type Icon = 'terminal' | 'server' | 'image' | 'host' | 'container' | 'cloud' | 'disk' | 'file' | 'shield' | 'bot' | 'filter' | 'router' | 'web' | 'users' | 'core' | 'phone' | 'db' | 'pc';
 
 type SceneNode = {
-  x: number; y: number; icon: Icon; tone: Tone; label?: string; labelPos?: 'below' | 'right' | 'above';
+  x: number; y: number; icon: Icon; tone: Tone; label?: string; labelPos?: 'below' | 'right' | 'left' | 'above';
   showAt?: number; tones?: Record<number, Tone>; pulseAt?: number; crossAt?: number;
   badge?: { text: string; tone: Tone; at: number };
   bars?: { tone: Tone; at: number }[];
@@ -57,19 +57,19 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The image is built locally: no malicious image download to alert on', tone: 'threat' },
       { text: 'A container is deployed from the custom image for follow-on activity', tone: 'threat' },
     ],
-    marks: [[326, 94], [120, 120], [300, 174], [300, 70], [274, 94], [470, 120]],
+    marks: [[424, 96], [150, 120], [366, 40], [426, 40], [376, 96], [630, 120]],
     nodes: [
-      { x: 70, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 300, y: 34, icon: 'server', tone: 'threat', label: 'Attacker C2 server', labelPos: 'right' },
-      { x: 300, y: 212, icon: 'image', tone: 'safe', label: 'Alpine base image', labelPos: 'right' },
-      { x: 300, y: 120, icon: 'host', tone: 'safe', tones: { 3: 'threat' }, label: 'Docker host', pulseAt: 1, bars: [{ tone: 'threat', at: 3 }, { tone: 'safe', at: 2 }] },
-      { x: 530, y: 120, icon: 'container', tone: 'threat', label: 'Container', showAt: 5, pulseAt: 5 },
+      { x: 90, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
+      { x: 560, y: 40, icon: 'server', tone: 'threat', label: 'Attacker C2 server', labelPos: 'right' },
+      { x: 260, y: 40, icon: 'image', tone: 'safe', label: 'Alpine base image', labelPos: 'left' },
+      { x: 400, y: 120, icon: 'host', tone: 'safe', tones: { 3: 'threat' }, label: 'Docker host', pulseAt: 1, bars: [{ tone: 'threat', at: 3 }, { tone: 'safe', at: 2 }] },
+      { x: 710, y: 120, icon: 'container', tone: 'threat', label: 'Container', showAt: 5, pulseAt: 5 },
     ],
     edges: [
-      { d: 'M100 120 H268', tone: 'threat', at: 1, label: 'POST /build', lx: 184, ly: 110 },
-      { d: 'M300 196 V152', tone: 'safe', at: 2, label: 'FROM alpine', lx: 312, ly: 178, anchor: 'start' },
-      { d: 'M300 52 V88', tone: 'threat', at: 3, label: 'RUN fetch malware', lx: 312, ly: 74, anchor: 'start' },
-      { d: 'M332 120 H502', tone: 'threat', at: 5, label: 'docker run', lx: 417, ly: 110 },
+      { d: 'M118 120 H372', tone: 'threat', at: 1, label: 'POST /build', lx: 250, ly: 110 },
+      { d: 'M284 40 H386 Q394 40 394 48 V96', tone: 'safe', at: 2, label: 'FROM alpine', lx: 320, ly: 30 },
+      { d: 'M536 40 H414 Q406 40 406 48 V96', tone: 'threat', at: 3, label: 'fetch malware', lx: 490, ly: 30 },
+      { d: 'M428 120 H682', tone: 'threat', at: 5, label: 'docker run', lx: 545, ly: 110 },
     ],
   },
   triage: {
@@ -80,20 +80,20 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The victim mounts the ISO: the EXE inside has no MOTW, because disk images drop it', tone: 'threat' },
       { text: 'The EXE runs: SmartScreen and Protected View never check it', tone: 'threat' },
     ],
-    marks: [[214, 96], [98, 120], [190, 76], [385, 120], [474, 10]],
+    marks: [[274, 96], [134, 120], [250, 80], [548, 120], [614, 18]],
     nodes: [
-      { x: 60, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 190, y: 120, icon: 'pc', tone: 'safe', label: 'Victim' },
-      { x: 190, y: 34, icon: 'cloud', tone: 'threat', label: 'Public file share', labelPos: 'right', showAt: 1 },
-      { x: 320, y: 120, icon: 'disk', tone: 'safe', label: 'ISO file', showAt: 2, badge: { text: 'MOTW', tone: 'safe', at: 2 } },
-      { x: 450, y: 120, icon: 'file', tone: 'threat', label: 'Payload .exe', showAt: 3, pulseAt: 4, badge: { text: 'no MOTW', tone: 'threat', at: 3 } },
-      { x: 450, y: 34, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'right', crossAt: 4 },
+      { x: 90, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
+      { x: 250, y: 120, icon: 'pc', tone: 'safe', label: 'Victim' },
+      { x: 250, y: 40, icon: 'cloud', tone: 'threat', label: 'Public file share', labelPos: 'right', showAt: 1 },
+      { x: 420, y: 120, icon: 'disk', tone: 'safe', label: 'ISO file', showAt: 2, badge: { text: 'MOTW', tone: 'safe', at: 2 } },
+      { x: 590, y: 120, icon: 'file', tone: 'threat', label: 'Payload .exe', showAt: 3, pulseAt: 4, badge: { text: 'no MOTW', tone: 'threat', at: 3 } },
+      { x: 590, y: 40, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'right', crossAt: 4 },
     ],
     edges: [
-      { d: 'M88 120 H166', tone: 'threat', at: 1, label: 'email link', lx: 136, ly: 110 },
-      { d: 'M190 58 V96', tone: 'threat', at: 2 },
-      { d: 'M214 120 H296', tone: 'safe', at: 2, label: 'saved', lx: 255, ly: 110 },
-      { d: 'M344 120 H426', tone: 'threat', at: 3, label: 'mount + run', lx: 385, ly: 108 },
+      { d: 'M118 120 H226', tone: 'threat', at: 1, label: 'email link', lx: 186, ly: 110 },
+      { d: 'M250 64 V96', tone: 'threat', at: 2 },
+      { d: 'M274 120 H396', tone: 'safe', at: 2, label: 'saved', lx: 335, ly: 110 },
+      { d: 'M444 120 H566', tone: 'threat', at: 3, label: 'mount + run', lx: 490, ly: 110 },
     ],
   },
   mitigation: {
@@ -104,22 +104,22 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The upstream bandwidth is saturated: real users can’t reach the site', tone: 'threat' },
       { text: 'The right defense: filter network traffic at the perimeter (M1037)', tone: 'safe' },
     ],
-    marks: [[472, 96], [100, 44], [250, 120], [349, 96], [199, 96]],
+    marks: [[594, 96], [144, 42], [330, 120], [444, 96], [274, 96]],
     nodes: [
-      { x: 60, y: 44, icon: 'bot', tone: 'threat', label: 'Botnet', labelPos: 'above', showAt: 1 },
-      { x: 60, y: 120, icon: 'bot', tone: 'threat', showAt: 1 },
-      { x: 60, y: 196, icon: 'bot', tone: 'threat', showAt: 1 },
-      { x: 175, y: 120, icon: 'filter', tone: 'safe', label: 'Traffic filter', showAt: 4, pulseAt: 4 },
-      { x: 325, y: 120, icon: 'router', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Upstream link', pulseAt: 3 },
-      { x: 448, y: 120, icon: 'web', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Web service' },
-      { x: 556, y: 120, icon: 'users', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Users' },
+      { x: 120, y: 64, icon: 'bot', tone: 'threat', showAt: 1 },
+      { x: 120, y: 120, icon: 'bot', tone: 'threat', label: 'Botnet', labelPos: 'left', showAt: 1 },
+      { x: 120, y: 176, icon: 'bot', tone: 'threat', showAt: 1 },
+      { x: 250, y: 120, icon: 'filter', tone: 'safe', label: 'Traffic filter', showAt: 4, pulseAt: 4 },
+      { x: 420, y: 120, icon: 'router', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Upstream link', pulseAt: 3 },
+      { x: 570, y: 120, icon: 'web', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Web service' },
+      { x: 710, y: 120, icon: 'users', tone: 'safe', tones: { 3: 'threat', 4: 'safe' }, label: 'Users' },
     ],
     edges: [
-      { d: 'M84 50 L299 112', tone: 'threat', at: 2, dimAt: 4 },
-      { d: 'M84 120 H297', tone: 'threat', at: 2, dimAt: 4, label: 'UDP flood', lx: 120, ly: 110 },
-      { d: 'M84 190 L299 128', tone: 'threat', at: 2, dimAt: 4 },
-      { d: 'M351 120 H422', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
-      { d: 'M531 120 H474', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
+      { d: 'M144 68 L396 114', tone: 'threat', at: 2, dimAt: 4 },
+      { d: 'M144 120 H396', tone: 'threat', at: 2, dimAt: 4, label: 'UDP flood', lx: 186, ly: 110 },
+      { d: 'M144 172 L396 126', tone: 'threat', at: 2, dimAt: 4 },
+      { d: 'M444 120 H546', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
+      { d: 'M686 120 H594', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
     ],
   },
   posture: {
@@ -132,20 +132,20 @@ export const SCENES: Record<string, Scene> = {
       { text: 'Devices in the same VLAN skip that check and reach dbs-310 directly', tone: 'threat' },
       { text: 'Those same-VLAN devices are dbs-310’s direct exposure', tone: 'threat' },
     ],
-    marks: [[506, 96], [370, 120], [450, 74], [554, 96]],
-    zones: [{ x: 330, y: 16, w: 262, h: 214, label: 'VLAN vlan_name2 · 10.40.12.0/24' }],
+    marks: [[666, 96], [375, 120], [540, 80], [714, 96]],
+    zones: [{ x: 400, y: 6, w: 360, h: 186, label: 'VLAN vlan_name2 · 10.40.12.0/24' }],
     nodes: [
-      { x: 70, y: 120, icon: 'pc', tone: 'safe', label: 'Other subnets' },
-      { x: 220, y: 120, icon: 'shield', tone: 'safe', label: 'Router / firewall' },
-      { x: 410, y: 52, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
-      { x: 410, y: 180, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
-      { x: 530, y: 120, icon: 'db', tone: 'safe', tones: { 3: 'threat' }, label: 'dbs-310', pulseAt: 3 },
+      { x: 90, y: 120, icon: 'pc', tone: 'safe', label: 'Other subnets' },
+      { x: 260, y: 120, icon: 'shield', tone: 'safe', label: 'Router / firewall' },
+      { x: 470, y: 58, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
+      { x: 470, y: 154, icon: 'pc', tone: 'safe', tones: { 2: 'threat' } },
+      { x: 690, y: 120, icon: 'db', tone: 'safe', tones: { 3: 'threat' }, label: 'dbs-310', pulseAt: 3 },
     ],
     edges: [
-      { d: 'M98 120 H198', tone: 'safe', at: 1 },
-      { d: 'M242 120 H506', tone: 'safe', at: 1, label: 'via firewall', lx: 290, ly: 110 },
-      { d: 'M432 64 L508 108', tone: 'threat', at: 2, label: 'direct', lx: 482, ly: 76, anchor: 'start' },
-      { d: 'M432 168 L508 132', tone: 'threat', at: 2 },
+      { d: 'M118 120 H236', tone: 'safe', at: 1 },
+      { d: 'M284 120 H666', tone: 'safe', at: 1, label: 'via firewall', lx: 320, ly: 110 },
+      { d: 'M494 68 L664 114', tone: 'threat', at: 2, label: 'direct', lx: 600, ly: 84 },
+      { d: 'M494 146 L664 126', tone: 'threat', at: 2 },
     ],
   },
   vuln: {
@@ -156,15 +156,15 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The assertion fails and the MME process crashes', tone: 'threat' },
       { text: 'Phones lose service, and the attacker can repeat it at will', tone: 'threat' },
     ],
-    marks: [[380, 120], [120, 120], [338, 78], [274, 96], [554, 96]],
+    marks: [[620, 120], [140, 120], [440, 78], [448, 120], [734, 96]],
     nodes: [
-      { x: 60, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
-      { x: 300, y: 120, icon: 'core', tone: 'safe', tones: { 3: 'threat' }, label: 'Open5GS MME · 4G core', pulseAt: 3, crossAt: 3, badge: { text: 'assert()', tone: 'threat', at: 2 } },
-      { x: 530, y: 120, icon: 'phone', tone: 'safe', tones: { 4: 'threat' }, label: 'Phones', crossAt: 4 },
+      { x: 90, y: 120, icon: 'terminal', tone: 'threat', label: 'Attacker' },
+      { x: 400, y: 120, icon: 'core', tone: 'safe', tones: { 3: 'threat' }, label: 'Open5GS MME · 4G core', pulseAt: 3, crossAt: 3, badge: { text: 'assert()', tone: 'threat', at: 2 } },
+      { x: 710, y: 120, icon: 'phone', tone: 'safe', tones: { 4: 'threat' }, label: 'Phones', crossAt: 4 },
     ],
     edges: [
-      { d: 'M88 120 H270', tone: 'threat', at: 1, label: 'Initial UE Message · S1AP', lx: 179, ly: 110 },
-      { d: 'M330 120 H514', tone: 'safe', at: 0, tones: { 3: 'threat' }, label: 'service', lx: 430, ly: 110 },
+      { d: 'M118 120 H372', tone: 'threat', at: 1, label: 'Initial UE Message · S1AP', lx: 245, ly: 110 },
+      { d: 'M430 120 H686', tone: 'safe', at: 0, tones: { 3: 'threat' }, label: 'service', lx: 560, ly: 110 },
     ],
   },
 };
@@ -188,17 +188,18 @@ export default function AttackScene({ scene }: { scene: Scene }) {
         <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
         <span className="as-legend"><i className="threat" />{scene.legend?.[0] ?? 'Malicious'}<i className="safe" />{scene.legend?.[1] ?? 'Legitimate'}</span>
       </div>
-      <svg viewBox="0 0 600 240" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
+      <svg viewBox="0 0 800 196" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
         {scene.zones?.map((z) => (
           <g key={z.label}>
             <rect x={z.x} y={z.y} width={z.w} height={z.h} rx="10" className="as-zone" />
-            <text x={z.x + 12} y={z.y + z.h - 10} className="as-zone-label">{z.label}</text>
+            <text x={z.x + 12} y={z.y + 18} className="as-zone-label">{z.label}</text>
           </g>
         ))}
         {scene.edges.map((e) => <path key={`bg-${e.d}`} d={e.d} className="as-track" />)}
         {scene.edges.map((e) => now >= e.at && (
           <motion.g key={`${cycle}-${e.d}`} initial={false} animate={{ opacity: e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
             <motion.path d={e.d} className={`as-line ${toneAt(e.tone, e.tones, now)}`} initial={{ pathLength: reduce || e.at === 0 ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} />
+            {toneAt(e.tone, e.tones, now) === 'threat' && !(e.dimAt !== undefined && now >= e.dimAt) && <path d={e.d} className="as-flow" />}
             {e.label && <motion.text x={e.lx} y={e.ly} textAnchor={e.anchor ?? 'middle'} className={`as-edge-label ${toneAt(e.tone, e.tones, now)}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}>{e.label}</motion.text>}
           </motion.g>
         ))}
@@ -222,8 +223,8 @@ export default function AttackScene({ scene }: { scene: Scene }) {
                 </motion.g>
               )}
               {n.label && (
-                <text className={`as-label ${tone}`} textAnchor={lp === 'right' ? 'start' : 'middle'}
-                  x={lp === 'right' ? n.x + 26 : n.x} y={lp === 'right' ? n.y + 4 : lp === 'above' ? n.y - 26 : n.y + 42}>{n.label}</text>
+                <text className={`as-label ${tone}`} textAnchor={lp === 'right' ? 'start' : lp === 'left' ? 'end' : 'middle'}
+                  x={lp === 'right' ? n.x + 34 : lp === 'left' ? n.x - 34 : n.x} y={lp === 'right' || lp === 'left' ? n.y + 4 : lp === 'above' ? n.y - 32 : n.y + 42}>{n.label}</text>
               )}
             </motion.g>
           );
@@ -237,7 +238,7 @@ export default function AttackScene({ scene }: { scene: Scene }) {
         ))}
       </svg>
       <motion.p key={`${cycle}-${now}`} className={`as-status ${caption.tone}`} initial={reduce ? false : { opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-        <b className="as-step-num">{now + 1}</b><span className="as-step-of">of {last + 1}</span>{caption.text}
+        <b className="as-step-num">{now + 1}/{last + 1}</b>{caption.text}
       </motion.p>
     </div>
   );
