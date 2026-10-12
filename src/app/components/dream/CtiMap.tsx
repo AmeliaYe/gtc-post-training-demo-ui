@@ -35,6 +35,18 @@ const pickSources = (): GroupSources => {
   return Object.fromEntries([...new Set(CAMPAIGNS.map((c) => c.group))].map((g, i) => [g, pool[i]]));
 };
 
+// What each model links from the same reports, as a share of the full campaign picture
+// (every campaign, targeted country and infrastructure site in the sample data).
+type Linked = { campaigns: number; countries: number; infra: number };
+const share = (l: Linked) => (l.campaigns + l.countries + l.infra) / (FULL.campaigns + FULL.countries + FULL.infra);
+const FULL: Linked = {
+  campaigns: CAMPAIGNS.length,
+  countries: new Set(CAMPAIGNS.flatMap((c) => c.targets)).size,
+  infra: CAMPAIGNS.flatMap((c) => (c.infra ?? []).flatMap((f) => f.sectors)).length,
+};
+const BEFORE_FOUND = CAMPAIGNS.filter((c) => c.before.length);
+const BEFORE_FINAL: Linked = { campaigns: BEFORE_FOUND.length, countries: new Set(BEFORE_FOUND.flatMap((c) => c.before)).size, infra: 0 };
+
 // Timeline in 500 ms ticks: before scan, before findings, after scan, after findings, hold, loop.
 const TICK = 500, AFTER_AT = 14, END = 49; // ~8 s hold on the final picture before the loop restarts
 const foundAt = (i: number, after: boolean) => (after ? AFTER_AT + 5 + i * 2 : 5 + i * 2);
@@ -65,9 +77,9 @@ export default function CtiMap() {
   const pool = after ? CAMPAIGNS : CAMPAIGNS.filter((c) => c.before.length);
   const found = pool.filter((_, i) => t >= foundAt(i, after)).map((c) => ({ ...c, hits: after ? c.targets : c.before }));
   const targeted = new Set(found.flatMap((c) => c.hits));
-  const groups = new Set(found.map((c) => c.group));
   const infra = after ? found.flatMap((c) => (c.infra ?? []).flatMap((f) => f.sectors.map((sector, k) => ({ country: f.country, sector, k })))) : [];
   const scanning = t < (after ? AFTER_AT + 5 : 5);
+  const live: Linked = { campaigns: found.length, countries: targeted.size, infra: infra.length };
   const phase = after ? 'after' : 'before';
 
   return (
@@ -120,19 +132,20 @@ export default function CtiMap() {
         </div>
 
         <div className="cti-overlay">
-          <AnimatePresence mode="wait">
-            <motion.div key={phase} initial={reduce ? false : { opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <b className={`dream-phase ${after ? 'on' : ''}`}>{after ? 'AFTER TRAINING' : 'BEFORE TRAINING'}</b>
-              <small>{after ? 'CLM powered by MiST & Dreamer · Trained by Dream' : 'Nemotron 3.5 Super'}</small>
-            </motion.div>
-          </AnimatePresence>
-          <p className={`cti-result ${scanning ? '' : after ? 'ok' : 'bad'}`}>{scanning ? 'Analysing threat reports…' : after ? 'Full campaign picture linked' : 'Only partial links found'}</p>
-          <dl>
-            <div><dt>{targeted.size}</dt><dd>targeted countries</dd></div>
-            <div><dt>{found.length}</dt><dd>active campaigns</dd></div>
-            <div><dt>{groups.size}</dt><dd>threat groups</dd></div>
-            <div><dt className="infra">{infra.length}</dt><dd>infrastructure targets</dd></div>
-          </dl>
+          {([
+            { key: 'before', phase: 'BEFORE TRAINING', model: 'Nemotron 3.5 Super', linked: after ? BEFORE_FINAL : live, active: !after },
+            { key: 'after', phase: 'AFTER TRAINING', model: 'CLM', linked: after ? live : null, active: after },
+          ] as const).map((row) => (
+            <div key={row.key} className={`cti-compare ${row.key} ${row.active ? 'active' : ''}`}>
+              <div className="cti-compare-head">
+                <b className={`dream-phase ${row.key === 'after' ? 'on' : ''}`}>{row.phase}</b><span>{row.model}</span>
+                <strong>{row.linked ? `${Math.round(share(row.linked) * 100)}%` : '–'}</strong>
+              </div>
+              <i className="cti-compare-bar"><b style={{ width: `${row.linked ? share(row.linked) * 100 : 0}%` }} /></i>
+              <small>{row.linked ? `${row.linked.campaigns} campaigns · ${row.linked.countries} countries · ${row.linked.infra} infrastructure sites linked` : 'Next: the same reports after post-training'}</small>
+            </div>
+          ))}
+          <p className={`cti-result ${scanning ? '' : after ? 'ok' : 'bad'}`}>{scanning ? 'Analysing threat reports…' : after ? `Post-training links ${Math.round((share(live) / share(BEFORE_FINAL)) * 10) / 10}× more of the campaign picture` : 'Only partial links found'}</p>
         </div>
 
         <span className="cti-watermark">Illustrative example data</span>
@@ -148,9 +161,9 @@ export default function CtiMap() {
         <AnimatePresence initial={false}>
           {found.map((c) => (
             <motion.article key={`${phase}-${c.name}`} layout initial={reduce ? false : { opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
-              <header><strong>{c.name}</strong><span className={`cti-sev ${c.severity.toLowerCase()}`}>{c.severity}</span></header>
-              <p>Threat group <b>{c.group}</b> · {c.hits.length} {c.hits.length === 1 ? 'country' : 'countries'}</p>
-              {after && c.infra && <small className="cti-infra">Critical infrastructure: {c.infra.flatMap((f) => f.sectors).length} sites · {[...new Set(c.infra.flatMap((f) => f.sectors))].join(', ')}</small>}
+              <header><strong>{c.name} <span>· {c.group}</span></strong><span className={`cti-sev ${c.severity.toLowerCase()}`}>{c.severity}</span></header>
+              <p>{c.hits.length} {c.hits.length === 1 ? 'country' : 'countries'}{after && c.infra && ` · ${c.infra.flatMap((f) => f.sectors).length} infrastructure sites`}</p>
+              {after && c.infra && <small className="cti-infra">{[...new Set(c.infra.flatMap((f) => f.sectors))].join(', ')}</small>}
             </motion.article>
           ))}
         </AnimatePresence>

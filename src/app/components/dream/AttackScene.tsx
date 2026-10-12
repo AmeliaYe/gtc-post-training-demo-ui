@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 
 // Step-by-step attack illustrations for the Model comparison questions. The CTI scene follows
 // Dream's "Docker API Build Attack" illustration; the others use the same visual language.
 
-type Tone = 'safe' | 'threat';
+type Tone = 'safe' | 'threat' | 'ours'; // ours: the post-trained model's answer
 type Icon = 'terminal' | 'server' | 'image' | 'host' | 'container' | 'cloud' | 'disk' | 'file' | 'shield' | 'bot' | 'filter' | 'router' | 'web' | 'users' | 'core' | 'phone' | 'db' | 'pc';
 
 type SceneNode = {
@@ -17,9 +18,12 @@ type SceneNode = {
 };
 type SceneEdge = { d: string; tone: Tone; at: number; tones?: Record<number, Tone>; dimAt?: number; label?: string; lx?: number; ly?: number; anchor?: 'middle' | 'start' };
 // `marks`: where each step's number sits on the drawing (index = step).
+// The last step (tone 'ours') is the post-trained model's answer: `chain` lights up the nodes (n#) and edges (e#)
+// it connects into one attack story, in order, and `answer` pins its label on the drawing.
 export type Scene = {
-  title?: string; legend?: [string, string]; steps: { text: string; tone: Tone }[]; marks: [number, number][]; nodes: SceneNode[]; edges: SceneEdge[];
+  title?: string; steps: { text: string; tone: Tone }[]; marks: [number, number][]; nodes: SceneNode[]; edges: SceneEdge[];
   zones?: { x: number; y: number; w: number; h: number; label: string }[];
+  chain?: string[]; answer?: { x: number; y: number; text: string };
 };
 
 const STEP_MS = 3400; // time to read each caption
@@ -52,10 +56,11 @@ export const SCENES: Record<string, Scene> = {
     steps: [
       { text: 'The attacker has access to the host’s Docker API', tone: 'threat' },
       { text: 'It sends a remote build request with its own Dockerfile', tone: 'threat' },
-      { text: 'Build step: pull a vanilla Alpine base image', tone: 'safe' },
+      { text: 'Build step: pull a clean Alpine base image', tone: 'safe' },
       { text: 'Build step: fetch malware from the attacker’s C2 server and bake it into the image', tone: 'threat' },
       { text: 'The image is built locally: no malicious image download to alert on', tone: 'threat' },
       { text: 'A container is deployed from the custom image for follow-on activity', tone: 'threat' },
+      { text: 'CLM connects the signals: building on the host avoids malicious-image alerts (T1612)', tone: 'ours' },
     ],
     marks: [[424, 96], [150, 120], [366, 40], [426, 40], [376, 96], [630, 120]],
     nodes: [
@@ -67,10 +72,12 @@ export const SCENES: Record<string, Scene> = {
     ],
     edges: [
       { d: 'M118 120 H372', tone: 'threat', at: 1, label: 'POST /build', lx: 250, ly: 110 },
-      { d: 'M284 40 H386 Q394 40 394 48 V96', tone: 'safe', at: 2, label: 'FROM alpine', lx: 320, ly: 30 },
+      { d: 'M284 40 H386 Q394 40 394 48 V96', tone: 'safe', at: 2, label: 'FROM alpine', lx: 318, ly: 30 },
       { d: 'M536 40 H414 Q406 40 406 48 V96', tone: 'threat', at: 3, label: 'fetch malware', lx: 490, ly: 30 },
       { d: 'M428 120 H682', tone: 'threat', at: 5, label: 'docker run', lx: 545, ly: 110 },
     ],
+    chain: ['n0', 'e0', 'n3', 'e1', 'n2', 'e2', 'n1', 'e3', 'n4'],
+    answer: { x: 400, y: 182, text: 'CLM · T1612 Build Image on Host' },
   },
   triage: {
     steps: [
@@ -78,7 +85,8 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The attacker emails the victim a link to an ISO on a public file share', tone: 'threat' },
       { text: 'The victim downloads the ISO: it is saved with the MOTW tag', tone: 'safe' },
       { text: 'The victim mounts the ISO: the EXE inside has no MOTW, because disk images drop it', tone: 'threat' },
-      { text: 'The EXE runs: SmartScreen and Protected View never check it', tone: 'threat' },
+      { text: 'The EXE runs: SmartScreen never checks it', tone: 'threat' },
+      { text: 'CLM connects the signals: the ISO drops MOTW, so SmartScreen never checks the EXE (T1553)', tone: 'ours' },
     ],
     marks: [[274, 96], [134, 120], [250, 80], [548, 120], [614, 18]],
     nodes: [
@@ -87,14 +95,17 @@ export const SCENES: Record<string, Scene> = {
       { x: 250, y: 40, icon: 'cloud', tone: 'threat', label: 'Public file share', labelPos: 'right', showAt: 1 },
       { x: 420, y: 120, icon: 'disk', tone: 'safe', label: 'ISO file', showAt: 2, badge: { text: 'MOTW', tone: 'safe', at: 2 } },
       { x: 590, y: 120, icon: 'file', tone: 'threat', label: 'Payload .exe', showAt: 3, pulseAt: 4, badge: { text: 'no MOTW', tone: 'threat', at: 3 } },
-      { x: 590, y: 40, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'right', crossAt: 4 },
+      { x: 590, y: 40, icon: 'shield', tone: 'safe', tones: { 4: 'threat' }, label: 'SmartScreen', labelPos: 'left', crossAt: 4 },
     ],
     edges: [
       { d: 'M118 120 H226', tone: 'threat', at: 1, label: 'email link', lx: 186, ly: 110 },
       { d: 'M250 64 V96', tone: 'threat', at: 2 },
       { d: 'M274 120 H396', tone: 'safe', at: 2, label: 'saved', lx: 335, ly: 110 },
       { d: 'M444 120 H566', tone: 'threat', at: 3, label: 'mount + run', lx: 490, ly: 110 },
+      { d: 'M614 120 H642 Q650 120 650 112 V48 Q650 40 642 40 H614', tone: 'threat', at: 4, label: 'no check', lx: 660, ly: 84, anchor: 'start' },
     ],
+    chain: ['n0', 'e0', 'n2', 'e1', 'n1', 'e2', 'n3', 'e3', 'n4', 'e4', 'n5'],
+    answer: { x: 505, y: 182, text: 'CLM · T1553 Subvert Trust Controls' },
   },
   mitigation: {
     steps: [
@@ -102,9 +113,9 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The attacker rents time on a large botnet', tone: 'threat' },
       { text: 'Bots worldwide flood the service with UDP packets', tone: 'threat' },
       { text: 'The upstream bandwidth is saturated: real users can’t reach the site', tone: 'threat' },
-      { text: 'The right defense: filter network traffic at the perimeter (M1037)', tone: 'safe' },
+      { text: 'CLM connects the signals: filtering traffic at the perimeter stops the flood (M1037)', tone: 'ours' },
     ],
-    marks: [[594, 96], [144, 42], [330, 120], [444, 96], [274, 96]],
+    marks: [[594, 96], [144, 42], [330, 120], [444, 96]],
     nodes: [
       { x: 120, y: 64, icon: 'bot', tone: 'threat', showAt: 1 },
       { x: 120, y: 120, icon: 'bot', tone: 'threat', label: 'Botnet', labelPos: 'left', showAt: 1 },
@@ -120,17 +131,19 @@ export const SCENES: Record<string, Scene> = {
       { d: 'M144 172 L396 126', tone: 'threat', at: 2, dimAt: 4 },
       { d: 'M444 120 H546', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
       { d: 'M686 120 H594', tone: 'safe', at: 0, tones: { 3: 'threat', 4: 'safe' } },
+      { d: 'M274 120 H396', tone: 'safe', at: 4 },
     ],
+    chain: ['n3', 'e5', 'n4', 'e3', 'n5', 'e4', 'n6'],
+    answer: { x: 300, y: 40, text: 'CLM · M1037 Filter Network Traffic' },
   },
   posture: {
     title: 'NETWORK VIEW',
-    // Not an attack: red marks exposure, not malicious activity.
-    legend: ['Direct exposure', 'Through firewall'],
     steps: [
       { text: 'dbs-310 sits in VLAN vlan_name2 (10.40.12.0/24)', tone: 'safe' },
       { text: 'Traffic from other subnets has to pass the router or firewall', tone: 'safe' },
       { text: 'Devices in the same VLAN skip that check and reach dbs-310 directly', tone: 'threat' },
       { text: 'Those same-VLAN devices are dbs-310’s direct exposure', tone: 'threat' },
+      { text: 'CLM connects the signals: the same-VLAN devices reach dbs-310 directly', tone: 'ours' },
     ],
     marks: [[666, 96], [375, 120], [540, 80], [714, 96]],
     zones: [{ x: 400, y: 6, w: 360, h: 186, label: 'VLAN vlan_name2 · 10.40.12.0/24' }],
@@ -147,6 +160,8 @@ export const SCENES: Record<string, Scene> = {
       { d: 'M494 68 L664 114', tone: 'threat', at: 2, label: 'direct', lx: 600, ly: 84 },
       { d: 'M494 146 L664 126', tone: 'threat', at: 2 },
     ],
+    chain: ['n2', 'e2', 'n3', 'e3', 'n4'],
+    answer: { x: 600, y: 40, text: 'CLM · same-VLAN devices' },
   },
   vuln: {
     steps: [
@@ -155,6 +170,7 @@ export const SCENES: Record<string, Scene> = {
       { text: 'The code hits an assert(): a debug check reachable from network input', tone: 'threat' },
       { text: 'The assertion fails and the MME process crashes', tone: 'threat' },
       { text: 'Phones lose service, and the attacker can repeat it at will', tone: 'threat' },
+      { text: 'CLM connects the signals: one malformed message reaches an assert() and takes phones down (CWE-617)', tone: 'ours' },
     ],
     marks: [[620, 120], [140, 120], [440, 78], [448, 120], [734, 96]],
     nodes: [
@@ -166,6 +182,8 @@ export const SCENES: Record<string, Scene> = {
       { d: 'M118 120 H372', tone: 'threat', at: 1, label: 'Initial UE Message · S1AP', lx: 245, ly: 110 },
       { d: 'M430 120 H686', tone: 'safe', at: 0, tones: { 3: 'threat' }, label: 'service', lx: 560, ly: 110 },
     ],
+    chain: ['n0', 'e0', 'n1', 'e1', 'n2'],
+    answer: { x: 400, y: 48, text: 'CLM · CWE-617 Reachable Assertion' },
   },
 };
 
@@ -173,20 +191,28 @@ export default function AttackScene({ scene }: { scene: Scene }) {
   const reduce = useReducedMotion();
   const last = scene.steps.length - 1;
   const [{ step, cycle }, setState] = useState({ step: 0, cycle: 0 });
+  const [paused, setPaused] = useState(false);
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || paused) return;
     // One extra tick holds the final state before the loop restarts.
     const id = window.setInterval(() => setState((s) => (s.step > last ? { step: 0, cycle: s.cycle + 1 } : { ...s, step: s.step + 1 })), STEP_MS);
     return () => window.clearInterval(id);
-  }, [reduce, last]);
+  }, [reduce, paused, last]);
   const now = reduce ? last : Math.min(step, last);
   const caption = scene.steps[now];
+  const answerAt = scene.steps.findIndex((s) => s.tone === 'ours');
+  // During the answer step, chained parts turn green one after another, tracing the attack end to end.
+  const inChain = (id: string) => (answerAt >= 0 && now >= answerAt ? scene.chain?.indexOf(id) ?? -1 : -1);
 
   return (
-    <div className="attack-scene">
+    <div className={`attack-scene${paused ? ' paused' : ''}`}>
       <div className="as-head">
-        <span className="as-title">{scene.title ?? 'ATTACK FLOW'}</span>
-        <span className="as-legend"><i className="threat" />{scene.legend?.[0] ?? 'Malicious'}<i className="safe" />{scene.legend?.[1] ?? 'Legitimate'}</span>
+        <span className="as-title">{scene.title ?? 'ATTACK PATH'}</span>
+        {!reduce && (
+          <button className="as-play" onClick={() => setPaused((p) => !p)} aria-label={paused ? 'Resume animation' : 'Pause animation'}>
+            {paused ? <PlayIcon /> : <PauseIcon />}
+          </button>
+        )}
       </div>
       <svg viewBox="0 0 800 196" role="img" aria-label={scene.steps.map((s) => s.text).join('. ')}>
         {scene.zones?.map((z) => (
@@ -196,22 +222,30 @@ export default function AttackScene({ scene }: { scene: Scene }) {
           </g>
         ))}
         {scene.edges.map((e) => <path key={`bg-${e.d}`} d={e.d} className="as-track" />)}
-        {scene.edges.map((e) => now >= e.at && (
-          <motion.g key={`${cycle}-${e.d}`} initial={false} animate={{ opacity: e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
-            <motion.path d={e.d} className={`as-line ${toneAt(e.tone, e.tones, now)}`} initial={{ pathLength: reduce || e.at === 0 ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} />
-            {toneAt(e.tone, e.tones, now) === 'threat' && !(e.dimAt !== undefined && now >= e.dimAt) && <path d={e.d} className="as-flow" />}
-            {e.label && <motion.text x={e.lx} y={e.ly} textAnchor={e.anchor ?? 'middle'} className={`as-edge-label ${toneAt(e.tone, e.tones, now)}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}>{e.label}</motion.text>}
+        {scene.edges.map((e, i) => {
+          if (now < e.at) return null;
+          const ci = inChain(`e${i}`);
+          const tone = ci >= 0 ? 'ours' : toneAt(e.tone, e.tones, now);
+          const delay = { transitionDelay: `${Math.max(ci, 0) * .22}s` };
+          return (
+          <motion.g key={`${cycle}-${e.d}`} initial={false} animate={{ opacity: ci < 0 && e.dimAt !== undefined && now >= e.dimAt ? .15 : 1 }}>
+            <motion.path d={e.d} style={delay} className={`as-line ${tone}`} initial={{ pathLength: reduce || e.at === 0 ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} />
+            {(ci >= 0 || (tone === 'threat' && !(e.dimAt !== undefined && now >= e.dimAt))) && <path d={e.d} className="as-flow" />}
+            {e.label && <motion.text x={e.lx} y={e.ly} textAnchor={e.anchor ?? 'middle'} style={delay} className={`as-edge-label ${tone}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}>{e.label}</motion.text>}
           </motion.g>
-        ))}
+          );
+        })}
         {scene.nodes.map((n, i) => {
           if (n.showAt !== undefined && now < n.showAt) return null;
-          const tone = toneAt(n.tone, n.tones, now);
+          const ci = inChain(`n${i}`);
+          const tone = ci >= 0 ? 'ours' : toneAt(n.tone, n.tones, now);
+          const delay = { transitionDelay: `${Math.max(ci, 0) * .22}s` };
           const lp = n.labelPos ?? 'below';
           return (
             <motion.g key={`${cycle}-${i}`} initial={reduce ? false : { opacity: 0, scale: .8 }} animate={{ opacity: 1, scale: 1 }} style={{ transformOrigin: `${n.x}px ${n.y}px` }}>
               {n.pulseAt === now && !reduce && <motion.circle cx={n.x} cy={n.y} r="30" className={`as-pulse ${tone}`} initial={{ scale: .7, opacity: .9 }} animate={{ scale: 2, opacity: 0 }} transition={{ duration: 1.6 }} style={{ transformOrigin: `${n.x}px ${n.y}px` }} />}
-              <g transform={`translate(${n.x} ${n.y})`} className={`as-icon ${tone}`}>
-                <rect x="-24" y="-24" width="48" height="48" rx="12" className="as-tile" />
+              <g transform={`translate(${n.x} ${n.y})`} style={delay} className={`as-icon ${tone}`}>
+                <rect x="-24" y="-24" width="48" height="48" rx="12" style={delay} className="as-tile" />
                 {ICONS[n.icon]}
                 {n.bars?.map((b, j) => now >= b.at && <motion.rect key={j} x="-17" y={j ? 4 : -13} width="34" height="9" rx="2" className={`as-bar ${b.tone}`} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} />)}
                 {n.crossAt !== undefined && now >= n.crossAt && <motion.path d="M-12 -12 L12 12 M12 -12 L-12 12" className="as-cross" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} />}
@@ -223,12 +257,18 @@ export default function AttackScene({ scene }: { scene: Scene }) {
                 </motion.g>
               )}
               {n.label && (
-                <text className={`as-label ${tone}`} textAnchor={lp === 'right' ? 'start' : lp === 'left' ? 'end' : 'middle'}
+                <text style={delay} className={`as-label ${tone}`} textAnchor={lp === 'right' ? 'start' : lp === 'left' ? 'end' : 'middle'}
                   x={lp === 'right' ? n.x + 34 : lp === 'left' ? n.x - 34 : n.x} y={lp === 'right' || lp === 'left' ? n.y + 4 : lp === 'above' ? n.y - 32 : n.y + 42}>{n.label}</text>
               )}
             </motion.g>
           );
         })}
+        {scene.answer && answerAt >= 0 && now >= answerAt && (
+          <motion.g key={`${cycle}-answer`} className="as-tag ours" initial={reduce ? false : { opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduce ? 0 : (scene.chain?.length ?? 0) * .22 }}>
+            <rect x={scene.answer.x - (scene.answer.text.length * 5.4 + 30) / 2} y={scene.answer.y - 10} width={scene.answer.text.length * 5.4 + 30} height="20" rx="10" />
+            <text x={scene.answer.x} y={scene.answer.y + 3.5} textAnchor="middle">✓ {scene.answer.text}</text>
+          </motion.g>
+        )}
         {scene.marks.map(([x, y], i) => i <= now && (
           <motion.g key={`${cycle}-m${i}`} className={`as-mark ${scene.steps[i].tone} ${i === now ? 'current' : ''}`}
             initial={reduce ? false : { opacity: 0, scale: .4 }} animate={{ opacity: 1, scale: 1 }} style={{ transformOrigin: `${x}px ${y}px` }}>
