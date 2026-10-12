@@ -112,6 +112,11 @@ h1 em { color: var(--acid); font-style: normal; white-space: nowrap; }
 .tile-copy strong { display: block; font-size: 12px; letter-spacing: -.01em; }
 .tile-copy small { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #a3aca0; font-size: 9px; line-height: 1.35; margin-top: 5px; }
 .tile-copy em { display: block; overflow: hidden; margin-top: 5px; color: #626b60; font: normal 7px/1.2 monospace; letter-spacing: .04em; text-overflow: ellipsis; white-space: nowrap; }
+.tile-copy .tile-partner { display: flex; align-items: center; gap: 5px; overflow: visible; }
+.tile-partner b { color: #4f574e; font-weight: 400; }
+.tile-partner-brand { display: inline-flex; align-items: center; gap: 4px; color: #858d83; font-size: 7px; font-weight: 700; letter-spacing: .08em; }
+.tile-partner-brand svg { width: 20px; height: 12px; color: #9b8cff; }
+.tile-partner-brand i { width: 1px; height: 10px; background: #50564f; }
 .tile-spacer { margin-top: auto; }
 .tile-score { margin-top: auto; height: 39px; padding: 0 12px; }
 .tile-score > span { white-space: nowrap; }

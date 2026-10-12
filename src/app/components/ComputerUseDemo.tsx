@@ -8,6 +8,7 @@ import {
   ReceiptPercentIcon,
 } from '@heroicons/react/24/outline';
 import styles from './ComputerUseDemo.module.css';
+import HCompanyLogo from './HCompanyLogo';
 
 type ResultPlaybackProps = {
   videoSrc: string;
@@ -194,8 +195,7 @@ export default function ComputerUseDemo() {
     <div className={`${styles.demo} computer-use-content`}>
       <header className={styles.partnerBar}>
         <div className={styles.partner} aria-label="H Company">
-          <span className={styles.hMark}>H</span>
-          <span><strong>COMPUTER USE · H COMPANY</strong><small>Post-trained GUI agent</small></span>
+          <span><strong>COMPUTER USE <i>·</i><span className={styles.companyLockup}><HCompanyLogo className={styles.partnerLogo} /><i className={styles.companyDivider} /><b>H COMPANY</b></span></strong><small>Post-trained GUI agent</small></span>
         </div>
         <nav className={styles.pageNav} aria-label="Computer use demo pages">
           <button type="button" className={page === 'goal' ? styles.activePage : undefined} onClick={showGoal}>1&nbsp; Goal</button>

@@ -6,6 +6,8 @@ import HealthcareDemo from './components/HealthcareDemo';
 import { CyberDefenseDemo } from './components/CyberDefenseDemo';
 import ComputerUseDemo from './components/ComputerUseDemo';
 import DreamDemoContent from './components/dream/DreamDemo';
+import PostTrainingLanding from './components/PostTrainingLanding';
+import HCompanyLogo from './components/HCompanyLogo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
@@ -99,7 +101,7 @@ const demos: Demo[] = [
   },
 ];
 
-type IntroStage = 'landing' | 'how-it-learns' | 'gallery';
+type IntroStage = 'landing' | 'gallery';
 function NvidiaLogo() {
   return (
     <svg className="nvidia-logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -131,9 +133,8 @@ function RodOfAsclepiusIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function PageSwitcher({ stage, onChange }: { stage: IntroStage; onChange: (stage: IntroStage) => void }) {
   const pages: Array<[IntroStage, string, string]> = [
-    ['landing', '1', 'Robot introduction'],
-    ['how-it-learns', '2', 'Post-training workflow'],
-    ['gallery', '3', 'Use cases'],
+    ['landing', '1', 'Post-training workflow'],
+    ['gallery', '2', 'Use cases'],
   ];
   return (
     <nav className="page-switcher" aria-label="Demo pages">
@@ -181,7 +182,9 @@ function ModelTile({ model }: { model: Demo }) {
       <span className="tile-copy">
         <strong>{model.name}</strong>
         <small>{model.description}</small>
-        <em>{model.task}</em>
+        {model.id === 'computer'
+          ? <em className="tile-partner"><span>GUI agent</span><b>·</b><span className="tile-partner-brand"><HCompanyLogo /><i /><span>H COMPANY</span></span></em>
+          : <em>{model.task}</em>}
       </span>
       {model.kind === 'placeholder' && model.id !== 'defense' ? (
         <span className="tile-score">
@@ -242,31 +245,12 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
-  const introFrameRef = useRef<HTMLIFrameElement>(null);
   const workspaceRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const stage = new URLSearchParams(window.location.search).get('stage');
-    if (stage && ['landing', 'how-it-learns', 'gallery'].includes(stage)) setIntroStage(stage as IntroStage);
+    if (stage === 'gallery') setIntroStage('gallery');
   }, []);
-
-  useEffect(() => {
-    if (introStage === 'gallery') return;
-    const advanceIntro = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== introFrameRef.current?.contentWindow) return;
-      if (introStage === 'landing' && event.data?.type === 'gtc-demo:enter') {
-        setIntroStage('how-it-learns');
-      }
-      if (introStage === 'how-it-learns' && event.data?.type === 'gtc-demo:enter-gallery') {
-        setIntroStage('gallery');
-      }
-      if (event.data?.type === 'gtc-demo:navigate' && ['landing', 'how-it-learns', 'gallery'].includes(event.data.stage)) {
-        setIntroStage(event.data.stage as IntroStage);
-      }
-    };
-    window.addEventListener('message', advanceIntro);
-    return () => window.removeEventListener('message', advanceIntro);
-  }, [introStage]);
 
   const runEvaluation = () => {
     if (isRunning) return;
@@ -290,12 +274,13 @@ export default function Home() {
 
   if (introStage !== 'gallery') {
     return (
-      <main className="demo-landing">
-        <iframe
-          ref={introFrameRef}
-          src={introStage === 'landing' ? '/healthcare/r02/introduction/index.html?embed=1' : '/healthcare/r01/how-it-learns.html?embed=1'}
-          title={introStage === 'landing' ? 'Post-training with practice and feedback' : 'How post-training works'}
-        />
+      <main className="app-shell">
+        <header className="topbar">
+          <div className="brand" role="img" aria-label="NVIDIA"><NvidiaLogo /></div>
+          <div className="topbar-center"><span className="crumb-muted">DGX Station</span></div>
+          <div className="topbar-actions"><PageSwitcher stage={introStage} onChange={setIntroStage} /><span className="local-badge"><i /> LOCAL</span></div>
+        </header>
+        <PostTrainingLanding onContinue={() => setIntroStage('gallery')} />
       </main>
     );
   }

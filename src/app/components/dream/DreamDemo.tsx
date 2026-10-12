@@ -6,8 +6,9 @@ import CtiMap from './CtiMap';
 import NvidiaLogo from './NvidiaLogo';
 import PartnerLogo from './PartnerLogo';
 import './DreamTheme.css';
+import { Inter, Instrument_Serif } from 'next/font/google';
 import { AnimatePresence, MotionConfig, animate, motion, useReducedMotion } from 'framer-motion';
-import { CheckIcon, ChevronDownIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 // Researcher-approved examples 01, 05, 06 and 10 from Dream's "Nemotron MiST Before and After":
 // questions, excerpts and full responses are verbatim from the evaluation logs (run 1);
@@ -27,8 +28,8 @@ const CATEGORIES: Category[] = [
   {
     id: 'cti', label: 'Threat Intelligence',
     bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
-    prompt: 'An attacker with access to a host’s Docker API sent a remote build request containing a Dockerfile that pulled a vanilla alpine base image and then fetched a malware binary from their C2 to bake into the image. The build completed locally on the host, avoiding alerts tied to downloading malicious images. The adversary then used the resulting custom image to deploy a container for follow-on activity.',
-    why: { base: "Base describes the build correctly, then labels the final step (deploying a container).", ours: "Ours sees that the evasion happens at build time, which is exactly T1612." },
+    prompt: 'An attacker with access to a host’s Docker API sent a remote build request. The Dockerfile pulled a clean alpine base image, then fetched malware from the attacker’s C2 into it. Building on the host avoided malicious-image alerts, and the attacker then ran a container from it.',
+    why: { base: "It notices the image was built on the host, but names the last step, deploying a container (T1610), instead of the evasion itself.", ours: "It sees that the evasion is building the image on the host, so no malicious image is ever pulled for scanning to catch: T1612 Build Image on Host." },
     key: 'T1612',
     before: { answer: 'T1610 · Deploy Container', runs: 'T1610 · T1610 · T1610', quote: 'This represents the use of the container build process to create and deploy malicious resources within the container environment.' },
     after: { answer: 'T1612 · Build Image on Host', runs: 'T1612 · T1612 · T1612', quote: 'The key behavior here is the creation of a custom container image on the host using a trusted base image, which is then used to deploy a container for further malicious activity. […] building an image on the host to bypass image scanning and registry monitoring controls.' },
@@ -37,8 +38,8 @@ const CATEGORIES: Category[] = [
   {
     id: 'triage', label: 'Alert Triage',
     bench: { name: 'ATT&CK technique extraction', plain: 'Identifying the attack technique', before: 43.9, after: 77.8 },
-    prompt: 'An attacker emailed a victim a malicious ISO file hosted on a public file-share, which was saved with a MOTW tag. The victim mounted the ISO and executed the contained EXE, which lacked the MOTW because the disk image did not preserve NTFS alternate data streams. This allowed the payload to run without SmartScreen or Protected View restrictions.',
-    why: { base: "Base labels the victim's click instead of the trick.", ours: "Ours explains why the payload escapes SmartScreen (the ISO drops the MOTW stream) and maps it to Subvert Trust Controls, the parent of the MOTW-bypass sub-technique." },
+    prompt: 'An attacker emailed a link to a malicious ISO on a public file share, saved with a MOTW tag. The victim mounted it and ran the EXE inside. Disk images don’t keep NTFS alternate data streams, so the EXE had no MOTW and bypassed SmartScreen.',
+    why: { base: "It labels the victim opening the file (T1204 User Execution), but the point of the case is how the payload got past SmartScreen.", ours: "It explains that the ISO drops the MOTW tag, so SmartScreen never checks the EXE: T1553 Subvert Trust Controls, whose sub-technique T1553.005 is Mark-of-the-Web Bypass." },
     key: 'T1553',
     before: { answer: 'T1204 · User Execution', runs: 'T1204 · T1204 · T1204', quote: 'This is categorized as a user execution method that evades defenses designed to flag or block downloaded executables.' },
     after: { answer: 'T1553 · Subvert Trust Controls', runs: 'T1553 · T1553 · T1553', quote: 'the contained executable does not inherit the MOTW because the ISO format does not preserve NTFS alternate data streams (ADS), where MOTW is stored. As a result, the payload bypasses protections like SmartScreen and Protected View' },
@@ -47,8 +48,8 @@ const CATEGORIES: Category[] = [
   {
     id: 'mitigation', label: 'Mitigation',
     bench: { name: 'risk mitigation strategy', plain: 'Choosing the right defense', before: 22.9, after: 55.7 },
-    prompt: 'An adversary rented time on a large botnet and instructed compromised hosts worldwide to flood a target web service with UDP packets. The sustained high-volume traffic saturated the service’s upstream bandwidth, preventing legitimate clients from reaching the site.',
-    why: { base: "Base has the right idea but every ID is wrong: T1499 is Endpoint DoS, and M1032 is MFA (Network Intrusion Prevention is M1031).", ours: "Ours gives the correct control with its correct ID and name." },
+    prompt: 'An adversary rented a botnet and had compromised hosts worldwide flood a web service with UDP packets. The traffic saturated its upstream bandwidth, so legitimate users couldn’t reach the site.',
+    why: { base: "Every ID is wrong: a bandwidth flood is T1498, not T1499 (Endpoint DoS), and M1032 is Multi-factor Authentication, not Network Intrusion Prevention (M1031).", ours: "It picks M1037 Filter Network Traffic, the mitigation ATT&CK lists for network floods: filter or rate-limit traffic before it saturates the link." },
     key: 'M1037',
     before: { answer: 'M1032 · Multi-factor Authentication', runs: 'M1032 · M1042 · M1025', quote: 'This activity corresponds to the MITRE ATT&CK technique Network Denial of Service (T1499). Among the available mitigations for this technique, Network Intrusion Prevention (M1032) is the most appropriate' },
     after: { answer: 'M1037 · Filter Network Traffic', runs: 'M1037 · M1037 · M1037', quote: 'The most effective defense is to control and filter incoming traffic at the network perimeter—specifically, by implementing ingress traffic filtering to block or rate-limit suspicious or excessive UDP traffic from untrusted sources. This aligns directly with the purpose of M1037: Filter Network Traffic' },
@@ -57,8 +58,8 @@ const CATEGORIES: Category[] = [
   {
     id: 'vuln', label: 'Vulnerability Analysis',
     bench: { name: 'root-cause mapping', plain: 'Finding the root cause', before: 61.3, after: 73.7 },
-    prompt: 'Open5GS MME versions <= 2.6.4 contain an assertion that can be remotely triggered via a malformed ASN.1 packet over the S1AP interface. An attacker may send an `Initial UE Message` message missing a required `PLMN Identity` field to repeatedly crash the MME, resulting in denial of service.',
-    why: { base: "Base falls back to the catch-all CWE-20, which is true but uninformative.", ours: "Ours names the precise weakness: a debug-time assertion that remote traffic can reach." },
+    prompt: 'Open5GS MME ≤ 2.6.4 has an assertion attackers can trigger remotely over S1AP. An Initial UE Message missing the required PLMN Identity field crashes the MME, and repeating it causes denial of service.',
+    why: { base: "It sees the crash but files it under CWE-20 Improper Input Validation, a broad catch-all that doesn’t name what actually fails.", ours: "It pinpoints the root cause: an assert() that attacker-controlled network input can reach, which is CWE-617 Reachable Assertion." },
     key: 'CWE-617',
     before: { answer: 'CWE-20 · Improper Input Validation', runs: 'CWE-20 · CWE-20 · CWE-20', quote: 'The absence of this expected field triggers an assertion failure, which causes the service to crash. This is a classic case of insufficient input validation' },
     after: { answer: 'CWE-617 · Reachable Assertion', runs: 'CWE-617 · CWE-617 · CWE-617', quote: 'The key indicator here is the use of an `assert()` statement—commonly used during development to catch internal logic errors—that is reachable through attacker-controlled input. […] The root cause is not a failure to validate input per se, but rather the improper use of assertions in a context where they can be triggered by untrusted input.' },
@@ -73,13 +74,6 @@ const CATEGORIES: Category[] = [
     full: { before: "No device can communicate directly with dbs-310 without going through a router or firewall", after: "Devices in the same VLAN segment as dbs-310 (VLAN \"vlan_name2\", subnet 10.40.12.0/24) can communicate with it directly without going through a router or firewall. Here are those devices:\n\n| Device name | Type |\n|---|---|\n| wks-431 | ENDPOINT |\n| dbs-254 | SERVER |\n| dbs-504 | SERVER |\n| wks-766 | ENDPOINT |\n| nb-149 | ENDPOINT |\n| nb-174 | ENDPOINT |\n| dbs-648 | SERVER |\n| dbs-196 | SERVER |\n| mail-474 | ENDPOINT |\n| nb-696 | ENDPOINT |\n| mail-159 | ENDPOINT |\n| wks-619 | ENDPOINT |\n| dbs-319 | SERVER |\n| mail-138 | ENDPOINT |\n| mail-188 | ENDPOINT |\n| nb-544 | ENDPOINT |\n| nb-528 | ENDPOINT |\n| mail-171 | ENDPOINT |\n| nb-346 | ENDPOINT |\n| 10.40.12.43 | ENDPOINT |\n| dbs-664 | SERVER |\n| app-534 | ENDPOINT |\n| nb-160 | ENDPOINT |\n| nb-679 | ENDPOINT |\n| nb-226 | ENDPOINT |\n| wks-328 | ENDPOINT |\n| app-745 | ENDPOINT |\n| nb-742 | ENDPOINT |\n| nb-163 | ENDPOINT |\n| wks-690 | ENDPOINT |\n| app-699 | ENDPOINT |\n| nb-506 | ENDPOINT |" },
   },
 ];
-
-// Source badge for the answer IDs: MITRE ATT&CK techniques/mitigations, or MITRE CWE weaknesses.
-function MitreBadge({ id }: { id: string }) {
-  return id.startsWith('CWE-')
-    ? <span className="mitre-badge">MITRE CWE</span>
-    : <span className="mitre-badge" title="MITRE ATT&CK®">MITRE ATT&amp;CK</span>;
-}
 
 // Splits a response into text and Markdown-table blocks (runs of lines starting with '|').
 const toBlocks = (text: string) => text.split('\n').reduce<string[]>((blocks, line) => {
@@ -186,41 +180,39 @@ function BeforeAfter() {
         <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>
           <div className="dream-scenario">
             <div className="dream-question">
-              <span className="prompt-label">CASE <span className="prompt-label-note">(original prompt)</span></span>
+              <span className="prompt-label">CASE</span>
               <p>{active.prompt}</p>
             </div>
             <AttackScene scene={SCENES[active.id]} />
           </div>
+          <StatsStrip bench={active.bench} />
           <div className="comparison-grid">
             <section className="output-panel">
               <header>
-                <span className="model-mark bad"><XMarkIcon /></span>
-                <span><small><b className="dream-phase">BEFORE TRAINING</b> · ORIGINAL</small><strong>Nemotron 3.5 Super</strong></span>
+                <span><small><b className="dream-phase">BEFORE TRAINING</b></small><strong>Nemotron 3.5 Super</strong></span>
               </header>
               <div className="response-copy">
-                <div className="answer-head"><Verdict ok={false} runs={active.before.runs} answerKey={active.key} />{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="answer-head"><Verdict ok={false} runs={active.before.runs} answerKey={active.key} /></div>
                 <div className="cyber-answer-row"><strong className="cyber-answer miss">{active.before.answer}</strong></div>
-                <p>“{active.before.quote}”</p>
-                {active.why && <div className="cyber-why-note bad"><b>Why it’s inaccurate</b>{cap(active.why.base.replace(/^Base /, ''))}</div>}
+                <p>{cap(active.before.quote)}</p>
+                {active.why && <div className="cyber-why-note bad"><b>Why it’s inaccurate</b>{active.why.base}</div>}
                 {active.full && active.full.before !== active.before.quote && <FullResponse text={active.full.before} open={fullOpen} onToggle={toggleFull} />}
               </div>
             </section>
             <div className="comparison-divider"><span>vs.</span></div>
             <section className="output-panel tuned cyber-scan">
               <header>
-                <span className="model-mark ok"><CheckIcon /></span>
-                <span><small><b className="dream-phase">AFTER TRAINING</b></small><strong>CLM (Cyber Language Model), powered by MiST &amp; Dreamer</strong></span>
+                <span><small><b className="dream-phase">AFTER TRAINING</b></small><strong>CLM (Cyber Language Model)</strong></span>
               </header>
               <div className="response-copy">
-                <div className="answer-head"><Verdict ok runs={active.after.runs} answerKey={active.key} />{active.key && <MitreBadge id={active.key} />}</div>
+                <div className="answer-head"><Verdict ok runs={active.after.runs} answerKey={active.key} /></div>
                 <div className="cyber-answer-row"><motion.strong className="cyber-answer" initial={{ opacity: 0, scale: .92, filter: 'blur(4px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ delay: .25, duration: .4 }}>{active.after.answer}</motion.strong></div>
-                <TypedText text={`“${active.after.quote}”`} />
-                {active.why && <div className="cyber-why-note ok"><b>Why CLM gets it right</b>{cap(active.why.ours.replace(/^Ours /, ''))}</div>}
+                <TypedText text={cap(active.after.quote)} />
+                {active.why && <div className="cyber-why-note ok"><b>Why CLM gets it right</b>{active.why.ours}</div>}
                 {active.full && <FullResponse text={active.full.after} open={fullOpen} onToggle={toggleFull} />}
               </div>
             </section>
           </div>
-          <StatsStrip bench={active.bench} />
         </motion.div>
       </AnimatePresence>
     </>
@@ -399,7 +391,7 @@ function RuntimeDiagram() {
 
       <AnimatePresence mode="wait">
         <motion.p key={`${mode}-${step}`} className={`rt-note ${mode}`} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: .2 }}>
-          <b className="rt-step-num">{step + 1}</b><span className="rt-step-of">of {seq.length}</span>{seq[step].caption}
+          <b className="rt-step-num">{step + 1}/{seq.length}</b>{seq[step].caption}
         </motion.p>
       </AnimatePresence>
     </div>
@@ -448,6 +440,12 @@ function ModelCard() {
             </div>
           ))}
           <p>Mean of 3 runs. Improves on all 15 security benchmarks, leads every 120B-class open model tested on 12. Scores measure stage 1 (cyber knowledge).</p>
+          <small className="cyber-scores-stage2">STAGE 1 · BENCHMARKS BEHIND THE BEFORE / AFTER CASES</small>
+          <dl className="cyber-rl">
+            <div><dt>43.9 → <b>77.8</b></dt><dd>ATT&amp;CK technique extraction (AthenaBench): Threat Intelligence, Alert Triage</dd></div>
+            <div><dt>22.9 → <b>55.7</b></dt><dd>risk mitigation strategy (AthenaBench): Mitigation</dd></div>
+            <div><dt>61.3 → <b>73.7</b></dt><dd>root-cause mapping (AthenaBench): Vulnerability Analysis</dd></div>
+          </dl>
           <small className="cyber-scores-stage2">STAGE 2 · AGENTIC RL · ONE TRAINING RUN</small>
           <dl className="cyber-rl">
             <div><dt>0.70 → <b>0.75</b></dt><dd>validation score on held-out questions</dd></div>
@@ -492,6 +490,10 @@ const TABS = [
   { id: 'card', label: 'Model Info' },
 ] as const;
 
+// Dream brand fonts (OFL), self-hosted by next/font and exposed to DreamTheme.css as CSS variables.
+const dreamBody = Inter({ subsets: ['latin'], variable: '--font-dream-body' });
+const dreamDisplay = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-dream-display' });
+
 function HowWeTrain() {
   return (
     <>
@@ -503,9 +505,17 @@ function HowWeTrain() {
 
 type CyberTab = (typeof TABS)[number]['id'];
 
+// Gallery entry for Dream's standalone card; page.tsx adds it to the use-case list.
+export const DREAM_DEMO = {
+  kind: 'demo' as const, id: 'dream', name: 'National Sovereign Cyber Defense', task: 'Cybersecurity · Dream',
+  color: '#E88480', glow: 'rgba(232, 132, 128, .18)', // Dream coral; no icon
+  embedUrl: '', // unused: DreamCard renders the expanded view itself
+  previewLabel: 'Real simulation',
+};
+
 function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab) => void }) {
   return (
-    <div className="cyber-tabs" role="tablist" aria-label="Dream cybersecurity demo">
+    <div className="cyber-tabs" role="tablist" aria-label="National Sovereign Cyber Defense demo">
       {TABS.map((t) => (
         <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'active' : ''} onClick={() => onChange(t.id)}>
           {tab === t.id && <motion.span layoutId="cyber-tab" className="cyber-tab-bg" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
@@ -516,16 +526,15 @@ function CyberTabs({ tab, onChange }: { tab: CyberTab; onChange: (tab: CyberTab)
   );
 }
 
-// Content-only integration: main owns the existing National Defense tile, title,
-// icon, color and expanded-card chrome.
+// Content-only integration: main owns the National Defense tile and expanded-card chrome.
 export default function DreamDemoContent() {
   const [tab, setTab] = useState<CyberTab>('compare');
   return (
     <MotionConfig reducedMotion="user">
-      <div className="dream-theme">
+      <div className={`dream-theme ${dreamBody.variable} ${dreamDisplay.variable}`}>
         <div className="dream-content-brand">
           <PartnerLogo className="partner-logo" />
-          <p className="dream-tagline">Cyber language built into the model, on hardware your nation owns</p>
+          <p className="dream-tagline">Cyber Language Model with Nemotron 3.5 Super</p>
         </div>
         <div className="cyber-tabs-row"><CyberTabs tab={tab} onChange={setTab} /></div>
         <div className="cyber-demo">
