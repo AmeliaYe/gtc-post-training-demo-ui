@@ -1,3 +1,14 @@
+# Current Demo team handoff — October 6, 2026
+
+The active standalone deliverables are in [`../public/healthcare/r02/`](../public/healthcare/r02/README.md):
+
+- **Introduction:** [`introduction/index.html`](../public/healthcare/r02/introduction/index.html), the larger gym r06 robot training animation.
+- **Post-training for healthcare:** [`healthcare/index.html`](../public/healthcare/r02/healthcare/index.html), the latest r08 workflow with How It Learns, Before & After, Results and Getting Started. Introduction is removed.
+
+The Healthcare tile now loads the second deliverable with `?embed=1`. The first is ready for landing-page composition by the Demo team. Keep each HTML with its assets directory. The handoff includes a README and SHA-256 provenance; earlier full Press and Developer tracks below remain preserved. The split handoff is maintained on the `healthcare-demo` branch.
+
+---
+
 # Healthcare demo — standalone reference tracks
 
 Complete standalone copies of the Press and Developer experiences, packaged on
@@ -16,7 +27,7 @@ and bundled library licenses. Keep each HTML file with its `assets/` directory.
 
 These copies are independent of the Next.js shell and preserve their source files
 byte-for-byte. The GTC Healthcare tile continues to use its four-page bundle in
-`public/healthcare/r01/`; this reference folder does not change that integration.
+`public/healthcare/r02/healthcare/`; this reference folder does not change that integration.
 
 ## Google Sheets narratives
 
@@ -65,8 +76,7 @@ step 25. They are separate presentations, not identical checkpoint comparisons.
 - Workstation repo folder: `/home/aquraini/gtc-post-training-demo-ui/healthcare-demo/`
 - Local source package: `outputs/healthcare-demo-r03/` in the healthcare evaluation repo.
 - Golden mirrored copy: `/home/aquraini/healthcare-agent-evals/outputs/healthcare-demo-r03/`
-- Git branch: `healthcare-demo`. This reference folder is included in commit preparation;
-  no commit or push has been made.
+- Git branch: `healthcare-demo`, containing the r06/r07 reference tracks and the current split handoff.
 
 Preserve this snapshot when refreshing the package: archive the current version
 or add a versioned folder rather than overwriting earlier revisions.

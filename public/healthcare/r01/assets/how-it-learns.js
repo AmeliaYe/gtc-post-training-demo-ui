@@ -1,14 +1,11 @@
-import {createArchitecture} from './architecture-r05.js';
+function navigate(stage) {
+  if (parent === window) {
+    location.assign(`/?stage=${stage}`);
+    return;
+  }
 
-const workflow=createArchitecture();
-workflow.setVisible(true);
-
-function enterGallery(){
-  workflow.pause();
-  if(parent===window){location.assign('/');return;}
-  parent.postMessage({type:'gtc-demo:enter-gallery'},location.origin);
+  parent.postMessage({type: 'gtc-demo:navigate', stage}, location.origin);
 }
 
-document.querySelector('#enter-gallery').addEventListener('click',enterGallery);
-document.querySelector('#heldout-gallery').addEventListener('click',enterGallery);
-document.documentElement.dataset.howItLearnsReady='true';
+document.querySelectorAll('[data-demo-stage]').forEach((button) => button.addEventListener('click', () => navigate(button.dataset.demoStage)));
+document.documentElement.dataset.howItLearnsReady = 'true';

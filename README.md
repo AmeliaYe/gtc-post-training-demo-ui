@@ -22,15 +22,15 @@ npm start
 
 ## Embedded demos
 
-The **multimodal biology** demo is embedded as an iframe. First clone the [nemotron-stitch-demos repo](https://github.com/NVIDIA-dev/nemotron-stitch-demos) and run and serve the model checkpoints. Then start the demo UI using:
+The **multimodal biology** demo (`kermt-web-ui/`) is embedded as an iframe pointed at `http://127.0.0.1:5173`. Its frontend lives in this repo; the inference backend (model checkpoints, molecule validation, generation endpoints) needs to be set up and run separately.
 
 ```bash
-cd nemotron-stitch-demos/nemotron-kermt/demo/web
-npm ci
-npm run dev
+npm run dev:bio      # just the biology demo frontend (for testing)
+npm run dev:all      # the main app + the biology demo frontend together
 ```
 
-It should start at <http://127.0.0.1:5173>.
+The frontend expects `/api/health`, `/api/molecule`, and `/api/{base,kermt}/generate` from a backend proxied at `KERMT_BACKEND_URL` (defaults to `http://127.0.0.1:8080`, see [kermt-web-ui/vite.config.js](kermt-web-ui/vite.config.js)). Make sure to update the URL if the backend is running elsewhere.
+
 ## Private analytics
 
 The demo can send privacy-conscious aggregate events to PostHog and expose a password-protected dashboard at `/admin/analytics`. The route is not linked from the public interface.

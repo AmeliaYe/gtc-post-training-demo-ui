@@ -1,0 +1,116 @@
+{
+  "note": "Questions, SMILES and expected answers were verified with RDKit. Model answers are from three runs each against the live backend; outputs were identical across runs.",
+  "scenarios": [
+    {
+      "id": "epoxide",
+      "title": "Epoxide safety alert",
+      "theme": "Drug Safety Screening",
+      "story": "A toxicology team is triaging compounds before synthesis. Epoxides are reactive and can damage DNA, so every one has to be counted and flagged.",
+      "chemblId": "CHEMBL2313050",
+      "question": "Epoxides are reactive and can damage DNA, so they are flagged in safety screens. Count the epoxide rings (C1OC1) in this molecule. Provide a whole number. Give your answer as an integer.",
+      "smiles": "C=C(O)OCC12CC[C@H]3O[C@]3(C)CCC3OC3(C)CC[C@H]([C@]3(C)CO3)[C@@H](O)C1O2",
+      "heavyAtoms": 29,
+      "property": "fr_epoxide",
+      "expectedAnswer": 4,
+      "observed": {
+        "base": 0,
+        "kermt": 4,
+        "runs": 3
+      },
+      "displayQuestion": "This drug candidate looks promising, but first I need to check it for DNA-damaging epoxide groups. How many does it have?",
+      "payoff": "Post-trained Nemotron found all {expected}. Base Nemotron didn’t, so a toxic candidate could have slipped through.",
+      "speaker": "Toxicologist",
+      "atoms": 29,
+      "bonds": 33,
+      "ready": true,
+      "intro": "A toxicologist is researching drug safety…",
+      "glossary": [
+        {
+          "term": "epoxide groups",
+          "definition": "A tiny ring of two carbon atoms and one oxygen atom. The ring is strained, so it reacts easily, including with DNA, which is why it can be toxic."
+        }
+      ]
+    },
+    {
+      "id": "h-bond-donors",
+      "title": "Oral absorption (Lipinski)",
+      "theme": "Drug-likeness",
+      "story": "A project team is deciding whether a compound is likely to be absorbed orally. Hydrogen-bond donor count is one of the Lipinski rule-of-five checks.",
+      "chemblId": "CHEMBL2296351",
+      "question": "Hydrogen-bond donors matter for oral absorption (Lipinski rule of five). What is the count of hydrogen bond donors in this molecule? Give your answer as an integer.",
+      "smiles": "NC(CCC(=O)n1c(OCc2ccccc2Cl)nc2ccccc2c1=O)C(=O)O",
+      "heavyAtoms": 29,
+      "property": "NumHDonors",
+      "expectedAnswer": 2,
+      "observed": {
+        "base": 3,
+        "kermt": 2,
+        "runs": 3
+      },
+      "ready": true,
+      "atoms": 29,
+      "bonds": 31,
+      "speaker": "Medicinal chemist",
+      "intro": "A medicinal chemist is designing an oral drug…",
+      "displayQuestion": "This compound looks promising, but a pill has to be absorbed through the gut, and too many hydrogen-bond donors can block that. How many does it have?",
+      "payoff": "Post-trained Nemotron counted all {expected}. Base Nemotron didn’t, so the chemist could misjudge whether the drug can be absorbed.",
+      "glossary": [
+        {
+          "term": "hydrogen-bond donors",
+          "definition": "Hydrogen atoms attached to nitrogen or oxygen (as in –NH₂ or –OH) that can bond to other molecules. Too many make it harder for a drug to cross cell membranes."
+        }
+      ]
+    },
+    {
+      "id": "alkyl-halide",
+      "title": "Alkylating agent alert",
+      "theme": "Safety screening",
+      "story": "A safety scientist is checking a candidate for alkylating groups, which can react with DNA and cause genotoxicity.",
+      "chemblId": "CHEMBL3645054",
+      "question": "Alkyl halides can act as alkylating, potentially genotoxic agents. How many total alkyl halides in the following compound? Give your answer as an integer.",
+      "smiles": "COc1ccc(C(F)(F)F)cc1-c1cccn2nc(Nc3ccc4c(c3)CCNC4)nc12",
+      "heavyAtoms": 32,
+      "property": "fr_alkyl_halide",
+      "expectedAnswer": 3,
+      "observed": {
+        "base": 0,
+        "kermt": 3,
+        "runs": 3
+      }
+    },
+    {
+      "id": "aniline",
+      "title": "Aromatic amine alert",
+      "theme": "Safety screening",
+      "story": "A medicinal chemist is reviewing a lead series. Aromatic amines (anilines) are a well-known toxicity alert, so each one needs to be found.",
+      "chemblId": "CHEMBL573538",
+      "question": "Aromatic amines (anilines) are a well-known toxicity alert. Determine the number of anilines (Ar-NH2) in the molecule below. Give your answer as an integer. Give your answer as an integer.",
+      "smiles": "Cn1ncc2c(Nc3ccc(F)cc3)nc(NCCN3CCOCC3)nc21",
+      "heavyAtoms": 27,
+      "property": "fr_aniline",
+      "expectedAnswer": 3,
+      "observed": {
+        "base": 1,
+        "kermt": 3,
+        "runs": 3
+      }
+    },
+    {
+      "id": "lactone",
+      "title": "Lactone stability",
+      "theme": "Drug stability",
+      "story": "A formulation team is assessing stability. Lactones can ring-open in the body and change how a drug behaves.",
+      "chemblId": "CHEMBL5416030",
+      "question": "Lactones can ring-open in the body and change a drug's activity. Identify the number of cyclic esters (lactones) in the following compound. Give your answer as an integer.",
+      "smiles": "C=C1C(=O)[C@@]23C(=O)O[C@H]4CCC(C)(C)[C@H]5C(=O)OC[C@]45[C@H]2CC[C@@H]1[C@H]3O",
+      "heavyAtoms": 26,
+      "property": "fr_lactone",
+      "expectedAnswer": 1,
+      "observed": {
+        "base": 2,
+        "kermt": 1,
+        "runs": 3
+      }
+    }
+  ]
+}

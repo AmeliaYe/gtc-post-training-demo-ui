@@ -1,52 +1,53 @@
 <!doctype html>
-<html lang="en" data-revision="gtc-how-it-learns-r01">
+<html lang="en" data-revision="gtc-workflow-r02">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="How Nemotron learns through practice, feedback, and policy updates.">
+  <meta name="description" content="Five steps from zero to a trained assistant.">
   <link rel="icon" href="data:,">
-  <title>Nemotron | How It Learns</title>
+  <title>Nemotron | The Workflow</title>
   <link rel="stylesheet" href="assets/press.css">
-  <link rel="stylesheet" href="assets/architecture-r03.css">
-  <link rel="stylesheet" href="assets/architecture-r04.css">
-  <link rel="stylesheet" href="assets/architecture-r05.css">
   <link rel="stylesheet" href="assets/how-it-learns.css">
 </head>
-<body class="gtc-how-it-learns">
+<body class="gtc-workflow">
   <main>
-    <section aria-labelledby="learn-title">
-      <div class="heading"><div><p class="eyebrow">Nemotron <span>/ Post-training for healthcare</span></p><h1 id="learn-title">Practice across healthcare tasks.</h1></div><div class="learn-heading-actions"><button class="next-link" id="enter-gallery">Explore use cases <img src="assets/beyond-request-arrow-right-r01.svg" alt=""></button><button class="icon-button" id="arch-present" aria-label="Enter presentation view" aria-pressed="false" title="Enter presentation view"><img src="assets/beyond-request-maximize-r01.svg" alt=""></button></div></div>
-      <div id="architecture" class="architecture learn-flow" data-phase="practice" data-playing="false">
-        <div class="learn-stage">
-          <canvas class="learn-cinema" aria-hidden="true"></canvas>
-          <svg class="learn-wires" aria-hidden="true"><defs><marker id="learn-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="context-stroke"/></marker></defs></svg>
-          <section class="learn-gym" aria-label="NeMo Gym practice environment">
-            <header class="learn-gym-title"><h2>NeMo Gym</h2><p>Practice Environment</p></header>
-            <div class="learn-data"><img src="assets/architecture-r04/tasks.png" alt=""><div><strong>Healthcare tasks</strong><p>Requests, health context<br>&amp; workflow goals</p></div></div>
-            <section class="learn-harness" aria-label="Hermes agent harness">
-              <h3>Hermes agent harness</h3><div class="learn-model"><img src="assets/architecture-r04/nemotron.png" alt="Nemotron agent model"><p>Nemotron 3.5 Lightning</p></div><span class="learn-policy-state">Policy updated</span>
-              <div class="learn-tools"><div><img src="assets/architecture-r04/tools.png" alt=""><strong>Clinical tools</strong></div><p>Profiles &middot; Refills &middot; Scheduling</p></div>
-            </section>
-            <div class="learn-stack" aria-label="Example healthcare tasks">
-              <div class="learn-sheet" data-task="0"><button aria-pressed="true" title="Practice prescription renewal">Prescription renewal</button></div>
-              <div class="learn-sheet" data-task="1"><button aria-pressed="false" title="Practice symptom assessment">Symptom assessment</button></div>
-              <div class="learn-sheet" data-task="2"><button aria-pressed="false" title="Practice appointment cancellation">Appointment cancellation</button></div>
-              <div class="learn-sheet" data-task="3"><button aria-pressed="false" title="Practice pharmacy update">Pharmacy update</button></div>
-              <div class="learn-sheet learn-more" aria-label="Additional healthcare tasks"><span aria-hidden="true">...</span></div>
-              <section class="learn-patient"><img src="assets/architecture-r04/nemotron.png" alt="Simulated patient model"><h3>Simulated patient</h3></section>
-            </div>
-            <section class="learn-evaluation" aria-label="Verifier and LLM judge"><h3>Evaluation</h3><div class="learn-judges"><div class="learn-verifier"><img src="assets/architecture-r04/verifier.png" alt=""><p>Verifier</p></div><div class="learn-judge"><img src="assets/architecture-r04/nemotron.png" alt="NVIDIA NIM"><p>LLM judge</p></div></div><p class="learn-rubric">Rubric + reward</p></section>
-          </section>
-          <section class="learn-optimizer" aria-label="NeMo RL optimizer"><img src="assets/architecture-r04/rl.png" alt=""><h2>NeMo RL</h2><p>GRPO</p></section>
-          <button class="learn-heldout" id="heldout-gallery"><span>See it in the field</span><strong>Explore use cases <img src="assets/beyond-request-arrow-right-r01.svg" alt=""></strong></button>
-          <span class="learn-label" data-label="conversation">Agent<br>responses</span><span class="learn-label" data-label="reply">Patient<br>replies</span><span class="learn-label" data-label="trace">Interaction<br>traces</span><span class="learn-label" data-label="feedback">Trajectories + rewards</span><span class="learn-label" data-label="update">Policy updates</span>
-        </div>
-        <input class="learn-timeline" id="arch-timeline" type="range" min="0" max="25" step="0.01" value="0" aria-label="Workflow timeline" aria-valuetext="Practice, 0 seconds">
-        <div class="learn-controls"><div class="learn-phases" role="group" aria-label="Learning stages"><button data-phase-select="0" aria-pressed="true">01 <span>Practice</span></button><button data-phase-select="1" aria-pressed="false">02 <span>Feedback</span></button><button data-phase-select="2" aria-pressed="false">03 <span>Update</span></button></div><div class="learn-playback"><button class="icon-button" id="arch-play" aria-label="Pause workflow" title="Pause workflow"><img src="assets/beyond-request-pause-r01.svg" alt=""></button><button class="icon-button" id="arch-next" aria-label="Next stage" title="Next stage"><img src="assets/beyond-request-arrow-right-r01.svg" alt=""></button><button class="icon-button" id="arch-reset" aria-label="Replay workflow" title="Replay workflow"><img src="assets/beyond-request-rotate-ccw-r01.svg" alt=""></button></div></div>
-        <p class="learn-caption" id="phase-caption">The agent practices across different healthcare tasks.</p>
-        <footer class="learn-platform"><p><strong>DGX Station</strong><span>A platform for post-training</span></p><span>Illustrative training loop</span></footer>
+    <header class="workflow-heading">
+      <div>
+        <h1>Post-training Workflow</h1>
+        <p class="workflow-subtitle">5 steps from zero to a trained model.</p>
       </div>
+      <nav class="page-switcher" aria-label="Demo pages">
+        <button type="button" data-demo-stage="landing" aria-label="1. Robot introduction" title="Robot introduction" aria-pressed="false">1</button>
+        <button type="button" data-demo-stage="how-it-learns" aria-label="2. Post-training workflow" title="Post-training workflow" aria-pressed="true">2</button>
+        <button type="button" data-demo-stage="gallery" aria-label="3. Use cases" title="Use cases" aria-pressed="false">3</button>
+      </nav>
+    </header>
+
+    <section class="workflow" aria-label="Five-step post-training workflow">
+      <ol class="workflow-steps">
+        <li class="workflow-step">
+          <span class="step-number">1</span>
+          <h2>Start with a<br><span class="nemotron">Nemotron</span> base model</h2>
+        </li>
+        <li class="workflow-step">
+          <span class="step-number">2</span>
+          <h2>Prepare domain<br>training tasks</h2>
+        </li>
+        <li class="workflow-step">
+          <span class="step-number">3</span>
+          <h2>Practice in<br><span class="nemotron">NeMo Gym</span></h2>
+        </li>
+        <li class="workflow-step">
+          <span class="step-number">4</span>
+          <h2>Train with<br><span class="nemotron">NeMo RL</span></h2>
+        </li>
+        <li class="workflow-step">
+          <span class="step-number">5</span>
+          <h2>Evaluate the specialized<br><span class="nemotron">Nemotron</span></h2>
+        </li>
+      </ol>
     </section>
+
   </main>
   <script type="module" src="assets/how-it-learns.js"></script>
 </body>

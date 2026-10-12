@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:bio": "npm run dev --prefix kermt-web-ui",
+    "dev:all": "next dev --turbopack & npm run dev --prefix kermt-web-ui & wait",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"

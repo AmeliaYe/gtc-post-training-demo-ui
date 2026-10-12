@@ -395,6 +395,7 @@
       to the card's height (the last row absorbs the extra space). */
 .workspace-body:has(.dream-theme) { grid-template-rows: repeat(4, auto) 1fr; }
 .workspace-body:has(.dream-theme) > .model-tile { align-self: start; }
+.workspace-body:has(.dream-theme) > .expanded-model { grid-row: 1 / -1; }
 
 /* 4. Before/After share row heights via subgrid: headers, answers and footers always line up,
       so the accuracy badge may wrap to its own line when the panel is narrow. */
