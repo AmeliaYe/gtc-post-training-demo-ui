@@ -68,7 +68,7 @@ function FittedScene({ children }: { children: ReactNode }) {
   return <div ref={viewport} className={styles.scene}><div ref={canvas} className={styles.sceneCanvas}>{children}</div></div>;
 }
 
-export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
+export function CyberDefenseDemo({ onExit, embedded = false }: { onExit?: () => void; embedded?: boolean }) {
   const reducedMotion = useReducedMotion();
   const [elapsed, setElapsed] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -105,7 +105,6 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   }, [elapsed, playing]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     container.current?.focus({ preventScroll: true });
     function updateFullscreen() {
       setFullscreen(document.fullscreenElement === container.current);
@@ -146,7 +145,7 @@ export function CyberDefenseDemo({ onExit }: { onExit?: () => void }) {
   }
 
   return (
-    <div ref={container} className={`${styles.demo} ${inter.variable}`} role="region" aria-label="Messaging server security review demo" tabIndex={-1}
+    <div ref={container} className={`${styles.demo} ${embedded ? styles.embedded : ''} ${inter.variable}`} role="region" aria-label="Messaging server security review demo" tabIndex={-1}
       onKeyDown={(event) => {
         if (!['Space', 'ArrowLeft', 'ArrowRight'].includes(event.code) || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
         if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;

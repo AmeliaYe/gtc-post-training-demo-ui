@@ -116,10 +116,7 @@
 .comparisonOrigin > span { display: grid; gap: 3px; }
 .comparisonOrigin small { color: var(--violet); font: 700 7px/1 monospace; letter-spacing: .1em; }
 .comparisonOrigin strong { color: #d8d8e0; font-size: 10px; }
-.branchPaths { height: 20px; flex: 0 0 20px; display: grid; grid-template-columns: 1fr 1fr; place-items: center; color: var(--violet); font-size: 21px; line-height: 1; }
-.branchPaths span:first-child { transform: translateX(20%); }
-.branchPaths span:last-child { transform: translateX(-20%); }
-.modelGrid { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr); align-items: stretch; }
+.modelGrid { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr); align-items: stretch; margin-top: 18px; }
 .modelGrid article { min-width: 0; display: grid; grid-template-rows: auto auto 1fr auto; padding: 13px 14px 11px; border: 1px solid rgba(255,255,255,.09); background: #12131b; }
 .baseModel { border-radius: 9px 0 0 9px; }
 .modelGrid .tunedModel { border-color: var(--violet-line); border-radius: 0 9px 9px 0; background: linear-gradient(145deg, var(--violet-soft), transparent 60%), #14141d; }
@@ -218,5 +215,4 @@
   .modelGrid { grid-template-columns: 1fr; gap: 8px; }
   .baseModel, .modelGrid .tunedModel { border-radius: 9px; }
   .arrow { display: none; }
-  .branchPaths { display: none; }
 }

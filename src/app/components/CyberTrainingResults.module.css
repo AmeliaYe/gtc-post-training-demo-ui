@@ -63,3 +63,15 @@
 
 .depthfirstText { font-family: inherit; color: #0c0c0c; font-size: 20px; font-weight: 500; letter-spacing: -.025em; }
 .compact .depthfirstText { font-size: 16px; }
+
+/* Dark embedded presentation theme. */
+.results { --result-blue: #b7ff54; color: #edf3e9; }
+.benchmark { border-color: #303b31; background: #121a14; }
+.benchmarkHeading h2, .depthfirstText { color: #edf3e9; }
+.depthfirstLogo { filter: brightness(0) invert(1); }
+.trainingNote, .metricLabel { color: #9eaa9b; }
+.eyebrow, .gain { background: #1a2a18; color: #b7ff54; }
+.eyebrow:hover { background: #21371d; }
+.afterMetric strong, .gain strong { color: #b7ff54; }
+.meter { background: #2d372e; }
+.afterMetric .meter > span { background: #b7ff54; }

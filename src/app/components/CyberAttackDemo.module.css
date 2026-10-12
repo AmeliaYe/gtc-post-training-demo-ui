@@ -34,4 +34,18 @@
 .unsafeNode .nodeNumber { color: #b82e37; background: #fff0f1; }
 .flaw, .impact { display: block; margin-top: auto; padding: 8px 10px; border-radius: 8px; color: #b82e37; background: #fff0f1; font-size: 16px; font-weight: 500; line-height: 1.3; }
 .note { margin: 16px 0 0; color: #71717a; font-size: 16px; line-height: 1.4; text-align: center; }
+
+/* Dark embedded presentation theme. */
+.attack { color: #edf3e9; }
+.routeLabel { background: #111812; }
+.node { border-color: #334035; background: #121a14; }
+.node:hover, .node:focus-visible { border-color: #627060; background: #182119; box-shadow: 0 10px 28px #00000055; }
+.expectedNode:hover, .expectedNode:focus-visible { background: #13251a; }
+.unsafeNode:hover, .unsafeNode:focus-visible { background: #291719; }
+.nodeTop { color: #8e9a8c; }
+.nodeNumber { background: #202a21; color: #a8b3a5; }
+.node strong { color: #edf3e9; }
+.nodeDetail, .note { color: #a2aea0; }
+.expectedNode .nodeNumber { background: #173322; }
+.unsafeNode .nodeNumber, .flaw, .impact { background: #351c20; }
 @media (prefers-reduced-motion: reduce) { .node { transition: none; } }

@@ -64,3 +64,13 @@
 .compact .step { box-sizing: border-box; min-height: 64px; padding: 8px; }
 .compact .step h2 { font-size: 18px; }
 .compact .step p { font-size: 14px; }
+
+/* Dark embedded presentation theme. */
+.loop { border-color: #303b31; background: #121a14; color: #edf3e9; }
+.step { border-color: #303b31; background: #182019; }
+.stepNumber { border-color: #3b473c; background: #101711; color: #9eaa9b; }
+.step h2 { color: #edf3e9; }
+.step p, .repeat { color: #9eaa9b; }
+.step.active { border-color: #b7ff54; background: #1a2a18; }
+.active .stepNumber { border-color: #b7ff54; background: #b7ff54; color: #10150f; }
+.loop .active .connector, .loop .repeat > svg, .step .weights { color: #b7ff54; }

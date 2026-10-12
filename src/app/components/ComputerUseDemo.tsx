@@ -332,7 +332,6 @@ export default function ComputerUseDemo() {
           <img src={originSrc} alt={`Shared starting state for ${activeTask.shortLabel}`} />
           <span><small>SHARED STARTING STATE</small><strong>Same task · same input</strong></span>
         </div>
-        <div className={styles.branchPaths} aria-hidden="true"><span>↙</span><span>↘</span></div>
         <div className={styles.modelGrid}>
           <article className={styles.baseModel}>
             <header><span>BASE MODEL</span><h4>Nemotron 3 Nano Omni</h4></header>

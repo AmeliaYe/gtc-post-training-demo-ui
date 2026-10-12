@@ -62,6 +62,18 @@
 .evidenceNote { margin: 16px 0 0; color: #63636f; font-size: 14px; line-height: 1.4; }
 
 .compact { --cyber-title-size: 22px; box-sizing: border-box; height: 420px; padding: 16px 20px; }
+
+/* Dark embedded presentation theme. */
+.prompt { border-color: #303b31; background: #121a14; color: #dce5d9; }
+.header, .component, .hint, .exposure, .trace p, .editorial, .constraints, .evidenceNote { color: #9eaa9b; }
+.badge, .scope code, .detailsButton { background: #202a21; color: #aab5a7; }
+.columns > section, .input, .impact { border-color: #303b31; background: #182019; color: #aab5a7; }
+.input strong, .exposure strong { color: #edf3e9; }
+.input.selectedInput { border-color: #b7ff54; background: #1a2a18; color: #b7ff54; }
+.focus { background: #b7ff54; color: #10150f; }
+.detailsHover:hover .detailsButton, .detailsHover:focus-within .detailsButton { border-color: #59665a; background: #283229; color: #edf3e9; }
+.original { border-color: #303b31; background: #121a14; color: #aab5a7; box-shadow: 0 8px 30px #00000055; }
+.connection { color: #dce5d9; }
 .compact .header { margin-bottom: 8px; font-size: 13px; }
 .compact .columns { margin-top: 24px; }
 .compact .columns > section { padding: 12px; }

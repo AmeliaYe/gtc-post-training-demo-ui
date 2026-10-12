@@ -38,6 +38,22 @@
 .number, .type { color: #e16512; }
 .function { color: #3499ef; }
 .routeOutput { color: #287c95; font-size: clamp(16px, 1.1cqw, 20px); }
+
+/* Dark embedded presentation theme. */
+.stage { color: #edf3e9; }
+.reasoning, .editor { border-color: #303b31; background: #121a14; }
+.reasoning h2 { color: #edf3e9; }
+.reasoning blockquote { color: #bdc8ba; }
+.thinking > span { background: #899586; }
+.fileBar > code { color: #cbd5c8; }
+.fileBadge { background: #202a21; color: #9daa9a; }
+.commands > code { color: #a8b4a5; }
+.commands code > span { color: #758172; }
+.source { border-color: #303b31; background: #0d130f; color: #dce5d9; }
+.source > .highlight { background: #142a38; }
+.source > .activeLine { background: #173d56; }
+.source > .riskLine { background: #351c20; }
+.source > .riskLine.activeLine { background: #482329; }
 .routeOutput > span > code { margin-left: 14px; }
 .diagramStage { width: 100%; min-width: 0; }
 .stage pre:focus-visible { outline: 2px solid #2870ff; outline-offset: 3px; }
