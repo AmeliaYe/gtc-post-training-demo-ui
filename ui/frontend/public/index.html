@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nemotron · Healthcare Agent Lab</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/icons.js"></script><script defer src="assets/app.js"></script>
+</head>
+<body>
+<div id="nv-care-lab">
+  <header class="nv-chrome"><div class="nv-brand"><i data-lucide="cpu" aria-hidden="true"></i>NVIDIA</div><span class="nv-divider" aria-hidden="true"></span><span class="nv-product">Nemotron · Agent Lab</span><span class="nv-preview" id="app-mode">LIVE COMPARISON</span></header>
+  <main class="nv-main">
+    <div class="nv-heading"><div><div class="nv-eyebrow">Healthcare / Policy comparison</div><h1>One patient. Two policies.</h1><p class="nv-subtitle">Compare a baseline and a trained checkpoint through the same Hermes healthcare agent.</p></div><button class="nv-button" id="connections" aria-expanded="false" aria-controls="settings"><i data-lucide="sliders-horizontal" aria-hidden="true"></i>Connections</button></div>
+    <section class="nv-config" id="settings" aria-label="Endpoint connections" hidden>
+      <div class="nv-config-top"><h2>Model connections</h2><button class="nv-button" id="close-settings" aria-label="Close connection settings"><i data-lucide="x" aria-hidden="true"></i></button></div>
+      <form id="settings-form" autocomplete="off">
+        <div class="nv-config-grid">
+          <fieldset><legend>BEFORE · BASELINE</legend>
+            <label class="nv-field" for="baseline-url">Base URL<input id="baseline-url" name="baseline_url" type="url" required spellcheck="false"></label>
+            <label class="nv-field" for="baseline-model">Model ID<input id="baseline-model" name="baseline_model" placeholder="Provider model ID for Nemotron 3.5 Lightning" spellcheck="false"></label>
+            <label class="nv-field" for="baseline-key">API key<input id="baseline-key" name="baseline_key" type="password" autocomplete="new-password" placeholder="Enter API key"></label>
+            <label class="key-clear"><input id="baseline-clear" type="checkbox"> Clear stored key</label>
+            <p class="connection-result" id="baseline-check" role="status"></p>
+          </fieldset>
+          <fieldset><legend>AFTER · CHECKPOINT</legend>
+            <label class="nv-field" for="checkpoint-url">Base URL<input id="checkpoint-url" name="checkpoint_url" type="url" required spellcheck="false"></label>
+            <label class="nv-field" for="checkpoint-model">Model ID<input id="checkpoint-model" name="checkpoint_model" placeholder="Leave blank until this endpoint is ready" spellcheck="false"></label>
+            <label class="nv-field" for="checkpoint-key">API key<input id="checkpoint-key" name="checkpoint_key" type="password" autocomplete="new-password" placeholder="Optional for local vLLM"></label>
+            <label class="key-clear"><input id="checkpoint-clear" type="checkbox"> Clear stored key</label>
+            <p class="connection-result" id="checkpoint-check" role="status"></p>
+          </fieldset>
+        </div>
+        <div class="nv-config-actions"><p class="nv-config-note">Keys stay in server memory and are never returned to the browser. Blank key fields retain a saved key only when its base URL is unchanged.</p><div class="actions"><button class="nv-button" id="check-connections" type="button">Check saved connections</button><button class="nv-button nv-primary" type="submit">Save connections</button></div></div>
+        <div class="nv-status" id="settings-status" role="status"></div>
+      </form>
+      <details class="nv-parameters"><summary>Programmable parameters</summary><pre class="nv-json">BASELINE_BASE_URL=...
+BASELINE_MODEL=...
+BASELINE_API_KEY=...
+CHECKPOINT_BASE_URL=...
+CHECKPOINT_MODEL=...
+CHECKPOINT_API_KEY=...</pre><p class="nv-config-note">Set these server environment variables before launch, or use the fields above. API: PUT /api/settings.</p></details>
+    </section>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <section id="case-picker" aria-label="Patient prompt chips"><div class="nv-section-top"><h2>Choose a patient request</h2><span class="nv-source" id="cohort-label">Loading cases…</span></div><div class="nv-chips" id="chips"></div></section>
+    <div class="nv-casebar"><div class="nv-casemeta"><strong id="selected-label">Patient request</strong><span class="nv-dot" aria-hidden="true"></span><span id="case-id"></span></div><div class="nv-segment" aria-label="Comparison mode"><button data-mode="live" aria-pressed="true">Live comparison</button><button data-mode="recorded" aria-pressed="false">Recorded preview</button></div></div>
+    <p class="nv-contextline" id="context-note">Same patient prompt and starting record. Each model has its own conversation and tool state.</p>
+    <section class="nv-prompt-editor" id="prompt-editor">
+      <label for="patient-prompt">SHARED PATIENT PROMPT</label>
+      <textarea id="patient-prompt" maxlength="12000" spellcheck="false"></textarea>
+      <div class="nv-prompt-bottom"><span id="run-hint">Choose which models the patient chips should run.</span>
+        <div class="actions">
+          <label class="nv-target" for="run-target">Run
+            <select id="run-target"><option value="both">Both models</option><option value="baseline">Baseline only</option><option value="checkpoint">Checkpoint only</option></select>
+          </label>
+          <button class="nv-button" id="stop-run" hidden>Stop</button>
+          <button class="nv-button nv-primary" id="run-both"><i data-lucide="play" aria-hidden="true"></i>Run both models</button>
+        </div>
+      </div>
+    </section>
+    <div class="nv-columns" id="comparison"></div>
+    <section class="nv-prompt-editor followup" id="followup-panel" hidden>
+      <label for="followup">PATIENT FOLLOW-UP</label>
+      <textarea id="followup" maxlength="12000" rows="2" placeholder="Continue the conversation in your own words…"></textarea>
+      <div class="nv-prompt-bottom"><span>Continue either conversation or send the same follow-up to both.</span>
+        <div class="actions">
+          <button class="nv-button" data-followup="baseline">Send to baseline</button>
+          <button class="nv-button" data-followup="checkpoint">Send to checkpoint</button>
+          <button class="nv-button nv-primary" id="send-followup" data-followup="both">Send to both</button>
+        </div>
+      </div>
+    </section>
+    <div class="nv-footer"><span class="nv-foot-brand"><i data-lucide="git-compare-arrows" aria-hidden="true"></i>Hermes + healthcare sandbox</span><span id="footer-note">Synthetic patients · Demonstration, not a scored evaluation</span></div>
+  </main>
+</div>
+</body>
+</html>

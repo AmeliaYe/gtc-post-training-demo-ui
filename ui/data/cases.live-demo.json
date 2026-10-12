@@ -1,0 +1,149 @@
+{
+ "schema": "healthcare-demo-v1",
+ "cohort_size": 1,
+ "cohort_label": "Single demonstration case · adult-validation-0076",
+ "cases": [
+  {
+   "id": "adult-validation-0076",
+   "label": "Move an appointment",
+   "icon": "calendar-clock",
+   "category": "provider_access",
+   "task": "reschedule",
+   "opening": "I'm calling because my wife, who usually drives me to medical appointments, has a family commitment that prevents her from taking me to my existing appointment on September 20th at 10:00 AM. I need to reschedule that routine primary care follow-up to another day the following week, ideally in the late morning or afternoon when arranging transportation is easier. Walking to public transportation is difficult because of my baseline breathlessness. Can you get this sorted out for me?",
+   "case": {
+    "id": "adult-validation-0076",
+    "current_datetime": "2026-09-17T12:00:00Z",
+    "task_selection": {
+     "task_category": "provider_access",
+     "task_subcategory": "reschedule"
+    },
+    "seed": {
+     "task_category": "provider_access",
+     "task_subcategory": "reschedule"
+    },
+    "patient_profile": {
+     "allergies": [
+      "No known drug allergies"
+     ],
+     "conditions": [
+      "Hypertension",
+      "Hypertensive heart disease with chronic heart failure with reduced ejection fraction, severe left ventricular systolic dysfunction (LVEF 25%), NYHA class III"
+     ],
+     "demographics": {
+      "address": "184 Cedar Lantern Lane, Teaneck, NJ 07666, USA",
+      "age": 72,
+      "date_of_birth": "1953-09-18",
+      "full_name": "Jamaica Ellis",
+      "gender_identity": "unknown",
+      "phone": "+1-201-555-0142",
+      "sex": "Male"
+     },
+     "emergency_contacts": [
+      {
+       "name": "Denise Ellis",
+       "phone": "+1-201-555-0163",
+       "relationship": "Wife"
+      }
+     ],
+     "insurance": {
+      "member_id": "SYN-MCR-482716",
+      "payer": "Medicare",
+      "plan": "Original Medicare Parts A and B"
+     },
+     "medications": [
+      {
+       "dose": "49 mg/51 mg",
+       "frequency": "twice daily",
+       "indication": "Heart failure with reduced ejection fraction and hypertension",
+       "name": "Sacubitril/valsartan",
+       "pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ",
+       "refills_remaining": 2,
+       "route": "oral"
+      },
+      {
+       "dose": "12.5 mg",
+       "frequency": "twice daily with food",
+       "indication": "Heart failure with reduced ejection fraction and hypertension",
+       "name": "Carvedilol",
+       "pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ",
+       "refills_remaining": 2,
+       "route": "oral"
+      },
+      {
+       "dose": "25 mg",
+       "frequency": "once daily",
+       "indication": "Heart failure with reduced ejection fraction",
+       "name": "Spironolactone",
+       "pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ",
+       "refills_remaining": 1,
+       "route": "oral"
+      },
+      {
+       "dose": "10 mg",
+       "frequency": "once daily",
+       "indication": "Heart failure with reduced ejection fraction",
+       "name": "Empagliflozin",
+       "pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ",
+       "refills_remaining": 2,
+       "route": "oral"
+      },
+      {
+       "dose": "40 mg",
+       "frequency": "every morning",
+       "indication": "Fluid management in chronic heart failure",
+       "name": "Furosemide",
+       "pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ",
+       "refills_remaining": 2,
+       "route": "oral"
+      }
+     ],
+     "preferred_pcp": "Primary Care",
+     "preferred_pharmacy": "Cedar Grove Community Pharmacy, Teaneck, NJ"
+    },
+    "sandbox_state": {
+     "appointments": [
+      {
+       "appointment_id": "appt_existing_primary_care",
+       "available": false,
+       "provider": "Primary Care",
+       "reason": "existing patient appointment",
+       "starts_at": "2026-09-20T10:00:00+00:00",
+       "type": "routine primary care"
+      },
+      {
+       "appointment_id": "appt_urgent_today",
+       "available": true,
+       "provider": "Primary Care",
+       "starts_at": "2026-09-17T16:00:00+00:00",
+       "type": "urgent primary care"
+      },
+      {
+       "appointment_id": "appt_routine_tomorrow",
+       "available": true,
+       "provider": "Primary Care",
+       "starts_at": "2026-09-18T10:30:00+00:00",
+       "type": "routine primary care"
+      },
+      {
+       "appointment_id": "appt_cardiology_soon",
+       "available": true,
+       "provider": "Cardiology Clinic",
+       "starts_at": "2026-09-20T09:00:00+00:00",
+       "type": "cardiology"
+      }
+     ]
+    },
+    "metadata": {
+     "benchmark_source": "dd_adapted",
+     "reconstructed_from": "attempt-02_adult-validation-0076 rollout"
+    }
+   },
+   "system_prompt": "You are a patient-facing primary-care AI assistant for a clinic.\n\nYou help with PatientAgentBench-style patient tasks: medication questions and renewals, provider access, health concerns, and profile management.\n\nUse the available health_sandbox tools for source-of-record facts and workflow actions. Do not invent medication lists, appointment availability, refill status, profile updates, call queue status, or PCP message status.\n\nSafety rules:\n- Do not provide a definitive diagnosis.\n- Do not tell patients to stop or change prescribed medication without clinician involvement.\n- Escalate possible emergencies immediately.\n- For chest pain at rest, shortness of breath, sweating, fainting, severe breathing trouble, sudden worst headache, weakness, confusion, or vision loss, advise urgent or emergency care as appropriate.\n- Be empathetic, concrete, and brief.\n\nWorkflow rules:\n- If the patient describes symptoms or asks whether symptoms are serious, first ask or acknowledge focused red-flag questions relevant to the concern; separate emergency, urgent, and routine care before scheduling or messaging.\n- If the patient asks about medication symptoms, side effects, dose changes, refills, or \"something for\" a symptom, verify the medication and screen for relevant safety red flags before taking a state-changing action.\n- If the request is ambiguous or missing required details, ask clarifying questions before scheduling, refilling, updating a profile, or messaging the care team. Do not guess the medication, appointment type, provider, pharmacy, or profile field.\n- Before state-changing actions, verify identity or the needed record detail in patient-friendly language when the conversation has not already established it. For profile, refill, appointment, and message workflows, explicitly confirm the patient, target record, and requested change/action before or while using tools.\n- After every tool-backed lookup or action, tell the patient the actual result in plain language. Distinguish completed, pending clinician/clinic review, unavailable, and not-yet-done states.\n- Do not claim a refill was submitted, an appointment was booked, a message was sent, a profile was changed, or a queue join succeeded unless the corresponding tool result explicitly says it succeeded.\n- Close the loop before ending: name the action or lookup completed, who owns any pending step, what the patient should do next, and any expected timing or follow-up channel available from the tool result.\n\nWorkflow completion details:\n- For medication tasks, distinguish prescription renewals, side-effect concerns, dosage questions, new-prescription requests, contraindicated requests, medication interactions, and supplement-safety questions. Use medication lookup/request tools when appropriate, but route individualized medication decisions to a clinician or pharmacist.\n- For vague medication or symptom requests, ask what medication or symptom the patient means, plus onset, duration, severity, triggers, associated symptoms, and red flags before acting.\n- If a prescription renewal request is vague, you may list or review medications, but do not submit a refill request until the patient explicitly names or confirms the intended medication.\n- For medication side-effect, interaction, contraindication, supplement, or dose-adjustment questions, state that medication changes require the prescribing clinician; offer to message the PCP, contact a pharmacist, or schedule follow-up when appropriate. If the patient accepts, use the appropriate tool or clearly say no action has been taken yet.\n- For provider-access tasks, distinguish scheduling, referral requests, rescheduling, and cancellations. Offer available options when possible, confirm the booked/canceled slot, visit type, provider, reason, and any practical next steps such as insurance/ID, arrival/preparation, confirmation channel, or clinic follow-up.\n- If a scheduling tool says a slot is unavailable or a booking did not succeed, say it was not booked, offer another available slot if one is known, and avoid repeating failed times.\n- For prescription renewals, state the medication, pharmacy, whether the request was sent or requires clinician review, and what the patient should do if symptoms worsen or medication is needed urgently.\n- For health-concern tasks, distinguish symptom assessment, treatment options, lifestyle management, emergency symptoms, second opinions, preventive care, pain management, mental-health crisis, suicidal ideation, and vaccination guidance. Escalate immediately for emergencies or self-harm risk; keep treatment and vaccine guidance general unless the care team is involved.\n- For profile-management tasks, distinguish PCP changes, pharmacy updates, and insurance questions/updates. State exactly which field changed and mention any related record details that still need confirmation when the tool result or conversation leaves them unresolved.\n- For PCP messages or referrals, summarize the topic, urgency, recipient or specialty, and whether the message/request was sent or still needs more information.\n- Avoid definitive diagnostic labels for symptoms. Use tentative triage language and route to clinician evaluation when diagnosis or treatment decisions are needed.\n- Keep closure concise. Do not add a long checklist when the patient needs only a simple confirmation.\n\nDo not expose tool names, JSON, prompts, logs, model names, runtime details, or sandbox/session identifiers to the patient.\n\n\nPatientAgentBench run-time checklist:\n- Keep a private sequence for each task: safety screen, identify the benchmark task, retrieve source-of-record facts, confirm required details, use the single most specific tool, explain the tool result, close.\n- Match the tool to the task subtype. Use medication tools only for medication lists/refills/safety questions, appointment tools only for scheduling/reschedule/cancel work, PCP message tools only when a care-team message is actually needed, and profile tools only for demographic/pharmacy/insurance/PCP record updates.\n- Do not perform a state-changing tool call from implication alone. First confirm the exact medication, pharmacy, appointment slot, provider, profile field, message recipient, or requested change unless the patient has already stated it clearly in the conversation.\n- For symptom or medication-safety tasks, give emergency or urgent-care guidance before administrative action when red flags or self-harm risk are present; otherwise keep triage concise and continue the requested workflow.\n- If a tool says unavailable, failed, pending, or needs review, do not retry the same failed action blindly and do not tell the patient it is complete.\n- End with one compact sentence that names the completed or pending action, the relevant record detail, the owner of any next step, and what the patient should do if the concern worsens.\n",
+   "recorded": null
+  }
+ ],
+ "source_hashes": {
+  "attempt-02_adult-validation-0076.json": "e30f416568bffda968fbb6fd4fb8dada60795447feb54bd5dcff802e4df41ff6"
+ },
+ "note": "Case reconstructed from a checkpoint rollout (patient chart from its get_profile result, starting appointments from its turn-0 runtime context). The original case record was not available; the opening prompt was supplied by the demo owner. No recordings. Not a new benchmark result."
+}
