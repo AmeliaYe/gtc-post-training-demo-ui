@@ -1,68 +1,65 @@
-.results { --result-green: #b7ff54; min-width: 0; }
-.eyebrow { color: var(--result-green); font: 14px/1.4 monospace; letter-spacing: .06em; text-transform: uppercase; }
-.benchmark { padding: 18px 24px; border: 1px solid #668541; border-radius: 12px; background: radial-gradient(ellipse at 80% 40%, #b7ff5410, transparent 60%), #0d150c; }
-.benchmarkHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
-.benchmarkHeading h4 { margin: 0; color: #e3eddc; font-size: 22px; line-height: 1.3; font-weight: 500; letter-spacing: -.025em; }
-.metric { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 100px; margin: 10px 0; }
-.metricLabel { display: block; color: #afc09f; font: 14px/1.4 monospace; text-transform: uppercase; letter-spacing: .06em; }
-.metric strong { display: flex; align-items: baseline; gap: 5px; margin: 0 0 8px; font-size: clamp(48px, 4.5vw, 72px); line-height: 1.08; font-weight: 500; letter-spacing: -.065em; font-variant-numeric: tabular-nums; }
-.metric strong > span { font-size: .47em; letter-spacing: -.04em; }
-.beforeMetric strong { color: #9eb28b; }
-.afterMetric strong { color: var(--result-green); text-shadow: 0 0 35px #b7ff5418; }
-.afterMetric .metricLabel { color: #d6e9c5; }
-.results .metricArrow { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; transform: translate(-50%, -25%); color: #a2bc88; }
-.meter { overflow: hidden; height: 7px; background: #293822; border-radius: 1px; }
-.meter > span { display: block; height: 100%; background: #81956a; }
-.afterMetric .meter > span { background: var(--result-green); box-shadow: 0 0 14px #b7ff5433; }
-.benchmarkFooter { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 18px; }
-.gain { display: flex; align-items: baseline; gap: 9px; margin: 0; color: #d2e4be; font-size: 20px; }
-.gain strong { color: var(--result-green); font-size: 36px; font-weight: 500; letter-spacing: -.035em; }
-.example { max-width: 680px; margin: 24px auto 0; }
-.comparison { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 54px; }
-.checkpoint { min-width: 0; }
-.checkpointLabel { display: block; color: #b3c4a3; font: 18px/1.4 monospace; }
-.later .checkpointLabel { color: #c7e3ac; }
-.outcome { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 38px; line-height: 1.2; font-weight: 500; letter-spacing: -.04em; }
-.results .outcome > svg { width: 28px; height: 28px; }
-.found { color: var(--result-green); }
-.missed { color: #c9bfad; }
-.comparisonArrow { position: absolute; display: grid; place-items: center; top: 50%; left: 50%; color: #9fb98a; transform: translate(-50%, -25%); }
-.results .comparisonArrow > svg { width: 30px; height: 30px; }
-.trainingNote { margin: 4px 0 0; color: #adbf9e; font-size: 14px; line-height: 1.4; }
-.details { margin-top: 12px; border-top: 1px solid #35452a; color: #b8c9aa; font-size: 18px; line-height: 1.6; }
-.details summary { width: fit-content; max-width: 100%; padding: 13px 0 2px; color: #c2d5b0; cursor: pointer; }
-.details summary:hover { color: var(--result-green); }
-.details :is(summary, a):focus-visible { outline: 2px solid var(--result-green); outline-offset: 4px; }
-.detailContent { padding-top: 3px; }
-.detailContent h5 { margin: 22px 0 9px; color: #e1eed6; font-size: 25px; font-weight: 500; }
-.detailContent h6 { margin: 0; color: #d0e6bb; font-size: 20px; font-weight: 500; line-height: 1.5; }
-.detailContent p { margin: 10px 0; }
-.detailContent code { overflow-wrap: anywhere; font-size: 18px; }
-.reportDetails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-top: 22px; }
-.reportDetails ul { padding-left: 23px; margin: 12px 0; }
-.reportDetails li { margin-bottom: 12px; }
-.reportDetails li > span { display: block; color: #a7bc98; font-size: 18px; }
-.detailContent a { display: inline-flex; align-items: center; gap: 7px; color: #c4dfa7; text-decoration: none; }
-.detailContent a:hover { text-decoration: underline; }
-.results .detailContent a > svg { width: 18px; height: 18px; }
+.results { --result-blue: #2870ff; position: relative; width: 100%; max-width: 1100px; min-width: 0; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
+.benchmark { box-sizing: border-box; height: 460px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: 28px 32px; border: 1px solid #e3e3e7; border-radius: 24px; background: #fff; }
+.benchmarkHeading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.benchmarkHeading h2 { margin: 0; color: #0c0c0c; font-size: var(--cyber-title-size, 28px); line-height: 1.25; font-weight: 500; letter-spacing: -.025em; }
+.benchmarkBrand { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px 16px; }
+.depthfirstLogo { width: 145px; height: auto; flex-shrink: 0; filter: brightness(0); }
+.trainingNote { margin: 7px 0 0; color: #63636f; font-size: 18px; line-height: 1.4; }
+.eyebrow { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; min-height: 34px; padding: 5px 12px; border-radius: 9px; background: #edf3ff; color: #205bca; font-size: 17px; line-height: 1.4; }
+.eyebrow:hover { background: #e0eaff; }
+.eyebrow:focus-visible { outline: 3px solid var(--result-blue); outline-offset: 3px; }
+.eyebrow > svg { width: 17px; height: 17px; }
+.metric { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 104px; max-width: 820px; margin: 18px auto 16px; }
+.metricLabel { display: block; color: #63636f; font-size: 20px; line-height: 1.35; }
+.metric strong { display: flex; align-items: baseline; gap: 4px; margin: 2px 0 10px; font-size: clamp(72px, 6cqw, 110px); line-height: 1.03; font-weight: 500; letter-spacing: -.065em; font-variant-numeric: tabular-nums; }
+.metric strong > span { font-size: .45em; letter-spacing: -.045em; }
+.beforeMetric strong { color: #858590; }
+.afterMetric strong { color: var(--result-blue); }
+.results .metricArrow { position: absolute; top: 50%; left: 50%; width: 35px; height: 35px; transform: translate(-50%, -15%); color: #aaaab3; }
+.meter { overflow: hidden; height: 6px; background: #eeeef1; border-radius: 4px; }
+.meter > span { display: block; height: 100%; border-radius: inherit; background: #a1a1ab; }
+.afterMetric .meter > span { background: var(--result-blue); }
+.benchmarkFooter { width: 100%; display: flex; justify-content: center; margin-top: 8px; animation: revealGain .45s ease .8s both; }
+.benchmark .metric { align-self: center; width: 100%; }
+.gain { display: inline-flex; align-items: baseline; gap: 8px; margin: 0; padding: 6px 15px; border-radius: 10px; background: #edf3ff; color: #205bca; font-size: 18px; line-height: 1.3; }
+.gain strong { color: #205bca; font-size: 28px; font-weight: 500; letter-spacing: -.035em; }
+@keyframes revealGain { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .benchmarkFooter { animation: none; } }
 
-@media (max-width: 1100px) {
-  .benchmark { padding: 24px; }
-  .benchmarkHeading { align-items: flex-start; flex-direction: column; gap: 5px; }
+@container cyber-scene (max-width: 700px) {
+  .benchmark { padding: 23px; border-radius: 20px; }
+  .benchmarkHeading h2 { font-size: var(--cyber-title-size, 28px); }
+  .benchmarkHeading { gap: 14px; }
+  .metric { column-gap: 48px; }
+  .metric strong { font-size: clamp(56px, 12cqw, 82px); }
 }
 
-@media (max-width: 600px) {
-  .benchmark { padding: 19px 16px; }
-  .benchmarkHeading h4 { font-size: 22px; }
-  .metric { column-gap: 30px; margin: 20px 0 14px; }
-  .metric strong { font-size: clamp(42px, 11.5vw, 69px); }
-  .results .metricArrow { width: 22px; height: 22px; }
-  .gain { flex-wrap: wrap; gap: 3px 8px; font-size: 18px; }
-  .gain strong { font-size: 30px; }
-  .comparison { gap: 32px; }
-  .checkpointLabel { font-size: 18px; }
-  .outcome { gap: 5px; font-size: 32px; }
-  .results .outcome > svg { width: 23px; height: 23px; }
-  .results .comparisonArrow > svg { width: 23px; height: 23px; }
-  .reportDetails { grid-template-columns: 1fr; gap: 18px; }
+@container cyber-scene (max-width: 450px) {
+  .benchmark { padding: 20px 16px; }
+  .benchmarkHeading { flex-wrap: wrap; gap: 11px; }
+  .benchmarkHeading h2 { font-size: var(--cyber-title-size, 28px); }
+  .trainingNote, .metricLabel { font-size: 16px; }
+  .eyebrow { min-height: 29px; font-size: 15px; }
+  .metric { column-gap: 32px; margin: 22px auto 17px; }
+  .metric strong { font-size: clamp(42px, 12cqw, 54px); }
+  .results .metricArrow { width: 23px; height: 23px; }
+  .gain { gap: 5px; padding: 6px 10px; font-size: 16px; }
+  .gain strong { font-size: 25px; }
 }
+
+.compact { --cyber-title-size: 22px; align-self: start; }
+.compact .benchmark { height: 300px; padding: 20px; }
+.compact .benchmarkHeading { gap: 8px; }
+.compact .depthfirstLogo { width: 100px; }
+.compact .benchmarkBrand { gap: 6px; }
+.compact .trainingNote { font-size: 14px; margin-top: 4px; }
+.compact .eyebrow { font-size: 13px; min-height: 24px; padding: 3px 7px; }
+.compact .metric { gap: 60px; max-width: 460px; margin: 10px auto; }
+.compact .metric strong { font-size: 64px; }
+.compact .metricLabel { font-size: 16px; }
+.compact .benchmarkFooter { margin-top: 8px; }
+.compact .gain { font-size: 14px; padding: 4px 12px; }
+.compact .gain strong { font-size: 20px; }
+
+.depthfirstText { font-family: inherit; color: #0c0c0c; font-size: 20px; font-weight: 500; letter-spacing: -.025em; }
+.compact .depthfirstText { font-size: 16px; }
