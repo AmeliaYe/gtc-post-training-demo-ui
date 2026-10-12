@@ -1,0 +1,1853 @@
+{
+  "revision": "inference-ui-r02",
+  "baseGtcCommit": "c876f83ad675bc067f54bd6c7737ea9d2af245b8",
+  "sourceRepository": "/home/aquraini/healthcare-agent-evals-grpo-clean-release",
+  "sourceCommit": "99e9a1cd9e023e8a373fac3301258eaa6c5174de",
+  "sourceThread": "01a0cf83-4f1a-7dd1-b402-7ac9cd748295",
+  "note": "Frontend/backend split and Compose packaging. Original import provenance preserved separately. No production credentials or sessions included. File hashes exclude this manifest itself.",
+  "preservedAssetCount": 205,
+  "files": {
+    ".dockerignore": {
+      "sha256": "b484cc6ff87e6cba275bdbebedd3827d0de28e76b9f30eacc5c568280579e295",
+      "bytes": 409
+    },
+    ".env.example": {
+      "sha256": "da72e16bb5a7a85a0d6f48683f78b63031c31d8575a90095c55a4894089ac50f",
+      "bytes": 731,
+      "importPath": ".env.example",
+      "importSha256": "b0221534107a6144f7afcce039bba40cb747afb68c314e3363fe65a0fd4a3b77"
+    },
+    ".gitignore": {
+      "sha256": "5f75fbbdea219b33b7bbb7ea3e61b60129ca0f72d214045b7223d27112327af9",
+      "bytes": 97,
+      "importPath": ".gitignore",
+      "importSha256": "242d9a90e4488ee88da171f7d9f66e4540b2663fbdac06a06a4d9ac6a7d87d16"
+    },
+    "README.md": {
+      "sha256": "8105905ba20226ce830b83a52e013c04103c18f767e7cf45d6bc135d59a3a3cd",
+      "bytes": 13989,
+      "importPath": "README.md",
+      "importSha256": "bcc5a454a62a45e3405651d541e9e88eb6b84b25e4112590aa6a41a110d24047"
+    },
+    "__init__.py": {
+      "sha256": "baeb8181b0f32ab7aa476d4203bbdd12ea224b168f16f342d428c3fe1913c547",
+      "bytes": 67,
+      "importPath": "__init__.py",
+      "importSha256": "baeb8181b0f32ab7aa476d4203bbdd12ea224b168f16f342d428c3fe1913c547",
+      "source": "demo/__init__.py",
+      "sourceSha256": "baeb8181b0f32ab7aa476d4203bbdd12ea224b168f16f342d428c3fe1913c547"
+    },
+    "backend/Dockerfile": {
+      "sha256": "600315090abafe6c16e7fcbd7b0c7192f4491edce3a0965073b876fcc366405c",
+      "bytes": 1098
+    },
+    "backend/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "backend/app/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "backend/app/config.py": {
+      "sha256": "437dc70c43a3b97aa27a57ff7fb6afc31fa4cb5588e810d028472b2bb15f9579",
+      "bytes": 2764,
+      "importPath": "config.py",
+      "importSha256": "68cc1c7ddd6b0cd62a877d8a5b3ed62bb236e653198a0069624ce28943ab1e40",
+      "source": "demo/config.py",
+      "sourceSha256": "68cc1c7ddd6b0cd62a877d8a5b3ed62bb236e653198a0069624ce28943ab1e40"
+    },
+    "backend/app/main.py": {
+      "sha256": "3a701fb8deb5223919cf62eeb25f1da9c44719f86ad9bfe16b7487d251b82dab",
+      "bytes": 10549,
+      "importPath": "app.py",
+      "importSha256": "93931194cbd554bd43a98339e5cfc859529fdf012135422bf234570330407abb",
+      "source": "demo/app.py",
+      "sourceSha256": "30e7a64a8c3d965428389e56b17e854aad12145fd147421106c71b9bbdef1c8d"
+    },
+    "backend/app/paths.py": {
+      "sha256": "e82858a56145cfa1b1a55a82b91ea27cd07db3c8d21858039a09c6a76f66062d",
+      "bytes": 234
+    },
+    "backend/app/prepare_cases.py": {
+      "sha256": "4487eadf0bf07afec4d4fc9da33cf62f1261e4ee5f3952502c161d932eb50bd1",
+      "bytes": 3712,
+      "importPath": "prepare_cases.py",
+      "importSha256": "e3d7c1de073abf9e8997558059dbdd067800a74716e073f7b05c13cd0ffc44d2",
+      "source": "demo/prepare_cases.py",
+      "sourceSha256": "e3d7c1de073abf9e8997558059dbdd067800a74716e073f7b05c13cd0ffc44d2"
+    },
+    "backend/app/runtime.py": {
+      "sha256": "393b5c4726dca13ef839a045dbf6456c11a7da69dfbaf81e54882bb0d0f8f929",
+      "bytes": 7786,
+      "importPath": "runtime.py",
+      "importSha256": "598008db03531ee486ccb6d7ac9659632044cd8544ff243f8a5f9e206e5368ef",
+      "source": "demo/runtime.py",
+      "sourceSha256": "794758eb166f8740633e9565f5801daaa1e72505d2b67e5d5e190a3880c113eb"
+    },
+    "backend/app/secrets.py": {
+      "sha256": "cb1ef7a60d27abe26329e14f7a8d6f8dab3bbbb9299598450101f3a3537f53c7",
+      "bytes": 372
+    },
+    "backend/app/share.py": {
+      "sha256": "5b60a2aa1eefbb7b947ba80d177b45876e545bc135cdd988cc73df62816145f7",
+      "bytes": 7573,
+      "importPath": "share.py",
+      "importSha256": "ae5e6c887230aa0babbf894169b822be4a28a6d93589f2b2c351d3a7e2dbcad6",
+      "source": "demo/share.py",
+      "sourceSha256": "acb1d0421f079571514d4d2f96d608efa5a9f440a611fbcd290828a525777bdb"
+    },
+    "backend/app/share_health.py": {
+      "sha256": "83322bdadbde77cafb6abbe9210a3f9460c7d57c9b27b9d457cd1b9c0b31f682",
+      "bytes": 553
+    },
+    "backend/app/streaming.py": {
+      "sha256": "da80cb2e7978994ac1043edca124a751ad3bdd3b090668d197a3ede9c6564828",
+      "bytes": 4638,
+      "importPath": "streaming.py",
+      "importSha256": "da80cb2e7978994ac1043edca124a751ad3bdd3b090668d197a3ede9c6564828",
+      "source": "demo/streaming.py",
+      "sourceSha256": "da80cb2e7978994ac1043edca124a751ad3bdd3b090668d197a3ede9c6564828"
+    },
+    "backend/app/worker.py": {
+      "sha256": "d4570fe1753ea4f1a2849435313195ada19ce17f43743b6f12cee3f70e143224",
+      "bytes": 7145,
+      "importPath": "worker.py",
+      "importSha256": "30db44131f1591e10356e2c0867c90839aafd7d2d971fbe49d10c860a35cd3e7",
+      "source": "demo/worker.py",
+      "sourceSha256": "713897babd7c0d984e6ffb7fc23d86b1be1f9d45cee45cb3abe98fcf938c7c00"
+    },
+    "backend/requirements-dev.txt": {
+      "sha256": "26db60f3749b2d582ef13e54530725d1038086c5b72953678670871c2b85e15a",
+      "bytes": 14,
+      "importPath": "requirements-dev.txt",
+      "importSha256": "26db60f3749b2d582ef13e54530725d1038086c5b72953678670871c2b85e15a"
+    },
+    "backend/requirements.lock": {
+      "sha256": "fb4939ca527924c7ed452ae8329ae188eae4821cf8cd2062158d97478513ad42",
+      "bytes": 1072
+    },
+    "backend/requirements.txt": {
+      "sha256": "3b7c4a9cce7eec658dc889c91545c1149363adb93df16933d355b1f73cdba2dd",
+      "bytes": 47,
+      "importPath": "requirements.txt",
+      "importSha256": "3b7c4a9cce7eec658dc889c91545c1149363adb93df16933d355b1f73cdba2dd",
+      "source": "demo/requirements.txt",
+      "sourceSha256": "3b7c4a9cce7eec658dc889c91545c1149363adb93df16933d355b1f73cdba2dd"
+    },
+    "backend/vendor/health_eval_env/__init__.py": {
+      "sha256": "fe0244e34f64d37fa22bc1ca174694dfd0c44becb9af2fca600147864c0eb483",
+      "bytes": 326,
+      "importPath": "vendor/health_eval_env/__init__.py",
+      "importSha256": "fe0244e34f64d37fa22bc1ca174694dfd0c44becb9af2fca600147864c0eb483",
+      "source": "health_eval_env/__init__.py",
+      "sourceSha256": "fe0244e34f64d37fa22bc1ca174694dfd0c44becb9af2fca600147864c0eb483"
+    },
+    "backend/vendor/health_eval_env/assistant_completion.py": {
+      "sha256": "ad11f4255f76fa3198008c4d70ac4e321d31a8b6c658b616d9dc5f9b1fa593ff",
+      "bytes": 3981,
+      "importPath": "vendor/health_eval_env/assistant_completion.py",
+      "importSha256": "ad11f4255f76fa3198008c4d70ac4e321d31a8b6c658b616d9dc5f9b1fa593ff",
+      "source": "health_eval_env/assistant_completion.py",
+      "sourceSha256": "ad11f4255f76fa3198008c4d70ac4e321d31a8b6c658b616d9dc5f9b1fa593ff"
+    },
+    "backend/vendor/health_eval_env/assistant_observations.py": {
+      "sha256": "000c20dfc2325fc969c758d658444f3fab99e65d6e181766b053064b688e1ad7",
+      "bytes": 6591,
+      "importPath": "vendor/health_eval_env/assistant_observations.py",
+      "importSha256": "000c20dfc2325fc969c758d658444f3fab99e65d6e181766b053064b688e1ad7",
+      "source": "health_eval_env/assistant_observations.py",
+      "sourceSha256": "000c20dfc2325fc969c758d658444f3fab99e65d6e181766b053064b688e1ad7"
+    },
+    "backend/vendor/health_eval_env/case_boundaries.py": {
+      "sha256": "b4ca5bf86d571e4543835ad9d1343286332c31f531c02368667bc5fe52088a40",
+      "bytes": 2633,
+      "importPath": "vendor/health_eval_env/case_boundaries.py",
+      "importSha256": "b4ca5bf86d571e4543835ad9d1343286332c31f531c02368667bc5fe52088a40",
+      "source": "health_eval_env/case_boundaries.py",
+      "sourceSha256": "b4ca5bf86d571e4543835ad9d1343286332c31f531c02368667bc5fe52088a40"
+    },
+    "backend/vendor/health_eval_env/fixed_clock.py": {
+      "sha256": "76129ae14566e6eea7968f6876d343953066923c432e76a46f611db45b1b7d81",
+      "bytes": 417,
+      "importPath": "vendor/health_eval_env/fixed_clock.py",
+      "importSha256": "76129ae14566e6eea7968f6876d343953066923c432e76a46f611db45b1b7d81",
+      "source": "health_eval_env/fixed_clock.py",
+      "sourceSha256": "76129ae14566e6eea7968f6876d343953066923c432e76a46f611db45b1b7d81"
+    },
+    "backend/vendor/health_eval_env/hermes_health_tools.py": {
+      "sha256": "14a542bd8a6ba60ce6598ee0bf97eefa51525b2758732611faf7878f378a2188",
+      "bytes": 7058,
+      "importPath": "vendor/health_eval_env/hermes_health_tools.py",
+      "importSha256": "14a542bd8a6ba60ce6598ee0bf97eefa51525b2758732611faf7878f378a2188",
+      "source": "health_eval_env/hermes_health_tools.py",
+      "sourceSha256": "14a542bd8a6ba60ce6598ee0bf97eefa51525b2758732611faf7878f378a2188"
+    },
+    "backend/vendor/health_eval_env/hermes_plugin.py": {
+      "sha256": "6d7d8d1fdd40ce6550522052517fe82c58627aee9a8cdb10b18c38ef744166ea",
+      "bytes": 1323,
+      "importPath": "vendor/health_eval_env/hermes_plugin.py",
+      "importSha256": "6d7d8d1fdd40ce6550522052517fe82c58627aee9a8cdb10b18c38ef744166ea",
+      "source": "health_eval_env/hermes_plugin.py",
+      "sourceSha256": "6d7d8d1fdd40ce6550522052517fe82c58627aee9a8cdb10b18c38ef744166ea"
+    },
+    "backend/vendor/health_eval_env/hermes_sandbox_session.py": {
+      "sha256": "a5f73e5a5171ef32734035224645e0c841d8c57963dcb7a3062d25d5b6d6b279",
+      "bytes": 3354,
+      "importPath": "vendor/health_eval_env/hermes_sandbox_session.py",
+      "importSha256": "a5f73e5a5171ef32734035224645e0c841d8c57963dcb7a3062d25d5b6d6b279",
+      "source": "health_eval_env/hermes_sandbox_session.py",
+      "sourceSha256": "a5f73e5a5171ef32734035224645e0c841d8c57963dcb7a3062d25d5b6d6b279"
+    },
+    "backend/vendor/health_eval_env/llm_patient_policy.py": {
+      "sha256": "89cd551f6e7aad35bd0994157bd85d95935f3ea525881ab69c422bf42faff0f1",
+      "bytes": 20021,
+      "importPath": "vendor/health_eval_env/llm_patient_policy.py",
+      "importSha256": "89cd551f6e7aad35bd0994157bd85d95935f3ea525881ab69c422bf42faff0f1",
+      "source": "health_eval_env/llm_patient_policy.py",
+      "sourceSha256": "89cd551f6e7aad35bd0994157bd85d95935f3ea525881ab69c422bf42faff0f1"
+    },
+    "backend/vendor/health_eval_env/native_policy_history.py": {
+      "sha256": "f3acdfc91a2e6baac56891b8227d559fc7f80e46bbd159d56e5785423ffb2734",
+      "bytes": 5228,
+      "importPath": "vendor/health_eval_env/native_policy_history.py",
+      "importSha256": "f3acdfc91a2e6baac56891b8227d559fc7f80e46bbd159d56e5785423ffb2734",
+      "source": "health_eval_env/native_policy_history.py",
+      "sourceSha256": "f3acdfc91a2e6baac56891b8227d559fc7f80e46bbd159d56e5785423ffb2734"
+    },
+    "backend/vendor/health_eval_env/patient_role.py": {
+      "sha256": "c2eecf139901d24a3b4636866aa66475aae067457a331b080f36d8ea87e1d91b",
+      "bytes": 1819,
+      "importPath": "vendor/health_eval_env/patient_role.py",
+      "importSha256": "c2eecf139901d24a3b4636866aa66475aae067457a331b080f36d8ea87e1d91b",
+      "source": "health_eval_env/patient_role.py",
+      "sourceSha256": "c2eecf139901d24a3b4636866aa66475aae067457a331b080f36d8ea87e1d91b"
+    },
+    "backend/vendor/health_eval_env/patient_sim.py": {
+      "sha256": "c0689551b244c3c75c3b02d54acf4f30872384e31ac8b78d6251ecd0495b41e6",
+      "bytes": 5551,
+      "importPath": "vendor/health_eval_env/patient_sim.py",
+      "importSha256": "c0689551b244c3c75c3b02d54acf4f30872384e31ac8b78d6251ecd0495b41e6",
+      "source": "health_eval_env/patient_sim.py",
+      "sourceSha256": "c0689551b244c3c75c3b02d54acf4f30872384e31ac8b78d6251ecd0495b41e6"
+    },
+    "backend/vendor/health_eval_env/patient_visible_reply.py": {
+      "sha256": "66c9fb846df324abf914b3ecfd87c8cbc1aefc1ee577bbdc20507c98c87f0632",
+      "bytes": 567,
+      "importPath": "vendor/health_eval_env/patient_visible_reply.py",
+      "importSha256": "66c9fb846df324abf914b3ecfd87c8cbc1aefc1ee577bbdc20507c98c87f0632",
+      "source": "health_eval_env/patient_visible_reply.py",
+      "sourceSha256": "66c9fb846df324abf914b3ecfd87c8cbc1aefc1ee577bbdc20507c98c87f0632"
+    },
+    "backend/vendor/health_eval_env/sandbox.py": {
+      "sha256": "952bc0959cb5880e3d0b8c9819ccf8d31cd87f5a10cf0e4d6b776a84e38b8402",
+      "bytes": 17400,
+      "importPath": "vendor/health_eval_env/sandbox.py",
+      "importSha256": "952bc0959cb5880e3d0b8c9819ccf8d31cd87f5a10cf0e4d6b776a84e38b8402",
+      "source": "health_eval_env/sandbox.py",
+      "sourceSha256": "952bc0959cb5880e3d0b8c9819ccf8d31cd87f5a10cf0e4d6b776a84e38b8402"
+    },
+    "backend/vendor/health_eval_env/schemas.py": {
+      "sha256": "e49736b5c723c0001003579727c4093cf747716ee4e0273ac56b3e21ffa11185",
+      "bytes": 668,
+      "importPath": "vendor/health_eval_env/schemas.py",
+      "importSha256": "e49736b5c723c0001003579727c4093cf747716ee4e0273ac56b3e21ffa11185",
+      "source": "health_eval_env/schemas.py",
+      "sourceSha256": "e49736b5c723c0001003579727c4093cf747716ee4e0273ac56b3e21ffa11185"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/__init__.py": {
+      "sha256": "c841e4cd574c5ae19003aebaee22396db3cc515dd600934059bbe78958324e98",
+      "bytes": 67,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/__init__.py",
+      "importSha256": "c841e4cd574c5ae19003aebaee22396db3cc515dd600934059bbe78958324e98",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/__init__.py",
+      "sourceSha256": "c841e4cd574c5ae19003aebaee22396db3cc515dd600934059bbe78958324e98"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/__main__.py": {
+      "sha256": "65164332e6d17cb9325248ea8bbdf346e5ced681e6474c6d28f1729bd5c26225",
+      "bytes": 99,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/__main__.py",
+      "importSha256": "65164332e6d17cb9325248ea8bbdf346e5ced681e6474c6d28f1729bd5c26225",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/__main__.py",
+      "sourceSha256": "65164332e6d17cb9325248ea8bbdf346e5ced681e6474c6d28f1729bd5c26225"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/auth.py": {
+      "sha256": "9231b690408cddb71f1ba648f615c08cd777e022966539bdb61f9697d25af573",
+      "bytes": 831,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/auth.py",
+      "importSha256": "9231b690408cddb71f1ba648f615c08cd777e022966539bdb61f9697d25af573",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/auth.py",
+      "sourceSha256": "9231b690408cddb71f1ba648f615c08cd777e022966539bdb61f9697d25af573"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/entry.py": {
+      "sha256": "be410062bf04a88f478ad7a98941d646a12bd769d1b3c8b89c8f2ba6c5dd9f42",
+      "bytes": 2437,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/entry.py",
+      "importSha256": "be410062bf04a88f478ad7a98941d646a12bd769d1b3c8b89c8f2ba6c5dd9f42",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/entry.py",
+      "sourceSha256": "be410062bf04a88f478ad7a98941d646a12bd769d1b3c8b89c8f2ba6c5dd9f42"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/events.py": {
+      "sha256": "ad4054b34c8fe426c3324b8371426dbb5ac8b5a470d98a215b979ddf58971cb8",
+      "bytes": 5292,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/events.py",
+      "importSha256": "ad4054b34c8fe426c3324b8371426dbb5ac8b5a470d98a215b979ddf58971cb8",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/events.py",
+      "sourceSha256": "ad4054b34c8fe426c3324b8371426dbb5ac8b5a470d98a215b979ddf58971cb8"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/permissions.py": {
+      "sha256": "fe52c0515a4512ff87b6aa127db21ed051445c748d65c3851958614ac7714f8d",
+      "bytes": 2525,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/permissions.py",
+      "importSha256": "fe52c0515a4512ff87b6aa127db21ed051445c748d65c3851958614ac7714f8d",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/permissions.py",
+      "sourceSha256": "fe52c0515a4512ff87b6aa127db21ed051445c748d65c3851958614ac7714f8d"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/server.py": {
+      "sha256": "394ec6238599bb288742262653e51c585c27996823f2115fbd3219012266ebc3",
+      "bytes": 21001,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/server.py",
+      "importSha256": "394ec6238599bb288742262653e51c585c27996823f2115fbd3219012266ebc3",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/server.py",
+      "sourceSha256": "394ec6238599bb288742262653e51c585c27996823f2115fbd3219012266ebc3"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/session.py": {
+      "sha256": "413ad180d1f34c932d1c27cfc88e5be01cf9890b93f627a9abcb5d9231183cda",
+      "bytes": 17416,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/session.py",
+      "importSha256": "413ad180d1f34c932d1c27cfc88e5be01cf9890b93f627a9abcb5d9231183cda",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/session.py",
+      "sourceSha256": "413ad180d1f34c932d1c27cfc88e5be01cf9890b93f627a9abcb5d9231183cda"
+    },
+    "backend/vendor/hermes_agent_runtime/acp_adapter/tools.py": {
+      "sha256": "2f893dd606a1bf7677a40246bb751c76b691302980e8be9daa57964734fb4097",
+      "bytes": 7298,
+      "importPath": "vendor/hermes_agent_runtime/acp_adapter/tools.py",
+      "importSha256": "2f893dd606a1bf7677a40246bb751c76b691302980e8be9daa57964734fb4097",
+      "source": "third_party/hermes_agent_runtime/acp_adapter/tools.py",
+      "sourceSha256": "2f893dd606a1bf7677a40246bb751c76b691302980e8be9daa57964734fb4097"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/__init__.py": {
+      "sha256": "a8d8dc8180980ed13c521d9692b875ac1aecff7c9afb00b6d75ba9487274c9e5",
+      "bytes": 276,
+      "importPath": "vendor/hermes_agent_runtime/agent/__init__.py",
+      "importSha256": "a8d8dc8180980ed13c521d9692b875ac1aecff7c9afb00b6d75ba9487274c9e5",
+      "source": "third_party/hermes_agent_runtime/agent/__init__.py",
+      "sourceSha256": "a8d8dc8180980ed13c521d9692b875ac1aecff7c9afb00b6d75ba9487274c9e5"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/anthropic_adapter.py": {
+      "sha256": "8f64c8986266151a0eff22ff27ffc7bd85afe90cd23b6f8197ec2524d7f58899",
+      "bytes": 51022,
+      "importPath": "vendor/hermes_agent_runtime/agent/anthropic_adapter.py",
+      "importSha256": "8f64c8986266151a0eff22ff27ffc7bd85afe90cd23b6f8197ec2524d7f58899",
+      "source": "third_party/hermes_agent_runtime/agent/anthropic_adapter.py",
+      "sourceSha256": "8f64c8986266151a0eff22ff27ffc7bd85afe90cd23b6f8197ec2524d7f58899"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/auxiliary_client.py": {
+      "sha256": "75b605f18ba077ecf9bb70051ed1e36ec25ddcb4aafa2a2bbe933a39b29372ca",
+      "bytes": 77797,
+      "importPath": "vendor/hermes_agent_runtime/agent/auxiliary_client.py",
+      "importSha256": "75b605f18ba077ecf9bb70051ed1e36ec25ddcb4aafa2a2bbe933a39b29372ca",
+      "source": "third_party/hermes_agent_runtime/agent/auxiliary_client.py",
+      "sourceSha256": "75b605f18ba077ecf9bb70051ed1e36ec25ddcb4aafa2a2bbe933a39b29372ca"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/context_compressor.py": {
+      "sha256": "63654d11d506ad2f0f6559f74ada0e0973c983394208a8a78b8fd18cb2a188ad",
+      "bytes": 29393,
+      "importPath": "vendor/hermes_agent_runtime/agent/context_compressor.py",
+      "importSha256": "63654d11d506ad2f0f6559f74ada0e0973c983394208a8a78b8fd18cb2a188ad",
+      "source": "third_party/hermes_agent_runtime/agent/context_compressor.py",
+      "sourceSha256": "63654d11d506ad2f0f6559f74ada0e0973c983394208a8a78b8fd18cb2a188ad"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/context_references.py": {
+      "sha256": "a6a875b4157ba55cef9775f412c22cb0d2d7cde1a76331c9282f0abc0adfa031",
+      "bytes": 15952,
+      "importPath": "vendor/hermes_agent_runtime/agent/context_references.py",
+      "importSha256": "a6a875b4157ba55cef9775f412c22cb0d2d7cde1a76331c9282f0abc0adfa031",
+      "source": "third_party/hermes_agent_runtime/agent/context_references.py",
+      "sourceSha256": "a6a875b4157ba55cef9775f412c22cb0d2d7cde1a76331c9282f0abc0adfa031"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/copilot_acp_client.py": {
+      "sha256": "ad0a99e9d7e8ad5a0012e80da2be0e86c5c5b1611eaa96d1ba26149b0f5af6b8",
+      "bytes": 15394,
+      "importPath": "vendor/hermes_agent_runtime/agent/copilot_acp_client.py",
+      "importSha256": "ad0a99e9d7e8ad5a0012e80da2be0e86c5c5b1611eaa96d1ba26149b0f5af6b8",
+      "source": "third_party/hermes_agent_runtime/agent/copilot_acp_client.py",
+      "sourceSha256": "ad0a99e9d7e8ad5a0012e80da2be0e86c5c5b1611eaa96d1ba26149b0f5af6b8"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/credential_pool.py": {
+      "sha256": "5e466baa871da2e925b196bedf1536014a68937de68d42ffd3c5633073f20a09",
+      "bytes": 31907,
+      "importPath": "vendor/hermes_agent_runtime/agent/credential_pool.py",
+      "importSha256": "5e466baa871da2e925b196bedf1536014a68937de68d42ffd3c5633073f20a09",
+      "source": "third_party/hermes_agent_runtime/agent/credential_pool.py",
+      "sourceSha256": "5e466baa871da2e925b196bedf1536014a68937de68d42ffd3c5633073f20a09"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/display.py": {
+      "sha256": "1f87523f8f4003221f93ddbc59239061efc0ad014b75b24d72f068895b77cb3f",
+      "bytes": 42035,
+      "importPath": "vendor/hermes_agent_runtime/agent/display.py",
+      "importSha256": "1f87523f8f4003221f93ddbc59239061efc0ad014b75b24d72f068895b77cb3f",
+      "source": "third_party/hermes_agent_runtime/agent/display.py",
+      "sourceSha256": "1f87523f8f4003221f93ddbc59239061efc0ad014b75b24d72f068895b77cb3f"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/insights.py": {
+      "sha256": "f2fe48932c137ff52b41598494eafbe6a417b3cbabe8e205c2c6d049d348a32e",
+      "bytes": 34154,
+      "importPath": "vendor/hermes_agent_runtime/agent/insights.py",
+      "importSha256": "f2fe48932c137ff52b41598494eafbe6a417b3cbabe8e205c2c6d049d348a32e",
+      "source": "third_party/hermes_agent_runtime/agent/insights.py",
+      "sourceSha256": "f2fe48932c137ff52b41598494eafbe6a417b3cbabe8e205c2c6d049d348a32e"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/model_metadata.py": {
+      "sha256": "4ce15d142abcdc06e1f8d44ab8f51a8253fbc779f9ca88d364e944a7cab95b09",
+      "bytes": 36585,
+      "importPath": "vendor/hermes_agent_runtime/agent/model_metadata.py",
+      "importSha256": "4ce15d142abcdc06e1f8d44ab8f51a8253fbc779f9ca88d364e944a7cab95b09",
+      "source": "third_party/hermes_agent_runtime/agent/model_metadata.py",
+      "sourceSha256": "4ce15d142abcdc06e1f8d44ab8f51a8253fbc779f9ca88d364e944a7cab95b09"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/models_dev.py": {
+      "sha256": "19cdd71c5f2744718263c2a385b7fc11fee5fd189ea2e379d16082d890f6dd36",
+      "bytes": 5442,
+      "importPath": "vendor/hermes_agent_runtime/agent/models_dev.py",
+      "importSha256": "19cdd71c5f2744718263c2a385b7fc11fee5fd189ea2e379d16082d890f6dd36",
+      "source": "third_party/hermes_agent_runtime/agent/models_dev.py",
+      "sourceSha256": "19cdd71c5f2744718263c2a385b7fc11fee5fd189ea2e379d16082d890f6dd36"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/prompt_builder.py": {
+      "sha256": "4c26a692809af1f9510595a8b16e42ee2ceba0d6a59763b0133fb0ca1b463108",
+      "bytes": 34325,
+      "importPath": "vendor/hermes_agent_runtime/agent/prompt_builder.py",
+      "importSha256": "4c26a692809af1f9510595a8b16e42ee2ceba0d6a59763b0133fb0ca1b463108",
+      "source": "third_party/hermes_agent_runtime/agent/prompt_builder.py",
+      "sourceSha256": "4c26a692809af1f9510595a8b16e42ee2ceba0d6a59763b0133fb0ca1b463108"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/prompt_caching.py": {
+      "sha256": "31befe122aafc69a19bf2aaf3e4cbee014f719108df5fb4b0f92aae958991053",
+      "bytes": 2250,
+      "importPath": "vendor/hermes_agent_runtime/agent/prompt_caching.py",
+      "importSha256": "31befe122aafc69a19bf2aaf3e4cbee014f719108df5fb4b0f92aae958991053",
+      "source": "third_party/hermes_agent_runtime/agent/prompt_caching.py",
+      "sourceSha256": "31befe122aafc69a19bf2aaf3e4cbee014f719108df5fb4b0f92aae958991053"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/redact.py": {
+      "sha256": "f28d06599b1cd69bd29c2fa5f1e14925cd6f48542fac9b95190ea60bd617ec75",
+      "bytes": 6719,
+      "importPath": "vendor/hermes_agent_runtime/agent/redact.py",
+      "importSha256": "f28d06599b1cd69bd29c2fa5f1e14925cd6f48542fac9b95190ea60bd617ec75",
+      "source": "third_party/hermes_agent_runtime/agent/redact.py",
+      "sourceSha256": "f28d06599b1cd69bd29c2fa5f1e14925cd6f48542fac9b95190ea60bd617ec75"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/skill_commands.py": {
+      "sha256": "6b5c45a7d17f71acee5600ce6bde4cfd928810259f23ad7fcee54ed189711028",
+      "bytes": 10622,
+      "importPath": "vendor/hermes_agent_runtime/agent/skill_commands.py",
+      "importSha256": "6b5c45a7d17f71acee5600ce6bde4cfd928810259f23ad7fcee54ed189711028",
+      "source": "third_party/hermes_agent_runtime/agent/skill_commands.py",
+      "sourceSha256": "6b5c45a7d17f71acee5600ce6bde4cfd928810259f23ad7fcee54ed189711028"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/skill_utils.py": {
+      "sha256": "07c29749f52bff41738dd4e3ade3f89048e6fcc011d92545fdc8980d9473f6e7",
+      "bytes": 9636,
+      "importPath": "vendor/hermes_agent_runtime/agent/skill_utils.py",
+      "importSha256": "07c29749f52bff41738dd4e3ade3f89048e6fcc011d92545fdc8980d9473f6e7",
+      "source": "third_party/hermes_agent_runtime/agent/skill_utils.py",
+      "sourceSha256": "07c29749f52bff41738dd4e3ade3f89048e6fcc011d92545fdc8980d9473f6e7"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/smart_model_routing.py": {
+      "sha256": "185b8bc46c31ff80c0e8d982587f7656072538566ce112e50df8d94e8e0521b7",
+      "bytes": 5852,
+      "importPath": "vendor/hermes_agent_runtime/agent/smart_model_routing.py",
+      "importSha256": "185b8bc46c31ff80c0e8d982587f7656072538566ce112e50df8d94e8e0521b7",
+      "source": "third_party/hermes_agent_runtime/agent/smart_model_routing.py",
+      "sourceSha256": "185b8bc46c31ff80c0e8d982587f7656072538566ce112e50df8d94e8e0521b7"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/title_generator.py": {
+      "sha256": "3d1c5456e72c9deb9e54752ec0645fe32ff69b1ff3708799bb552bbbe4a3f95e",
+      "bytes": 4168,
+      "importPath": "vendor/hermes_agent_runtime/agent/title_generator.py",
+      "importSha256": "3d1c5456e72c9deb9e54752ec0645fe32ff69b1ff3708799bb552bbbe4a3f95e",
+      "source": "third_party/hermes_agent_runtime/agent/title_generator.py",
+      "sourceSha256": "3d1c5456e72c9deb9e54752ec0645fe32ff69b1ff3708799bb552bbbe4a3f95e"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/trajectory.py": {
+      "sha256": "f1163056e1b5ba0588fc6b85a58dc8c4bb48eca9d27a256e358308222e5b3934",
+      "bytes": 2028,
+      "importPath": "vendor/hermes_agent_runtime/agent/trajectory.py",
+      "importSha256": "f1163056e1b5ba0588fc6b85a58dc8c4bb48eca9d27a256e358308222e5b3934",
+      "source": "third_party/hermes_agent_runtime/agent/trajectory.py",
+      "sourceSha256": "f1163056e1b5ba0588fc6b85a58dc8c4bb48eca9d27a256e358308222e5b3934"
+    },
+    "backend/vendor/hermes_agent_runtime/agent/usage_pricing.py": {
+      "sha256": "0427850f5729341ec9a557379940dade06d610c6b5f1f467f2bc422070550b63",
+      "bytes": 23550,
+      "importPath": "vendor/hermes_agent_runtime/agent/usage_pricing.py",
+      "importSha256": "0427850f5729341ec9a557379940dade06d610c6b5f1f467f2bc422070550b63",
+      "source": "third_party/hermes_agent_runtime/agent/usage_pricing.py",
+      "sourceSha256": "0427850f5729341ec9a557379940dade06d610c6b5f1f467f2bc422070550b63"
+    },
+    "backend/vendor/hermes_agent_runtime/batch_runner.py": {
+      "sha256": "fce2d5537697dfa6d44b47d1bbf4709fd88b37decc7443e77c601bb27e953897",
+      "bytes": 55291,
+      "importPath": "vendor/hermes_agent_runtime/batch_runner.py",
+      "importSha256": "fce2d5537697dfa6d44b47d1bbf4709fd88b37decc7443e77c601bb27e953897",
+      "source": "third_party/hermes_agent_runtime/batch_runner.py",
+      "sourceSha256": "fce2d5537697dfa6d44b47d1bbf4709fd88b37decc7443e77c601bb27e953897"
+    },
+    "backend/vendor/hermes_agent_runtime/cli.py": {
+      "sha256": "326794e1d531e53aad19e54fb4af5bbdc61a84b8b095ee628655da56dc1d3342",
+      "bytes": 357294,
+      "importPath": "vendor/hermes_agent_runtime/cli.py",
+      "importSha256": "326794e1d531e53aad19e54fb4af5bbdc61a84b8b095ee628655da56dc1d3342",
+      "source": "third_party/hermes_agent_runtime/cli.py",
+      "sourceSha256": "326794e1d531e53aad19e54fb4af5bbdc61a84b8b095ee628655da56dc1d3342"
+    },
+    "backend/vendor/hermes_agent_runtime/cron/__init__.py": {
+      "sha256": "8b697250e486871c212e711d8f5582dbd469658dfa63e9dfd9892a4e1227727f",
+      "bytes": 1063,
+      "importPath": "vendor/hermes_agent_runtime/cron/__init__.py",
+      "importSha256": "8b697250e486871c212e711d8f5582dbd469658dfa63e9dfd9892a4e1227727f",
+      "source": "third_party/hermes_agent_runtime/cron/__init__.py",
+      "sourceSha256": "8b697250e486871c212e711d8f5582dbd469658dfa63e9dfd9892a4e1227727f"
+    },
+    "backend/vendor/hermes_agent_runtime/cron/jobs.py": {
+      "sha256": "9fa786e0d2c1e135a0b9303a5d0eb3a61f1d6dd9aa990788bc31b40715c81ccf",
+      "bytes": 25210,
+      "importPath": "vendor/hermes_agent_runtime/cron/jobs.py",
+      "importSha256": "9fa786e0d2c1e135a0b9303a5d0eb3a61f1d6dd9aa990788bc31b40715c81ccf",
+      "source": "third_party/hermes_agent_runtime/cron/jobs.py",
+      "sourceSha256": "9fa786e0d2c1e135a0b9303a5d0eb3a61f1d6dd9aa990788bc31b40715c81ccf"
+    },
+    "backend/vendor/hermes_agent_runtime/cron/scheduler.py": {
+      "sha256": "68f4453e837ef1ab3c5d641bce7ec989dd4ba2a246fdbeba8509c0ebb37eaafb",
+      "bytes": 22193,
+      "importPath": "vendor/hermes_agent_runtime/cron/scheduler.py",
+      "importSha256": "68f4453e837ef1ab3c5d641bce7ec989dd4ba2a246fdbeba8509c0ebb37eaafb",
+      "source": "third_party/hermes_agent_runtime/cron/scheduler.py",
+      "sourceSha256": "68f4453e837ef1ab3c5d641bce7ec989dd4ba2a246fdbeba8509c0ebb37eaafb"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/__init__.py": {
+      "sha256": "e867b3f21d24424c68acb9ac7b53c47d5bb540d5d0dceeb148c8629da808808e",
+      "bytes": 1020,
+      "importPath": "vendor/hermes_agent_runtime/gateway/__init__.py",
+      "importSha256": "e867b3f21d24424c68acb9ac7b53c47d5bb540d5d0dceeb148c8629da808808e",
+      "source": "third_party/hermes_agent_runtime/gateway/__init__.py",
+      "sourceSha256": "e867b3f21d24424c68acb9ac7b53c47d5bb540d5d0dceeb148c8629da808808e"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/builtin_hooks/__init__.py": {
+      "sha256": "2d6b6939f9548e4895aa12c9911a161c264a977f688b9996934f5df90e499e11",
+      "bytes": 57,
+      "importPath": "vendor/hermes_agent_runtime/gateway/builtin_hooks/__init__.py",
+      "importSha256": "2d6b6939f9548e4895aa12c9911a161c264a977f688b9996934f5df90e499e11",
+      "source": "third_party/hermes_agent_runtime/gateway/builtin_hooks/__init__.py",
+      "sourceSha256": "2d6b6939f9548e4895aa12c9911a161c264a977f688b9996934f5df90e499e11"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/builtin_hooks/boot_md.py": {
+      "sha256": "aea27f0b699ad202986423dc66ab43eddfb7b7182f5ce9ce3fdf8c98a24f5fe8",
+      "bytes": 2671,
+      "importPath": "vendor/hermes_agent_runtime/gateway/builtin_hooks/boot_md.py",
+      "importSha256": "aea27f0b699ad202986423dc66ab43eddfb7b7182f5ce9ce3fdf8c98a24f5fe8",
+      "source": "third_party/hermes_agent_runtime/gateway/builtin_hooks/boot_md.py",
+      "sourceSha256": "aea27f0b699ad202986423dc66ab43eddfb7b7182f5ce9ce3fdf8c98a24f5fe8"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/channel_directory.py": {
+      "sha256": "537f705b78e95b1f62a411a7f39bc15dd395b0e456b8d1f35a0e34ec3a456c57",
+      "bytes": 8770,
+      "importPath": "vendor/hermes_agent_runtime/gateway/channel_directory.py",
+      "importSha256": "537f705b78e95b1f62a411a7f39bc15dd395b0e456b8d1f35a0e34ec3a456c57",
+      "source": "third_party/hermes_agent_runtime/gateway/channel_directory.py",
+      "sourceSha256": "537f705b78e95b1f62a411a7f39bc15dd395b0e456b8d1f35a0e34ec3a456c57"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/config.py": {
+      "sha256": "d78a29ed7204dca5b73f6b757b5c8021d9e5576f6b17da11594a6bd51750b34a",
+      "bytes": 38266,
+      "importPath": "vendor/hermes_agent_runtime/gateway/config.py",
+      "importSha256": "d78a29ed7204dca5b73f6b757b5c8021d9e5576f6b17da11594a6bd51750b34a",
+      "source": "third_party/hermes_agent_runtime/gateway/config.py",
+      "sourceSha256": "d78a29ed7204dca5b73f6b757b5c8021d9e5576f6b17da11594a6bd51750b34a"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/delivery.py": {
+      "sha256": "af7d4e2716b4218b1a4160d309748db6f1e11e41befcb6646141251ebde0f2e3",
+      "bytes": 11660,
+      "importPath": "vendor/hermes_agent_runtime/gateway/delivery.py",
+      "importSha256": "af7d4e2716b4218b1a4160d309748db6f1e11e41befcb6646141251ebde0f2e3",
+      "source": "third_party/hermes_agent_runtime/gateway/delivery.py",
+      "sourceSha256": "af7d4e2716b4218b1a4160d309748db6f1e11e41befcb6646141251ebde0f2e3"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/hooks.py": {
+      "sha256": "0f31d9e46d19bcff4192f32aba47af1f342f29cba53a4c5e1797a59b97c85913",
+      "bytes": 6427,
+      "importPath": "vendor/hermes_agent_runtime/gateway/hooks.py",
+      "importSha256": "0f31d9e46d19bcff4192f32aba47af1f342f29cba53a4c5e1797a59b97c85913",
+      "source": "third_party/hermes_agent_runtime/gateway/hooks.py",
+      "sourceSha256": "0f31d9e46d19bcff4192f32aba47af1f342f29cba53a4c5e1797a59b97c85913"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/mirror.py": {
+      "sha256": "c3feae63c83996da4cc2bbf99fb1e558785ca3480628f83241f6c97a5a262492",
+      "bytes": 4324,
+      "importPath": "vendor/hermes_agent_runtime/gateway/mirror.py",
+      "importSha256": "c3feae63c83996da4cc2bbf99fb1e558785ca3480628f83241f6c97a5a262492",
+      "source": "third_party/hermes_agent_runtime/gateway/mirror.py",
+      "sourceSha256": "c3feae63c83996da4cc2bbf99fb1e558785ca3480628f83241f6c97a5a262492"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/pairing.py": {
+      "sha256": "8a53dba9ceb66154a69b792c7742c8b590e2b06b031057b8159991d42d0e404b",
+      "bytes": 10421,
+      "importPath": "vendor/hermes_agent_runtime/gateway/pairing.py",
+      "importSha256": "8a53dba9ceb66154a69b792c7742c8b590e2b06b031057b8159991d42d0e404b",
+      "source": "third_party/hermes_agent_runtime/gateway/pairing.py",
+      "sourceSha256": "8a53dba9ceb66154a69b792c7742c8b590e2b06b031057b8159991d42d0e404b"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/__init__.py": {
+      "sha256": "86502285ad8b8c3b29663a36098502fdd1c2bd6669a542a0a29026b673308345",
+      "bytes": 368,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/__init__.py",
+      "importSha256": "86502285ad8b8c3b29663a36098502fdd1c2bd6669a542a0a29026b673308345",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/__init__.py",
+      "sourceSha256": "86502285ad8b8c3b29663a36098502fdd1c2bd6669a542a0a29026b673308345"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/api_server.py": {
+      "sha256": "3770f58565a3c372f9d789a33c769f6bc89ec392c1db3ec3194ceb6b1c64fa4b",
+      "bytes": 55399,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/api_server.py",
+      "importSha256": "3770f58565a3c372f9d789a33c769f6bc89ec392c1db3ec3194ceb6b1c64fa4b",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/api_server.py",
+      "sourceSha256": "3770f58565a3c372f9d789a33c769f6bc89ec392c1db3ec3194ceb6b1c64fa4b"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/base.py": {
+      "sha256": "97c59a2615d594f96046405cea1ad6afddb5bd133e677cdf37f3cf680efcce2a",
+      "bytes": 60691,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/base.py",
+      "importSha256": "97c59a2615d594f96046405cea1ad6afddb5bd133e677cdf37f3cf680efcce2a",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/base.py",
+      "sourceSha256": "97c59a2615d594f96046405cea1ad6afddb5bd133e677cdf37f3cf680efcce2a"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/dingtalk.py": {
+      "sha256": "6a3f28beeecf2a4f4033459997e43a8d881fb428b903fc08479976eb0655bac6",
+      "bytes": 12841,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/dingtalk.py",
+      "importSha256": "6a3f28beeecf2a4f4033459997e43a8d881fb428b903fc08479976eb0655bac6",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/dingtalk.py",
+      "sourceSha256": "6a3f28beeecf2a4f4033459997e43a8d881fb428b903fc08479976eb0655bac6"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/discord.py": {
+      "sha256": "be5321169938370abbd273f00e261dd020686949dd8aade991f9837bfec27f2c",
+      "bytes": 98347,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/discord.py",
+      "importSha256": "be5321169938370abbd273f00e261dd020686949dd8aade991f9837bfec27f2c",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/discord.py",
+      "sourceSha256": "be5321169938370abbd273f00e261dd020686949dd8aade991f9837bfec27f2c"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/email.py": {
+      "sha256": "c91bca9c576dac40bb419778dd3b073170f78e7b3d577f7b332612487ad0f39c",
+      "bytes": 23140,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/email.py",
+      "importSha256": "c91bca9c576dac40bb419778dd3b073170f78e7b3d577f7b332612487ad0f39c",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/email.py",
+      "sourceSha256": "c91bca9c576dac40bb419778dd3b073170f78e7b3d577f7b332612487ad0f39c"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/feishu.py": {
+      "sha256": "343b4ebe0c1e6a2aa1d5be95d4ef2721d4fece3061e8c5df31b7e3205cd19456",
+      "bytes": 136460,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/feishu.py",
+      "importSha256": "343b4ebe0c1e6a2aa1d5be95d4ef2721d4fece3061e8c5df31b7e3205cd19456",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/feishu.py",
+      "sourceSha256": "343b4ebe0c1e6a2aa1d5be95d4ef2721d4fece3061e8c5df31b7e3205cd19456"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/homeassistant.py": {
+      "sha256": "a10121e4853f3c382af9e465b9d8b12ee4a6fc09692f989eaac8032f17b44349",
+      "bytes": 16246,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/homeassistant.py",
+      "importSha256": "a10121e4853f3c382af9e465b9d8b12ee4a6fc09692f989eaac8032f17b44349",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/homeassistant.py",
+      "sourceSha256": "a10121e4853f3c382af9e465b9d8b12ee4a6fc09692f989eaac8032f17b44349"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/matrix.py": {
+      "sha256": "705c327b2ed943cdf247b7b9655c3f2bab6fce88a17595a76f04afd30010ae7a",
+      "bytes": 48136,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/matrix.py",
+      "importSha256": "705c327b2ed943cdf247b7b9655c3f2bab6fce88a17595a76f04afd30010ae7a",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/matrix.py",
+      "sourceSha256": "705c327b2ed943cdf247b7b9655c3f2bab6fce88a17595a76f04afd30010ae7a"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/mattermost.py": {
+      "sha256": "fb692d8060a925555bf89e452db7b71da7a384c4c2ad718738ab71fd473d6099",
+      "bytes": 26568,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/mattermost.py",
+      "importSha256": "fb692d8060a925555bf89e452db7b71da7a384c4c2ad718738ab71fd473d6099",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/mattermost.py",
+      "sourceSha256": "fb692d8060a925555bf89e452db7b71da7a384c4c2ad718738ab71fd473d6099"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/signal.py": {
+      "sha256": "fea3a890482e8a60897f8f9f32f428c3e85f8c1b39758080fe68d6b4dffc515c",
+      "bytes": 31068,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/signal.py",
+      "importSha256": "fea3a890482e8a60897f8f9f32f428c3e85f8c1b39758080fe68d6b4dffc515c",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/signal.py",
+      "sourceSha256": "fea3a890482e8a60897f8f9f32f428c3e85f8c1b39758080fe68d6b4dffc515c"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/slack.py": {
+      "sha256": "cca187a39b0b689412f71928d7f4afa8dabacdc45fec1eb677550765398ca2c9",
+      "bytes": 37899,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/slack.py",
+      "importSha256": "cca187a39b0b689412f71928d7f4afa8dabacdc45fec1eb677550765398ca2c9",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/slack.py",
+      "sourceSha256": "cca187a39b0b689412f71928d7f4afa8dabacdc45fec1eb677550765398ca2c9"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/sms.py": {
+      "sha256": "6e56f509b2eb5f34330371e7d9988aa58f44c0d192894f78462046ba32c4e292",
+      "bytes": 10138,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/sms.py",
+      "importSha256": "6e56f509b2eb5f34330371e7d9988aa58f44c0d192894f78462046ba32c4e292",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/sms.py",
+      "sourceSha256": "6e56f509b2eb5f34330371e7d9988aa58f44c0d192894f78462046ba32c4e292"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/telegram.py": {
+      "sha256": "e53801342bb5c62a925cb75248fbe75987fbd87b3beaf1e5e5002b213b877078",
+      "bytes": 92826,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/telegram.py",
+      "importSha256": "e53801342bb5c62a925cb75248fbe75987fbd87b3beaf1e5e5002b213b877078",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/telegram.py",
+      "sourceSha256": "e53801342bb5c62a925cb75248fbe75987fbd87b3beaf1e5e5002b213b877078"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/telegram_network.py": {
+      "sha256": "cc618837552da0f7759f0cb4e32cdc31a75d528e74da320add9a52900d4c4bbb",
+      "bytes": 9158,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/telegram_network.py",
+      "importSha256": "cc618837552da0f7759f0cb4e32cdc31a75d528e74da320add9a52900d4c4bbb",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/telegram_network.py",
+      "sourceSha256": "cc618837552da0f7759f0cb4e32cdc31a75d528e74da320add9a52900d4c4bbb"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/webhook.py": {
+      "sha256": "94d2e63c88a6b25a59f77efac64a40db9c839b87190bb7d6c124d29d6e230215",
+      "bytes": 23270,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/webhook.py",
+      "importSha256": "94d2e63c88a6b25a59f77efac64a40db9c839b87190bb7d6c124d29d6e230215",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/webhook.py",
+      "sourceSha256": "94d2e63c88a6b25a59f77efac64a40db9c839b87190bb7d6c124d29d6e230215"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/wecom.py": {
+      "sha256": "b802eb6831865bfc3aebbfcb82bd3c55158b4b30cbd03c303767226fee2e7bcd",
+      "bytes": 53250,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/wecom.py",
+      "importSha256": "b802eb6831865bfc3aebbfcb82bd3c55158b4b30cbd03c303767226fee2e7bcd",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/wecom.py",
+      "sourceSha256": "b802eb6831865bfc3aebbfcb82bd3c55158b4b30cbd03c303767226fee2e7bcd"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/platforms/whatsapp.py": {
+      "sha256": "cd26dcfb3f6e3ea7ab8bc928fb98a1f5f95886a7d41c9f20de2cf5e7b1f3ad17",
+      "bytes": 34418,
+      "importPath": "vendor/hermes_agent_runtime/gateway/platforms/whatsapp.py",
+      "importSha256": "cd26dcfb3f6e3ea7ab8bc928fb98a1f5f95886a7d41c9f20de2cf5e7b1f3ad17",
+      "source": "third_party/hermes_agent_runtime/gateway/platforms/whatsapp.py",
+      "sourceSha256": "cd26dcfb3f6e3ea7ab8bc928fb98a1f5f95886a7d41c9f20de2cf5e7b1f3ad17"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/run.py": {
+      "sha256": "9e605b7c6e83bb78d2a2cc68a8de136131c0db1b2bc8df518702434679e8ff43",
+      "bytes": 291129,
+      "importPath": "vendor/hermes_agent_runtime/gateway/run.py",
+      "importSha256": "9e605b7c6e83bb78d2a2cc68a8de136131c0db1b2bc8df518702434679e8ff43",
+      "source": "third_party/hermes_agent_runtime/gateway/run.py",
+      "sourceSha256": "9e605b7c6e83bb78d2a2cc68a8de136131c0db1b2bc8df518702434679e8ff43"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/session.py": {
+      "sha256": "c502dbb7d2f2cca6e25aafe14e3a726ef6e024a37fc1d338ce0572207d4fad29",
+      "bytes": 40350,
+      "importPath": "vendor/hermes_agent_runtime/gateway/session.py",
+      "importSha256": "c502dbb7d2f2cca6e25aafe14e3a726ef6e024a37fc1d338ce0572207d4fad29",
+      "source": "third_party/hermes_agent_runtime/gateway/session.py",
+      "sourceSha256": "c502dbb7d2f2cca6e25aafe14e3a726ef6e024a37fc1d338ce0572207d4fad29"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/status.py": {
+      "sha256": "de3003655873ab109d732a3f9c3aafbe404fe46ffdb02c236eac9a1ce0da80bf",
+      "bytes": 12491,
+      "importPath": "vendor/hermes_agent_runtime/gateway/status.py",
+      "importSha256": "de3003655873ab109d732a3f9c3aafbe404fe46ffdb02c236eac9a1ce0da80bf",
+      "source": "third_party/hermes_agent_runtime/gateway/status.py",
+      "sourceSha256": "de3003655873ab109d732a3f9c3aafbe404fe46ffdb02c236eac9a1ce0da80bf"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/sticker_cache.py": {
+      "sha256": "9be1ba1e54a00ce901053c852765288cd71d783052fc317c89526fd4e2a58fdd",
+      "bytes": 3100,
+      "importPath": "vendor/hermes_agent_runtime/gateway/sticker_cache.py",
+      "importSha256": "9be1ba1e54a00ce901053c852765288cd71d783052fc317c89526fd4e2a58fdd",
+      "source": "third_party/hermes_agent_runtime/gateway/sticker_cache.py",
+      "sourceSha256": "9be1ba1e54a00ce901053c852765288cd71d783052fc317c89526fd4e2a58fdd"
+    },
+    "backend/vendor/hermes_agent_runtime/gateway/stream_consumer.py": {
+      "sha256": "d49c69194624b40efc096086d510165d883f7beda4be695449f3d7d2930b7f45",
+      "bytes": 8118,
+      "importPath": "vendor/hermes_agent_runtime/gateway/stream_consumer.py",
+      "importSha256": "d49c69194624b40efc096086d510165d883f7beda4be695449f3d7d2930b7f45",
+      "source": "third_party/hermes_agent_runtime/gateway/stream_consumer.py",
+      "sourceSha256": "d49c69194624b40efc096086d510165d883f7beda4be695449f3d7d2930b7f45"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/METADATA": {
+      "sha256": "4cba91c18c1ba9e260789258e5424b455e623ea290d7cad2d49550561042241f",
+      "bytes": 15047,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/METADATA",
+      "importSha256": "4cba91c18c1ba9e260789258e5424b455e623ea290d7cad2d49550561042241f",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/METADATA",
+      "sourceSha256": "4cba91c18c1ba9e260789258e5424b455e623ea290d7cad2d49550561042241f"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/RECORD": {
+      "sha256": "b3c813d6ac2c72243a8faca58bfbcf11be3a12df02659e632632afff9407983e",
+      "bytes": 14779,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/RECORD",
+      "importSha256": "b3c813d6ac2c72243a8faca58bfbcf11be3a12df02659e632632afff9407983e",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/RECORD",
+      "sourceSha256": "b3c813d6ac2c72243a8faca58bfbcf11be3a12df02659e632632afff9407983e"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/WHEEL": {
+      "sha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+      "bytes": 91,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/WHEEL",
+      "importSha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/WHEEL",
+      "sourceSha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/entry_points.txt": {
+      "sha256": "7c350e4a7ddc48a552560234fcfe1103a23fc3522e6837376aff49edd0dba17a",
+      "bytes": 114,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/entry_points.txt",
+      "importSha256": "7c350e4a7ddc48a552560234fcfe1103a23fc3522e6837376aff49edd0dba17a",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/entry_points.txt",
+      "sourceSha256": "7c350e4a7ddc48a552560234fcfe1103a23fc3522e6837376aff49edd0dba17a"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/licenses/LICENSE": {
+      "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+      "bytes": 1070,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/licenses/LICENSE",
+      "importSha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/licenses/LICENSE",
+      "sourceSha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/top_level.txt": {
+      "sha256": "b002c55de9432d64528ca19a3b120c0014092b1115444f3cbc25892a549525a5",
+      "bytes": 214,
+      "importPath": "vendor/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/top_level.txt",
+      "importSha256": "b002c55de9432d64528ca19a3b120c0014092b1115444f3cbc25892a549525a5",
+      "source": "third_party/hermes_agent_runtime/hermes_agent-0.6.0.dist-info/top_level.txt",
+      "sourceSha256": "b002c55de9432d64528ca19a3b120c0014092b1115444f3cbc25892a549525a5"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/__init__.py": {
+      "sha256": "2577c536bda9a2492e0017563c1bf6c4164e9c463455453f156a983cc41f155d",
+      "bytes": 505,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/__init__.py",
+      "importSha256": "2577c536bda9a2492e0017563c1bf6c4164e9c463455453f156a983cc41f155d",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/__init__.py",
+      "sourceSha256": "2577c536bda9a2492e0017563c1bf6c4164e9c463455453f156a983cc41f155d"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/auth.py": {
+      "sha256": "093fbb970b7ffecb0a7d0b6ff57e3e89c2990d6471acf7517f6ebc28a202a46f",
+      "bytes": 97086,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/auth.py",
+      "importSha256": "093fbb970b7ffecb0a7d0b6ff57e3e89c2990d6471acf7517f6ebc28a202a46f",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/auth.py",
+      "sourceSha256": "093fbb970b7ffecb0a7d0b6ff57e3e89c2990d6471acf7517f6ebc28a202a46f"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/auth_commands.py": {
+      "sha256": "5fd4da283528e0ae809264da2f403a27f2179fc2a89e95ffffee274aba603c57",
+      "bytes": 16306,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/auth_commands.py",
+      "importSha256": "5fd4da283528e0ae809264da2f403a27f2179fc2a89e95ffffee274aba603c57",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/auth_commands.py",
+      "sourceSha256": "5fd4da283528e0ae809264da2f403a27f2179fc2a89e95ffffee274aba603c57"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/banner.py": {
+      "sha256": "b1634fb28ba978cde2304c4a100825ff702f54c08c8305fcc4992a71f82d2918",
+      "bytes": 19903,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/banner.py",
+      "importSha256": "b1634fb28ba978cde2304c4a100825ff702f54c08c8305fcc4992a71f82d2918",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/banner.py",
+      "sourceSha256": "b1634fb28ba978cde2304c4a100825ff702f54c08c8305fcc4992a71f82d2918"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/callbacks.py": {
+      "sha256": "02bcd2e159ad36a661f1d818a610473a51625234177785344fb645ddad2eb368",
+      "bytes": 9591,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/callbacks.py",
+      "importSha256": "02bcd2e159ad36a661f1d818a610473a51625234177785344fb645ddad2eb368",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/callbacks.py",
+      "sourceSha256": "02bcd2e159ad36a661f1d818a610473a51625234177785344fb645ddad2eb368"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/checklist.py": {
+      "sha256": "279f6fc8ca959d59e75aa918cea89770770c2a4e5c8cc53d925d4f7dbd3833a1",
+      "bytes": 5058,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/checklist.py",
+      "importSha256": "279f6fc8ca959d59e75aa918cea89770770c2a4e5c8cc53d925d4f7dbd3833a1",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/checklist.py",
+      "sourceSha256": "279f6fc8ca959d59e75aa918cea89770770c2a4e5c8cc53d925d4f7dbd3833a1"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/claw.py": {
+      "sha256": "94f6f3d1f0c114ffd7902c6dc76e5b69965cd72f3c834c6ffd0f34d8a00a4b57",
+      "bytes": 20674,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/claw.py",
+      "importSha256": "94f6f3d1f0c114ffd7902c6dc76e5b69965cd72f3c834c6ffd0f34d8a00a4b57",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/claw.py",
+      "sourceSha256": "94f6f3d1f0c114ffd7902c6dc76e5b69965cd72f3c834c6ffd0f34d8a00a4b57"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/clipboard.py": {
+      "sha256": "687d5d7454f6e041df0b04d63c0d12f82b087b0f3cffe95b699186e049a2a6c3",
+      "bytes": 12245,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/clipboard.py",
+      "importSha256": "687d5d7454f6e041df0b04d63c0d12f82b087b0f3cffe95b699186e049a2a6c3",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/clipboard.py",
+      "sourceSha256": "687d5d7454f6e041df0b04d63c0d12f82b087b0f3cffe95b699186e049a2a6c3"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/codex_models.py": {
+      "sha256": "503d3d382e457fd678aee81ea29f64a4568b69cad3dd9e83a3bb0e81da93c813",
+      "bytes": 5841,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/codex_models.py",
+      "importSha256": "503d3d382e457fd678aee81ea29f64a4568b69cad3dd9e83a3bb0e81da93c813",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/codex_models.py",
+      "sourceSha256": "503d3d382e457fd678aee81ea29f64a4568b69cad3dd9e83a3bb0e81da93c813"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/colors.py": {
+      "sha256": "82a0e2b86010406ab20f04d0950b8d91953dee6dd6d86c834172dcc5314e35ff",
+      "bytes": 937,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/colors.py",
+      "importSha256": "82a0e2b86010406ab20f04d0950b8d91953dee6dd6d86c834172dcc5314e35ff",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/colors.py",
+      "sourceSha256": "82a0e2b86010406ab20f04d0950b8d91953dee6dd6d86c834172dcc5314e35ff"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/commands.py": {
+      "sha256": "ccfb446c78cd9e137cf4b4252bd25533de6518478aa5f17d9af5561b567c1530",
+      "bytes": 34207,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/commands.py",
+      "importSha256": "ccfb446c78cd9e137cf4b4252bd25533de6518478aa5f17d9af5561b567c1530",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/commands.py",
+      "sourceSha256": "ccfb446c78cd9e137cf4b4252bd25533de6518478aa5f17d9af5561b567c1530"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/config.py": {
+      "sha256": "57e3d6a7f8ba253a3c476430c4c5a237446d984d679e001bafa69043bbff2e20",
+      "bytes": 84461,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/config.py",
+      "importSha256": "57e3d6a7f8ba253a3c476430c4c5a237446d984d679e001bafa69043bbff2e20",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/config.py",
+      "sourceSha256": "57e3d6a7f8ba253a3c476430c4c5a237446d984d679e001bafa69043bbff2e20"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/copilot_auth.py": {
+      "sha256": "58beace51ec713f196288c23563c2e601fbe792aa7b349caddb784452bc36e4e",
+      "bytes": 9791,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/copilot_auth.py",
+      "importSha256": "58beace51ec713f196288c23563c2e601fbe792aa7b349caddb784452bc36e4e",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/copilot_auth.py",
+      "sourceSha256": "58beace51ec713f196288c23563c2e601fbe792aa7b349caddb784452bc36e4e"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/cron.py": {
+      "sha256": "e9ec63c31eaf88ab859dc024c9ac1ef0a1e78f444b4004f5cbfcf546a1d4e705",
+      "bytes": 9492,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/cron.py",
+      "importSha256": "e9ec63c31eaf88ab859dc024c9ac1ef0a1e78f444b4004f5cbfcf546a1d4e705",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/cron.py",
+      "sourceSha256": "e9ec63c31eaf88ab859dc024c9ac1ef0a1e78f444b4004f5cbfcf546a1d4e705"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/curses_ui.py": {
+      "sha256": "6e682892f643fed3144b3ab133fb85c6c086da8ed488599cbedf8ccd2d92c1b6",
+      "bytes": 6533,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/curses_ui.py",
+      "importSha256": "6e682892f643fed3144b3ab133fb85c6c086da8ed488599cbedf8ccd2d92c1b6",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/curses_ui.py",
+      "sourceSha256": "6e682892f643fed3144b3ab133fb85c6c086da8ed488599cbedf8ccd2d92c1b6"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/default_soul.py": {
+      "sha256": "697fe40db8b9bb8bdb23f998943f49ffbc2e5aa9701704ab70bd00da2fd235fa",
+      "bytes": 654,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/default_soul.py",
+      "importSha256": "697fe40db8b9bb8bdb23f998943f49ffbc2e5aa9701704ab70bd00da2fd235fa",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/default_soul.py",
+      "sourceSha256": "697fe40db8b9bb8bdb23f998943f49ffbc2e5aa9701704ab70bd00da2fd235fa"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/doctor.py": {
+      "sha256": "5b1ff0e943119e3671aa7f7b3cdfa56ec9f34ba7f17bc1f50d961bd043afb53d",
+      "bytes": 35912,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/doctor.py",
+      "importSha256": "5b1ff0e943119e3671aa7f7b3cdfa56ec9f34ba7f17bc1f50d961bd043afb53d",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/doctor.py",
+      "sourceSha256": "5b1ff0e943119e3671aa7f7b3cdfa56ec9f34ba7f17bc1f50d961bd043afb53d"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/env_loader.py": {
+      "sha256": "a097b6505bd676aa51a3cfabc0eb8544060e5490bfa291442687492c20665d08",
+      "bytes": 1478,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/env_loader.py",
+      "importSha256": "a097b6505bd676aa51a3cfabc0eb8544060e5490bfa291442687492c20665d08",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/env_loader.py",
+      "sourceSha256": "a097b6505bd676aa51a3cfabc0eb8544060e5490bfa291442687492c20665d08"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/gateway.py": {
+      "sha256": "a60884b165a55f60d7910a6dff4bb7e646d3506f37c7aaec504c84558033a6da",
+      "bytes": 84434,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/gateway.py",
+      "importSha256": "a60884b165a55f60d7910a6dff4bb7e646d3506f37c7aaec504c84558033a6da",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/gateway.py",
+      "sourceSha256": "a60884b165a55f60d7910a6dff4bb7e646d3506f37c7aaec504c84558033a6da"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/main.py": {
+      "sha256": "355326aa6d14dc9cf4097c3e2fb8a4b42072e90c955efba6a255c5d66e2fa811",
+      "bytes": 205310,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/main.py",
+      "importSha256": "355326aa6d14dc9cf4097c3e2fb8a4b42072e90c955efba6a255c5d66e2fa811",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/main.py",
+      "sourceSha256": "355326aa6d14dc9cf4097c3e2fb8a4b42072e90c955efba6a255c5d66e2fa811"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/mcp_config.py": {
+      "sha256": "8e3840f84706ced39654d3e8507aaf09cd5e53508219db1692e2fa2e579a8b31",
+      "bytes": 22119,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/mcp_config.py",
+      "importSha256": "8e3840f84706ced39654d3e8507aaf09cd5e53508219db1692e2fa2e579a8b31",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/mcp_config.py",
+      "sourceSha256": "8e3840f84706ced39654d3e8507aaf09cd5e53508219db1692e2fa2e579a8b31"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/model_switch.py": {
+      "sha256": "2b123a19b03c961ec841f3bfb877331ac8ce1a0714ee310ebc0c90ceb5979446",
+      "bytes": 7728,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/model_switch.py",
+      "importSha256": "2b123a19b03c961ec841f3bfb877331ac8ce1a0714ee310ebc0c90ceb5979446",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/model_switch.py",
+      "sourceSha256": "2b123a19b03c961ec841f3bfb877331ac8ce1a0714ee310ebc0c90ceb5979446"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/models.py": {
+      "sha256": "89809fb4b0251783a22fb0384256afa390d69b21ad9a0547baa9b7749c83f41d",
+      "bytes": 43378,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/models.py",
+      "importSha256": "89809fb4b0251783a22fb0384256afa390d69b21ad9a0547baa9b7749c83f41d",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/models.py",
+      "sourceSha256": "89809fb4b0251783a22fb0384256afa390d69b21ad9a0547baa9b7749c83f41d"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/pairing.py": {
+      "sha256": "dfe26ed54e16e64344ab3df284a7111044ea7676fc9d10597e99946c2a21ee34",
+      "bytes": 3413,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/pairing.py",
+      "importSha256": "dfe26ed54e16e64344ab3df284a7111044ea7676fc9d10597e99946c2a21ee34",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/pairing.py",
+      "sourceSha256": "dfe26ed54e16e64344ab3df284a7111044ea7676fc9d10597e99946c2a21ee34"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/plugins.py": {
+      "sha256": "abd554d48c54b517f976cf4dd91e8b2a8aa923dc24d2ac0545574e2119e9bbed",
+      "bytes": 20503,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/plugins.py",
+      "importSha256": "abd554d48c54b517f976cf4dd91e8b2a8aa923dc24d2ac0545574e2119e9bbed",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/plugins.py",
+      "sourceSha256": "abd554d48c54b517f976cf4dd91e8b2a8aa923dc24d2ac0545574e2119e9bbed"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/plugins_cmd.py": {
+      "sha256": "ccec2da3cf659989e41d5cb1e2cf9a69ad041261b5f04097f4e86b71d6e1883a",
+      "bytes": 19673,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/plugins_cmd.py",
+      "importSha256": "ccec2da3cf659989e41d5cb1e2cf9a69ad041261b5f04097f4e86b71d6e1883a",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/plugins_cmd.py",
+      "sourceSha256": "ccec2da3cf659989e41d5cb1e2cf9a69ad041261b5f04097f4e86b71d6e1883a"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/profiles.py": {
+      "sha256": "bb2be71af8b1056d06ec0605e5f49276283e83b609c9084ce92a9d57e130d7cc",
+      "bytes": 35868,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/profiles.py",
+      "importSha256": "bb2be71af8b1056d06ec0605e5f49276283e83b609c9084ce92a9d57e130d7cc",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/profiles.py",
+      "sourceSha256": "bb2be71af8b1056d06ec0605e5f49276283e83b609c9084ce92a9d57e130d7cc"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/runtime_provider.py": {
+      "sha256": "c0752be867fa8f2aa33c0caa47c54febb5e9f634f3291bb48dbe1fd747da5745",
+      "bytes": 26233,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/runtime_provider.py",
+      "importSha256": "c0752be867fa8f2aa33c0caa47c54febb5e9f634f3291bb48dbe1fd747da5745",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/runtime_provider.py",
+      "sourceSha256": "c0752be867fa8f2aa33c0caa47c54febb5e9f634f3291bb48dbe1fd747da5745"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/setup.py": {
+      "sha256": "0f9619833abee6d74cf1112a136b84ef42656eaddde9ee46a2f198eba30bbc3c",
+      "bytes": 111992,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/setup.py",
+      "importSha256": "0f9619833abee6d74cf1112a136b84ef42656eaddde9ee46a2f198eba30bbc3c",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/setup.py",
+      "sourceSha256": "0f9619833abee6d74cf1112a136b84ef42656eaddde9ee46a2f198eba30bbc3c"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/skills_config.py": {
+      "sha256": "feb425bf6b2415980d1f51a56374b53fa695ca8e1a5b7373640225f2f3acf81d",
+      "bytes": 7256,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/skills_config.py",
+      "importSha256": "feb425bf6b2415980d1f51a56374b53fa695ca8e1a5b7373640225f2f3acf81d",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/skills_config.py",
+      "sourceSha256": "feb425bf6b2415980d1f51a56374b53fa695ca8e1a5b7373640225f2f3acf81d"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/skills_hub.py": {
+      "sha256": "b482e9f19dddcc99e81b6bcfb08cc04ab68dac5e9ea944181ea340f8b082d115",
+      "bytes": 45776,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/skills_hub.py",
+      "importSha256": "b482e9f19dddcc99e81b6bcfb08cc04ab68dac5e9ea944181ea340f8b082d115",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/skills_hub.py",
+      "sourceSha256": "b482e9f19dddcc99e81b6bcfb08cc04ab68dac5e9ea944181ea340f8b082d115"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/skin_engine.py": {
+      "sha256": "316230294fa6c31446401f9da74cb28f64430532356cdd7a003635599c4cb19a",
+      "bytes": 35213,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/skin_engine.py",
+      "importSha256": "316230294fa6c31446401f9da74cb28f64430532356cdd7a003635599c4cb19a",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/skin_engine.py",
+      "sourceSha256": "316230294fa6c31446401f9da74cb28f64430532356cdd7a003635599c4cb19a"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/status.py": {
+      "sha256": "f00b97157550c635c19bbf0f4beffaec602b21fcdc680a565d2f2c11477c143d",
+      "bytes": 15691,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/status.py",
+      "importSha256": "f00b97157550c635c19bbf0f4beffaec602b21fcdc680a565d2f2c11477c143d",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/status.py",
+      "sourceSha256": "f00b97157550c635c19bbf0f4beffaec602b21fcdc680a565d2f2c11477c143d"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/tools_config.py": {
+      "sha256": "bc4c94b99c54537c549611baddb56d8ac1e07ee42a65de4353f3e997418a1f86",
+      "bytes": 67243,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/tools_config.py",
+      "importSha256": "bc4c94b99c54537c549611baddb56d8ac1e07ee42a65de4353f3e997418a1f86",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/tools_config.py",
+      "sourceSha256": "bc4c94b99c54537c549611baddb56d8ac1e07ee42a65de4353f3e997418a1f86"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/uninstall.py": {
+      "sha256": "efe04e9db7450147b1ecaf0824e79b7b86dbe149e3aaebef1f9d6ddd763df85f",
+      "bytes": 11345,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/uninstall.py",
+      "importSha256": "efe04e9db7450147b1ecaf0824e79b7b86dbe149e3aaebef1f9d6ddd763df85f",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/uninstall.py",
+      "sourceSha256": "efe04e9db7450147b1ecaf0824e79b7b86dbe149e3aaebef1f9d6ddd763df85f"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_cli/webhook.py": {
+      "sha256": "7ccfb9657fd0ee57c96a503daa6ea18fd7408798603a0447823997223765cddf",
+      "bytes": 7637,
+      "importPath": "vendor/hermes_agent_runtime/hermes_cli/webhook.py",
+      "importSha256": "7ccfb9657fd0ee57c96a503daa6ea18fd7408798603a0447823997223765cddf",
+      "source": "third_party/hermes_agent_runtime/hermes_cli/webhook.py",
+      "sourceSha256": "7ccfb9657fd0ee57c96a503daa6ea18fd7408798603a0447823997223765cddf"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_constants.py": {
+      "sha256": "f07b9765a6ee9ced41cf91826187b62e8884edd78ae2cc61c1c971fa0bca320a",
+      "bytes": 3551,
+      "importPath": "vendor/hermes_agent_runtime/hermes_constants.py",
+      "importSha256": "f07b9765a6ee9ced41cf91826187b62e8884edd78ae2cc61c1c971fa0bca320a",
+      "source": "third_party/hermes_agent_runtime/hermes_constants.py",
+      "sourceSha256": "f07b9765a6ee9ced41cf91826187b62e8884edd78ae2cc61c1c971fa0bca320a"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_state.py": {
+      "sha256": "de380386279065c59d97a838b663771a1a95eb4d066d5d5bbc85a332b80bdec8",
+      "bytes": 50242,
+      "importPath": "vendor/hermes_agent_runtime/hermes_state.py",
+      "importSha256": "de380386279065c59d97a838b663771a1a95eb4d066d5d5bbc85a332b80bdec8",
+      "source": "third_party/hermes_agent_runtime/hermes_state.py",
+      "sourceSha256": "de380386279065c59d97a838b663771a1a95eb4d066d5d5bbc85a332b80bdec8"
+    },
+    "backend/vendor/hermes_agent_runtime/hermes_time.py": {
+      "sha256": "ab3dac038c3909799d21f5577d50413b447043695a4b754313335a786ffc6858",
+      "bytes": 3778,
+      "importPath": "vendor/hermes_agent_runtime/hermes_time.py",
+      "importSha256": "ab3dac038c3909799d21f5577d50413b447043695a4b754313335a786ffc6858",
+      "source": "third_party/hermes_agent_runtime/hermes_time.py",
+      "sourceSha256": "ab3dac038c3909799d21f5577d50413b447043695a4b754313335a786ffc6858"
+    },
+    "backend/vendor/hermes_agent_runtime/honcho_integration/__init__.py": {
+      "sha256": "5a45027212ce1b0b861c71a01eaad88ca802564f291092a6ffeb62e6aaeb1f82",
+      "bytes": 355,
+      "importPath": "vendor/hermes_agent_runtime/honcho_integration/__init__.py",
+      "importSha256": "5a45027212ce1b0b861c71a01eaad88ca802564f291092a6ffeb62e6aaeb1f82",
+      "source": "third_party/hermes_agent_runtime/honcho_integration/__init__.py",
+      "sourceSha256": "5a45027212ce1b0b861c71a01eaad88ca802564f291092a6ffeb62e6aaeb1f82"
+    },
+    "backend/vendor/hermes_agent_runtime/honcho_integration/cli.py": {
+      "sha256": "01f1e625ce6fe56b6ba80fed3589c76716fa16fe223913230e080d6314613f51",
+      "bytes": 33616,
+      "importPath": "vendor/hermes_agent_runtime/honcho_integration/cli.py",
+      "importSha256": "01f1e625ce6fe56b6ba80fed3589c76716fa16fe223913230e080d6314613f51",
+      "source": "third_party/hermes_agent_runtime/honcho_integration/cli.py",
+      "sourceSha256": "01f1e625ce6fe56b6ba80fed3589c76716fa16fe223913230e080d6314613f51"
+    },
+    "backend/vendor/hermes_agent_runtime/honcho_integration/client.py": {
+      "sha256": "9f1b9d1459007623fa4da053a011ca38daccbe8c17bb69bd64b397ae10811408",
+      "bytes": 16164,
+      "importPath": "vendor/hermes_agent_runtime/honcho_integration/client.py",
+      "importSha256": "9f1b9d1459007623fa4da053a011ca38daccbe8c17bb69bd64b397ae10811408",
+      "source": "third_party/hermes_agent_runtime/honcho_integration/client.py",
+      "sourceSha256": "9f1b9d1459007623fa4da053a011ca38daccbe8c17bb69bd64b397ae10811408"
+    },
+    "backend/vendor/hermes_agent_runtime/honcho_integration/session.py": {
+      "sha256": "b14b53328bfe45bcdaf3f35f0567de8e17600cc98cda3b5c55df9c356aeaae17",
+      "bytes": 37476,
+      "importPath": "vendor/hermes_agent_runtime/honcho_integration/session.py",
+      "importSha256": "b14b53328bfe45bcdaf3f35f0567de8e17600cc98cda3b5c55df9c356aeaae17",
+      "source": "third_party/hermes_agent_runtime/honcho_integration/session.py",
+      "sourceSha256": "b14b53328bfe45bcdaf3f35f0567de8e17600cc98cda3b5c55df9c356aeaae17"
+    },
+    "backend/vendor/hermes_agent_runtime/model_tools.py": {
+      "sha256": "d5b3d20200f20b2ac252a3468959f78f3323f949cdda6f9dfeff2630e0874c7c",
+      "bytes": 19564,
+      "importPath": "vendor/hermes_agent_runtime/model_tools.py",
+      "importSha256": "d5b3d20200f20b2ac252a3468959f78f3323f949cdda6f9dfeff2630e0874c7c",
+      "source": "third_party/hermes_agent_runtime/model_tools.py",
+      "sourceSha256": "d5b3d20200f20b2ac252a3468959f78f3323f949cdda6f9dfeff2630e0874c7c"
+    },
+    "backend/vendor/hermes_agent_runtime/pyproject.toml": {
+      "sha256": "3adf6547e730f80356d113608e1487f70ecabbd880a8972e57a01477fe9130d9",
+      "bytes": 1046,
+      "importPath": "vendor/hermes_agent_runtime/pyproject.toml",
+      "importSha256": "3adf6547e730f80356d113608e1487f70ecabbd880a8972e57a01477fe9130d9",
+      "source": "third_party/hermes_agent_runtime/pyproject.toml",
+      "sourceSha256": "3adf6547e730f80356d113608e1487f70ecabbd880a8972e57a01477fe9130d9"
+    },
+    "backend/vendor/hermes_agent_runtime/rl_cli.py": {
+      "sha256": "78b580a72c7294bce929e6936d20896ce39b901c8d752483bdfafe7bd7878588",
+      "bytes": 16286,
+      "importPath": "vendor/hermes_agent_runtime/rl_cli.py",
+      "importSha256": "78b580a72c7294bce929e6936d20896ce39b901c8d752483bdfafe7bd7878588",
+      "source": "third_party/hermes_agent_runtime/rl_cli.py",
+      "sourceSha256": "78b580a72c7294bce929e6936d20896ce39b901c8d752483bdfafe7bd7878588"
+    },
+    "backend/vendor/hermes_agent_runtime/run_agent.py": {
+      "sha256": "48a8013315223e9656b7c0df3d52bf688f36b9828fc388c8c63ac5367302b2b3",
+      "bytes": 443016,
+      "importPath": "vendor/hermes_agent_runtime/run_agent.py",
+      "importSha256": "48a8013315223e9656b7c0df3d52bf688f36b9828fc388c8c63ac5367302b2b3",
+      "source": "third_party/hermes_agent_runtime/run_agent.py",
+      "sourceSha256": "48a8013315223e9656b7c0df3d52bf688f36b9828fc388c8c63ac5367302b2b3"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/__init__.py": {
+      "sha256": "83c8ad907a32ed0e643018e2c21dc394f77442f004b8b6b3391729e3f581fcb5",
+      "bytes": 6475,
+      "importPath": "vendor/hermes_agent_runtime/tools/__init__.py",
+      "importSha256": "83c8ad907a32ed0e643018e2c21dc394f77442f004b8b6b3391729e3f581fcb5",
+      "source": "third_party/hermes_agent_runtime/tools/__init__.py",
+      "sourceSha256": "83c8ad907a32ed0e643018e2c21dc394f77442f004b8b6b3391729e3f581fcb5"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/ansi_strip.py": {
+      "sha256": "23ed13d2a7ca54b148b0b966a9f337fb8c8b0ed93fe2c99cbd53e51a3a5cfc1a",
+      "bytes": 1784,
+      "importPath": "vendor/hermes_agent_runtime/tools/ansi_strip.py",
+      "importSha256": "23ed13d2a7ca54b148b0b966a9f337fb8c8b0ed93fe2c99cbd53e51a3a5cfc1a",
+      "source": "third_party/hermes_agent_runtime/tools/ansi_strip.py",
+      "sourceSha256": "23ed13d2a7ca54b148b0b966a9f337fb8c8b0ed93fe2c99cbd53e51a3a5cfc1a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/approval.py": {
+      "sha256": "a31a4a3688f3cfe42378aaf4c80e64ace1d67cfbd47446ca023e6b842315666a",
+      "bytes": 26698,
+      "importPath": "vendor/hermes_agent_runtime/tools/approval.py",
+      "importSha256": "a31a4a3688f3cfe42378aaf4c80e64ace1d67cfbd47446ca023e6b842315666a",
+      "source": "third_party/hermes_agent_runtime/tools/approval.py",
+      "sourceSha256": "a31a4a3688f3cfe42378aaf4c80e64ace1d67cfbd47446ca023e6b842315666a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_camofox.py": {
+      "sha256": "676bfa6ba6e4a9fc75d4811d5ce6686d0bb121e1aac010f41ed2bc7f830e05e9",
+      "bytes": 20247,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_camofox.py",
+      "importSha256": "676bfa6ba6e4a9fc75d4811d5ce6686d0bb121e1aac010f41ed2bc7f830e05e9",
+      "source": "third_party/hermes_agent_runtime/tools/browser_camofox.py",
+      "sourceSha256": "676bfa6ba6e4a9fc75d4811d5ce6686d0bb121e1aac010f41ed2bc7f830e05e9"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_camofox_state.py": {
+      "sha256": "4d03c8f433c7f5a8b3f31a29b51d2e98833ecbbcf1280cb14128972dbc349bcb",
+      "bytes": 1588,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_camofox_state.py",
+      "importSha256": "4d03c8f433c7f5a8b3f31a29b51d2e98833ecbbcf1280cb14128972dbc349bcb",
+      "source": "third_party/hermes_agent_runtime/tools/browser_camofox_state.py",
+      "sourceSha256": "4d03c8f433c7f5a8b3f31a29b51d2e98833ecbbcf1280cb14128972dbc349bcb"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_providers/__init__.py": {
+      "sha256": "245bc508f00c4e0a1485c2de83becb031e35b24039844c022161703a130fac63",
+      "bytes": 240,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_providers/__init__.py",
+      "importSha256": "245bc508f00c4e0a1485c2de83becb031e35b24039844c022161703a130fac63",
+      "source": "third_party/hermes_agent_runtime/tools/browser_providers/__init__.py",
+      "sourceSha256": "245bc508f00c4e0a1485c2de83becb031e35b24039844c022161703a130fac63"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_providers/base.py": {
+      "sha256": "30656be65fd8b1801e784ad22559ae79f928d31004c18bc94112951e4e0b3a0a",
+      "bytes": 2158,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_providers/base.py",
+      "importSha256": "30656be65fd8b1801e784ad22559ae79f928d31004c18bc94112951e4e0b3a0a",
+      "source": "third_party/hermes_agent_runtime/tools/browser_providers/base.py",
+      "sourceSha256": "30656be65fd8b1801e784ad22559ae79f928d31004c18bc94112951e4e0b3a0a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_providers/browser_use.py": {
+      "sha256": "137b3f273e038f847175e9b93e9ab6fb2edacb42fce3253ab85e14bacfd3b0c0",
+      "bytes": 3576,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_providers/browser_use.py",
+      "importSha256": "137b3f273e038f847175e9b93e9ab6fb2edacb42fce3253ab85e14bacfd3b0c0",
+      "source": "third_party/hermes_agent_runtime/tools/browser_providers/browser_use.py",
+      "sourceSha256": "137b3f273e038f847175e9b93e9ab6fb2edacb42fce3253ab85e14bacfd3b0c0"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_providers/browserbase.py": {
+      "sha256": "4a5ec37ca9d1ec4987d0cb7fcbffa1956343ca9666d85798f91b921c32bc70b2",
+      "bytes": 7636,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_providers/browserbase.py",
+      "importSha256": "4a5ec37ca9d1ec4987d0cb7fcbffa1956343ca9666d85798f91b921c32bc70b2",
+      "source": "third_party/hermes_agent_runtime/tools/browser_providers/browserbase.py",
+      "sourceSha256": "4a5ec37ca9d1ec4987d0cb7fcbffa1956343ca9666d85798f91b921c32bc70b2"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/browser_tool.py": {
+      "sha256": "f5254101250a4fdb2c7cab9a8d360dae773314fcedf03fd0097b9768487e873b",
+      "bytes": 79477,
+      "importPath": "vendor/hermes_agent_runtime/tools/browser_tool.py",
+      "importSha256": "f5254101250a4fdb2c7cab9a8d360dae773314fcedf03fd0097b9768487e873b",
+      "source": "third_party/hermes_agent_runtime/tools/browser_tool.py",
+      "sourceSha256": "f5254101250a4fdb2c7cab9a8d360dae773314fcedf03fd0097b9768487e873b"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/checkpoint_manager.py": {
+      "sha256": "5fab3012add2cbf46b2f00a463812c093278e11f14cbb7f3fcd7ba569d59aa49",
+      "bytes": 19274,
+      "importPath": "vendor/hermes_agent_runtime/tools/checkpoint_manager.py",
+      "importSha256": "5fab3012add2cbf46b2f00a463812c093278e11f14cbb7f3fcd7ba569d59aa49",
+      "source": "third_party/hermes_agent_runtime/tools/checkpoint_manager.py",
+      "sourceSha256": "5fab3012add2cbf46b2f00a463812c093278e11f14cbb7f3fcd7ba569d59aa49"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/clarify_tool.py": {
+      "sha256": "3abccfd21f2bf8c6f4fd288d10e2cc67853f26838e58b6e92f260055bd985146",
+      "bytes": 5005,
+      "importPath": "vendor/hermes_agent_runtime/tools/clarify_tool.py",
+      "importSha256": "3abccfd21f2bf8c6f4fd288d10e2cc67853f26838e58b6e92f260055bd985146",
+      "source": "third_party/hermes_agent_runtime/tools/clarify_tool.py",
+      "sourceSha256": "3abccfd21f2bf8c6f4fd288d10e2cc67853f26838e58b6e92f260055bd985146"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/code_execution_tool.py": {
+      "sha256": "3a174c877ca39b1ea730e7cd2355f1e21900445d66a07ce1345ca5f7625ceedb",
+      "bytes": 32145,
+      "importPath": "vendor/hermes_agent_runtime/tools/code_execution_tool.py",
+      "importSha256": "3a174c877ca39b1ea730e7cd2355f1e21900445d66a07ce1345ca5f7625ceedb",
+      "source": "third_party/hermes_agent_runtime/tools/code_execution_tool.py",
+      "sourceSha256": "3a174c877ca39b1ea730e7cd2355f1e21900445d66a07ce1345ca5f7625ceedb"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/credential_files.py": {
+      "sha256": "800f5fefb0fd14ee0095716e29b19f70bcab41ae9a3c8e5a4c0adbb91bc9eaca",
+      "bytes": 11115,
+      "importPath": "vendor/hermes_agent_runtime/tools/credential_files.py",
+      "importSha256": "800f5fefb0fd14ee0095716e29b19f70bcab41ae9a3c8e5a4c0adbb91bc9eaca",
+      "source": "third_party/hermes_agent_runtime/tools/credential_files.py",
+      "sourceSha256": "800f5fefb0fd14ee0095716e29b19f70bcab41ae9a3c8e5a4c0adbb91bc9eaca"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/cronjob_tools.py": {
+      "sha256": "3cd2f535f260f8eac1c593e2c6046fad69c0a4f42ce84bc54ec326fa1f7edc53",
+      "bytes": 17713,
+      "importPath": "vendor/hermes_agent_runtime/tools/cronjob_tools.py",
+      "importSha256": "3cd2f535f260f8eac1c593e2c6046fad69c0a4f42ce84bc54ec326fa1f7edc53",
+      "source": "third_party/hermes_agent_runtime/tools/cronjob_tools.py",
+      "sourceSha256": "3cd2f535f260f8eac1c593e2c6046fad69c0a4f42ce84bc54ec326fa1f7edc53"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/debug_helpers.py": {
+      "sha256": "626c1106397a9fefb800ba55a9d8924f1589140a1161bb4521ddebd47d23f0d7",
+      "bytes": 3654,
+      "importPath": "vendor/hermes_agent_runtime/tools/debug_helpers.py",
+      "importSha256": "626c1106397a9fefb800ba55a9d8924f1589140a1161bb4521ddebd47d23f0d7",
+      "source": "third_party/hermes_agent_runtime/tools/debug_helpers.py",
+      "sourceSha256": "626c1106397a9fefb800ba55a9d8924f1589140a1161bb4521ddebd47d23f0d7"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/delegate_tool.py": {
+      "sha256": "fd94ec6698ee88049d9564254ff9539b982be12449653442ae6745445b97f9a2",
+      "bytes": 32274,
+      "importPath": "vendor/hermes_agent_runtime/tools/delegate_tool.py",
+      "importSha256": "fd94ec6698ee88049d9564254ff9539b982be12449653442ae6745445b97f9a2",
+      "source": "third_party/hermes_agent_runtime/tools/delegate_tool.py",
+      "sourceSha256": "fd94ec6698ee88049d9564254ff9539b982be12449653442ae6745445b97f9a2"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/env_passthrough.py": {
+      "sha256": "aaaf09e4af775022936e163b78f5acf797327ee1ab818f958167ecdf5a6a6ac0",
+      "bytes": 3527,
+      "importPath": "vendor/hermes_agent_runtime/tools/env_passthrough.py",
+      "importSha256": "aaaf09e4af775022936e163b78f5acf797327ee1ab818f958167ecdf5a6a6ac0",
+      "source": "third_party/hermes_agent_runtime/tools/env_passthrough.py",
+      "sourceSha256": "aaaf09e4af775022936e163b78f5acf797327ee1ab818f958167ecdf5a6a6ac0"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/__init__.py": {
+      "sha256": "f86d86e9cd68e186cd995d84b2bd155e5d8df11d24ed1611722178e843da403e",
+      "bytes": 419,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/__init__.py",
+      "importSha256": "f86d86e9cd68e186cd995d84b2bd155e5d8df11d24ed1611722178e843da403e",
+      "source": "third_party/hermes_agent_runtime/tools/environments/__init__.py",
+      "sourceSha256": "f86d86e9cd68e186cd995d84b2bd155e5d8df11d24ed1611722178e843da403e"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/base.py": {
+      "sha256": "9479c84ad857de1f62a7a3d2d8447ff6b48993265786178497b17d34289cbd62",
+      "bytes": 3338,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/base.py",
+      "importSha256": "9479c84ad857de1f62a7a3d2d8447ff6b48993265786178497b17d34289cbd62",
+      "source": "third_party/hermes_agent_runtime/tools/environments/base.py",
+      "sourceSha256": "9479c84ad857de1f62a7a3d2d8447ff6b48993265786178497b17d34289cbd62"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/daytona.py": {
+      "sha256": "63d36af304db29067a5a0dc6ecdb57dfe3cedb51c8f5244768bd4d3d42e6d31d",
+      "bytes": 12234,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/daytona.py",
+      "importSha256": "63d36af304db29067a5a0dc6ecdb57dfe3cedb51c8f5244768bd4d3d42e6d31d",
+      "source": "third_party/hermes_agent_runtime/tools/environments/daytona.py",
+      "sourceSha256": "63d36af304db29067a5a0dc6ecdb57dfe3cedb51c8f5244768bd4d3d42e6d31d"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/docker.py": {
+      "sha256": "e06009dc843b0c5bba34be1e79638fe4a2ea416b8ed21fbaee0f009059aae911",
+      "bytes": 20456,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/docker.py",
+      "importSha256": "e06009dc843b0c5bba34be1e79638fe4a2ea416b8ed21fbaee0f009059aae911",
+      "source": "third_party/hermes_agent_runtime/tools/environments/docker.py",
+      "sourceSha256": "e06009dc843b0c5bba34be1e79638fe4a2ea416b8ed21fbaee0f009059aae911"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/local.py": {
+      "sha256": "7fbdf275e00bf9aebf1f1885843031a05efad9c4bee403e1a6dd63b91b274184",
+      "bytes": 17542,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/local.py",
+      "importSha256": "7fbdf275e00bf9aebf1f1885843031a05efad9c4bee403e1a6dd63b91b274184",
+      "source": "third_party/hermes_agent_runtime/tools/environments/local.py",
+      "sourceSha256": "7fbdf275e00bf9aebf1f1885843031a05efad9c4bee403e1a6dd63b91b274184"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/modal.py": {
+      "sha256": "f16580ee81d9b9a62a39c4ea011ef00591bafb94d8b124d383db62a58335f287",
+      "bytes": 14292,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/modal.py",
+      "importSha256": "f16580ee81d9b9a62a39c4ea011ef00591bafb94d8b124d383db62a58335f287",
+      "source": "third_party/hermes_agent_runtime/tools/environments/modal.py",
+      "sourceSha256": "f16580ee81d9b9a62a39c4ea011ef00591bafb94d8b124d383db62a58335f287"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/persistent_shell.py": {
+      "sha256": "9f5d2f23d9ef487bf43210d75756331a2311786b9ecadf1fb962c25232a91601",
+      "bytes": 9713,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/persistent_shell.py",
+      "importSha256": "9f5d2f23d9ef487bf43210d75756331a2311786b9ecadf1fb962c25232a91601",
+      "source": "third_party/hermes_agent_runtime/tools/environments/persistent_shell.py",
+      "sourceSha256": "9f5d2f23d9ef487bf43210d75756331a2311786b9ecadf1fb962c25232a91601"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/singularity.py": {
+      "sha256": "50a01fa12714b364dbd53ecf4f3a904e8124860352df8d4e1947146641dc3e5e",
+      "bytes": 14358,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/singularity.py",
+      "importSha256": "50a01fa12714b364dbd53ecf4f3a904e8124860352df8d4e1947146641dc3e5e",
+      "source": "third_party/hermes_agent_runtime/tools/environments/singularity.py",
+      "sourceSha256": "50a01fa12714b364dbd53ecf4f3a904e8124860352df8d4e1947146641dc3e5e"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/environments/ssh.py": {
+      "sha256": "ea49c52c8d2859d078fa3a3e8f2c39a860b1ff0cbda448c209680b5a278e4288",
+      "bytes": 12379,
+      "importPath": "vendor/hermes_agent_runtime/tools/environments/ssh.py",
+      "importSha256": "ea49c52c8d2859d078fa3a3e8f2c39a860b1ff0cbda448c209680b5a278e4288",
+      "source": "third_party/hermes_agent_runtime/tools/environments/ssh.py",
+      "sourceSha256": "ea49c52c8d2859d078fa3a3e8f2c39a860b1ff0cbda448c209680b5a278e4288"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/file_operations.py": {
+      "sha256": "7603ee9935323e7f98f39d013c4dc3ff408e76485361cdd3b6df4937ca9b1756",
+      "bytes": 44762,
+      "importPath": "vendor/hermes_agent_runtime/tools/file_operations.py",
+      "importSha256": "7603ee9935323e7f98f39d013c4dc3ff408e76485361cdd3b6df4937ca9b1756",
+      "source": "third_party/hermes_agent_runtime/tools/file_operations.py",
+      "sourceSha256": "7603ee9935323e7f98f39d013c4dc3ff408e76485361cdd3b6df4937ca9b1756"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/file_tools.py": {
+      "sha256": "e1556d6d8aabf53fbb7e8c99cebf65b3ed21055a0300df7110af5a39263bff6a",
+      "bytes": 38149,
+      "importPath": "vendor/hermes_agent_runtime/tools/file_tools.py",
+      "importSha256": "e1556d6d8aabf53fbb7e8c99cebf65b3ed21055a0300df7110af5a39263bff6a",
+      "source": "third_party/hermes_agent_runtime/tools/file_tools.py",
+      "sourceSha256": "e1556d6d8aabf53fbb7e8c99cebf65b3ed21055a0300df7110af5a39263bff6a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/fuzzy_match.py": {
+      "sha256": "7006407ce1738a31a9a0a3b4b4084efba17da2ad8d8e92c4e07a60e3759368ff",
+      "bytes": 17562,
+      "importPath": "vendor/hermes_agent_runtime/tools/fuzzy_match.py",
+      "importSha256": "7006407ce1738a31a9a0a3b4b4084efba17da2ad8d8e92c4e07a60e3759368ff",
+      "source": "third_party/hermes_agent_runtime/tools/fuzzy_match.py",
+      "sourceSha256": "7006407ce1738a31a9a0a3b4b4084efba17da2ad8d8e92c4e07a60e3759368ff"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/homeassistant_tool.py": {
+      "sha256": "4d1ce5de4215f586dde7dc0420d512db65cf543dfc53e3aa7020483b2654bcea",
+      "bytes": 16865,
+      "importPath": "vendor/hermes_agent_runtime/tools/homeassistant_tool.py",
+      "importSha256": "4d1ce5de4215f586dde7dc0420d512db65cf543dfc53e3aa7020483b2654bcea",
+      "source": "third_party/hermes_agent_runtime/tools/homeassistant_tool.py",
+      "sourceSha256": "4d1ce5de4215f586dde7dc0420d512db65cf543dfc53e3aa7020483b2654bcea"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/honcho_tools.py": {
+      "sha256": "579dd3384552a013439ef169cbfa6797eca92d537e4588cef91edb168645b291",
+      "bytes": 9952,
+      "importPath": "vendor/hermes_agent_runtime/tools/honcho_tools.py",
+      "importSha256": "579dd3384552a013439ef169cbfa6797eca92d537e4588cef91edb168645b291",
+      "source": "third_party/hermes_agent_runtime/tools/honcho_tools.py",
+      "sourceSha256": "579dd3384552a013439ef169cbfa6797eca92d537e4588cef91edb168645b291"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/image_generation_tool.py": {
+      "sha256": "521780bf5a2af80f40c970b18a0afc9372c70c4532ee6941b9e74d0b3fe0f3f3",
+      "bytes": 21481,
+      "importPath": "vendor/hermes_agent_runtime/tools/image_generation_tool.py",
+      "importSha256": "521780bf5a2af80f40c970b18a0afc9372c70c4532ee6941b9e74d0b3fe0f3f3",
+      "source": "third_party/hermes_agent_runtime/tools/image_generation_tool.py",
+      "sourceSha256": "521780bf5a2af80f40c970b18a0afc9372c70c4532ee6941b9e74d0b3fe0f3f3"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/interrupt.py": {
+      "sha256": "76987a74d6b73886750221fb6ce1f2be70d317da4cc55253127ab682a5e01fa0",
+      "bytes": 813,
+      "importPath": "vendor/hermes_agent_runtime/tools/interrupt.py",
+      "importSha256": "76987a74d6b73886750221fb6ce1f2be70d317da4cc55253127ab682a5e01fa0",
+      "source": "third_party/hermes_agent_runtime/tools/interrupt.py",
+      "sourceSha256": "76987a74d6b73886750221fb6ce1f2be70d317da4cc55253127ab682a5e01fa0"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/mcp_oauth.py": {
+      "sha256": "139d5c12d3069566678c8b9c06ca31a18f981a61f0616d348d349a221e468b52",
+      "bytes": 8224,
+      "importPath": "vendor/hermes_agent_runtime/tools/mcp_oauth.py",
+      "importSha256": "139d5c12d3069566678c8b9c06ca31a18f981a61f0616d348d349a221e468b52",
+      "source": "third_party/hermes_agent_runtime/tools/mcp_oauth.py",
+      "sourceSha256": "139d5c12d3069566678c8b9c06ca31a18f981a61f0616d348d349a221e468b52"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/mcp_tool.py": {
+      "sha256": "93d2501ddb1596a53925a86ba6111d525facb8676c0d40b4b2b3e65cd04f813c",
+      "bytes": 77769,
+      "importPath": "vendor/hermes_agent_runtime/tools/mcp_tool.py",
+      "importSha256": "93d2501ddb1596a53925a86ba6111d525facb8676c0d40b4b2b3e65cd04f813c",
+      "source": "third_party/hermes_agent_runtime/tools/mcp_tool.py",
+      "sourceSha256": "93d2501ddb1596a53925a86ba6111d525facb8676c0d40b4b2b3e65cd04f813c"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/memory_tool.py": {
+      "sha256": "edcb70d21f4037138047378dbd1e87c9b63c872b2abffcb927d60f3512e7d4ec",
+      "bytes": 22276,
+      "importPath": "vendor/hermes_agent_runtime/tools/memory_tool.py",
+      "importSha256": "edcb70d21f4037138047378dbd1e87c9b63c872b2abffcb927d60f3512e7d4ec",
+      "source": "third_party/hermes_agent_runtime/tools/memory_tool.py",
+      "sourceSha256": "edcb70d21f4037138047378dbd1e87c9b63c872b2abffcb927d60f3512e7d4ec"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/mixture_of_agents_tool.py": {
+      "sha256": "834e2850aafaf1f7f4465ee152465f00b08501f400a8e2999f99d018ee224221",
+      "bytes": 22735,
+      "importPath": "vendor/hermes_agent_runtime/tools/mixture_of_agents_tool.py",
+      "importSha256": "834e2850aafaf1f7f4465ee152465f00b08501f400a8e2999f99d018ee224221",
+      "source": "third_party/hermes_agent_runtime/tools/mixture_of_agents_tool.py",
+      "sourceSha256": "834e2850aafaf1f7f4465ee152465f00b08501f400a8e2999f99d018ee224221"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/neutts_synth.py": {
+      "sha256": "1c0653e10510efa9ba309aa8ebcd7f999c413eaeae8f8f864a8d43303cacefc9",
+      "bytes": 3547,
+      "importPath": "vendor/hermes_agent_runtime/tools/neutts_synth.py",
+      "importSha256": "1c0653e10510efa9ba309aa8ebcd7f999c413eaeae8f8f864a8d43303cacefc9",
+      "source": "third_party/hermes_agent_runtime/tools/neutts_synth.py",
+      "sourceSha256": "1c0653e10510efa9ba309aa8ebcd7f999c413eaeae8f8f864a8d43303cacefc9"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/openrouter_client.py": {
+      "sha256": "1dd4e6ca97a6be613c5a0e16d9c12c04eb7d60d81f0e9ca1fdee74a58f877b04",
+      "bytes": 1091,
+      "importPath": "vendor/hermes_agent_runtime/tools/openrouter_client.py",
+      "importSha256": "1dd4e6ca97a6be613c5a0e16d9c12c04eb7d60d81f0e9ca1fdee74a58f877b04",
+      "source": "third_party/hermes_agent_runtime/tools/openrouter_client.py",
+      "sourceSha256": "1dd4e6ca97a6be613c5a0e16d9c12c04eb7d60d81f0e9ca1fdee74a58f877b04"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/patch_parser.py": {
+      "sha256": "531891c9f167a12f064282c2a7d9bf619a5d2f52066ce4613996342b4c5366fa",
+      "bytes": 15678,
+      "importPath": "vendor/hermes_agent_runtime/tools/patch_parser.py",
+      "importSha256": "531891c9f167a12f064282c2a7d9bf619a5d2f52066ce4613996342b4c5366fa",
+      "source": "third_party/hermes_agent_runtime/tools/patch_parser.py",
+      "sourceSha256": "531891c9f167a12f064282c2a7d9bf619a5d2f52066ce4613996342b4c5366fa"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/process_registry.py": {
+      "sha256": "78768e9844010db83de56bc9166686b97ff46c7ce53df246e85a69f55a1c1e75",
+      "bytes": 34887,
+      "importPath": "vendor/hermes_agent_runtime/tools/process_registry.py",
+      "importSha256": "78768e9844010db83de56bc9166686b97ff46c7ce53df246e85a69f55a1c1e75",
+      "source": "third_party/hermes_agent_runtime/tools/process_registry.py",
+      "sourceSha256": "78768e9844010db83de56bc9166686b97ff46c7ce53df246e85a69f55a1c1e75"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/registry.py": {
+      "sha256": "d5a45a9f69d40d1da452228b33e715f4c563cbc66587c55d7b7b7e56c5bd04df",
+      "bytes": 10719,
+      "importPath": "vendor/hermes_agent_runtime/tools/registry.py",
+      "importSha256": "d5a45a9f69d40d1da452228b33e715f4c563cbc66587c55d7b7b7e56c5bd04df",
+      "source": "third_party/hermes_agent_runtime/tools/registry.py",
+      "sourceSha256": "d5a45a9f69d40d1da452228b33e715f4c563cbc66587c55d7b7b7e56c5bd04df"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/rl_training_tool.py": {
+      "sha256": "fda25e5cba51d3b0c9623bdba3e34d81aea4a418aaf6fa2353fbd52a475a9b1a",
+      "bytes": 57089,
+      "importPath": "vendor/hermes_agent_runtime/tools/rl_training_tool.py",
+      "importSha256": "fda25e5cba51d3b0c9623bdba3e34d81aea4a418aaf6fa2353fbd52a475a9b1a",
+      "source": "third_party/hermes_agent_runtime/tools/rl_training_tool.py",
+      "sourceSha256": "fda25e5cba51d3b0c9623bdba3e34d81aea4a418aaf6fa2353fbd52a475a9b1a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/send_message_tool.py": {
+      "sha256": "a775b5c1d0568eb09456c22790f2bea380fe7a68984643aed02a15931e98bb27",
+      "bytes": 37971,
+      "importPath": "vendor/hermes_agent_runtime/tools/send_message_tool.py",
+      "importSha256": "a775b5c1d0568eb09456c22790f2bea380fe7a68984643aed02a15931e98bb27",
+      "source": "third_party/hermes_agent_runtime/tools/send_message_tool.py",
+      "sourceSha256": "a775b5c1d0568eb09456c22790f2bea380fe7a68984643aed02a15931e98bb27"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/session_search_tool.py": {
+      "sha256": "2c88dd348a7ec6f3aa98204a4fbe4a10a2ec30b8a125c395632c92dc1d297f93",
+      "bytes": 20913,
+      "importPath": "vendor/hermes_agent_runtime/tools/session_search_tool.py",
+      "importSha256": "2c88dd348a7ec6f3aa98204a4fbe4a10a2ec30b8a125c395632c92dc1d297f93",
+      "source": "third_party/hermes_agent_runtime/tools/session_search_tool.py",
+      "sourceSha256": "2c88dd348a7ec6f3aa98204a4fbe4a10a2ec30b8a125c395632c92dc1d297f93"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/skill_manager_tool.py": {
+      "sha256": "0b15ba06eec2451807700f9db94ea906bdfa16f577a77070f2389f03dc78e580",
+      "bytes": 26975,
+      "importPath": "vendor/hermes_agent_runtime/tools/skill_manager_tool.py",
+      "importSha256": "0b15ba06eec2451807700f9db94ea906bdfa16f577a77070f2389f03dc78e580",
+      "source": "third_party/hermes_agent_runtime/tools/skill_manager_tool.py",
+      "sourceSha256": "0b15ba06eec2451807700f9db94ea906bdfa16f577a77070f2389f03dc78e580"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/skills_guard.py": {
+      "sha256": "1abf232bfdfada3ddbdd38b94eb80cc0c77caf8bb784da0b978ead3b750eed30",
+      "bytes": 42878,
+      "importPath": "vendor/hermes_agent_runtime/tools/skills_guard.py",
+      "importSha256": "1abf232bfdfada3ddbdd38b94eb80cc0c77caf8bb784da0b978ead3b750eed30",
+      "source": "third_party/hermes_agent_runtime/tools/skills_guard.py",
+      "sourceSha256": "1abf232bfdfada3ddbdd38b94eb80cc0c77caf8bb784da0b978ead3b750eed30"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/skills_hub.py": {
+      "sha256": "45e2ca4aba69d685a3e15b47938d9f7831dc98e43e512aafcecfb3d32f6f08ae",
+      "bytes": 98921,
+      "importPath": "vendor/hermes_agent_runtime/tools/skills_hub.py",
+      "importSha256": "45e2ca4aba69d685a3e15b47938d9f7831dc98e43e512aafcecfb3d32f6f08ae",
+      "source": "third_party/hermes_agent_runtime/tools/skills_hub.py",
+      "sourceSha256": "45e2ca4aba69d685a3e15b47938d9f7831dc98e43e512aafcecfb3d32f6f08ae"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/skills_sync.py": {
+      "sha256": "9ab452dedd78c33abc84598941c4a981e5e466d72828727ceb783090a609f8aa",
+      "bytes": 10792,
+      "importPath": "vendor/hermes_agent_runtime/tools/skills_sync.py",
+      "importSha256": "9ab452dedd78c33abc84598941c4a981e5e466d72828727ceb783090a609f8aa",
+      "source": "third_party/hermes_agent_runtime/tools/skills_sync.py",
+      "sourceSha256": "9ab452dedd78c33abc84598941c4a981e5e466d72828727ceb783090a609f8aa"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/skills_tool.py": {
+      "sha256": "6c7582a18aa8d9e55995cf89729c4bb081ee8fa9e63218c951198dcf04569b43",
+      "bytes": 48324,
+      "importPath": "vendor/hermes_agent_runtime/tools/skills_tool.py",
+      "importSha256": "6c7582a18aa8d9e55995cf89729c4bb081ee8fa9e63218c951198dcf04569b43",
+      "source": "third_party/hermes_agent_runtime/tools/skills_tool.py",
+      "sourceSha256": "6c7582a18aa8d9e55995cf89729c4bb081ee8fa9e63218c951198dcf04569b43"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/terminal_tool.py": {
+      "sha256": "9e5520323227183a21ba0731c02600afdb567691e2f2ff0b3a48ffec2395e2f0",
+      "bytes": 57317,
+      "importPath": "vendor/hermes_agent_runtime/tools/terminal_tool.py",
+      "importSha256": "9e5520323227183a21ba0731c02600afdb567691e2f2ff0b3a48ffec2395e2f0",
+      "source": "third_party/hermes_agent_runtime/tools/terminal_tool.py",
+      "sourceSha256": "9e5520323227183a21ba0731c02600afdb567691e2f2ff0b3a48ffec2395e2f0"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/tirith_security.py": {
+      "sha256": "5b61c11618143f3e9def5ddfe23ed4ce27c83e7902b2894914f6c99b78f2756e",
+      "bytes": 25113,
+      "importPath": "vendor/hermes_agent_runtime/tools/tirith_security.py",
+      "importSha256": "5b61c11618143f3e9def5ddfe23ed4ce27c83e7902b2894914f6c99b78f2756e",
+      "source": "third_party/hermes_agent_runtime/tools/tirith_security.py",
+      "sourceSha256": "5b61c11618143f3e9def5ddfe23ed4ce27c83e7902b2894914f6c99b78f2756e"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/todo_tool.py": {
+      "sha256": "2aa950c5febe1cc30ca8c381a848365d86a04e8262b9dd8334800f2768eeb491",
+      "bytes": 9612,
+      "importPath": "vendor/hermes_agent_runtime/tools/todo_tool.py",
+      "importSha256": "2aa950c5febe1cc30ca8c381a848365d86a04e8262b9dd8334800f2768eeb491",
+      "source": "third_party/hermes_agent_runtime/tools/todo_tool.py",
+      "sourceSha256": "2aa950c5febe1cc30ca8c381a848365d86a04e8262b9dd8334800f2768eeb491"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/transcription_tools.py": {
+      "sha256": "ea60c291026e3fcd2cc7a8f355c384e5c3c57cd8fbb23fef32decccbb80e174c",
+      "bytes": 21731,
+      "importPath": "vendor/hermes_agent_runtime/tools/transcription_tools.py",
+      "importSha256": "ea60c291026e3fcd2cc7a8f355c384e5c3c57cd8fbb23fef32decccbb80e174c",
+      "source": "third_party/hermes_agent_runtime/tools/transcription_tools.py",
+      "sourceSha256": "ea60c291026e3fcd2cc7a8f355c384e5c3c57cd8fbb23fef32decccbb80e174c"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/tts_tool.py": {
+      "sha256": "49cfd8ccc25566bddc0ed7462cd265ad16e85a653a9f80f665d4eb794798b848",
+      "bytes": 32833,
+      "importPath": "vendor/hermes_agent_runtime/tools/tts_tool.py",
+      "importSha256": "49cfd8ccc25566bddc0ed7462cd265ad16e85a653a9f80f665d4eb794798b848",
+      "source": "third_party/hermes_agent_runtime/tools/tts_tool.py",
+      "sourceSha256": "49cfd8ccc25566bddc0ed7462cd265ad16e85a653a9f80f665d4eb794798b848"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/url_safety.py": {
+      "sha256": "b79b2e4cb44dda3a6631cd6a95b7ccc7a23bbb56a02434595f92ae875cccbe4a",
+      "bytes": 3686,
+      "importPath": "vendor/hermes_agent_runtime/tools/url_safety.py",
+      "importSha256": "b79b2e4cb44dda3a6631cd6a95b7ccc7a23bbb56a02434595f92ae875cccbe4a",
+      "source": "third_party/hermes_agent_runtime/tools/url_safety.py",
+      "sourceSha256": "b79b2e4cb44dda3a6631cd6a95b7ccc7a23bbb56a02434595f92ae875cccbe4a"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/vision_tools.py": {
+      "sha256": "265459b81768d0b7f4f70ca9fca7ec2c93421f27c3418852b04042f14057e813",
+      "bytes": 22139,
+      "importPath": "vendor/hermes_agent_runtime/tools/vision_tools.py",
+      "importSha256": "265459b81768d0b7f4f70ca9fca7ec2c93421f27c3418852b04042f14057e813",
+      "source": "third_party/hermes_agent_runtime/tools/vision_tools.py",
+      "sourceSha256": "265459b81768d0b7f4f70ca9fca7ec2c93421f27c3418852b04042f14057e813"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/voice_mode.py": {
+      "sha256": "ce682be8b074ae7b7539b32059df8115d55d4709bca2783279e6832b8d3967c7",
+      "bytes": 31461,
+      "importPath": "vendor/hermes_agent_runtime/tools/voice_mode.py",
+      "importSha256": "ce682be8b074ae7b7539b32059df8115d55d4709bca2783279e6832b8d3967c7",
+      "source": "third_party/hermes_agent_runtime/tools/voice_mode.py",
+      "sourceSha256": "ce682be8b074ae7b7539b32059df8115d55d4709bca2783279e6832b8d3967c7"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/web_tools.py": {
+      "sha256": "4425bf4f7d7bef8271bff015a8dd0e700224ed4929f73456252b052b360ad61b",
+      "bytes": 77437,
+      "importPath": "vendor/hermes_agent_runtime/tools/web_tools.py",
+      "importSha256": "4425bf4f7d7bef8271bff015a8dd0e700224ed4929f73456252b052b360ad61b",
+      "source": "third_party/hermes_agent_runtime/tools/web_tools.py",
+      "sourceSha256": "4425bf4f7d7bef8271bff015a8dd0e700224ed4929f73456252b052b360ad61b"
+    },
+    "backend/vendor/hermes_agent_runtime/tools/website_policy.py": {
+      "sha256": "7eb644f8da1ba3028d1c98890e5cacc64c4308468bffb99be3d766ef8cb9bff3",
+      "bytes": 9796,
+      "importPath": "vendor/hermes_agent_runtime/tools/website_policy.py",
+      "importSha256": "7eb644f8da1ba3028d1c98890e5cacc64c4308468bffb99be3d766ef8cb9bff3",
+      "source": "third_party/hermes_agent_runtime/tools/website_policy.py",
+      "sourceSha256": "7eb644f8da1ba3028d1c98890e5cacc64c4308468bffb99be3d766ef8cb9bff3"
+    },
+    "backend/vendor/hermes_agent_runtime/toolset_distributions.py": {
+      "sha256": "3ceec534300786cc31ee8dfd8b53bbc1544b5fc9d902e95a9b6c1688088ff861",
+      "bytes": 12332,
+      "importPath": "vendor/hermes_agent_runtime/toolset_distributions.py",
+      "importSha256": "3ceec534300786cc31ee8dfd8b53bbc1544b5fc9d902e95a9b6c1688088ff861",
+      "source": "third_party/hermes_agent_runtime/toolset_distributions.py",
+      "sourceSha256": "3ceec534300786cc31ee8dfd8b53bbc1544b5fc9d902e95a9b6c1688088ff861"
+    },
+    "backend/vendor/hermes_agent_runtime/toolsets.py": {
+      "sha256": "2c1bcbb342ae76525b6daaea39b9a110256268c6ccbd854bd6111a67c053bd48",
+      "bytes": 20982,
+      "importPath": "vendor/hermes_agent_runtime/toolsets.py",
+      "importSha256": "2c1bcbb342ae76525b6daaea39b9a110256268c6ccbd854bd6111a67c053bd48",
+      "source": "third_party/hermes_agent_runtime/toolsets.py",
+      "sourceSha256": "2c1bcbb342ae76525b6daaea39b9a110256268c6ccbd854bd6111a67c053bd48"
+    },
+    "backend/vendor/hermes_agent_runtime/trajectory_compressor.py": {
+      "sha256": "30fb88619ba806e4aafb75834d805e73913604f4787c68b5377b1616f2d36446",
+      "bytes": 65244,
+      "importPath": "vendor/hermes_agent_runtime/trajectory_compressor.py",
+      "importSha256": "30fb88619ba806e4aafb75834d805e73913604f4787c68b5377b1616f2d36446",
+      "source": "third_party/hermes_agent_runtime/trajectory_compressor.py",
+      "sourceSha256": "30fb88619ba806e4aafb75834d805e73913604f4787c68b5377b1616f2d36446"
+    },
+    "backend/vendor/hermes_agent_runtime/utils.py": {
+      "sha256": "9ac4b0d3155133f933cb8dbb16143b3ee4df685c9d8238e7110f97f4f4832768",
+      "bytes": 3251,
+      "importPath": "vendor/hermes_agent_runtime/utils.py",
+      "importSha256": "9ac4b0d3155133f933cb8dbb16143b3ee4df685c9d8238e7110f97f4f4832768",
+      "source": "third_party/hermes_agent_runtime/utils.py",
+      "sourceSha256": "9ac4b0d3155133f933cb8dbb16143b3ee4df685c9d8238e7110f97f4f4832768"
+    },
+    "compose.secrets.yaml": {
+      "sha256": "26b682a7244691ddb58db9df819fdc2aea12b352f6146bf7fa4ee02bc3819b20",
+      "bytes": 496
+    },
+    "compose.share.yaml": {
+      "sha256": "1c28878c54538494a299990e53c8082474ad96bad6c93a7f311767b9f765d619",
+      "bytes": 952
+    },
+    "compose.yaml": {
+      "sha256": "271bf0f576e3a3b43537f2eeda996efafecda54630f6183e2204be2233b77143",
+      "bytes": 1644
+    },
+    "data/cases.json": {
+      "sha256": "09412141535df498796db05febb0f16146a318fe6fb3580721fe6d577806acb0",
+      "bytes": 132600,
+      "importPath": "data/cases.json",
+      "importSha256": "09412141535df498796db05febb0f16146a318fe6fb3580721fe6d577806acb0",
+      "source": "demo/.local/cases.json",
+      "sourceSha256": "09412141535df498796db05febb0f16146a318fe6fb3580721fe6d577806acb0"
+    },
+    "deploy/systemd/gtc-healthcare-ui-share.service": {
+      "sha256": "d6f2735d31161aee8ba608f183fe0c4679e00b866477dc2d3533a4ca72de250e",
+      "bytes": 475,
+      "importPath": "systemd/gtc-healthcare-ui-share.service",
+      "importSha256": "c15a38884ba618ca053381ce7833ad1e7e82aa33a1e3715ac8ff54e89e9deda2",
+      "source": "demo/systemd/healthcare-demo-share.service",
+      "sourceSha256": "29704e75270be278ffa2faf6a7850fcca7fc74469efe1aeef384a1cb821558d2"
+    },
+    "deploy/systemd/gtc-healthcare-ui.service": {
+      "sha256": "5fbdb0766045ffcebfb5cc31c1866e5b5b2f50815bf3e8b8f1511cf61bcc3ded",
+      "bytes": 451,
+      "importPath": "systemd/gtc-healthcare-ui.service",
+      "importSha256": "5fbdb0766045ffcebfb5cc31c1866e5b5b2f50815bf3e8b8f1511cf61bcc3ded",
+      "source": "demo/systemd/healthcare-demo.service",
+      "sourceSha256": "82edf09f7b08938eb11df99516f3820765faff10628f1ecf93f33a7f2cfc3c8b"
+    },
+    "frontend/Dockerfile": {
+      "sha256": "b626861140c7355fc70f0fe0ea59bea48296552271b43ddf8258131a2f73efd7",
+      "bytes": 185
+    },
+    "frontend/nginx.conf": {
+      "sha256": "88c56097c0ec71d71740088028ec24c8006b8c92b6fd226f1dc6ba989b09403f",
+      "bytes": 1486
+    },
+    "frontend/public/assets/LUCIDE-LICENSE": {
+      "sha256": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "bytes": 880,
+      "importPath": "static/LUCIDE-LICENSE",
+      "importSha256": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "source": "demo/static/LUCIDE-LICENSE",
+      "sourceSha256": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc"
+    },
+    "frontend/public/assets/app.js": {
+      "sha256": "ffdec4b33ebe8a8d17cea73d72cdc7af9909cc01f6e9844ce2285a2cd9184cc6",
+      "bytes": 19966,
+      "importPath": "static/app.js",
+      "importSha256": "ffdec4b33ebe8a8d17cea73d72cdc7af9909cc01f6e9844ce2285a2cd9184cc6",
+      "source": "demo/static/app.js",
+      "sourceSha256": "ffdec4b33ebe8a8d17cea73d72cdc7af9909cc01f6e9844ce2285a2cd9184cc6"
+    },
+    "frontend/public/assets/icons.js": {
+      "sha256": "3411692820cb8d47543f69496aa25fd603a358f4498046f41c508a5a3342210e",
+      "bytes": 357796,
+      "importPath": "static/icons.js",
+      "importSha256": "3411692820cb8d47543f69496aa25fd603a358f4498046f41c508a5a3342210e",
+      "source": "demo/static/icons.js",
+      "sourceSha256": "3411692820cb8d47543f69496aa25fd603a358f4498046f41c508a5a3342210e"
+    },
+    "frontend/public/assets/styles.css": {
+      "sha256": "58101e7e2d7ab00ed0c55fa10b39716d6c43978a8b455279724028ee189ba240",
+      "bytes": 13958,
+      "importPath": "static/styles.css",
+      "importSha256": "58101e7e2d7ab00ed0c55fa10b39716d6c43978a8b455279724028ee189ba240",
+      "source": "demo/static/styles.css",
+      "sourceSha256": "58101e7e2d7ab00ed0c55fa10b39716d6c43978a8b455279724028ee189ba240"
+    },
+    "frontend/public/index.html": {
+      "sha256": "b0d663b301ce2ed9be6348c8deb5ccc2c77563d07e47e9b685354358e2d2d722",
+      "bytes": 6770,
+      "importPath": "static/index.html",
+      "importSha256": "b0d663b301ce2ed9be6348c8deb5ccc2c77563d07e47e9b685354358e2d2d722",
+      "source": "demo/static/index.html",
+      "sourceSha256": "b0d663b301ce2ed9be6348c8deb5ccc2c77563d07e47e9b685354358e2d2d722"
+    },
+    "provenance.import-r01.json": {
+      "sha256": "31e7e5b2338846d21c75ddcee3dbb52cc10b94d5a450ba74eaf531d85c4db497",
+      "bytes": 73532
+    },
+    "run.sh": {
+      "sha256": "fddc9528c6248dd4281f3355334caaac03a84c80fe6e811bc1e270907372f7a2",
+      "bytes": 330,
+      "importPath": "run.sh",
+      "importSha256": "18476a1857c52f9e0f27468f417fd2b0d4eca4056d7c3dac36b6e14a863c81b2"
+    },
+    "tests/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "tests/serve_fixture.py": {
+      "sha256": "a041a0f0e32ac9aa153a1d3702c4c1c9a8169a8a3008d25369d08ff9ac0800dd",
+      "bytes": 787
+    },
+    "tests/test_demo.py": {
+      "sha256": "3786d2d8da963700a3aaab8aa44aa7559e1476fecc2b1275a8613945a19ea70c",
+      "bytes": 21958,
+      "importPath": "test_demo.py",
+      "importSha256": "c09381633bdb4f0b491d4c3fd1ae69d86b3522bda2f3eb841cb792491b29c84a",
+      "source": "demo/test_demo.py",
+      "sourceSha256": "f2ffead331a2fb5979aaea641e42f82fffd2b296f94e65e9f2f36d9b8bdc584b"
+    },
+    "tests/test_deployment.py": {
+      "sha256": "cd3df1b89aae243af0f08c94f874921091eb414971a347d615d4cde2c876a18c",
+      "bytes": 2685
+    },
+    "tests/test_share.py": {
+      "sha256": "e05d630d8ee0db5abf5f96bce54389f287ef1a239c8e8a4c194e5653dd0ca3a6",
+      "bytes": 5144,
+      "importPath": "test_share.py",
+      "importSha256": "8350f5b3809d1288d9b0734aeb9e50aecdb5b28dd29392e3d131758ba05c889d",
+      "source": "demo/test_share.py",
+      "sourceSha256": "9d43e7276c7b711f81045b46410736d8582b034d7de242af9933ccf174c9478f"
+    }
+  }
+}
