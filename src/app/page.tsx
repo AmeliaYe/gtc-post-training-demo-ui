@@ -7,7 +7,6 @@ import { CyberDefenseDemo } from './components/CyberDefenseDemo';
 import ComputerUseDemo from './components/ComputerUseDemo';
 import DreamDemoContent from './components/dream/DreamDemo';
 import PostTrainingLanding from './components/PostTrainingLanding';
-import HCompanyLogo from './components/HCompanyLogo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
@@ -68,7 +67,7 @@ type Demo = PlaceholderDemo | LiveDemo | CyberDemo | ComputerDemo;
 
 const demos: Demo[] = [
   {
-    kind: 'computer', id: 'computer', name: 'Computer Use', task: 'GUI agent · H Company',
+    kind: 'computer', id: 'computer', name: 'Computer Use', task: 'GUI agent',
     description: 'Complete software tasks by seeing and using the screen.',
     color: '#9b8cff', glow: 'rgba(155, 140, 255, .18)', icon: CommandLineIcon,
   },
@@ -182,9 +181,7 @@ function ModelTile({ model }: { model: Demo }) {
       <span className="tile-copy">
         <strong>{model.name}</strong>
         <small>{model.description}</small>
-        {model.id === 'computer'
-          ? <em className="tile-partner"><span>GUI agent</span><b>·</b><span className="tile-partner-brand"><HCompanyLogo /><i /><span>H COMPANY</span></span></em>
-          : <em>{model.task}</em>}
+        <em>{model.task}</em>
       </span>
       {model.kind === 'placeholder' && model.id !== 'defense' ? (
         <span className="tile-score">

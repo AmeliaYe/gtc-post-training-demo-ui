@@ -6,6 +6,7 @@ import {
   CubeTransparentIcon,
   PhotoIcon,
   ReceiptPercentIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline';
 import styles from './ComputerUseDemo.module.css';
 import HCompanyLogo from './HCompanyLogo';
@@ -22,6 +23,59 @@ type ResultPlaybackProps = {
 };
 
 type PlaybackState = 'ready' | 'running' | 'finished';
+
+const EXPENSE_STEPS = [
+  'Found the Volkshochschule Rheintal draft invoice',
+  'Validated the invoice',
+  'Recorded payment by bank transfer, current account',
+  'Paid in full, invoice shows as settled',
+  'Reported the task as done',
+] as const;
+
+function ExpenseGoalState({ complete }: { complete: boolean }) {
+  return (
+    <article className={`${styles.expenseGoalState} ${complete ? styles.expenseGoalComplete : styles.expenseGoalPending}`}>
+      <header>
+        <small>{complete ? 'GOAL' : 'STARTING STATE'}</small>
+        <strong>{complete ? 'Invoice issued and settled' : 'Invoice not yet processed'}</strong>
+      </header>
+      <div>
+        {EXPENSE_STEPS.map((step) => (
+          <span key={step}>{complete ? <CheckCircleIcon /> : <XCircleIcon />}{step}</span>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function ExpenseBenchmarkResult({ variant }: { variant: 'base' | 'tuned' }) {
+  const tuned = variant === 'tuned';
+  const passed = tuned ? [true, true, true, true, true] : [true, false, false, false, false];
+  return (
+    <div className={`${styles.expenseResult} ${tuned ? styles.expenseResultSuccess : styles.expenseResultFailure}`}>
+      <header>
+        {tuned ? <CheckCircleIcon /> : <XCircleIcon />}
+        <strong>{tuned ? 'Invoice issued and settled' : 'Invoice never validated'}</strong>
+      </header>
+      <div className={styles.expenseResultSteps}>
+        {EXPENSE_STEPS.map((step, index) => (
+          <span key={step} className={passed[index] ? styles.resultPassed : styles.resultFailed}>
+            {passed[index] ? <CheckCircleIcon /> : <XCircleIcon />}
+            <b>{step}</b>
+            {!tuned && index === 1 && <em>left as draft</em>}
+            {!tuned && index === 4 && <em>hit 100-step limit</em>}
+          </span>
+        ))}
+      </div>
+      <div className={styles.expenseResultMeta}>
+        <span><b>{tuned ? '40' : '100'}</b> steps</span>
+        <span><b>{tuned ? '9' : '45'}</b> min</span>
+        <span><b>{tuned ? '0.5M' : '4.0M'}</b> tokens</span>
+        <strong>{tuned ? '6 of 6 passed' : '0 of 11 passed'}</strong>
+      </div>
+    </div>
+  );
+}
 
 function ResultPlayback({
   videoSrc,
@@ -43,10 +97,12 @@ function ResultPlayback({
   };
 
   return (
-    <div className={`${styles.playbackShell} ${compact ? styles.cadPlayback : ''}`}>
+    <div className={`${styles.playbackShell} ${compact ? styles.cadPlayback : ''} ${showExpenseChecklist ? styles.expensePlayback : ''}`}>
       {finished ? (
         <>
-          <img className={styles.finalFrame} src={resultSrc} alt={resultAlt} />
+          {showExpenseChecklist
+            ? <ExpenseBenchmarkResult variant={variant} />
+            : <img className={styles.finalFrame} src={resultSrc} alt={resultAlt} />}
           <span className={styles.resultLabel}>{variant === 'tuned' && <CheckCircleIcon />}{variant === 'tuned' ? 'Successful end state' : 'Failed end state'}</span>
           <button type="button" className={styles.replayButton} onClick={replay}>Replay</button>
         </>
@@ -75,7 +131,7 @@ function ResultPlayback({
           }}
         />
       )}
-      {showExpenseChecklist && (
+      {showExpenseChecklist && !finished && (
         <div className={`${styles.expenseVideoChecklist} ${expenseProgress === 2 ? styles.expenseVideoComplete : ''}`}>
           <strong>{expenseProgress === 2 ? 'ALL VALIDATIONS PASSED' : 'TASK CHECKLIST'}</strong>
           <span className={expenseProgress >= 1 ? styles.checkDone : undefined}>{expenseProgress >= 1 ? <CheckCircleIcon /> : <i />} Invoice validated</span>
@@ -246,28 +302,10 @@ export default function ComputerUseDemo() {
             </div>
           )}
           {isExpenseTask && (
-            <div className={`${styles.goalFrames} ${styles.expenseGoalFrames}`} aria-label="Unchecked invoice and payment becoming validated and recorded">
-              <figure>
-                <img src="/computer-use/expense/result-before.png" alt="Dolibarr before the invoice is validated or its payment is recorded" />
-                <div className={`${styles.expenseChecklist} ${styles.pendingChecklist}`}>
-                  <strong>VALIDATION INCOMPLETE</strong>
-                  <small>2 checks remaining</small>
-                  <span><i /> Validate the invoice</span>
-                  <span><i /> Record the payment</span>
-                </div>
-                <figcaption><strong>BEFORE</strong>Two actions still open</figcaption>
-              </figure>
+            <div className={styles.expenseGoalFlow} aria-label="Five incomplete invoice steps becoming five completed invoice steps">
+              <ExpenseGoalState complete={false} />
               <span aria-hidden="true">→</span>
-              <figure>
-                <img src="/computer-use/expense/result-after.png" alt="Dolibarr after the invoice is validated and its payment is recorded" />
-                <div className={`${styles.expenseChecklist} ${styles.completeChecklist}`}>
-                  <strong>ALL VALIDATIONS PASSED</strong>
-                  <small>Every required check is complete</small>
-                  <span><CheckCircleIcon /> Invoice validated</span>
-                  <span><CheckCircleIcon /> Payment recorded</span>
-                </div>
-                <figcaption><strong>GOAL</strong>Both actions completed</figcaption>
-              </figure>
+              <ExpenseGoalState complete />
             </div>
           )}
           {isCadTask && (

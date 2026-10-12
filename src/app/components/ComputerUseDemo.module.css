@@ -76,9 +76,21 @@
 .videoGoal .goalSequence > span { line-height: 1; text-align: center; }
 .videoGoal .goalSequence figure { width: 100%; height: 100%; min-height: 0; }
 .videoGoal .videoGoalFrames figcaption { right: 8px; bottom: 8px; left: 8px; }
-.videoGoal .expenseGoalFrames { align-items: center; }
-.videoGoal .expenseGoalFrames figure { width: min(500px, 38vw); height: auto; min-height: 0; aspect-ratio: 1408 / 928; }
-.videoGoal .expenseGoalFrames img { object-fit: cover; }
+.expenseGoalFlow { width: min(1120px, 92vw); min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 18px; }
+.expenseGoalFlow > span { color: var(--violet); font-size: 28px; }
+.expenseGoalState { min-width: 0; display: grid; gap: 11px; padding: 16px; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; background: rgba(255,255,255,.035); }
+.expenseGoalState header { display: grid; gap: 4px; }
+.expenseGoalState header small { font: 800 9px/1 monospace; letter-spacing: .14em; }
+.expenseGoalState header strong { color: #f1f2f7; font-size: 17px; }
+.expenseGoalState > div { display: grid; gap: 7px; }
+.expenseGoalState > div span { min-width: 0; display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 7px; color: #dcdee5; font-size: 11px; line-height: 1.25; }
+.expenseGoalState svg { width: 20px; height: 20px; flex: none; }
+.expenseGoalPending { border-color: rgba(239,75,66,.28); }
+.expenseGoalPending header small, .expenseGoalPending svg { color: #ef4b42; }
+.expenseGoalPending > div span { background: rgba(239,75,66,.09); }
+.expenseGoalComplete { border-color: rgba(42,183,94,.3); }
+.expenseGoalComplete header small, .expenseGoalComplete svg { color: #35c46b; }
+.expenseGoalComplete > div span { background: rgba(42,183,94,.1); }
 .expenseChecklist { position: absolute; z-index: 2; top: 50%; right: 16px; width: 250px; display: grid; gap: 9px; padding: 15px 17px; transform: translateY(-50%); border: 1px solid rgba(255,255,255,.2); border-radius: 9px; color: #f3f3f8; background: rgba(10,12,18,.92); box-shadow: 0 10px 30px rgba(0,0,0,.34); font: 700 12px/1.2 monospace; backdrop-filter: blur(5px); }
 .expenseChecklist strong { color: #ffca72; font-size: 11px; letter-spacing: .1em; }
 .expenseChecklist small { margin-top: -5px; color: #a7a9b3; font: 8px/1.3 monospace; letter-spacing: .02em; }
@@ -132,6 +144,27 @@
 .finalFrame { object-fit: contain; animation: revealResult .24s ease-out both; }
 .cadPlayback { aspect-ratio: 1280 / 755; background: #f7f7f7; }
 .cadPlayback .finalFrame { background: #f7f7f7; }
+.expensePlayback { background: #f6f7f8; }
+.expenseResult { width: 100%; height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 7px; padding: 30px 10px 9px; color: #18191d; background: #f7f8f8; animation: revealResult .24s ease-out both; }
+.expenseResult > header { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.expenseResult > header svg { width: 18px; height: 18px; flex: none; }
+.expenseResult > header strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.expenseResultSuccess > header { color: #169447; }
+.expenseResultFailure > header { color: #e32d23; }
+.expenseResultSteps { min-height: 0; display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.expenseResultSteps > span { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 7px; padding: 4px 7px; border-radius: 5px; }
+.expenseResultSteps svg { width: 17px; height: 17px; flex: none; }
+.expenseResultSteps b { overflow: hidden; font-size: 8px; font-weight: 650; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
+.expenseResultSteps em { color: #696b72; font-size: 7px; font-style: normal; white-space: nowrap; }
+.expenseResultSteps .resultPassed { color: #159345; background: #e3f3e9; }
+.expenseResultSteps .resultFailed { color: #e32d23; background: #fbe6e4; }
+.expenseResultSteps .resultPassed b, .expenseResultSteps .resultFailed b { color: #202126; }
+.expenseResultMeta { display: flex; align-items: center; gap: 10px; color: #53555c; font-size: 7px; }
+.expenseResultMeta span { white-space: nowrap; }
+.expenseResultMeta b { color: #1b1c21; font-size: 9px; }
+.expenseResultMeta strong { margin-left: auto; font-size: 8px; white-space: nowrap; }
+.expenseResultSuccess .expenseResultMeta strong { color: #159345; }
+.expenseResultFailure .expenseResultMeta strong { color: #e32d23; }
 .expenseVideoChecklist { position: absolute; z-index: 3; top: 9px; right: 9px; width: 190px; display: grid; gap: 7px; padding: 10px 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: #e8e8ef; background: rgba(9,10,15,.9); box-shadow: 0 7px 24px rgba(0,0,0,.35); font: 700 9px/1.15 monospace; pointer-events: none; }
 .expenseVideoChecklist strong { color: #aeb0ba; font-size: 8px; letter-spacing: .1em; }
 .expenseVideoChecklist span { display: flex; align-items: center; gap: 7px; }
@@ -163,7 +196,7 @@
   .videoGoal .goalSequence { width: min(660px, 78vw); }
   .videoGoal .goalSequence figure,
   .videoGoal .cadGoalFrames figure { width: 100%; height: 100%; min-height: 0; }
-  .videoGoal .expenseGoalFrames figure { width: min(330px, 39vw); height: auto; }
+  .expenseGoalFlow { width: min(900px, 90vw); gap: 10px; }
   .comparison { padding: 10px; }
   .modelGrid article { padding: 11px; }
 }
@@ -176,10 +209,10 @@
   .videoGoal .goalCopy { width: 100%; grid-template-columns: auto minmax(0, 1fr) auto; }
   .videoGoal .goalCopy h3, .videoGoal .goalCopy p { white-space: normal; }
   .videoGoal .goalSequence { width: 100%; min-height: 420px; }
-  .videoGoal .videoGoalFrames,
-  .videoGoal .expenseGoalFrames { min-height: 440px; flex-direction: column; }
-  .videoGoal .videoGoalFrames figure,
-  .videoGoal .expenseGoalFrames figure { width: min(430px, 100%); height: min(205px, 46%); }
+  .videoGoal .videoGoalFrames { min-height: 440px; flex-direction: column; }
+  .videoGoal .videoGoalFrames figure { width: min(430px, 100%); height: min(205px, 46%); }
+  .expenseGoalFlow { width: 100%; grid-template-columns: 1fr; }
+  .expenseGoalFlow > span { transform: rotate(90deg); text-align: center; }
   .expenseChecklist { width: 215px; padding: 11px 13px; font-size: 10px; }
   .comparisonOrigin { width: 76%; }
   .modelGrid { grid-template-columns: 1fr; gap: 8px; }

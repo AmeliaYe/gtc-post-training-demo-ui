@@ -303,11 +303,15 @@
 .dream-theme .cti-country { fill: var(--panel-3); stroke: var(--dream-navy); stroke-width: .4; transition: fill .6s ease; }
 .dream-theme .cti-country.hit { fill: var(--dream-coral); filter: drop-shadow(0 0 6px rgba(232, 132, 128, .5)); }
 .dream-theme .cti-link { stroke: var(--dream-periwinkle); stroke-width: 1; stroke-dasharray: 3 5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.dream-theme .cti-actor-halo { fill: color-mix(in srgb, var(--dream-periwinkle) 10%, var(--dream-navy)); stroke: color-mix(in srgb, var(--dream-periwinkle) 60%, transparent); stroke-width: 1; }
-.dream-theme .cti-actor-body { fill: color-mix(in srgb, var(--dream-periwinkle) 28%, var(--dream-navy)); stroke: var(--dream-periwinkle); stroke-width: 1; }
-.dream-theme .cti-actor-hood { fill: var(--dream-navy); stroke: var(--dream-periwinkle); stroke-width: 1.2; }
-.dream-theme .cti-actor-seam { fill: none; stroke: color-mix(in srgb, var(--dream-periwinkle) 72%, transparent); stroke-width: .8; }
-.dream-theme .cti-actor-label { fill: var(--dream-periwinkle); font-size: 6px; font-weight: 700; letter-spacing: .7px; text-anchor: middle; }
+.dream-theme .cti-actor { filter: drop-shadow(0 0 12px rgba(205, 208, 252, .3)); }
+.dream-theme .cti-actor-halo { fill: color-mix(in srgb, var(--dream-navy) 76%, transparent); stroke: color-mix(in srgb, var(--dream-periwinkle) 55%, transparent); stroke-width: 1; }
+.dream-theme .cti-actor-body { fill: url(#cti-actor-cloak); stroke: var(--dream-periwinkle); stroke-width: 1; }
+.dream-theme .cti-actor-hood { fill: url(#cti-actor-hood); stroke: #e2e4ff; stroke-width: 1.15; }
+.dream-theme .cti-actor-face { fill: #040817; stroke: color-mix(in srgb, var(--dream-periwinkle) 42%, transparent); stroke-width: .8; }
+.dream-theme .cti-actor-eyes { fill: none; stroke: #f1f2ff; stroke-width: 1.8; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--dream-periwinkle)); }
+.dream-theme .cti-actor-laptop { fill: #111a31; stroke: #e2e4ff; stroke-width: 1.2; stroke-linejoin: round; }
+.dream-theme .cti-actor-code { fill: none; stroke: var(--dream-periwinkle); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.dream-theme .cti-actor-label { fill: #e7e8ff; font-size: 6px; font-weight: 800; letter-spacing: .65px; text-anchor: middle; }
 .dream-theme .cti-overlay { position: absolute; bottom: var(--dream-space-4); left: var(--dream-space-4); display: grid; gap: var(--dream-space-3); padding: var(--dream-space-4) var(--dream-space-5); border: 1px solid var(--line); border-radius: var(--dream-radius-md); background: rgba(12, 20, 42, .88); backdrop-filter: blur(8px); }
 .dream-theme .cti-overlay small { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
 .dream-theme .cti-overlay .dream-phase.on { background: var(--accent); color: var(--accent-ink); }
@@ -551,9 +555,8 @@
 .dream-theme .rt-note { display: flex; align-items: center; gap: 8px; }
 .dream-theme .rt-note b.rt-step-num { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; margin: 0; border-radius: 50%; background: var(--accent); color: var(--dream-navy); font-size: 12px; }
 .dream-theme .rt-note.live b.rt-step-num { background: var(--live); }
-/* Map data note as a watermark in the top-right corner. */
-.dream-theme .cti-watermark { position: absolute; top: var(--dream-space-3); right: var(--dream-space-4); color: color-mix(in srgb, var(--ink) 45%, transparent); font-size: 12px; font-style: italic; letter-spacing: .02em; pointer-events: none; }
-.dream-theme .cti-watermark { font-size: 15px; }
+/* Large three-line sample-data marker, matching the highlighted-country coral. */
+.dream-theme .cti-watermark { position: absolute; top: var(--dream-space-4); right: var(--dream-space-4); display: flex; flex-direction: column; align-items: flex-end; color: var(--dream-coral); font-size: 26px; font-style: normal; font-weight: 700; line-height: .96; letter-spacing: -.02em; text-align: right; text-shadow: 0 0 14px rgba(232, 132, 128, .4); pointer-events: none; }
 /* Map pause/resume. Paused also freezes the CSS beacon pulses. */
 .dream-theme .cti-play { position: absolute; top: var(--dream-space-3); left: 300px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line-strong); border-radius: var(--dream-radius-pill); background: color-mix(in srgb, var(--dream-navy) 88%, transparent); color: var(--ink); font-size: 12px; font-weight: 600; cursor: pointer; }
 .dream-theme .cti-play:hover { border-color: var(--accent); color: var(--accent); }

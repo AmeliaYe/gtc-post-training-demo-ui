@@ -23,7 +23,7 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Evaluator gives feedback',
+    title: 'Environment gives feedback',
     icon: CheckBadgeIcon,
   },
   {

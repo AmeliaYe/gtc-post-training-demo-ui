@@ -6,7 +6,7 @@ import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import { COUNTRIES } from './worldMap';
 
 // Illustrative CTI map: the same threat-report feed analysed before and after training.
-// The source is intentionally shown as one unattributed threat actor rather than a country.
+// The source is intentionally shown as a threat actor rather than a country.
 // Dotted lines represent relationships inferred from reports, not physical attack trajectories.
 // `infra`: critical-infrastructure targets inside a targeted country. Only the trained model
 // surfaces them (the base model at most links the campaign to a country), so beacons appear after training.
@@ -26,7 +26,12 @@ const SPREAD: [number, number][] = [[0, 0], [10, -6], [-9, 7]];
 const CENTROID = Object.fromEntries(COUNTRIES.map((c) => [c.id, c.c]));
 // Crop of the world map around the campaigns (Eastern Europe to South-East Asia).
 const VIEW = { x: 400, y: 150, w: 500, h: 290 };
-const ACTOR: readonly [number, number] = [858, 192];
+// Fixed open-water positions keep distinct actors visible without implying country attribution.
+const ACTORS: Record<string, readonly [number, number]> = {
+  'Group A': [855, 275], // Pacific, east of Japan
+  'Group B': [850, 345], // Pacific, east of the Philippines
+  'Group C': [670, 410], // Indian Ocean, south of India
+};
 
 // What each model links from the same reports, as a share of the full campaign picture
 // (every campaign, targeted country and infrastructure site in the sample data).
@@ -62,6 +67,7 @@ export default function CtiMap() {
   const pool = after ? CAMPAIGNS : CAMPAIGNS.filter((c) => c.before.length);
   const found = pool.filter((_, i) => t >= foundAt(i, after)).map((c) => ({ ...c, hits: after ? c.targets : c.before }));
   const targeted = new Set(found.flatMap((c) => c.hits));
+  const activeGroups = [...new Set(found.map((c) => c.group))];
   const infra = after ? found.flatMap((c) => (c.infra ?? []).flatMap((f) => f.sectors.map((sector, k) => ({ country: f.country, sector, k })))) : [];
   const scanning = t < (after ? AFTER_AT + 5 : 5);
   const live: Linked = { campaigns: found.length, countries: targeted.size, infra: infra.length };
@@ -70,19 +76,32 @@ export default function CtiMap() {
   return (
     <div className="cti">
       <div className={`cti-map ${paused ? 'paused' : ''}`}>
-        <svg viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} role="img" aria-label={`Illustrative CTI map. Dotted lines connect one unattributed threat actor to relationships inferred from reports. Before training the model links ${CAMPAIGNS.filter((c) => c.before.length).length} campaigns; after training it links ${CAMPAIGNS.length} campaigns across ${new Set(CAMPAIGNS.flatMap((c) => c.targets)).size} countries.`}>
+        <svg viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} role="img" aria-label={`Illustrative CTI map. Dotted lines connect distinct attackers over open water to relationships inferred from reports. Before training the model links ${CAMPAIGNS.filter((c) => c.before.length).length} campaigns; after training it links ${CAMPAIGNS.length} campaigns across ${new Set(CAMPAIGNS.flatMap((c) => c.targets)).size} countries.`}>
           {COUNTRIES.map((c) => <path key={c.id} d={c.d} className={`cti-country ${targeted.has(c.id) ? 'hit' : ''}`} />)}
-          {found.map((c) => c.hits.map((id) => (
-            <motion.line key={`${phase}-${c.name}-${id}`} x1={ACTOR[0] - 18} y1={ACTOR[1] + 5} x2={CENTROID[id][0]} y2={CENTROID[id][1]} className="cti-link"
-              initial={reduce ? false : { opacity: 0 }} animate={{ opacity: .78 }} transition={{ duration: .45, ease: 'easeOut' }} />
-          )))}
-          <g className="cti-actor" transform={`translate(${ACTOR[0]} ${ACTOR[1]})`} aria-label="Unattributed threat actor">
-            <circle r="22" className="cti-actor-halo" />
-            <path d="M-18 18C-16 8-10 3-5 1H5C10 3 16 8 18 18Z" className="cti-actor-body" />
-            <path d="M-11 5C-12-4-8-14 0-17C8-14 12-4 11 5C8 10 4 12 0 13C-4 12-8 10-11 5Z" className="cti-actor-hood" />
-            <path d="M-8 5Q0 12 8 5" className="cti-actor-seam" />
-            <text y="33" className="cti-actor-label">UNATTRIBUTED ACTOR</text>
-          </g>
+          {found.map((c) => c.hits.map((id) => {
+            const [ax, ay] = ACTORS[c.group];
+            return <motion.line key={`${phase}-${c.name}-${id}`} x1={ax} y1={ay} x2={CENTROID[id][0]} y2={CENTROID[id][1]} className="cti-link"
+              initial={reduce ? false : { opacity: 0 }} animate={{ opacity: .78 }} transition={{ duration: .45, ease: 'easeOut' }} />;
+          }))}
+          {activeGroups.map((group) => {
+            const [x, y] = ACTORS[group];
+            const suffix = group.slice(-1);
+            return (
+              <motion.g key={`${phase}-${group}`} className="cti-actor" transform={`translate(${x} ${y})`} role="img" aria-label={`Attacker ${suffix}, shown over open water`}
+                initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: .35 }}>
+                <g transform="scale(.54)">
+                  <circle r="31" className="cti-actor-halo" />
+                  <path d="M-28 23C-25 9-18 3-11 0C-14-9-11-22 0-30C11-22 14-9 11 0C18 3 25 9 28 23Z" className="cti-actor-body" />
+                  <path d="M-17 0C-18-14-11-29 0-34C11-29 18-14 17 0C13 9 7 14 0 17C-7 14-13 9-17 0Z" className="cti-actor-hood" />
+                  <path d="M-11-2C-11-13-7-22 0-26C7-22 11-13 11-2C8 5 4 8 0 10C-4 8-8 5-11-2Z" className="cti-actor-face" />
+                  <path d="M-5-2H-1M1-2H5" className="cti-actor-eyes" />
+                  <path d="M-22 9H22V26H-22ZM-27 28H27L23 32H-23Z" className="cti-actor-laptop" />
+                  <path d="M-8 15L-4 18L-8 21M-1 21H8" className="cti-actor-code" />
+                </g>
+                <text y="25" className="cti-actor-label">ATTACKER {suffix}</text>
+              </motion.g>
+            );
+          })}
           {infra.map(({ country, k }) => {
             const [cx, cy] = CENTROID[country];
             const [x, y] = [cx + SPREAD[k][0], cy + SPREAD[k][1]];
@@ -102,6 +121,16 @@ export default function CtiMap() {
               <stop offset="0" stopColor="var(--accent)" stopOpacity="0" />
               <stop offset=".9" stopColor="var(--accent)" stopOpacity=".18" />
               <stop offset="1" stopColor="var(--accent)" stopOpacity=".6" />
+            </linearGradient>
+            <linearGradient id="cti-actor-cloak" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#cdd0fc" stopOpacity=".52" />
+              <stop offset=".48" stopColor="#596080" stopOpacity=".9" />
+              <stop offset="1" stopColor="#111a31" />
+            </linearGradient>
+            <linearGradient id="cti-actor-hood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#7f86ad" stopOpacity=".9" />
+              <stop offset=".55" stopColor="#26304c" />
+              <stop offset="1" stopColor="#0a1227" />
             </linearGradient>
           </defs>
         </svg>
@@ -136,7 +165,7 @@ export default function CtiMap() {
           <p className={`cti-result ${scanning ? '' : after ? 'ok' : 'bad'}`}>{scanning ? 'Analysing threat reports…' : after ? `Post-training links ${Math.round((share(live) / share(BEFORE_FINAL)) * 10) / 10}× more of the campaign picture` : 'Only partial links found'}</p>
         </div>
 
-        <span className="cti-watermark">Illustrative example data</span>
+        <span className="cti-watermark"><span>Illustrative</span><span>example</span><span>data</span></span>
 
         <div className="cti-legend">
           <span><i className="target" />Targeted country</span>
