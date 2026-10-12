@@ -18,17 +18,17 @@ const steps = [
   },
   {
     number: '02',
-    title: 'Nemotron practices',
+    title: 'Nemotron Model',
     icon: CpuChipIcon,
   },
   {
     number: '03',
-    title: 'Environment gives feedback',
+    title: 'Practice and Get Rewarded in RL Environments',
     icon: CheckBadgeIcon,
   },
   {
     number: '04',
-    title: 'Training updates Nemotron',
+    title: 'Collect Rollouts and Retrain',
     icon: SparklesIcon,
   },
 ];
@@ -82,18 +82,9 @@ export default function PostTrainingLanding({ onContinue }: { onContinue: () => 
           })}
         </div>
 
-        <div className={styles.loop} aria-label="The improved model repeats the practice loop">
+        <div className={styles.loop} aria-label="Repeat and continuously improve the Nemotron model">
           <span className={styles.loopLine} aria-hidden="true"><i /></span>
-          <span className={styles.loopLabel}><ArrowPathIcon aria-hidden="true" /> Repeat with harder tasks</span>
-        </div>
-
-        <div className={styles.heldOut}>
-          <span className={styles.heldOutSource}>Trained model</span>
-          <span className={styles.heldOutLine} aria-hidden="true"><i /></span>
-          <div>
-            <small>Separate evaluation</small>
-            <strong>Held-out cases <ArrowRightIcon aria-hidden="true" /></strong>
-          </div>
+          <span className={styles.loopLabel}><ArrowPathIcon aria-hidden="true" /> Repeat and Continuously Improve</span>
         </div>
 
         <footer className={styles.platform}>
