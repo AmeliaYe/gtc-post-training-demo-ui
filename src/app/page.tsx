@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import HealthcareDemo from './components/HealthcareDemo';
 import { CyberDefenseDemo } from './components/CyberDefenseDemo';
 import ComputerUseDemo from './components/ComputerUseDemo';
-import DreamDemoContent from './components/dream/DreamDemo';
+import DreamCard, { DREAM_DEMO } from './components/dream/DreamDemo';
 import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
@@ -88,7 +88,7 @@ const demos: Demo[] = [
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
   },
   {
-    kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
+    kind: 'placeholder', id: 'defense', name: DREAM_DEMO.name, task: 'Cybersecurity · Dream',
     description: 'Analyze threats, choose defenses, and diagnose vulnerabilities.',
     color: '#ff536b', glow: 'rgba(255, 83, 107, .18)', icon: NationalDefenseIcon,
     scoreLabel: 'Overall security knowledge', scoreBefore: 65.4, scoreAfter: 74.1, scoreLift: 8.8, latency: '44 ms', memory: '5.9 GB',
@@ -360,7 +360,7 @@ export default function Home() {
                   tabIndex={isSelected ? undefined : 0}
                   aria-label={isSelected ? undefined : `Expand ${model.name}`}
                 >
-                  {!isSelected ? <ModelTile model={model} /> : <>
+                  {!isSelected ? <ModelTile model={model} /> : model.id === 'defense' ? <DreamCard onBack={() => resetView('window')} /> : <>
                 <div className="expanded-window-bar">
                   <span className="expanded-traffic"><i /><i /><i /></span>
                   <button className="view-all-button" onClick={() => resetView('window')}>← All use cases</button>
@@ -376,7 +376,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.id === 'defense' ? <DreamDemoContent /> : model.kind === 'computer' ? <ComputerUseDemo /> : model.kind === 'demo'
+                {model.kind === 'cyber' ? <CyberDefenseDemo /> : model.id === 'health' ? <HealthcareDemo /> : model.kind === 'computer' ? <ComputerUseDemo /> : model.kind === 'demo'
                   ? <iframe className="embed-frame" src={model.embedUrl} title={`${model.name} demo`} allow="clipboard-read; clipboard-write" />
                   : <PlaceholderBody model={model} isRunning={isRunning} runCount={runCount} />}
               </>}
