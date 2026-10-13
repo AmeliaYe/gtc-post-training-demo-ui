@@ -1,5 +1,5 @@
 .findings { width: 100%; max-width: 1320px; margin: 0 auto; color: #0c0c0c; font-family: inherit; }
-.reports { padding: 3px; }
+.reports { padding: 27px 3px 3px; }
 .comparison { min-height: 116px; position: relative; top: -58px; }
 .feedbackHeader { display: grid; grid-template-columns: 1120px 160px; width: 1280px; margin: 0 auto 12px; }
 .feedbackHeader > span { grid-column: 2; padding-left: 25px; color: #63636f; font-size: 17px; line-height: 1.2; text-align: center; }

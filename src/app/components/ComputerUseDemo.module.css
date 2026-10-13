@@ -131,8 +131,10 @@
 @keyframes statusPulse { 50% { opacity: .35; transform: scale(.72); } }
 .tunedModel .outcome { color: #dcd7ff; border-color: var(--violet-line); background: var(--violet-soft); }
 .outcome svg { width: 13px; height: 13px; color: var(--violet); }
-.elapsed { display: flex; align-items: baseline; gap: 6px; color: #6f7180; font: 7px/1.2 monospace; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
-.elapsed strong { color: #d4d5de; font-size: 10px; letter-spacing: 0; }
+.elapsed { display: flex; align-items: baseline; gap: 5px; padding: 5px 7px; border: 1px solid rgba(255,255,255,.09); border-radius: 5px; color: #a8aab5; background: rgba(255,255,255,.035); font: 8px/1.2 monospace; letter-spacing: .035em; text-transform: uppercase; white-space: nowrap; }
+.elapsed em { color: #c5bfff; font-style: normal; font-weight: 800; }
+.elapsed > i { color: #696b77; font-style: normal; }
+.elapsed strong { color: #f0f1f6; font-size: 10px; letter-spacing: 0; }
 .tunedModel .elapsed strong { color: var(--violet); }
 .modelGrid article > p { margin: 0; align-self: start; color: #8f919c; font-size: 10px; line-height: 1.45; }
 .tunedModel > p { color: #b3b1c2; }

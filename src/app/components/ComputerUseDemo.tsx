@@ -337,7 +337,7 @@ export default function ComputerUseDemo() {
             <header><span>BASE MODEL</span><h4>Nemotron 3 Nano Omni</h4></header>
             <div className={styles.runMeta}>
               <div className={`${styles.outcome} ${baseState === 'running' ? styles.outcomeRunning : ''}`}><i />{outcomeLabel(baseState, activeTask.baseOutcome)}</div>
-              {isVideoTask && <span className={styles.elapsed}>Real time elapsed <strong>45 min</strong></span>}
+              {isVideoTask && <span className={styles.elapsed}><em>Sped-up replay</em><i aria-hidden="true">·</i> Real time elapsed: <strong>45 min</strong></span>}
             </div>
             {hasVisualTask && (
               <ResultPlayback
@@ -362,7 +362,7 @@ export default function ComputerUseDemo() {
             <header><span>POST-TRAINED NEMOTRON</span><h4>Holotron 4 Nano</h4></header>
             <div className={styles.runMeta}>
               <div className={`${styles.outcome} ${tunedState === 'running' ? styles.outcomeRunning : ''}`}>{tunedState === 'finished' ? <CheckCircleIcon /> : <i />}{outcomeLabel(tunedState, activeTask.tunedOutcome)}</div>
-              {isVideoTask && <span className={styles.elapsed}>Real time elapsed <strong>12.6 min</strong></span>}
+              {isVideoTask && <span className={styles.elapsed}><em>Sped-up replay</em><i aria-hidden="true">·</i> Real time elapsed: <strong>12.6 min</strong></span>}
             </div>
             {hasVisualTask && (
               <ResultPlayback

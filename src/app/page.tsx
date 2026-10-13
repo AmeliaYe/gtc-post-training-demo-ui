@@ -89,7 +89,7 @@ const demos: Demo[] = [
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
   },
   {
-    kind: 'placeholder', id: 'defense', name: 'National Defense', task: 'Cybersecurity · Dream',
+    kind: 'placeholder', id: 'defense', name: 'National Sovereign Cyber Defense', task: 'Cybersecurity · Dream',
     description: 'Analyze threats, choose defenses, and diagnose vulnerabilities.',
     color: '#ff536b', glow: 'rgba(255, 83, 107, .18)', icon: NationalDefenseIcon,
     scoreLabel: 'Overall security knowledge', scoreBefore: 65.4, scoreAfter: 74.1, scoreLift: 8.8, latency: '44 ms', memory: '5.9 GB',
@@ -100,7 +100,7 @@ const demos: Demo[] = [
   },
 ];
 
-type IntroStage = 'landing' | 'gallery';
+type IntroStage = 'landing' | 'gallery' | 'resources';
 function NvidiaLogo() {
   return (
     <svg className="nvidia-logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -134,6 +134,7 @@ function PageSwitcher({ stage, onChange }: { stage: IntroStage; onChange: (stage
   const pages: Array<[IntroStage, string, string]> = [
     ['landing', '1', 'Post-training workflow'],
     ['gallery', '2', 'Use cases'],
+    ['resources', '3', 'Next steps'],
   ];
   return (
     <nav className="page-switcher" aria-label="Demo pages">
@@ -141,6 +142,58 @@ function PageSwitcher({ stage, onChange }: { stage: IntroStage; onChange: (stage
         <button key={value} type="button" aria-label={`${label}. ${title}`} title={title} aria-pressed={stage === value} onClick={() => onChange(value)}>{label}</button>
       ))}
     </nav>
+  );
+}
+
+function ResourcesPage() {
+  const assetRoot = '/healthcare/r02/healthcare/assets';
+  return (
+    <section className="next-steps-page" aria-labelledby="next-steps-title">
+      <div className="next-steps-heading">
+        <p className="next-steps-eyebrow">From practice to your next step</p>
+        <h1 id="next-steps-title">Here&apos;s what you just saw, why it matters,<br />and where you can go next.</h1>
+      </div>
+
+      <div className="next-steps-grid">
+        <article className="next-step-resource">
+          <p className="next-steps-eyebrow">01 / Open models + recipes</p>
+          <h2>Nemotron</h2>
+          <div className="next-step-art"><img src={`${assetRoot}/architecture-r04/nemotron.png`} alt="Nemotron open models" /></div>
+          <p>Start with an open model, then adapt it with NeMo RL and NeMo Gym.</p>
+          <a href="https://developer.nvidia.com/topics/ai/nemotron" target="_blank" rel="noopener noreferrer">Open model family page <span>↗</span></a>
+          <a href="https://docs.nvidia.com/nemo/rl/latest/guides/nemotron-3-nano.html" target="_blank" rel="noopener noreferrer">Nemotron recipe cookbook <span>↗</span></a>
+        </article>
+
+        <article className="next-step-resource">
+          <p className="next-steps-eyebrow">02 / Post-training platform</p>
+          <h2>DGX Station</h2>
+          <div className="next-step-art next-step-station"><img src={`${assetRoot}/get-started-dgx-station-r01.jpg`} alt="NVIDIA DGX Station" /></div>
+          <p>A platform for local model development.</p>
+          <a href="https://www.nvidia.com/en-us/products/workstations/dgx-station/" target="_blank" rel="noopener noreferrer">Explore DGX Station <span>↗</span></a>
+          <a href="https://build.nvidia.com/station" target="_blank" rel="noopener noreferrer">DGX Station playbooks <span>↗</span></a>
+        </article>
+
+        <article className="next-step-resource">
+          <p className="next-steps-eyebrow">03 / Partner ecosystem</p>
+          <h2>Specialize with the post-training ecosystem</h2>
+          <div className="next-step-art next-step-partners">
+            <img src="/partners/post-training-services.png" alt="Post-training as a Service partners" />
+            <div className="next-step-data-partners" aria-label="Data Vendors: Handshake, Mercor, and Scale">
+              <strong>Data Vendors</strong>
+              <div>
+                <img src="/partners/data-handshake.png" alt="Handshake" />
+                <img src="/partners/data-mercor.png" alt="Mercor" />
+                <img src="/partners/data-scale.png" alt="Scale" />
+              </div>
+            </div>
+            <img src="/partners/inference-providers.png" alt="Post-training inference providers" />
+          </div>
+          <p>Bring domain expertise, data, tools and evaluation into your post-training workflow.</p>
+        </article>
+      </div>
+
+      <p className="next-steps-note">Adapt the reference recipe to your model and compute. It is not a verified healthcare or DGX Station recipe; recorded demo results are not a DGX Station benchmark.</p>
+    </section>
   );
 }
 
@@ -246,7 +299,7 @@ export default function Home() {
 
   useEffect(() => {
     const stage = new URLSearchParams(window.location.search).get('stage');
-    if (stage === 'gallery') setIntroStage('gallery');
+    if (stage === 'gallery' || stage === 'resources') setIntroStage(stage);
   }, []);
 
   const runEvaluation = () => {
@@ -269,7 +322,7 @@ export default function Home() {
     setSelectedId(null);
   };
 
-  if (introStage !== 'gallery') {
+  if (introStage === 'landing') {
     return (
       <main className="app-shell">
         <header className="topbar">
@@ -278,6 +331,19 @@ export default function Home() {
           <div className="topbar-actions"><PageSwitcher stage={introStage} onChange={setIntroStage} /><span className="local-badge"><i /> LOCAL</span></div>
         </header>
         <PostTrainingLanding onContinue={() => setIntroStage('gallery')} />
+      </main>
+    );
+  }
+
+  if (introStage === 'resources') {
+    return (
+      <main className="app-shell">
+        <header className="topbar">
+          <div className="brand" role="img" aria-label="NVIDIA"><NvidiaLogo /></div>
+          <div className="topbar-center"><span className="crumb-muted">DGX Station</span></div>
+          <div className="topbar-actions"><PageSwitcher stage={introStage} onChange={setIntroStage} /><span className="local-badge"><i /> LOCAL</span></div>
+        </header>
+        <ResourcesPage />
       </main>
     );
   }
