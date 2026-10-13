@@ -84,7 +84,7 @@ const demos: Demo[] = [
     embedUrl: KERMT_DEMO_URL,
   },
   {
-    kind: 'cyber', id: 'cyber', name: 'Cyber Defense', task: 'Cybersecurity · Depthfirst',
+    kind: 'cyber', id: 'cyber', name: 'Continual Cyber Defense', task: 'Cybersecurity · Depthfirst',
     description: 'Find security weaknesses before attackers do.',
     color: '#b7ff54', glow: 'rgba(183, 255, 84, .18)', icon: ShieldCheckIcon,
   },
