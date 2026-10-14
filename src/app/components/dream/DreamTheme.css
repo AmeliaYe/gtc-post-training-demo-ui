@@ -752,3 +752,12 @@
 .dream-theme .cti-overlay .cti-compare small { margin-top: 2px; }
 /* Badges sit on their own fill, so they skip the readability shadow (it blurred the AFTER TRAINING text). */
 .dream-theme .cti-overlay .dream-phase { text-shadow: none; }
+/* Inline header row: logo and tagline share a center line, logo letters about 1.25x the tagline's caps. */
+.dream-theme .dream-content-brand .dream-tagline { margin: 0; }
+.dream-theme .dream-content-brand .partner-nvidia { height: 20px; }
+.dream-theme .dream-content-brand .partner-dream { height: 13px; }
+.dream-theme .dream-content-brand .partner-logo { gap: 10px; }
+/* World view: the stats sit in a strip under the map instead of over it, legend below them. */
+.dream-theme .cti-map .cti-overlay { position: static; width: auto; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: var(--dream-space-6); padding: var(--dream-space-3) var(--dream-space-4); border-top: 1px solid var(--line); text-shadow: none; }
+.dream-theme .cti-map .cti-legend { position: static; width: fit-content; margin: 0 var(--dream-space-4) var(--dream-space-3) auto; }
+@media (max-width: 820px) { .dream-theme .cti-map .cti-overlay { grid-template-columns: 1fr; gap: var(--dream-space-3); } }
