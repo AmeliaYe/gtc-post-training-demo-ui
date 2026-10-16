@@ -4,6 +4,28 @@ An interactive demonstration of local Nemotron customization and inference on NV
 
 The experience opens with five domain use cases—cybersecurity, healthcare simulation, multimodal biology, coding, and computer use. Selecting a use case expands it into a focused before-and-after comparison while the remaining demos move into a compact side rail.
 
+## Live demo service boundary
+
+The gallery includes two live inference experiences. This repository contains the
+booth UI and the local integration layers, but it does **not** contain model weights
+or start the model-serving infrastructure.
+
+| Experience | Included in this repository | Must already be running separately | Booth-facing port | Readiness check |
+| --- | --- | --- | --- | --- |
+| Healthcare Cached | Recorded narrative and assets | Nothing | `3000` | Open the Healthcare **Cached** view |
+| Healthcare Live | Healthcare browser UI, FastAPI/Hermes runtime, sandbox and Compose/tunnel configuration under `ui/` | Reachable OpenAI-compatible baseline/checkpoint model endpoints; the remote checkpoint server must be started before the tunnel | `4193` | `curl -fsS http://127.0.0.1:4193/healthz` |
+| Multimodal Biology Live | Booth frontend under `kermt-web-ui/` | KERMT encoder, base worker, post-trained worker, gateway and model artifacts | `5173`; gateway at `8080` | `curl -fsS http://127.0.0.1:5173/api/health` |
+
+`npm run dev` starts only the portal. `npm run dev:all` starts the portal and the
+Biology **frontend**, but still does not start Healthcare model endpoints or the
+KERMT inference stack. A visible iframe proves that its frontend is available; it
+does not prove that a live model request will succeed.
+
+Detailed station provisioning remains in the operator runbooks rather than this
+repository because it contains machine-specific addresses, private artifact access,
+registry credentials and hardware-specific recovery steps. Do not commit passwords,
+tokens, fixed booth IPs or model artifacts here.
+
 ## Healthcare inference demo
 
 The standalone inference application is in [`ui/`](ui/README.md), with separate
@@ -16,21 +38,29 @@ toggle; Live demo embeds this application. Compose defaults to a single live cas
 with no recordings. The original six recorded cases remain available by setting
 `DEMO_CASES_FILE` (see [`ui/README.md`](ui/README.md#case-bundles)).
 
+The Compose tunnel provides connectivity to a remote model endpoint; it does not
+start that endpoint. An operator must first start and verify the model server on the
+model host. Keep its station-specific startup scripts, host credentials and API keys
+outside this repository.
+
 ## Run the full demo
 
-Start these in order. Ports: healthcare inference UI `4193`, multimodal biology
-`5173`, landing site `3000`. **Port 3000 must be free** before `npm run dev`: if
+Start these in order. Ports: healthcare checkpoint endpoint/tunnel `18045`,
+healthcare inference UI `4193`, KERMT encoder `8003`, KERMT workers `8081` and
+`8082`, KERMT gateway `8080`, multimodal biology frontend `5173`, and landing site
+`3000`. **Port 3000 must be free** before `npm run dev`: if
 something else holds it, Next.js silently starts on `3001`, and the healthcare Live
 demo frame will be blocked (see the note below).
 
-1. **Checkpoint model endpoint.** The healthcare **After** lane needs an
-   OpenAI-compatible server with tool calling and a 65,536-token context serving the
-   checkpoint (model ID `pab-astra-step25-heldout`, port `18045` on the model host).
-   Confirm it is up from wherever you run the stack: `curl <endpoint>/v1/models`
-   should list that model ID. Set the **Before** lane's endpoint and key in
-   `ui/.env` (see [`ui/README.md`](ui/README.md#connect-live-models)).
-2. **SSH tunnel to the model host** (if it is only reachable over SSH). Put the host
-   login in `ui/.secrets/model_host_password` and `MODEL_HOST_ADDRESS` /
+1. **Healthcare model endpoints.** The Healthcare live comparison needs reachable
+   OpenAI-compatible model servers with tool calling and the configured 65,536-token
+   context. The booth checkpoint is served as `pab-astra-step25-heldout` on port
+   `18045` of its model host. Use the operator runbook to start that remote service,
+   then confirm `<endpoint>/v1/models` lists the expected model ID. Configure both
+   comparison lanes in `ui/.env`; do not commit that file or its keys. See
+   [`ui/README.md`](ui/README.md#connect-live-models).
+2. **Healthcare UI and SSH tunnel** (when the endpoint is only reachable over SSH).
+   Put the host login in `ui/.secrets/model_host_password` and `MODEL_HOST_ADDRESS` /
    `MODEL_HOST_USER` in `ui/.env`, then start Compose with the tunnel overlay:
 
    ```bash
@@ -41,26 +71,41 @@ demo frame will be blocked (see the note below).
    Details, verification and troubleshooting:
    [`ui/README.md`](ui/README.md#reach-a-remote-model-through-an-ssh-tunnel). If the
    model is directly reachable, use `docker compose up --build -d --wait` and set
-   `CHECKPOINT_BASE_URL` instead. Open <http://127.0.0.1:4193> to check the UI alone.
-3. **Multimodal biology** (separate repository). Clone
-   [nemotron-stitch-demos](https://github.com/NVIDIA-dev/nemotron-stitch-demos), run
-   and serve its model checkpoints as described there, then:
+   `CHECKPOINT_BASE_URL` instead. Verify `http://127.0.0.1:4193/healthz` before using
+   the Live toggle. Opening the page alone checks the UI, not model inference.
+3. **KERMT inference stack.** Provision the station with the external KERMT runtime,
+   container images and model artifacts described in the Biology operator runbook.
+   Start and verify these services in order:
+
+   - KERMT encoder on `8003`
+   - Base Nemotron worker on `8081`
+   - Post-trained KERMT-conditioned worker on `8082`
+   - Gateway on `8080`
+
+   The encoder must be healthy before the trained worker starts; warm up the base
+   worker before opening the booth. The gateway is the only KERMT service the local
+   frontend should call. If it runs on another station, create a local SSH forward
+   for `8080`, then verify `curl -fsS http://127.0.0.1:8080/api/health`.
+4. **Multimodal Biology frontend.** From this repository's root, point the Vite proxy
+   at the local or forwarded gateway and start the embedded frontend:
 
    ```bash
-   cd nemotron-stitch-demos/nemotron-kermt/demo/web
-   npm ci
-   npm run dev     # http://127.0.0.1:5173
+   KERMT_BACKEND_URL=http://127.0.0.1:8080 npm run dev:bio
+   # frontend: http://127.0.0.1:5173
+   # end-to-end readiness: http://127.0.0.1:5173/api/health
    ```
 
-4. **Landing site.** From this repository's root:
+5. **Landing site.** From this repository's root:
 
    ```bash
    npm install
    npm run dev     # http://localhost:3000
    ```
 
-   Choose **Healthcare → Live demo** and **Multimodal Biology**. Both are iframes;
-   a blank frame means the corresponding service above is not running.
+   Choose **Healthcare → Live demo** and **Multimodal Biology**. Both are live-demo
+   iframes. A blank frame means its frontend is down; a visible page with a failed
+   request means its external model service, gateway, tunnel or credentials are not
+   ready.
 
 **Embedding origins.** Compose's Nginx allows the healthcare frame only from
 `http://localhost:3000` and `http://127.0.0.1:3000` (`ui/frontend/nginx.conf`). If
