@@ -7,7 +7,7 @@ import { CyberDefenseDemo } from './components/CyberDefenseDemo';
 import ComputerUseDemo from './components/ComputerUseDemo';
 import DreamDemoContent from './components/dream/DreamDemo';
 import PostTrainingLanding from './components/PostTrainingLanding';
-import { trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
+import { setAnalyticsSurface, trackInteraction, trackUseCaseSelection } from '@/lib/analytics';
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -229,7 +229,6 @@ function ModelTile({ model }: { model: Demo }) {
         <span className="mini-traffic"><i /><i /><i /></span>
         <span className="expand-glyph">↗</span>
       </span>
-      <span className="tile-topline"><span className="status-pill"><i /> {model.id === 'health' || model.kind === 'cyber' ? 'DEMO' : 'LIVE'}</span></span>
       <span className="tile-icon" style={{ color: model.color, backgroundColor: model.glow }}><Icon /></span>
       <span className="tile-copy">
         <strong>{model.name}</strong>
@@ -295,12 +294,29 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [runCount, setRunCount] = useState(248);
+  const skipInitialSurfaceEffect = useRef(true);
   const workspaceRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const stage = new URLSearchParams(window.location.search).get('stage');
-    if (stage === 'gallery' || stage === 'resources') setIntroStage(stage);
+    const initialStage = stage === 'gallery' || stage === 'resources' ? stage : 'landing';
+    // URL state is only available after hydration in this client-rendered booth app.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (initialStage !== 'landing') setIntroStage(initialStage);
+    setAnalyticsSurface(initialStage);
   }, []);
+
+  useEffect(() => {
+    if (skipInitialSurfaceEffect.current) {
+      skipInitialSurfaceEffect.current = false;
+      return;
+    }
+    if (introStage === 'landing' || introStage === 'resources') {
+      setAnalyticsSurface(introStage);
+      return;
+    }
+    setAnalyticsSurface(selectedId === null ? 'gallery' : selectedId as 'computer' | 'health' | 'bio' | 'cyber' | 'defense');
+  }, [introStage, selectedId]);
 
   const runEvaluation = () => {
     if (isRunning) return;

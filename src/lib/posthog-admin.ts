@@ -17,7 +17,16 @@ export type AnalyticsSummary = {
   resets: number;
   selections: number;
   sessions: number;
-  useCases: Array<{ name: string; selections: number; sessions: number; rapidSelections: number }>;
+  surfaceViews: number;
+  surfaces: Array<{
+    averageActiveSeconds: number;
+    id: string;
+    medianActiveSeconds: number;
+    qualifiedViews: number;
+    quickViews: number;
+    sessions: number;
+    views: number;
+  }>;
   views: number;
 };
 
@@ -31,7 +40,8 @@ const EMPTY_SUMMARY: AnalyticsSummary = {
   resets: 0,
   selections: 0,
   sessions: 0,
-  useCases: [],
+  surfaceViews: 0,
+  surfaces: [],
   views: 0,
 };
 
@@ -69,7 +79,7 @@ export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
   if (!process.env.POSTHOG_PERSONAL_API_KEY || !process.env.POSTHOG_PROJECT_ID) return EMPTY_SUMMARY;
 
   try {
-    const [totals, sessionStats, useCases] = await Promise.all([
+    const [totals, sessionStats, surfaces] = await Promise.all([
       queryPostHog(`
         SELECT
           countIf(event = 'demo_viewed'),
@@ -100,17 +110,39 @@ export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
       `, 'GTC demo engagement quality'),
       queryPostHog(`
         SELECT
-          properties.use_case,
+          surface,
           count(),
-          uniq(properties.demo_session_id),
-          countIf(properties.rapid_switch = true)
-        FROM events
-        WHERE event = 'use_case_selected'
-          AND timestamp >= now() - INTERVAL 30 DAY
-        GROUP BY properties.use_case
+          uniq(session_id),
+          countIf(active_seconds >= 5),
+          countIf(active_seconds < 5),
+          round(avg(active_seconds), 1),
+          round(quantile(0.5)(active_seconds), 1)
+        FROM (
+          SELECT
+            any(properties.surface) AS surface,
+            properties.surface_view_id AS surface_view_id,
+            any(properties.demo_session_id) AS session_id,
+            max(toFloat(coalesce(properties.active_seconds_total, 0))) AS active_seconds
+          FROM events
+          WHERE event IN ('demo_surface_viewed', 'demo_surface_heartbeat', 'demo_surface_summary')
+            AND timestamp >= now() - INTERVAL 30 DAY
+          GROUP BY surface_view_id
+        )
+        WHERE surface != ''
+        GROUP BY surface
         ORDER BY count() DESC
-      `, 'GTC demo use-case popularity'),
+      `, 'GTC demo surface views and dwell'),
     ]);
+
+    const surfaceRows = surfaces.map((row) => ({
+      averageActiveSeconds: numberAt(row, 5),
+      id: String(row[0] ?? 'unknown'),
+      medianActiveSeconds: numberAt(row, 6),
+      qualifiedViews: numberAt(row, 3),
+      quickViews: numberAt(row, 4),
+      sessions: numberAt(row, 2),
+      views: numberAt(row, 1),
+    }));
 
     return {
       averageActiveSeconds: numberAt(sessionStats[0], 0),
@@ -122,12 +154,8 @@ export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
       resets: numberAt(totals[0], 4),
       selections: numberAt(totals[0], 2),
       sessions: numberAt(totals[0], 1),
-      useCases: useCases.map((row) => ({
-        name: String(row[0] ?? 'unknown'),
-        selections: numberAt(row, 1),
-        sessions: numberAt(row, 2),
-        rapidSelections: numberAt(row, 3),
-      })),
+      surfaceViews: surfaceRows.reduce((total, surface) => total + surface.views, 0),
+      surfaces: surfaceRows,
       views: numberAt(totals[0], 0),
     };
   } catch (error) {

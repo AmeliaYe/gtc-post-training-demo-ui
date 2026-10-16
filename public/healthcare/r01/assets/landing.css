@@ -9,7 +9,7 @@ html, body { min-height: 100%; }
 .gtc-landing [data-screen-panel="break-ice"] { min-height: calc(100vh - clamp(36px, 6vh, 68px)); }
 .gtc-landing .gym-opening.r03 {
   display: grid;
-  grid-template-rows: auto minmax(320px, 1fr) auto auto;
+  grid-template-rows: auto minmax(320px, 1fr);
   width: 100%;
   max-width: 1600px !important;
   min-height: calc(100vh - clamp(36px, 6vh, 68px));
@@ -22,6 +22,6 @@ html, body { min-height: 100%; }
   .gtc-landing > main { padding: 18px; }
   .gtc-landing [data-screen-panel="break-ice"],
   .gtc-landing .gym-opening.r03 { min-height: calc(100vh - 36px); }
-  .gtc-landing .gym-opening.r03 { grid-template-rows: auto minmax(280px, 1fr) auto auto; }
+  .gtc-landing .gym-opening.r03 { grid-template-rows: auto minmax(280px, 1fr); }
   .gtc-landing .gym-opening.r03 .go-stage { min-height: 280px; }
 }

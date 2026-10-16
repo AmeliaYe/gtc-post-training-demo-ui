@@ -112,11 +112,12 @@ Copy `.env.example` to `.env.local` and configure:
 
 The PostHog personal API key needs only the `query:read` scope. It must remain server-side and must never use the `NEXT_PUBLIC_` prefix.
 
-Tracked events include demo views, active dwell heartbeats, use-case selections, evaluation runs, resets, and aggregate session summaries. Active dwell pauses when the page is hidden or idle. Prompt text, form data, screen content, and session recordings are not collected.
+Tracked events include demo launches, landing-page and use-case views, per-surface active dwell, use-case selections, evaluation runs, resets, and aggregate session summaries. Active dwell pauses when the page is hidden, the browser loses focus, or the visitor is idle for 60 seconds. Prompt text, form data, screen content, and session recordings are not collected.
 
 The private dashboard reports:
 
 - Views and sessions
+- Views, qualified views, quick exits, and active dwell for the landing page and every use case
 - Average and median active dwell
 - Engaged-session rate
 - Evaluation runs

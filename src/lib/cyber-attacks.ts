@@ -40,14 +40,14 @@ export type CyberAttack = {
 // They explain possible behavior, not additional observed attacks or tool calls.
 export const CYBER_ATTACKS: Record<CyberScenario['id'], CyberAttack> = {
   openfire: {
-    context: 'This Java messaging server fetches website icons for users.',
+    context: 'This open-source messaging server fetches website icons for users.',
     title: 'An icon request can reach a private service',
     term: 'Server-side request forgery (SSRF)',
     termExplanation: 'Someone makes a server send a request to a destination they choose, using the server’s network access.',
     caveat: 'Illustrative network: access depends on the server’s deployment. The recorded evaluation identified the flaw; it did not demonstrate customer data being exposed.',
     nodes: [
       { id: 'requester', label: 'Requester', detail: 'Supplies a website address', icon: 'person', x: 125, y: 190 },
-      { id: 'server', label: 'Java messaging server', detail: 'Fetches the website icon', icon: 'server', x: 450, y: 190 },
+      { id: 'server', label: 'Open-source messaging server', detail: 'Fetches the website icon', icon: 'server', x: 450, y: 190 },
       { id: 'public', label: 'Public website', detail: 'The expected destination', icon: 'globe', x: 825, y: 85 },
       { id: 'private', label: 'Internal service', detail: 'May be reachable by the server', icon: 'lock', x: 825, y: 290 },
     ],

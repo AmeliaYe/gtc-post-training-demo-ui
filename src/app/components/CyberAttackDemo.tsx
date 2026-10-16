@@ -15,7 +15,7 @@ const NODE_ICONS = {
 
 const OPENFIRE_LABELS: Record<string, { label: string; detail: string }> = {
   requester: { label: 'User-supplied address', detail: 'Input to the icon request' },
-  server: { label: 'Java messaging server', detail: 'Fetches the website icon' },
+  server: { label: 'Open-source messaging server', detail: 'Fetches the website icon' },
   public: { label: 'Public website', detail: 'Expected destination' },
   private: { label: 'Internal service', detail: 'Attacker-selected destination' },
 };
