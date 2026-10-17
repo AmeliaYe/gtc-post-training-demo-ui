@@ -76,6 +76,10 @@
 .videoGoal .goalSequence > span { line-height: 1; text-align: center; }
 .videoGoal .goalSequence figure { width: 100%; height: 100%; min-height: 0; }
 .videoGoal .videoGoalFrames figcaption { right: 8px; bottom: 8px; left: 8px; }
+.circuitGoalPreview { width: min(1120px, 92vw); height: 100%; min-height: 0; position: relative; margin: 0; overflow: hidden; border: 1px solid var(--violet-line); border-radius: 10px; background: #07090d; box-shadow: 0 16px 42px rgba(0,0,0,.28); }
+.circuitGoalPreview img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.circuitGoalPreview figcaption { position: absolute; right: 14px; bottom: 12px; left: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; color: #dadbe4; background: rgba(8,9,14,.9); font: 700 10px/1.2 monospace; backdrop-filter: blur(7px); }
+.circuitGoalPreview figcaption strong { color: var(--violet); font-size: 9px; letter-spacing: .13em; }
 .expenseGoalFlow { width: min(1120px, 92vw); min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 18px; }
 .expenseGoalFlow > span { color: var(--violet); font-size: 28px; }
 .expenseGoalState { min-width: 0; display: grid; gap: 11px; padding: 16px; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; background: rgba(255,255,255,.035); }
@@ -116,6 +120,8 @@
 .comparisonOrigin > span { display: grid; gap: 3px; }
 .comparisonOrigin small { color: var(--violet); font: 700 7px/1 monospace; letter-spacing: .1em; }
 .comparisonOrigin strong { color: #d8d8e0; font-size: 10px; }
+.compositeComparison { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--violet-line); border-radius: 9px; background: #07090d; box-shadow: 0 16px 46px rgba(0,0,0,.3); }
+.compositeComparison video { width: 100%; height: 100%; display: block; object-fit: contain; background: #07090d; }
 .modelGrid { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr); align-items: stretch; margin-top: 18px; }
 .modelGrid article { min-width: 0; display: grid; grid-template-rows: auto auto 1fr auto; padding: 13px 14px 11px; border: 1px solid rgba(255,255,255,.09); background: #12131b; }
 .baseModel { border-radius: 9px 0 0 9px; }
@@ -210,6 +216,7 @@
   .videoGoal .goalSequence { width: 100%; min-height: 420px; }
   .videoGoal .videoGoalFrames { min-height: 440px; flex-direction: column; }
   .videoGoal .videoGoalFrames figure { width: min(430px, 100%); height: min(205px, 46%); }
+  .circuitGoalPreview { width: 100%; min-height: 360px; }
   .expenseGoalFlow { width: 100%; grid-template-columns: 1fr; }
   .expenseGoalFlow > span { transform: rotate(90deg); text-align: center; }
   .expenseChecklist { width: 215px; padding: 11px 13px; font-size: 10px; }

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import {
   CheckCircleIcon,
+  CpuChipIcon,
   CubeTransparentIcon,
-  PhotoIcon,
   ReceiptPercentIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline';
@@ -156,16 +156,16 @@ const TASKS = [
     tunedSummary: 'Changes the middle block to 12 mm and verifies the final dimension.',
   },
   {
-    id: 'video',
-    label: 'Photoshop your video',
-    shortLabel: 'Video editing',
-    icon: PhotoIcon,
-    goal: 'I need to edit a video',
-    details: 'Remove the DRAFT watermark, then add an AI watermark at the bottom.',
+    id: 'circuit',
+    label: 'Set a resistor value',
+    shortLabel: 'Circuit editing',
+    icon: CpuChipIcon,
+    goal: 'I need to update a circuit schematic',
+    details: 'R1 and R2 are in parallel. Calculate R2 so the equivalent resistance is 2 kΩ, enter the value, and save the schematic.',
     baseOutcome: 'Task failed',
-    baseSummary: 'The base model does not complete the requested crop reliably.',
+    baseSummary: 'The base model fails after 69 actions without setting the resistor value.',
     tunedOutcome: 'Task passed',
-    tunedSummary: 'The post-trained model completes and verifies the watermark removal.',
+    tunedSummary: 'The post-trained model calculates and sets R2 to 3 kΩ in 9 actions, then saves the schematic.',
   },
   {
     id: 'expense',
@@ -189,35 +189,25 @@ export default function ComputerUseDemo() {
   const [tunedState, setTunedState] = useState<PlaybackState>('ready');
   const activeTask = TASKS.find((task) => task.id === activeId) ?? TASKS[0];
   const ActiveIcon = activeTask.icon;
-  const isVideoTask = activeTask.id === 'video';
+  const isCircuitTask = activeTask.id === 'circuit';
   const isExpenseTask = activeTask.id === 'expense';
   const isCadTask = activeTask.id === 'cad';
-  const hasVisualTask = isVideoTask || isExpenseTask || isCadTask;
+  const hasVisualTask = isCircuitTask || isExpenseTask || isCadTask;
   const basePlaybackSrc = isCadTask
     ? '/computer-use/cad/nemotron-before.mp4'
-    : isExpenseTask
-      ? '/computer-use/expense/nemotron-before.mp4'
-      : '/computer-use/video-editing/nemotron-before.mp4';
+    : '/computer-use/expense/nemotron-before.mp4';
   const tunedPlaybackSrc = isCadTask
     ? '/computer-use/cad/holotron-after.mp4'
-    : isExpenseTask
-      ? '/computer-use/expense/holotron-after.mp4'
-      : '/computer-use/video-editing/holotron-after.mp4';
+    : '/computer-use/expense/holotron-after.mp4';
   const baseResultSrc = isCadTask
     ? '/computer-use/cad/original-stack.png'
-    : isExpenseTask
-      ? '/computer-use/expense/result-before.png'
-      : '/computer-use/video-editing/source-draft.png';
+    : '/computer-use/expense/result-before.png';
   const tunedResultSrc = isCadTask
     ? '/computer-use/cad/changed-stack.png'
-    : isExpenseTask
-      ? '/computer-use/expense/result-after.png'
-      : '/computer-use/video-editing/target-ai-bottom.png';
+    : '/computer-use/expense/result-after.png';
   const originSrc = isCadTask
     ? '/computer-use/cad/original-stack.png'
-    : isExpenseTask
-      ? '/computer-use/expense/result-before.png'
-      : '/computer-use/video-editing/source-draft.png';
+    : '/computer-use/expense/result-before.png';
 
   const runTask = () => {
     if (transitioning) return;
@@ -288,18 +278,11 @@ export default function ComputerUseDemo() {
             <p>{activeTask.details}</p>
             <button type="button" className={styles.continueButton} onClick={runTask}>Run task <span>→</span></button>
           </div>
-          {isVideoTask && (
-            <div className={`${styles.goalFrames} ${styles.videoGoalFrames}`} aria-label="Source frame and requested result">
-              <figure>
-                <img src="/computer-use/video-editing/source-draft.png" alt="Source video frame with a DRAFT watermark at the top" />
-                <figcaption><strong>BEFORE</strong>DRAFT watermark at top</figcaption>
-              </figure>
-              <span aria-hidden="true">→</span>
-              <figure>
-                <img src="/computer-use/video-editing/target-ai-bottom.png" alt="Requested video frame with DRAFT removed and an AI watermark at the bottom" />
-                <figcaption><strong>GOAL</strong>DRAFT removed · AI at bottom</figcaption>
-              </figure>
-            </div>
+          {isCircuitTask && (
+            <figure className={styles.circuitGoalPreview} aria-label="Parallel resistor task preview">
+              <img src="/computer-use/kicad/parallel-resistor-poster.png" alt="Nemotron and Holotron starting the same KiCad parallel resistor task" />
+              <figcaption><strong>GOAL</strong> Compute R2, set it to 3 kΩ, and save the schematic</figcaption>
+            </figure>
           )}
           {isExpenseTask && (
             <div className={styles.expenseGoalFlow} aria-label="Five incomplete invoice steps becoming five completed invoice steps">
@@ -328,16 +311,33 @@ export default function ComputerUseDemo() {
           <span>PERFORMANCE COMPARISON</span>
           <small>Observed task behavior</small>
         </div>
-        <div className={styles.comparisonOrigin}>
-          <img src={originSrc} alt={`Shared starting state for ${activeTask.shortLabel}`} />
-          <span><small>SHARED STARTING STATE</small><strong>Same task · same input</strong></span>
-        </div>
+        {!isCircuitTask && (
+          <div className={styles.comparisonOrigin}>
+            <img src={originSrc} alt={`Shared starting state for ${activeTask.shortLabel}`} />
+            <span><small>SHARED STARTING STATE</small><strong>Same task · same input</strong></span>
+          </div>
+        )}
+        {isCircuitTask ? (
+          <div className={styles.compositeComparison}>
+            <video
+              src="/computer-use/kicad/parallel-resistor-comparison.mp4"
+              poster="/computer-use/kicad/parallel-resistor-poster.png"
+              aria-label="Side-by-side comparison of Nemotron 3 Nano Omni and Holotron 4 Nano completing the same KiCad parallel resistor task"
+              autoPlay
+              muted
+              playsInline
+              controls
+              preload="auto"
+              onPlay={() => { setBaseState('running'); setTunedState('running'); }}
+              onEnded={() => { setBaseState('finished'); setTunedState('finished'); }}
+            />
+          </div>
+        ) : (
         <div className={styles.modelGrid}>
           <article className={styles.baseModel}>
             <header><span>BASE MODEL</span><h4>Nemotron 3 Nano Omni</h4></header>
             <div className={styles.runMeta}>
               <div className={`${styles.outcome} ${baseState === 'running' ? styles.outcomeRunning : ''}`}><i />{outcomeLabel(baseState, activeTask.baseOutcome)}</div>
-              {isVideoTask && <span className={styles.elapsed}><em>Sped-up replay</em><i aria-hidden="true">·</i> Real time elapsed: <strong>45 min</strong></span>}
             </div>
             {hasVisualTask && (
               <ResultPlayback
@@ -348,8 +348,8 @@ export default function ComputerUseDemo() {
                 showExpenseChecklist={isExpenseTask}
                 onStateChange={setBaseState}
                 compact={isCadTask}
-                videoAlt={isCadTask ? 'Nemotron attempting the FreeCAD object modification' : isExpenseTask ? 'Nemotron attempting the Dolibarr invoice validation and payment task' : 'Nemotron before post-training attempting the video-editing task'}
-                resultAlt={isCadTask ? 'Original CAD stack left unchanged by Nemotron' : isExpenseTask ? 'Dolibarr with the invoice and payment actions still incomplete' : 'Source video frame with the DRAFT watermark still at the top'}
+                videoAlt={isCadTask ? 'Nemotron attempting the FreeCAD object modification' : 'Nemotron attempting the Dolibarr invoice validation and payment task'}
+                resultAlt={isCadTask ? 'Original CAD stack left unchanged by Nemotron' : 'Dolibarr with the invoice and payment actions still incomplete'}
               />
             )}
             <p>{summaryLabel(baseState, activeTask.baseSummary)}</p>
@@ -362,7 +362,6 @@ export default function ComputerUseDemo() {
             <header><span>POST-TRAINED NEMOTRON</span><h4>Holotron 4 Nano</h4></header>
             <div className={styles.runMeta}>
               <div className={`${styles.outcome} ${tunedState === 'running' ? styles.outcomeRunning : ''}`}>{tunedState === 'finished' ? <CheckCircleIcon /> : <i />}{outcomeLabel(tunedState, activeTask.tunedOutcome)}</div>
-              {isVideoTask && <span className={styles.elapsed}><em>Sped-up replay</em><i aria-hidden="true">·</i> Real time elapsed: <strong>12.6 min</strong></span>}
             </div>
             {hasVisualTask && (
               <ResultPlayback
@@ -373,14 +372,15 @@ export default function ComputerUseDemo() {
                 showExpenseChecklist={isExpenseTask}
                 onStateChange={setTunedState}
                 compact={isCadTask}
-                videoAlt={isCadTask ? 'Holotron completing and verifying the FreeCAD object modification' : isExpenseTask ? 'Holotron completing the Dolibarr invoice validation and payment task' : 'Holotron after post-training completing the video-editing task'}
-                resultAlt={isCadTask ? 'Changed CAD stack with the middle block at 12 millimeters' : isExpenseTask ? 'Dolibarr showing the validated invoice and recorded payment' : 'Final video frame with DRAFT removed and AI at the bottom'}
+                videoAlt={isCadTask ? 'Holotron completing and verifying the FreeCAD object modification' : 'Holotron completing the Dolibarr invoice validation and payment task'}
+                resultAlt={isCadTask ? 'Changed CAD stack with the middle block at 12 millimeters' : 'Dolibarr showing the validated invoice and recorded payment'}
               />
             )}
             <p>{summaryLabel(tunedState, activeTask.tunedSummary)}</p>
             <footer><span>Task execution</span><strong>Domain-specialized</strong></footer>
           </article>
         </div>
+        )}
       </section>
       )}
     </div>
