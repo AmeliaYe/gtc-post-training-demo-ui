@@ -156,18 +156,6 @@ const TASKS = [
     tunedSummary: 'Changes the middle block to 12 mm and verifies the final dimension.',
   },
   {
-    id: 'circuit',
-    label: 'Set a resistor value',
-    shortLabel: 'Circuit editing',
-    icon: CpuChipIcon,
-    goal: 'I need to update a circuit schematic',
-    details: 'R1 and R2 are in parallel. Calculate R2 so the equivalent resistance is 2 kΩ, enter the value, and save the schematic.',
-    baseOutcome: 'Task failed',
-    baseSummary: 'The base model fails after 69 actions without setting the resistor value.',
-    tunedOutcome: 'Task passed',
-    tunedSummary: 'The post-trained model calculates and sets R2 to 3 kΩ in 9 actions, then saves the schematic.',
-  },
-  {
     id: 'expense',
     label: 'Validate your travel expense',
     shortLabel: 'Expense review',
@@ -178,6 +166,18 @@ const TASKS = [
     baseSummary: 'Does not finish the invoice validation and payment workflow.',
     tunedOutcome: 'Task completed',
     tunedSummary: 'Validates the invoice and records the collected payment.',
+  },
+  {
+    id: 'circuit',
+    label: 'Set a resistor value',
+    shortLabel: 'Circuit editing',
+    icon: CpuChipIcon,
+    goal: 'I need to update a circuit schematic',
+    details: 'R1 and R2 are in parallel. Calculate R2 so the equivalent resistance is 2 kΩ, enter the value, and save the schematic.',
+    baseOutcome: 'Task failed',
+    baseSummary: 'The base model fails after 69 actions without setting the resistor value.',
+    tunedOutcome: 'Task passed',
+    tunedSummary: 'The post-trained model calculates and sets R2 to 3 kΩ in 9 actions, then saves the schematic.',
   },
 ] as const;
 
@@ -272,10 +272,10 @@ export default function ComputerUseDemo() {
       {page === 'goal' ? (
         <section className={`${styles.goal} ${styles.goalPage} ${hasVisualTask ? styles.videoGoal : ''} ${transitioning ? styles.goalExit : ''}`} aria-labelledby={`goal-${activeTask.id}`}>
           <span className={styles.goalIcon}><ActiveIcon /></span>
-          <div className={styles.goalCopy}>
+          <div className={`${styles.goalCopy} ${isCircuitTask ? styles.circuitGoalCopy : ''}`}>
             <small>TASK</small>
             <h3 id={`goal-${activeTask.id}`}>{activeTask.goal}</h3>
-            <p>{activeTask.details}</p>
+            <p className={isCircuitTask ? styles.circuitGoalDescription : undefined}>{activeTask.details}</p>
             <button type="button" className={styles.continueButton} onClick={runTask}>Run task <span>→</span></button>
           </div>
           {isCircuitTask && (
